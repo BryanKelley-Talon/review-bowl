@@ -5,6 +5,12 @@
 //   • A touchdown's six points bank the instant the ball crosses — before the
 //     extra-point question is even drawn. The question can add one. Nothing a
 //     question does can take the six back.  (build-order rule 1)
+//   • PENALTY MOMENTS (v5, BK 2026-09-22: "its real football, its consequences")
+//     amend that rule for YARDAGE only. A big gain that ends in the field of play
+//     can draw a flag: answer the check and the play stands, miss it and the play
+//     comes back with a 10-yard penalty and the down replayed. **A touchdown is
+//     never called back** — the six are banked and stay banked, which is the part
+//     of rule 1 BK has not moved.
 //   • The clock runs in chunks per snap, Retro Bowl style — never real time.
 //
 // The clock is kept per HALF (quarters are just a label on it), so a drive that
@@ -80,9 +86,43 @@ export function applyPlay(g0, res, random = Math.random) {
   }
 }
 
+// ── penalty moments ─────────────────────────────────────────────────────────
+// Eligible: a big gain that ended in the field of play. Never a score, never a
+// turnover, never a loss — a flag is for taking something away, and those plays
+// have nothing to take.
+export function isPenaltySpot(res, outcome, rules = {}) {
+  if (!outcome || outcome.kind !== 'continue') return false
+  if (!['tackle', 'oob'].includes(res.type)) return false
+  return res.gained >= (rules.penalty_min_gain ?? 15)
+}
+
+// The flag. The play comes back to where it started, the down is replayed, and the
+// penalty is walked off from that spot — half the distance when the goal line is close,
+// the way it actually works. `before` is the game state BEFORE the snap.
+export function applyPenalty(before, after, rules = {}) {
+  const yards = rules.penalty_yards ?? 10
+  const walk = before.ballOn <= yards * 2 ? Math.max(1, Math.floor(before.ballOn / 2)) : yards
+  const ballOn = clamp(before.ballOn - walk, 1, 99)
+  return {
+    ...after,                      // keep the clock that already ran
+    ballOn,
+    down: before.down,             // the down is replayed
+    toGo: Math.min(before.toGo + walk, 100 - ballOn),
+    lastRunoff: 0,                 // a flag stops the clock
+    penaltyYards: walk,
+  }
+}
+
 // The extra point. Adds one on a right answer. Takes nothing on a wrong one.
 export function extraPoint(g, correct) {
   return correct ? { ...g, you: g.you + 1 } : g
+}
+
+// The two-point try (v5, BK: a chance to get back a kick you missed earlier). Two
+// questions instead of one: get them all and it is worth two, miss any and it is worth
+// nothing — the same bet the real decision is. The touchdown is banked either way.
+export function twoPoint(g, made) {
+  return made ? { ...g, you: g.you + 2 } : g
 }
 
 export function punt(g, random = Math.random) {

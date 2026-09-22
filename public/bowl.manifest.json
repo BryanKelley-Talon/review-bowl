@@ -8,7 +8,7 @@
     "quarter_minutes": 8
   },
   "rules": {
-    "_note": "Hints: 2 escalating hints per item in the regular season and off-season; playoffs run cold (BK, 2026-09-22). hint_form_discount = how much a hint trims the stat gain from a correct answer (0 = hints are free, the default the build order asked for; 1 = each hint costs a point of form). unverified_in_scoring_gates: items whose answer key is not officially verified (answer_verified: false) are kept OUT of gates that decide points — the extra point and every playoff gate — unless this is true. Practice Week (v3): practice_defense_questions is how many film-study items run between games, and defense_gain / defense_loss are how hard each one swings the Defense rating — bigger than an in-game answer, because the week is what sets the defense for the next game.",
+    "_note": "Hints: 2 escalating hints per item in the regular season and off-season; playoffs run cold (BK, 2026-09-22). hint_form_discount = how much a hint trims the stat gain from a correct answer (0 = hints are free, the default the build order asked for; 1 = each hint costs a point of form). unverified_in_scoring_gates: items whose answer key is not officially verified (answer_verified: false) are kept OUT of gates that decide points — the extra point and every playoff gate — unless this is true. Practice Week (v3): practice_defense_questions is how many film-study items run between games, and defense_gain / defense_loss are how hard each one swings the Defense rating — bigger than an in-game answer, because the week is what sets the defense for the next game. Penalty moments (v5, BK: \"its real football, its consequences\"): a gain of penalty_min_gain or more can draw a flag — penalty_chance is how often, penalties_per_half caps it, penalty_yards is the walk-off. A right answer keeps the play; a wrong one brings it back and replays the down. Touchdowns are never called back. Two-point try (v5, BK): after a touchdown a student may kick (one question, +1) or go for two (two_point_questions questions, all right = +2, any miss = 0). The six are banked either way.",
     "hints_regular_season": true,
     "hints_playoffs": false,
     "hint_form_discount": 0,
@@ -18,7 +18,12 @@
     "live_checks_per_half": 1,
     "practice_defense_questions": 3,
     "defense_gain": 3,
-    "defense_loss": 2
+    "defense_loss": 2,
+    "penalty_chance": 0.35,
+    "penalty_min_gain": 15,
+    "penalties_per_half": 1,
+    "penalty_yards": 10,
+    "two_point_questions": 2
   },
   "lanes": {
     "_note": "Each content lane builds ONE team stat. That is the stat layer (FULL-SPEC §2.2): a team that knows the material throws tighter and breaks more tackles. Labels are what a student reads.",

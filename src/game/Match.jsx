@@ -15,8 +15,8 @@ import { FieldEngine } from './field.js'
 import { driveLine, simDrive, standLine } from './drive.js'
 import { isBigMoment } from './threat.js'
 import {
-  applyDrive, applyPlay, callTimeout, canKick, clockOf, extraPoint, fieldGoal, firstDown, goalToGo,
-  halfOver, kickChance, kickDistance, newGame, punt, startOvertime, startSecondHalf,
+  applyDrive, applyPenalty, applyPlay, callTimeout, canKick, clockOf, extraPoint, fieldGoal, firstDown, goalToGo,
+  halfOver, isPenaltySpot, kickChance, kickDistance, newGame, punt, startOvertime, startSecondHalf, twoPoint,
 } from './matchRules.js'
 import { STAT_OF, physics, ratings, values } from './ratings.js'
 import { kits as makeKits, TEAMS } from './teams.js'
@@ -65,6 +65,8 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   const [fieldVersion, setFieldVersion] = useState(0)
   const setRead = on => { playBoost.current = on ? { read: true } : null; setFieldVersion(n => n + 1) }
   const liveChecks = useRef({ 1: 0, 2: 0 })
+  const flags = useRef({ 1: 0, 2: 0 })
+  const missedKicks = useRef(0)          // so the two-point card can say why it matters
   const tally = useRef({ right: 0, total: 0 })
   const bigMomentAsked = useRef(-1)
 
@@ -220,21 +222,13 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
     oppDrive(gs, 25)
   }, [oppOvertime, endHalf, oppDrive])
 
-  handlers.current.playEnd = res => {
-    const gs = gRef.current
-    playBoost.current = null
-    const { g: g2, outcome } = applyPlay(gs, res)
-    setToast(describe(res, outcome))
+  // What happens once a play (and any flag on it) is settled.
+  const settle = (res, g2, outcome) => {
     commit(g2)
     if (outcome.kind === 'td') {
-      // Six are banked already. The question can only add the seventh.
-      ask('xp', 'Extra point. Get it right and the kick is good. Miss it and you keep your six — you just don’t get the seventh.',
-        correct => {
-          const g3 = extraPoint(gRef.current, correct !== false)
-          commit(g3)
-          setToast(correct === false ? 'Kick is no good. The touchdown stands.' : 'The kick is good.')
-          afterYourScore(g3)
-        })
+      // Six are banked already (matchRules). What is left is the try, and the student
+      // chooses which bet to take: one question for one point, or two for two.
+      setStage('convert')
       return
     }
     if (outcome.kind === 'safety') return oppDrive(g2, 35)
@@ -245,6 +239,71 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
     }
     if (halfOver(g2)) return endHalf(g2)
     toPresnap(g2)
+  }
+
+  handlers.current.playEnd = res => {
+    const gs = gRef.current
+    playBoost.current = null
+    const { g: g2, outcome } = applyPlay(gs, res)
+    setToast(describe(res, outcome))
+    commit(g2)
+
+    // FLAG ON THE PLAY (BK, 2026-09-22). A big gain draws a quick check: answer it and
+    // the play stands, miss it and it comes back with a penalty and the down replayed.
+    // Never on a touchdown — those six are banked and stay banked.
+    const half = gs.ot ? 2 : gs.half
+    const cap = rules.penalties_per_half ?? 1
+    if (isPenaltySpot(res, outcome, rules) && flags.current[half] < cap &&
+        Math.random() < (rules.penalty_chance ?? 0.35)) {
+      flags.current[half] += 1
+      setStage('flag')
+      ask('penalty', `Flag down on a ${res.gained}-yard gain. Answer this and the play stands. Miss it and it comes back — ${rules.penalty_yards ?? 10} yards and the down replayed.`,
+        correct => {
+          if (correct === false) {
+            const pg = applyPenalty(gs, g2, rules)
+            commit(pg)
+            setToast(`Flag on the play — ${pg.penaltyYards} yards. The gain comes back, ${ORD[pg.down]} down again.`)
+            if (halfOver(pg)) return endHalf(pg)
+            return toPresnap(pg)
+          }
+          setToast('No flag — the play stands.')
+          settle(res, g2, outcome)
+        })
+      return
+    }
+    settle(res, g2, outcome)
+  }
+
+  // ── the try, after a touchdown (v5, BK) ────────────────────────────────────
+  const kickTry = () => {
+    setStage('live')
+    ask('xp', 'Extra point. Get it right and the kick is good. Miss it and you keep your six — you just don’t get the seventh.',
+      correct => {
+        const made = correct !== false
+        if (!made) missedKicks.current += 1
+        const g3 = extraPoint(gRef.current, made)
+        commit(g3)
+        setToast(made ? 'The kick is good.' : 'Kick is no good. The touchdown stands.')
+        afterYourScore(g3)
+      })
+  }
+
+  // All or nothing, the way the real decision is: every question right, or the try is
+  // worth nothing. The touchdown is banked either way.
+  const twoPointTry = () => {
+    setStage('live')
+    const want = rules.two_point_questions ?? 2
+    const run = (i, ok) => {
+      if (i >= want || !ok) {
+        const g3 = twoPoint(gRef.current, ok)
+        commit(g3)
+        setToast(ok ? 'They got it \u2014 two points.' : 'No good. The touchdown stands, the two does not.')
+        return afterYourScore(g3)
+      }
+      ask('xp', `Going for two \u2014 question ${i + 1} of ${want}. Both have to be right, or the try is worth nothing.`,
+        correct => run(i + 1, ok && correct !== false))
+    }
+    run(0, true)
   }
 
   // ── pre-snap choices ───────────────────────────────────────────────────────
@@ -369,6 +428,24 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
           <h2 className="h2">{you.name} vs {them.name}</h2>
           <p className="sub">{playoff ? 'Playoffs run cold: no hints on any question today.' : 'Two hints are available on every question this regular season.'}</p>
           <button type="button" className="btn-primary" onClick={start}>Coin toss</button>
+        </div>
+      )}
+
+      {stage === 'convert' && (
+        <div className="panel center">
+          <div className="eyebrow">Touchdown — six on the board</div>
+          <h2 className="h2">{you.abbr} {g.you} – {g.opp} {them.abbr}</h2>
+          <p className="sub">
+            The six are yours either way. Now take the kick, or go for two.
+            {missedKicks.current > 0 && <b> You have missed {missedKicks.current === 1 ? 'a kick' : `${missedKicks.current} kicks`} today — two would get {missedKicks.current === 1 ? 'it' : 'some of it'} back.</b>}
+          </p>
+          <div className="row center">
+            <button type="button" className="btn-primary" autoFocus onClick={kickTry}>Kick it · 1 question for 1 point</button>
+            <button type="button" className="btn-secondary" onClick={twoPointTry}>
+              Go for two · {rules.two_point_questions ?? 2} questions for 2 points
+            </button>
+          </div>
+          <p className="sub small">Going for two is all or nothing: miss either question and the try is worth nothing.</p>
         </div>
       )}
 

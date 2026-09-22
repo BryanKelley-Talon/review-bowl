@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url'
 import { buildPool } from '../src/content/pool.js'
 import { makeDealer } from '../src/content/dealer.js'
 import { DEFENSE, applyAnswer, applyAnswerAll, physics, ratings, values } from '../src/game/ratings.js'
-import { applyPlay, callTimeout, extraPoint, newGame } from '../src/game/matchRules.js'
+import { applyPenalty, applyPlay, callTimeout, extraPoint, isPenaltySpot, newGame, twoPoint } from '../src/game/matchRules.js'
 import {
   afterGame, applySeasonReview, bracket, finishPractice, MAX_LEVEL, newCareer, opponentStrength,
   PLAYOFF_BITE, PRACTICE_FACILITY_MAX, RESULT, schedule, standings, startNextSeason, trainPlayer, upgradeFacility,
@@ -174,12 +174,39 @@ const td = applyPlay(g, { type: 'td', yardLine: 100, seconds: 3 })
 eq(td.g.you, 6, 'touchdown banks six before any question')
 eq(extraPoint(td.g, false).you, 6, 'wrong extra-point answer: still six')
 eq(extraPoint(td.g, true).you, 7, 'right extra-point answer: seven')
+// v5: the two-point try — all or nothing, and the six are never at risk
+eq(twoPoint(td.g, true).you, 8, 'two-point try converted: eight')
+eq(twoPoint(td.g, false).you, 6, 'two-point try missed: still six, the touchdown stands')
 g = newGame(8)
 const inc = applyPlay({ ...g, down: 4 }, { type: 'incomplete', yardLine: 25, seconds: 2 })
 eq(inc.outcome.kind, 'downs', '4th-down incompletion turns it over')
 const tk = applyPlay(g, { type: 'tackle', yardLine: 37, seconds: 3 }, () => 0.5)
 ok(tk.g.down === 1 && tk.g.ballOn === 37, '12-yard gain is a first down')
 ok(callTimeout(tk.g).halfLeft === tk.g.halfLeft + tk.g.lastRunoff, 'timeout refunds the runoff')
+
+// ── v5: penalty moments (BK: "its real football, its consequences") ─────────
+const bigGain = { type: 'tackle', yardLine: 49, gained: 24, seconds: 4 }
+ok(isPenaltySpot(bigGain, { kind: 'continue' }, manifest.rules), 'a big gain can draw a flag')
+ok(!isPenaltySpot({ type: 'tackle', gained: 4 }, { kind: 'continue' }, manifest.rules), 'a short gain cannot')
+ok(!isPenaltySpot({ type: 'td', gained: 60 }, { kind: 'td' }, manifest.rules),
+   'a TOUCHDOWN is never called back — the six bank and stay banked')
+ok(!isPenaltySpot({ type: 'int', gained: 0 }, { kind: 'turnover' }, manifest.rules), 'a turnover cannot draw a flag')
+ok(!isPenaltySpot({ type: 'sack', gained: -7 }, { kind: 'continue' }, manifest.rules), 'a loss cannot draw a flag')
+{
+  const before = { ...newGame(8), ballOn: 30, down: 2, toGo: 7 }
+  const after = applyPlay(before, bigGain, () => 0.5).g
+  ok(after.ballOn > before.ballOn && after.down === 1, 'the gain is a first down until the flag lands')
+  const flagged = applyPenalty(before, after, manifest.rules)
+  eq(flagged.ballOn, 20, 'the flag walks it back 10 from the previous spot')
+  eq(flagged.down, 2, 'the down is replayed, not lost')
+  eq(flagged.toGo, 17, 'and the distance grows by the penalty')
+  eq(flagged.lastRunoff, 0, 'a flag stops the clock')
+  eq(flagged.you, before.you, 'a flag never touches the score')
+  const deep = { ...newGame(8), ballOn: 8, down: 1, toGo: 8 }
+  const walked = applyPenalty(deep, { ...deep, ballOn: 44 }, manifest.rules)
+  eq(walked.ballOn, 4, 'half the distance when the goal line is close')
+  ok(walked.ballOn >= 1, 'a penalty can never walk the ball through your own goal line')
+}
 
 // ── season, league, career ───────────────────────────────────────────────────
 const sch = schedule(7, 1)

@@ -21,6 +21,9 @@ const GATES = {
   // shape a student can run three of between games. Training draws from the lane the
   // player being trained plays for, so `lane` is always passed with it.
   practice: { label: 'Film study', only: ['vocab', 'reading', 'skills'] },
+  // A flag is a quick look at the officials, not a reading passage: vocabulary and
+  // identification shapes only (BK, 2026-09-22: "shorter, vocab matching type or ID type").
+  penalty:  { label: 'Flag on the play', only: ['vocab', 'skills', 'reading'] },
   training: { label: 'Training' },
 }
 
