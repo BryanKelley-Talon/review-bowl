@@ -13,13 +13,15 @@
 // because that is the thing this game is actually about.
 // ============================================================
 
-// ONE nondescript masthead, built from the team's own name (BK, 2026-09-22).
-// The first version gave each town its own paper title — and several of them landed on the
-// REAL papers of those real towns (the Elmira Star-Gazette, the Ithaca Journal and
-// Binghamton's Press & Sun-Bulletin all exist). Naming a real publication next to a real
-// town is the masthead version of using a real kid's name, so the whole scheme is gone.
-// One generic suffix, no variety, nothing that can collide with a masthead somebody owns.
-const PAPER_SUFFIX = 'Sporting News'
+// ONE nondescript masthead, built from the team's own name. BK ruled the word, 2026-09-22:
+// "Corning Gazette (its far enough away from Stargazette)---that works for all of them."
+//
+// The first version gave each town its own paper title and several landed on the REAL papers
+// of those real towns (the Elmira Star-Gazette, the Ithaca Journal and Binghamton's Press &
+// Sun-Bulletin all exist). Naming a real publication beside a real town is the masthead
+// version of using a real kid's name. One generic suffix means there is no list to collide
+// with anything — including when an eleventh team is added.
+const PAPER_SUFFIX = 'Gazette'
 
 const LANE_WORD = {
   sources: 'reading sources', context: 'historical context', vocab: 'vocabulary',
