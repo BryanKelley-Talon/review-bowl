@@ -12,7 +12,8 @@
     "test": "node scripts/test.mjs",
     "balance": "node scripts/balance.mjs",
     "offense": "node scripts/offense.mjs",
-    "sim": "node scripts/season-sim.mjs"
+    "sim": "node scripts/season-sim.mjs",
+    "code": "node scripts/make-code.mjs"
   },
   "dependencies": {
     "react": "^18.2.0",
