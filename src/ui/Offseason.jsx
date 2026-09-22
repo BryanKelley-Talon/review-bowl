@@ -3,13 +3,14 @@
 import { useMemo, useState } from 'react'
 import Question from './Question.jsx'
 import CampRep, { repsOf } from './CampRep.jsx'
-import { FACILITY_COST, freeAgents } from '../game/season.js'
-import { LANE_OF, applyAnswer } from '../game/ratings.js'
+import { FACILITY_COST, MAX_LEVEL, freeAgents } from '../game/season.js'
+import { DEFENSE, LANE_OF, applyAnswer } from '../game/ratings.js'
 import { player, POSITION_OF } from '../game/teams.js'
 
 const CAMP_REPS = 2
 const money = units => `$${units * 10}k`
-const starText = n => '★'.repeat(n) + '☆'.repeat(4 - n)
+// Same language as Practice Week: players have levels, not stars.
+const pips = n => '●'.repeat(n) + '○'.repeat(Math.max(0, MAX_LEVEL - n))
 
 export default function Offseason({ career, setCareer, camp, dealer, manifest, onAnswer, onStart }) {
   const [campDone, setCampDone] = useState(0)
@@ -32,7 +33,7 @@ export default function Offseason({ career, setCareer, camp, dealer, manifest, o
 
   const sign = a => {
     const q = dealer.draw('agency', { lane: LANE_OF[a.stat] })
-    const p = player(career.seed, career.team, POSITION_OF[a.stat], career.season + 1, a.stars)
+    const p = player(career.seed, career.team, POSITION_OF[a.stat], career.season + 1, a.level)
     setGate({ a, p, q })
   }
   const signed = ({ correct, hintsUsed, q }) => {
@@ -41,8 +42,8 @@ export default function Offseason({ career, setCareer, camp, dealer, manifest, o
     onAnswer(q.lane, correct, hintsUsed)
     setDecided(d => ({ ...d, [a.stat]: correct ? 'signed' : 'walked' }))
     if (correct) {
-      setCareer(c => ({ ...c, cash: c.cash - a.cost, stars: { ...c.stars, [a.stat]: a.stars } }))
-      setNote(`Signed ${p.name}, #${p.number}. ${statLabel(a.stat)} roster rating is now ${a.stars} stars.`)
+      setCareer(c => ({ ...c, cash: c.cash - a.cost, levels: { ...c.levels, [a.stat]: a.level } }))
+      setNote(`Signed ${p.name}, #${p.number}. Your ${statLabel(a.stat)} starter is a level ${a.level} player next season.`)
     } else setNote(`${p.name}'s agent walks. No money spent.`)
   }
 
@@ -76,15 +77,15 @@ export default function Offseason({ career, setCareer, camp, dealer, manifest, o
         <p className="sub">Signing costs cash <b>and</b> a right answer from that player's lane. Miss it and the agent walks — you keep your money. Cash: <b>{money(career.cash)}</b>.</p>
         <div className="grid">
           {agents.map(a => {
-            const p = player(career.seed, career.team, POSITION_OF[a.stat], career.season + 1, a.stars)
-            const have = career.stars[a.stat] || 2
+            const p = player(career.seed, career.team, POSITION_OF[a.stat], career.season + 1, a.level)
+            const have = career.levels[a.stat] || 2
             const status = decided[a.stat]
-            const worse = a.stars <= have
+            const worse = a.level <= have
             return (
               <div key={a.stat} className="card static">
                 <div className="card-type">{POSITION_OF[a.stat]} · {statLabel(a.stat)}</div>
                 <div className="card-name">{p.name} #{p.number}</div>
-                <div className="card-blurb">{starText(a.stars)} · yours now {starText(have)} · {money(a.cost)}</div>
+                <div className="card-blurb"><span className="pips">{pips(a.level)}</span> level {a.level} · yours now level {have} · {money(a.cost)}</div>
                 {status ? <span className="flag">{status === 'signed' ? 'Signed' : 'Walked'}</span>
                   : <button type="button" className="btn-secondary" disabled={worse || career.cash < a.cost} onClick={() => sign(a)}>
                       {worse ? 'No upgrade' : career.cash < a.cost ? 'Not enough cash' : `Sign · answer a ${manifest.lanes[LANE_OF[a.stat]]?.label} question`}
@@ -99,12 +100,12 @@ export default function Offseason({ career, setCareer, camp, dealer, manifest, o
         <h3 className="h3">Facilities</h3>
         <p className="sub">Permanent +1 to a stat, bought with cash. They stay with the team — if you're fired, they don't come with you. What you know does.</p>
         <div className="grid">
-          {Object.keys(POSITION_OF).map(s => {
+          {[...Object.keys(POSITION_OF), DEFENSE].map(s => {
             const lvl = career.facilities[s] || 0
             const cost = FACILITY_COST[lvl]
             return (
               <div key={s} className="card static">
-                <div className="card-name">{statLabel(s)}</div>
+                <div className="card-name">{s === DEFENSE ? 'Film room' : statLabel(s)}</div>
                 <div className="card-blurb">Level {lvl} of 2</div>
                 {lvl >= 2 ? <span className="flag">Maxed</span>
                   : <button type="button" className="btn-secondary" disabled={career.cash < cost} onClick={() => upgrade(s)}>Upgrade · {money(cost)}</button>}

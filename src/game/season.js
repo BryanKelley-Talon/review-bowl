@@ -6,7 +6,7 @@
 // save code only has to carry the player's own eight results, and a restored code
 // rebuilds the exact same league table.
 // ============================================================
-import { FORM_START, STATS } from './ratings.js'
+import { ALL_LANES, DEFENSE, FORM_START, STATS } from './ratings.js'
 import { TEAMS, mix, rng, teamStrength } from './teams.js'
 
 export const RESULT = { NONE: 0, W: 1, L: 2, T: 3 }
@@ -54,7 +54,8 @@ export function simGame(seed, season, tag, a, b) {
 
 export function standings(career) {
   const { seed, season, team, results } = career
-  const played = career.phase === 'regular' ? career.week : REGULAR_GAMES
+  // 'practice' is mid-season too: only a finished regular season counts all eight.
+  const played = career.phase === 'regular' || career.phase === 'practice' ? career.week : REGULAR_GAMES
   const rows = TEAMS.map((t, i) => ({ index: i, team: t, w: 0, l: 0, t: 0 }))
   schedule(seed, season).slice(0, played).forEach((pairs, week) => {
     for (const [a, b] of pairs) {
@@ -105,23 +106,32 @@ export function opponentStrength(career, opp) {
 }
 
 // ── the career ───────────────────────────────────────────────────────────────
-export function starsFor(seed, team, salt = 0) {
+// A squad arrives at levels 1–3. Level is what a player is worth to his stat, and
+// Practice Week training (or a free-agent signing) is how it goes up. Max 4.
+export function levelsFor(seed, team, salt = 0) {
   const r = rng(mix(seed, team, 5, salt))
   return Object.fromEntries(STATS.map(s => [s, r() < 0.2 ? 1 : r() < 0.85 ? 2 : 3]))
 }
+export const MAX_LEVEL = 4
+// What the next level costs, in $10k: 1→2, 2→3, 3→4.
+export const TRAIN_COST = [0, 2, 3, 4]
+export const trainCost = level => TRAIN_COST[clamp(level, 1, 3)] ?? 4
 
 export function newCareer(course, team, seed = Math.floor(Math.random() * 64)) {
   return {
     course, team, seed,
-    season: 1, phase: 'regular', week: 0,
+    // A season opens in Practice Week, so the first thing a student meets is the
+    // defensive film study rather than a cold kickoff.
+    season: 1, phase: 'practice', week: 0,
     results: [0, 0, 0, 0, 0, 0, 0, 0],
     playoffRound: 0, champ: false,
     cash: 5,                                   // in $10k
     security: 18,                              // job security, 0–31
-    form: { sources: FORM_START, context: FORM_START, vocab: FORM_START, reading: FORM_START, skills: FORM_START },
-    facilities: Object.fromEntries(STATS.map(s => [s, 0])),
-    stars: starsFor(seed, team),
+    form: Object.fromEntries(ALL_LANES.map(l => [l, FORM_START])),
+    facilities: Object.fromEntries([...STATS, DEFENSE].map(s => [s, 0])),
+    levels: levelsFor(seed, team),
     titles: 0,
+    practiceDone: false,
   }
 }
 
@@ -143,6 +153,11 @@ export function afterGame(career, outcome) {
       const rank = standings(c).findIndex(r => r.index === c.team)
       if (rank < 4) { c.phase = 'playoffs'; c.playoffRound = 1 }
       else c.phase = 'seasonEnd'
+    } else {
+      // Practice Week: recovery, film study and training before the next opponent.
+      // Not before a playoff game — the playoffs run cold (iteration order §5).
+      c.phase = 'practice'
+      c.practiceDone = false
     }
   } else if (c.phase === 'playoffs') {
     if (won && c.playoffRound === 1) c.playoffRound = 2
@@ -183,16 +198,29 @@ export function jobOffers(career) {
 export function takeJob(career, team) {
   return {
     ...career, team, security: 16, phase: 'offseason',
-    facilities: Object.fromEntries(STATS.map(s => [s, 0])),
-    stars: starsFor(career.seed, team, career.season),
+    facilities: Object.fromEntries([...STATS, DEFENSE].map(s => [s, 0])),
+    levels: levelsFor(career.seed, team, career.season),
   }
 }
 
 export function startNextSeason(career) {
   return {
-    ...career, season: clamp(career.season + 1, 1, 16), phase: 'regular', week: 0,
-    results: [0, 0, 0, 0, 0, 0, 0, 0], playoffRound: 0, champ: false,
+    ...career, season: clamp(career.season + 1, 1, 16), phase: 'practice', week: 0,
+    results: [0, 0, 0, 0, 0, 0, 0, 0], playoffRound: 0, champ: false, practiceDone: false,
   }
+}
+
+// Practice Week is over; the next opponent is up.
+export function finishPractice(career) {
+  return { ...career, phase: 'regular', practiceDone: true }
+}
+
+// Training one player: cash AND a right answer from his lane (Practice Week).
+export function trainPlayer(career, stat) {
+  const level = career.levels[stat] ?? 2
+  if (level >= MAX_LEVEL) return career
+  return { ...career, cash: clamp(career.cash - trainCost(level), 0, 31),
+           levels: { ...career.levels, [stat]: level + 1 } }
 }
 
 // ── the off-season market ────────────────────────────────────────────────────
@@ -202,10 +230,13 @@ export function freeAgents(career) {
   const pool = STATS.slice()
   for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]] }
   for (const stat of pool.slice(0, 3)) {
-    const stars = r() < 0.3 ? 4 : 3
-    list.push({ stat, stars, cost: stars === 4 ? 4 : 2 })
+    const level = r() < 0.3 ? 4 : 3
+    list.push({ stat, level, cost: level === 4 ? 4 : 2 })
   }
   return list
 }
 
 export const FACILITY_COST = [3, 5]                     // level 0→1, 1→2, in $10k
+// Practice Week sells the first tier only; the second tier stays the off-season's
+// deeper investment (BK: post-season should be "even more so").
+export const PRACTICE_FACILITY_MAX = 1

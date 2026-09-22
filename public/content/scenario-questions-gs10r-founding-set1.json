@@ -1,0 +1,150 @@
+{
+  "_note": "First working set, Global 10R scenario questions -- built by Will 2026-09-21 for the founding-1789 scenario, per Josh's 2026-09-21 ask and BK's same-day ruling that vocab is now gate-eligible (not optional bonus). Sourced from Six Moves (GS10R_SixMoves_Deck_v2) and Unit 10.2 Casefile A vocabulary (Enlightenment/founding-era) -- the same content this scenario's governance poles run on. Hint voice matches your Arena pattern (StationScreen.v1.1: terse, second-person, states the gate as a rule of the space, never scolds). Data shape (id/type/prompt/resolution/hints, plus term or move + optional umbrella) is my proposal -- tell me the engine's real field names if this needs to change. This is a first set, not a full bank; more can follow once this is buildable in front of BK.",
+  "items": [
+    {
+      "id": "sq-natural-rights",
+      "type": "vocab",
+      "term": "natural rights",
+      "prompt": "A philosophe argues that no king granted you the right to your own life and liberty -- you were born with it. Name the term for a right that exists before any government and isn't given by one.",
+      "resolution": "natural rights",
+      "hints": [
+        "Think about where the right comes from -- a ruler, or something older than any ruler.",
+        "The term starts with the idea that some rights exist before government does.",
+        "It's the pair of words Locke used to argue government exists to protect, not to grant."
+      ]
+    },
+    {
+      "id": "sq-social-contract",
+      "type": "vocab",
+      "term": "social contract",
+      "prompt": "Explain, in one sentence, why people would voluntarily give up some of their freedom to a government at all.",
+      "resolution": "They trade some freedom for protection of their rights -- that trade is the social contract.",
+      "hints": [
+        "This isn't about fear of the ruler. It's about a trade the people choose to make.",
+        "The word you want pairs 'social' with a word for a binding agreement.",
+        "It's the deal Hobbes, Locke, and Rousseau all describe differently but all name the same way."
+      ]
+    },
+    {
+      "id": "sq-consent-of-the-governed",
+      "type": "vocab",
+      "term": "consent of the governed",
+      "prompt": "A government changes its tax law. Under what condition does the Enlightenment argument say that law is legitimate?",
+      "resolution": "Only if the people being governed have agreed to be ruled by that government -- consent of the governed.",
+      "hints": [
+        "Legitimacy here isn't about force. It's about agreement.",
+        "Whose agreement has to be present for power to be legitimate?",
+        "Three words: consent... of the...?"
+      ]
+    },
+    {
+      "id": "sq-identification-power",
+      "type": "move",
+      "move": "Identification",
+      "umbrella": "power-its-abuse",
+      "prompt": "Your Minister just told you: 'They're starting to ask whether obedience was ever the same as consent.' Name the pattern this line is pointing at -- not the event, the issue underneath it.",
+      "resolution": "Power and its legitimacy -- whether a government's authority is real just because people obey it, or only when they've actually agreed to it.",
+      "hints": [
+        "Don't describe what's happening in the town. Name what's always at stake when a line like this gets said.",
+        "This is the same question every government has had to answer since the town's founding.",
+        "It's the umbrella issue this whole founding choice sits under: Power and Its ______."
+      ]
+    },
+    {
+      "id": "sq-causation",
+      "type": "move",
+      "move": "Causation",
+      "prompt": "Unrest rose the week after you raised taxes. Is that proof the tax caused the unrest? Explain in one sentence what more you'd need to know.",
+      "resolution": "No -- 'after' isn't 'because.' You'd need to rule out other causes happening the same week before you can call the tax the cause.",
+      "hints": [
+        "Something happening after something else isn't enough on its own.",
+        "What's the difference between something following an event and being caused by it?",
+        "The move here has a name: don't confuse timing with causation."
+      ]
+    },
+    {
+      "id": "sq-source-use",
+      "type": "move",
+      "move": "Source Use",
+      "prompt": "Two advisors give you opposite readings of the same unrest. Before you decide who's right, what's the first thing you should ask about each of them?",
+      "resolution": "Who they are and why their position might shape what they're telling you -- who's speaking, and what they want.",
+      "hints": [
+        "The content of what they say matters less right now than something else about them.",
+        "Ask about the speaker, not just the statement.",
+        "Say who said it -- and why that changes things."
+      ]
+    },
+    {
+      "id": "sq-purpose-audience",
+      "type": "move",
+      "move": "Purpose & Audience",
+      "prompt": "The Town Crier's announcement is written very differently from your Minister's private report. Why would the same information be phrased two different ways?",
+      "resolution": "Because they're written for different audiences with different purposes -- a public announcement and a private advisory don't need to say the same thing the same way.",
+      "hints": [
+        "Who is each one actually written for?",
+        "What does each speaker want the audience to do or feel?",
+        "Purpose and ______ -- the second word is who's listening."
+      ]
+    },
+    {
+      "id": "sq-tyranny",
+      "type": "vocab",
+      "term": "tyranny",
+      "prompt": "Name the term for rule that has no limit and no consent behind it.",
+      "resolution": "tyranny",
+      "hints": [
+        "It's not just 'a bad ruler' -- it's a specific structural failure.",
+        "No limit, and no agreement from the governed.",
+        "It's the word Locke uses for what happens when a ruler breaks the social contract."
+      ]
+    },
+    {
+      "id": "sq-separation-of-powers",
+      "type": "vocab",
+      "term": "separation of powers",
+      "prompt": "The Reformer's council splits authority between a body that writes laws and a body that enforces them. Name the principle behind that split.",
+      "resolution": "separation of powers",
+      "hints": [
+        "The goal is making sure no single branch holds everything.",
+        "Legislature, executive, judiciary -- divided rather than combined.",
+        "Two words: separation of ______."
+      ]
+    },
+    {
+      "id": "sq-general-will",
+      "type": "vocab",
+      "term": "general will",
+      "prompt": "Rousseau's rule isn't 'whatever the majority wants right now.' What is it instead?",
+      "resolution": "The general will -- what's genuinely in the shared interest of the whole community, not just the sum of individual wants.",
+      "hints": [
+        "It's not the same as majority opinion -- that's a different term (will of all).",
+        "Think 'common good,' not 'most votes.'",
+        "Two words, and the first one means 'shared by everyone.'"
+      ]
+    },
+    {
+      "id": "sq-claim-support",
+      "type": "move",
+      "move": "Claim Support",
+      "prompt": "'The old system had to go because it no longer served the people.' Is that reason enough, or does it go too far? Explain.",
+      "resolution": "It's a real reason, but stated alone it goes too far -- it needs evidence of how it stopped serving people, not just the assertion.",
+      "hints": [
+        "A reason can be true and still be incomplete on its own.",
+        "What would you need to see to actually believe that claim?",
+        "This move is about whether the support actually holds up the claim, or just restates it."
+      ]
+    },
+    {
+      "id": "sq-divine-right-absolute-monarchy",
+      "type": "vocab",
+      "term": "divine right / absolute monarchy",
+      "prompt": "A ruler claims their authority comes directly from God and cannot be questioned by any court or assembly. Name both the claim and the system it justifies.",
+      "resolution": "Divine right justifies absolute monarchy -- the claim, and the system it defends.",
+      "hints": [
+        "One term is the justification, the other is the government it's used to defend.",
+        "Divine ______ justifies absolute ______.",
+        "This is Hobbes' pole, taken to its most extreme historical form."
+      ]
+    }
+  ]
+}

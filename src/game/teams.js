@@ -59,23 +59,42 @@ const LAST = ['Hollis', 'Barnes', 'Whitaker', 'Pruitt', 'Okafor', 'Delaney', 'Cr
   'Voss', 'Wendell', 'Yates', 'Zeller', 'Ashby', 'Burrell', 'Colvin', 'Dunmore', 'Everly', 'Farrow', 'Gentry']
 const NUMBERS = { QB: [1, 19], WR: [80, 89], RB: [20, 39], OL: [60, 79], TE: [40, 49] }
 
-export function player(seed, teamIndex, position, season, stars) {
-  const r = rng(mix(seed, teamIndex, position.charCodeAt(0), position.charCodeAt(1), season, stars))
+// A player's NAME and NUMBER are seeded by team, position and season only — never by
+// his level. Training him raises the level; it must not turn him into a different kid.
+// A free agent signed in the off-season is generated at season + 1, which is exactly
+// the name next season's roster will show for that position: you signed him, he's yours.
+export function player(seed, teamIndex, position, season, level) {
+  const r = rng(mix(seed, teamIndex, position.charCodeAt(0), position.charCodeAt(1), season))
   const [lo, hi] = NUMBERS[position]
   return {
     name: `${FIRST[Math.floor(r() * FIRST.length)]} ${LAST[Math.floor(r() * LAST.length)]}`,
     number: lo + Math.floor(r() * (hi - lo + 1)),
     position,
-    stars,
+    level,
   }
 }
 
 // The key players, one per stat: QB throws, WR catches, RB runs, OL blocks, TE takes hits.
 export const POSITION_OF = { throwing: 'QB', hands: 'WR', speed: 'RB', blocking: 'OL', toughness: 'TE' }
 
-export function roster(seed, teamIndex, season, stars) {
-  return Object.fromEntries(Object.entries(POSITION_OF).map(([stat, pos]) =>
-    [stat, player(seed, teamIndex, pos, season, stars[stat] ?? 2)]))
+export function roster(seed, teamIndex, season, levels) {
+  // Five starters on one screen: nudge a repeated first name along the list rather than
+  // fielding two players called Trey. Identity still depends only on team/position/season.
+  const used = new Set()
+  return Object.fromEntries(Object.entries(POSITION_OF).map(([stat, pos]) => {
+    const p = player(seed, teamIndex, pos, season, levels?.[stat] ?? 2)
+    let first = p.name.split(' ')[0]
+    if (used.has(first)) {
+      const i = FIRST.indexOf(first)
+      for (let n = 1; n <= FIRST.length; n++) {
+        const alt = FIRST[(i + n * 7) % FIRST.length]
+        if (!used.has(alt)) { first = alt; break }
+      }
+      p.name = `${first} ${p.name.split(' ').slice(1).join(' ')}`
+    }
+    used.add(first)
+    return [stat, p]
+  }))
 }
 
 // A team's hidden strength for a season (the opponents' "rating" in the engine and

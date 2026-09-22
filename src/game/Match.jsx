@@ -12,7 +12,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Question from '../ui/Question.jsx'
 import { gateLabel } from '../content/dealer.js'
 import { FieldEngine } from './field.js'
-import { driveLine, simDrive } from './drive.js'
+import { driveLine, simDrive, standLine } from './drive.js'
+import { isBigMoment } from './threat.js'
 import {
   applyDrive, applyPlay, callTimeout, canKick, clockOf, extraPoint, fieldGoal, firstDown, goalToGo,
   halfOver, kickChance, kickDistance, newGame, punt, startOvertime, startSecondHalf,
@@ -67,7 +68,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   const tally = useRef({ right: 0, total: 0 })
   const bigMomentAsked = useRef(-1)
 
-  const r = ratings({ form: career.form, stars: career.stars, facilities: career.facilities, boost })
+  const r = ratings({ form: career.form, levels: career.levels, facilities: career.facilities, boost })
   const v = values(r)
 
   // ── gates ──────────────────────────────────────────────────────────────────
@@ -108,7 +109,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
     const pb = playBoost.current
     engine.current.setup({
       ballOn: gs.ballOn, toGo: gs.toGo, goal: goalToGo(gs), kits,
-      phys: physics(values(ratings({ form: career.form, stars: career.stars, facilities: career.facilities, boost })),
+      phys: physics(values(ratings({ form: career.form, levels: career.levels, facilities: career.facilities, boost })),
                     oppStrength, !!(pb && pb.read)),
     })
   }, [kits, career, boost, oppStrength])
@@ -120,7 +121,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
     commit(gs)
     // The rare big moment: 3rd-and-long or the red zone, once a half at most.
     const key = gs.half * 1000 + gs.ballOn * 10 + gs.down
-    const eligible = !gs.ot && ((gs.down === 3 && gs.toGo >= 8) || gs.ballOn >= 80)
+    const eligible = !gs.ot && isBigMoment(gs)
     if (eligible && bigMomentAsked.current !== key && liveChecks.current[gs.half] < (rules.live_checks_per_half ?? 1) &&
         Math.random() < (rules.live_check_chance ?? 0.3)) {
       bigMomentAsked.current = key
@@ -139,7 +140,12 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   }, [stage])
 
   useEffect(() => {
-    const onKey = e => { if (e.key === 'Enter' && stage === 'presnap' && !gate) { e.preventDefault(); snap() } }
+    // SPACE snaps (BK's playtest: easier to hit under pressure than Enter). Enter still
+    // works as a quiet fallback. `repeat` is ignored so holding the key cannot snap and
+    // then immediately hand the ball to a scrambling quarterback.
+    const onKey = e => {
+      if ((e.key === ' ' || e.key === 'Enter') && !e.repeat && stage === 'presnap' && !gate) { e.preventDefault(); snap() }
+    }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [stage, gate, snap])
@@ -152,7 +158,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
 
   const oppOvertime = useCallback(gs => {
     const d = simDrive({ opp: oppStrength, defense: v.defense, start: 75, ot: true })
-    setDrive({ d, line: driveLine(them.name, d), after: () => {
+    setDrive({ d, line: driveLine(them.name, d), stand: standLine(d, v.defense), after: () => {
       const g2 = { ...gs, opp: gs.opp + d.points }
       if (g2.you !== g2.opp || (!playoff && g2.ot >= 2)) return finish(g2)
       const g3 = startOvertime(g2)
@@ -168,7 +174,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
     if (gs.ot) return oppOvertime(gs)
     if (halfOver(gs)) return endHalfRef.current(gs)
     const d = simDrive({ opp: oppStrength, defense: v.defense, start, secondsLeft: gs.halfLeft })
-    setDrive({ d, line: driveLine(them.name, d), after: () => {
+    setDrive({ d, line: driveLine(them.name, d), stand: standLine(d, v.defense), after: () => {
       const g2 = applyDrive(gs, d)
       if (d.result === 'END' || halfOver(g2)) return endHalfRef.current(g2)
       toPresnap(g2)
@@ -323,14 +329,14 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
       <div className="field-wrap" onClick={() => { if (stage === 'presnap' && !gate) snap() }}>
         <canvas ref={canvasRef} className="field" aria-label="The field. Live play." />
         {toast && <div className="toast" role="status">{toast}</div>}
-        {stage === 'presnap' && !gate && <div className="snap-hint">Tap the field or press Enter to snap</div>}
+        {stage === 'presnap' && !gate && <div className="snap-hint">Tap the field or press Space to snap</div>}
         {stage === 'live' && help && <div className="snap-hint">{help}</div>}
       </div>
 
       {flash && <div key={flash.id} className={`stat-flash ${flash.up ? 'up' : ''}`} role="status">{flash.text}</div>}
       <div className="stat-strip" aria-label="Your team's stats, built from your answers">
         {statCells.map(([k, label]) => (
-          <div className={`stat-cell${flash && flash.stat === k ? ' lit' : ''}`} key={k} title={k === 'defense' ? 'Average of the five' : undefined}>
+          <div className={`stat-cell${flash && flash.stat === k ? ' lit' : ''}`} key={k} title={k === 'defense' ? 'Trained in Practice Week' : undefined}>
             <span className="stat-name">{label}</span>
             <span className="stat-bar"><i style={{ width: `${r[k].value * 10}%` }} /></span>
             <b>{r[k].value}</b>
@@ -381,7 +387,9 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
         <div className="panel center">
           <div className="eyebrow">{them.name} have the ball</div>
           <p className="drive-line">{drive.line}</p>
-          <p className="sub">Your Defense rating ({v.defense}) is the average of your five stats — every lane of content holds them.</p>
+          {drive.stand
+            ? <p className="sub stand-line">{drive.stand}</p>
+            : <p className="sub">Your Defense rating ({v.defense}) comes out of Practice Week film study, and it counts for most when they get close.</p>}
           <button type="button" className="btn-primary" autoFocus onClick={() => { const a = drive.after; setDrive(null); a() }}>Continue</button>
         </div>
       )}

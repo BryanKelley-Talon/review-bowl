@@ -19,7 +19,7 @@
 
 export const VW = 480
 export const VH = 270
-const PX = 6
+const PX = 7
 const VIEW_W = VW / PX
 const VIEW_H = VH / PX
 export const FIELD_W = 53.33
@@ -70,6 +70,11 @@ export class FieldEngine {
     this.keys = {}
     this.pointer = null
     this.players = []
+    // Feedback on the big moments (iteration order §3): a flash and a shake, no sound —
+    // BK ruled audio out, a classroom is the wrong room for it. Reduced motion keeps
+    // the flash and drops the shake.
+    this.fx = { flash: 0, color: '#F5CB63', shake: 0 }
+    this.calm = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
     this.t = 0
     this.last = performance.now()
     this._bind()
@@ -129,12 +134,23 @@ export class FieldEngine {
 
   snap() {
     if (this.state !== 'presnap') return
+    // The snap itself is Space (handled by Match). Hold it a beat too long and the
+    // engine would read the same press as "take off running", so Space stays locked
+    // out until it is released.
+    this.spaceLocked = !!this.keys[' ']
     this.state = 'dropback'
     this.t = 0
     this._phase('dropback')
   }
 
   _phase(p) { if (this.cb.onPhase) this.cb.onPhase(p) }
+
+  // One call for every "that mattered" moment on the field.
+  _boom({ flash = 0, color = '#F5CB63', shake = 0 }) {
+    this.fx.flash = Math.max(this.fx.flash, this.calm ? flash * 0.5 : flash)
+    this.fx.color = color
+    this.fx.shake = this.calm ? 0 : Math.max(this.fx.shake, shake)
+  }
 
   // ── input ──────────────────────────────────────────────────────────────────
   _bind() {
@@ -168,11 +184,13 @@ export class FieldEngine {
       const k = e.key
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(k) && this.state !== 'presnap' && this.state !== 'idle') e.preventDefault()
       this.keys[k] = down
-      if (!down) return
+      if (k === ' ' && !down) this.spaceLocked = false
+      if (!down || e.repeat) return
+      const space = k === ' ' && !this.spaceLocked
       if (this.state === 'dropback') {
         if (/^[1-4]$/.test(k)) { const r = this.targets.find(t => t.label === Number(k)); if (r) this._throwTo(r) }
-        else if (k === ' ') this._qbRun()
-      } else if (this.state === 'run' && k === ' ') this._doJuke()
+        else if (space) this._qbRun()
+      } else if (this.state === 'run' && space) this._doJuke()
     }
     this._kd = e => this._key(e, true)
     this._ku = e => this._key(e, false)
@@ -269,6 +287,8 @@ export class FieldEngine {
 
   _step(dt) {
     this.t += dt
+    if (this.fx.flash > 0) this.fx.flash = Math.max(0, this.fx.flash - dt * 2.4)
+    if (this.fx.shake > 0) this.fx.shake = Math.max(0, this.fx.shake - dt * 14)
     const ph = this.phys
     for (const p of this.players) {
       p.hist.push({ x: p.x, y: p.y, t: this.t })
@@ -420,6 +440,7 @@ export class FieldEngine {
       if (d.stun > 0 || dist(d, c) > 0.8) continue
       if (Math.random() < ph.breakTackle) {
         d.stun = 0.9
+        this._boom({ shake: 1.6 })
         if (this.cb.onEvent) this.cb.onEvent({ type: 'broken' })
         continue
       }
@@ -444,6 +465,14 @@ export class FieldEngine {
     }
     if (kind === 'incomplete' || kind === 'int') this.result.yardLine = kind === 'int'
       ? clamp(Math.round((extra.spot?.x ?? x) - 10), 0, 100) : this.los - 10
+    // What the moment was worth, in light and motion.
+    if (kind === 'td') this._boom({ flash: 0.85, color: '#F5CB63', shake: 4 })
+    else if (kind === 'int' || kind === 'fumble') this._boom({ flash: 0.7, color: '#E08C82', shake: 5 })
+    else if (kind === 'safety') this._boom({ flash: 0.6, color: '#E08C82', shake: 4 })
+    else if (kind === 'sack') this._boom({ flash: 0.25, color: '#E08C82', shake: 3.5 })
+    else if (this.result.gained >= 20) this._boom({ flash: 0.35, color: '#F5CB63', shake: 1.5 })
+    else if (this.result.gained <= 0 && kind !== 'incomplete') this._boom({ shake: 2.6 })
+
     this.ball = null
     this.aim = null
     this.state = 'dead'
@@ -459,8 +488,12 @@ export class FieldEngine {
       this.cam.x += (this._camX(focus.x) - this.cam.x) * 0.12
       this.cam.y += (clamp(focus.y, VIEW_H / 2 - 3, FIELD_W - VIEW_H / 2 + 3) - this.cam.y) * 0.12
     }
+    g.save()
+    if (this.fx.shake > 0) {
+      g.translate(Math.round((Math.random() - 0.5) * this.fx.shake * 2), Math.round((Math.random() - 0.5) * this.fx.shake * 2))
+    }
     g.fillStyle = '#23471F'
-    g.fillRect(0, 0, VW, VH)
+    g.fillRect(-12, -12, VW + 24, VH + 24)
     this._drawField(g)
     if (!this.players.length) return
     if (['presnap', 'dropback', 'air', 'run'].includes(this.state)) {
@@ -472,15 +505,23 @@ export class FieldEngine {
     if (this.ball) this._drawBall(g)
     else if (!this.carrier && this.qb && this.state !== 'idle') {
       const s = this._toScreen(this.qb.x, this.qb.y)
-      g.fillStyle = '#8B4A1C'; g.fillRect(s.x + 3, s.y - 4, 3, 2)
+      g.fillStyle = '#8B4A1C'; g.fillRect(s.x + 4, s.y - 6, 4, 3)
     }
     if (this.aim && this.state === 'dropback') this._drawAim(g)
     if (['presnap', 'dropback'].includes(this.state)) {
       for (const r of this.targets) {
         const s = this._toScreen(r.x, r.y)
-        g.fillStyle = 'rgba(11,18,32,.85)'; g.fillRect(s.x - 3, s.y - 18, 7, 9)
-        this._digit(g, r.label, s.x - 1, s.y - 16, 1, '#F4F6FA')
+        g.fillStyle = 'rgba(11,18,32,.88)'; g.fillRect(s.x - 5, s.y - 26, 11, 13)
+        g.fillStyle = '#F5CB63'; g.fillRect(s.x - 5, s.y - 26, 11, 1)
+        this._digit(g, r.label, s.x - 3, s.y - 23, 2, '#F4F6FA')
       }
+    }
+    g.restore()
+    if (this.fx.flash > 0) {
+      g.globalAlpha = Math.min(0.55, this.fx.flash * 0.55)
+      g.fillStyle = this.fx.color
+      g.fillRect(0, 0, VW, VH)
+      g.globalAlpha = 1
     }
   }
 
@@ -524,7 +565,8 @@ export class FieldEngine {
     g.fillRect(tl.x, br.y - 2, br.x - tl.x, 2)
     for (let x = 20; x <= 100; x += 10) {
       const n = x <= 60 ? x - 10 : 110 - x
-      for (const ny of [5, FIELD_W - 7]) {
+      // Inside the camera's band: at this zoom the old sideline positions sat off screen.
+      for (const ny of [9, FIELD_W - 11]) {
         const s = this._toScreen(x, ny)
         const str = String(n)
         this._text(g, str, s.x - (str.length * 8 - 2) / 2, s.y, 2, 'rgba(255,255,255,.7)')
@@ -542,18 +584,36 @@ export class FieldEngine {
 
   _drawPlayer(g, p, time) {
     const s = this._toScreen(p.x, p.y)
-    if (s.x < -10 || s.x > VW + 10 || s.y < -14 || s.y > VH + 10) return
+    if (s.x < -16 || s.x > VW + 16 || s.y < -24 || s.y > VH + 16) return
     const kit = p.team === 'o' ? this.kits.offense : this.kits.defense
-    const bob = (Math.abs(p.vx) + Math.abs(p.vy) > 0.5) ? Math.round(Math.sin(time * 16 + p.y) * 0.8) : 0
-    g.fillStyle = 'rgba(0,0,0,.28)'; g.fillRect(s.x - 3, s.y + 3, 7, 2)
-    if (p === this.carrier) { g.fillStyle = 'rgba(245,203,99,.55)'; g.fillRect(s.x - 5, s.y + 3, 11, 2) }
-    g.fillStyle = '#E8C9A0'; g.fillRect(s.x - 2, s.y - 1 + bob, 1, 3); g.fillRect(s.x + 2, s.y - 1 + bob, 1, 3)
-    g.fillStyle = kit.jersey; g.fillRect(s.x - 2, s.y - 5 + bob, 5, 6)
-    g.fillStyle = kit.trim; g.fillRect(s.x - 2, s.y - 9 + bob, 5, 4)
-    g.fillStyle = p.team === 'o' ? '#D9D9D9' : '#1A1A1A'; g.fillRect(s.x - 2, s.y + 1 + bob, 5, 2)
+    const moving = Math.abs(p.vx) + Math.abs(p.vy) > 0.5
+    const bob = moving ? Math.round(Math.sin(time * 15 + p.y)) : 0
+    const stride = moving ? Math.round(Math.sin(time * 15 + p.y)) : 0
+    const y = s.y + bob
+    // shadow, and a gold ring under whoever has the ball
+    g.fillStyle = 'rgba(0,0,0,.3)'; g.fillRect(s.x - 5, s.y + 5, 11, 2)
+    if (p === this.carrier) { g.fillStyle = 'rgba(245,203,99,.6)'; g.fillRect(s.x - 7, s.y + 5, 15, 2) }
+    // legs (they scissor as he runs), shoes
+    g.fillStyle = kit.trim
+    g.fillRect(s.x - 3, y + 1, 2, 4 - stride)
+    g.fillRect(s.x + 2, y + 1, 2, 4 + stride)
+    g.fillStyle = '#1A1A1A'
+    g.fillRect(s.x - 4, s.y + 4, 3, 2); g.fillRect(s.x + 2, s.y + 4, 3, 2)
+    // arms
+    g.fillStyle = '#E8C9A0'
+    g.fillRect(s.x - 5, y - 5 + stride, 2, 5); g.fillRect(s.x + 4, y - 5 - stride, 2, 5)
+    // jersey and shoulder pads
+    g.fillStyle = kit.jersey; g.fillRect(s.x - 4, y - 7, 9, 9)
+    g.fillStyle = kit.trim; g.fillRect(s.x - 4, y - 7, 9, 2)
+    // helmet with a facemask facing the way he plays
+    g.fillStyle = kit.trim; g.fillRect(s.x - 4, y - 14, 9, 7)
+    g.fillStyle = 'rgba(0,0,0,.25)'; g.fillRect(s.x - 4, y - 14, 9, 2)
     g.fillStyle = p.team === 'o' ? '#0B1220' : '#F4F6FA'
-    g.fillRect(p.team === 'o' ? s.x + 2 : s.x - 2, s.y - 8 + bob, 1, 2)
-    if (p.stun > 0) { g.fillStyle = '#F4F6FA'; g.fillRect(s.x - 1, s.y - 12, 1, 1); g.fillRect(s.x + 2, s.y - 11, 1, 1) }
+    g.fillRect(p.team === 'o' ? s.x + 4 : s.x - 5, y - 11, 2, 3)
+    if (p.stun > 0) {
+      g.fillStyle = '#F4F6FA'
+      g.fillRect(s.x - 3, y - 19, 2, 2); g.fillRect(s.x + 3, y - 21, 2, 2)
+    }
   }
 
   _drawBall(g) {
@@ -563,8 +623,10 @@ export class FieldEngine {
     const y = b.from.y + (b.to.y - b.from.y) * k
     const h = 4 * b.arc * k * (1 - k)
     const s = this._toScreen(x, y)
-    g.fillStyle = 'rgba(0,0,0,.35)'; g.fillRect(s.x - 1, s.y + 2, 3, 1)
-    g.fillStyle = '#8B4A1C'; g.fillRect(s.x - 1, Math.round(s.y - h * PX * 0.7) - 2, 3, 2)
+    g.fillStyle = 'rgba(0,0,0,.35)'; g.fillRect(s.x - 2, s.y + 2, 5, 2)
+    const by = Math.round(s.y - h * PX * 0.7) - 3
+    g.fillStyle = '#8B4A1C'; g.fillRect(s.x - 2, by, 5, 3)
+    g.fillStyle = '#F4F6FA'; g.fillRect(s.x, by + 1, 1, 1)
     const t = this._toScreen(b.to.x, b.to.y)
     g.strokeStyle = 'rgba(245,203,99,.6)'; g.lineWidth = 1
     g.strokeRect(t.x - 2, t.y - 2, 5, 5)

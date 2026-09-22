@@ -1,70 +1,233 @@
 {
-  "_README": "SKILLS REVIEW BOWL — the manifest. This file is the game's content and emphasis control (FULL-SPEC §6). Editing it needs no code change: change a weight, turn a pack on or off, add a new pack line when Sam or Will send a unit, save, reload. On a deployed copy, edit dist/bowl.manifest.json the same way. The pool is CUMULATIVE (FULL-SPEC §3): every enabled pack is live in every game, regular season and playoffs alike. Nothing here is per-game.",
-  "version": 1,
-
+  "_README": "SKILLS REVIEW BOWL — the manifest. This file is the game's content and emphasis control (FULL-SPEC §6). Editing it needs no code change: change a weight, turn a pack on or off, add a new pack line when Sam or Will send a unit, save, reload. On a deployed copy, edit dist/bowl.manifest.json the same way. Defense is trained in Practice Week, not in a game (see lanes.defense). The pool is CUMULATIVE (FULL-SPEC §3): every enabled pack is live in every game, regular season and playoffs alike. Nothing here is per-game.",
+  "version": 2,
   "season": {
     "_note": "8-game regular season, top 4 of 10 make the playoffs (semifinal + final). Quarters are 8 game-minutes, run in chunks per snap, never real time.",
     "regular_games": 8,
     "playoff_teams": 4,
     "quarter_minutes": 8
   },
-
   "rules": {
-    "_note": "Hints: 2 escalating hints per item in the regular season and off-season; playoffs run cold (BK, 2026-09-22). hint_form_discount = how much a hint trims the stat gain from a correct answer (0 = hints are free, the default the build order asked for; 1 = each hint costs a point of form). unverified_in_scoring_gates: items whose answer key is not officially verified (answer_verified: false) are kept OUT of gates that decide points — the extra point and every playoff gate — unless this is true.",
+    "_note": "Hints: 2 escalating hints per item in the regular season and off-season; playoffs run cold (BK, 2026-09-22). hint_form_discount = how much a hint trims the stat gain from a correct answer (0 = hints are free, the default the build order asked for; 1 = each hint costs a point of form). unverified_in_scoring_gates: items whose answer key is not officially verified (answer_verified: false) are kept OUT of gates that decide points — the extra point and every playoff gate — unless this is true. Practice Week (v3): practice_defense_questions is how many film-study items run between games, and defense_gain / defense_loss are how hard each one swings the Defense rating — bigger than an in-game answer, because the week is what sets the defense for the next game.",
     "hints_regular_season": true,
     "hints_playoffs": false,
     "hint_form_discount": 0,
     "unverified_in_scoring_gates": false,
     "halftime_questions": 3,
     "live_check_chance": 0.3,
-    "live_checks_per_half": 1
+    "live_checks_per_half": 1,
+    "practice_defense_questions": 3,
+    "defense_gain": 3,
+    "defense_loss": 2
   },
-
   "lanes": {
     "_note": "Each content lane builds ONE team stat. That is the stat layer (FULL-SPEC §2.2): a team that knows the material throws tighter and breaks more tackles. Labels are what a student reads.",
-    "sources":  { "label": "Reading sources",        "stat": "throwing",  "stat_label": "Throwing",  "position": "QB", "blurb": "Part I stimulus questions build your quarterback's accuracy." },
-    "context":  { "label": "Historical context",     "stat": "hands",     "stat_label": "Hands",     "position": "WR", "blurb": "Best-context-statement questions build your receivers' hands." },
-    "vocab":    { "label": "Content vocabulary",     "stat": "speed",     "stat_label": "Speed",     "position": "RB", "blurb": "Unit vocabulary builds your team's speed." },
-    "reading":  { "label": "Task words",             "stat": "blocking",  "stat_label": "Blocking",  "position": "OL", "blurb": "The exam's own task words build your offensive line." },
-    "skills":   { "label": "Skills & principles",    "stat": "toughness", "stat_label": "Toughness", "position": "TE", "blurb": "Skill lines, civic principles and camp reps build toughness: breaking tackles, holding the ball." }
+    "sources": {
+      "label": "Reading sources",
+      "stat": "throwing",
+      "stat_label": "Throwing",
+      "position": "QB",
+      "blurb": "Part I stimulus questions build your quarterback's accuracy."
+    },
+    "context": {
+      "label": "Historical context",
+      "stat": "hands",
+      "stat_label": "Hands",
+      "position": "WR",
+      "blurb": "Best-context-statement questions build your receivers' hands."
+    },
+    "vocab": {
+      "label": "Content vocabulary",
+      "stat": "speed",
+      "stat_label": "Speed",
+      "position": "RB",
+      "blurb": "Unit vocabulary builds your team's speed."
+    },
+    "reading": {
+      "label": "Task words",
+      "stat": "blocking",
+      "stat_label": "Blocking",
+      "position": "OL",
+      "blurb": "The exam's own task words build your offensive line."
+    },
+    "skills": {
+      "label": "Skills & principles",
+      "stat": "toughness",
+      "stat_label": "Toughness",
+      "position": "TE",
+      "blurb": "Skill lines, civic principles and camp reps build toughness: breaking tackles, holding the ball."
+    },
+    "defense": {
+      "label": "Defensive film study",
+      "stat": "defense",
+      "stat_label": "Defense",
+      "position": "DEF",
+      "trained_in": "practice",
+      "blurb": "Trained between games in Practice Week, using vocabulary as film. It decides whether the other team finishes a drive, and counts for most in the red zone."
+    }
   },
-
   "courses": {
     "global10r": {
       "label": "Global History & Geography · 10R",
       "short": "Global 10R",
       "accent": "#7FB2D9",
       "_weights_note": "Relative draw weight per lane. 0 turns a lane off. A lane with no enabled pack is skipped automatically, and its stat is built from every answer until its content lands.",
-      "weights": { "sources": 3, "context": 2, "vocab": 1, "reading": 1, "skills": 1 },
+      "weights": {
+        "sources": 3,
+        "context": 2,
+        "vocab": 2,
+        "reading": 1,
+        "skills": 2
+      },
       "packs": [
-        { "file": "content/station-gs10r-10.1-partI-mc.json", "lane": "sources", "unit": "10.1", "enabled": true, "from": "Will, 2026-09-22" },
-        { "file": "content/station-gs10r-10.2-checkpoint-practice.json", "lane": "sources", "unit": "10.2", "enabled": true, "from": "Will, 2026-09-20 (reframed for Review Bowl 2026-09-22)" },
-        { "file": "content/matching-gs10r-10-1.json", "lane": "vocab", "unit": "10.1", "enabled": true, "from": "Will, 2026-09-19 (Arena matching pack; no hints written)" }
+        {
+          "file": "content/station-gs10r-10.1-partI-mc.json",
+          "lane": "sources",
+          "unit": "10.1",
+          "enabled": true,
+          "from": "Will, 2026-09-22"
+        },
+        {
+          "file": "content/station-gs10r-10.2-checkpoint-practice.json",
+          "lane": "sources",
+          "unit": "10.2",
+          "enabled": true,
+          "from": "Will, 2026-09-20 (reframed for Review Bowl 2026-09-22)"
+        },
+        {
+          "file": "content/matching-gs10r-10-1.json",
+          "lane": "vocab",
+          "unit": "10.1",
+          "enabled": true,
+          "from": "Will, 2026-09-19 (Arena matching pack; no hints written)"
+        },
+        {
+          "file": "content/scenario-questions-gs10r-founding-set1.json",
+          "lane": "vocab",
+          "lanes": {
+            "vocab": "vocab",
+            "move": "skills"
+          },
+          "unit": "10.2",
+          "enabled": true,
+          "from": "Will, 2026-09-21 — written for Nation Builder scenario questions, reused here (7 Enlightenment terms + 5 skill moves, hinted)"
+        }
       ],
       "camp": [
-        { "file": "content/station-gs10r-historical-context.json", "label": "Historical Context" },
-        { "file": "content/station-gs10r-document-use.json", "label": "Document Use" },
-        { "file": "content/station-10-enduring-issues.json", "label": "Enduring Issue" }
+        {
+          "file": "content/station-gs10r-historical-context.json",
+          "label": "Historical Context"
+        },
+        {
+          "file": "content/station-gs10r-document-use.json",
+          "label": "Document Use"
+        },
+        {
+          "file": "content/station-10-enduring-issues.json",
+          "label": "Enduring Issue"
+        }
       ]
     },
     "us11r": {
       "label": "U.S. History & Government · 11R",
       "short": "US 11R",
       "accent": "#E3B341",
-      "weights": { "sources": 3, "context": 2, "vocab": 2, "reading": 1, "skills": 1 },
+      "weights": {
+        "sources": 3,
+        "context": 2,
+        "vocab": 2,
+        "reading": 1,
+        "skills": 1
+      },
       "packs": [
-        { "file": "content/partI-mc-us11r-unit01.json", "lane": "sources", "unit": "11.1", "enabled": true, "from": "Sam, 2026-09-22" },
-        { "file": "content/context-statements-us11r-11.1.json", "lane": "context", "unit": "11.1", "enabled": true, "from": "Sam, 2026-09-22" },
-        { "file": "content/vocab-us11r-11.1-content.json", "lane": "vocab", "unit": "11.1", "enabled": true, "from": "Sam, 2026-09-22" },
-        { "file": "content/vocab-us11r-reading-taskwords.json", "lane": "reading", "unit": "year-round", "enabled": true, "from": "Sam, 2026-09-22" },
-        { "file": "content/matching-us11r-vocab-six-skills.json", "lane": "skills", "unit": "year-round", "enabled": true, "from": "Sam, 2026-09-21 (hints 2026-09-22)" },
-        { "file": "content/matching-us11r-11.1-vocab-civic-principles.json", "lane": "skills", "unit": "11.1", "enabled": true, "from": "Sam, 2026-09-21 (hints 2026-09-22)" }
+        {
+          "file": "content/partI-mc-us11r-unit01.json",
+          "lane": "sources",
+          "unit": "11.1",
+          "enabled": true,
+          "from": "Sam, 2026-09-22"
+        },
+        {
+          "file": "content/context-statements-us11r-11.1.json",
+          "lane": "context",
+          "unit": "11.1",
+          "enabled": true,
+          "from": "Sam, 2026-09-22"
+        },
+        {
+          "file": "content/vocab-us11r-11.1-content.json",
+          "lane": "vocab",
+          "unit": "11.1",
+          "enabled": true,
+          "from": "Sam, 2026-09-22"
+        },
+        {
+          "file": "content/vocab-us11r-reading-taskwords.json",
+          "lane": "reading",
+          "unit": "year-round",
+          "enabled": true,
+          "from": "Sam, 2026-09-22"
+        },
+        {
+          "file": "content/matching-us11r-vocab-six-skills.json",
+          "lane": "skills",
+          "unit": "year-round",
+          "enabled": true,
+          "from": "Sam, 2026-09-21 (hints 2026-09-22)"
+        },
+        {
+          "file": "content/matching-us11r-11.1-vocab-civic-principles.json",
+          "lane": "skills",
+          "unit": "11.1",
+          "enabled": true,
+          "from": "Sam, 2026-09-21 (hints 2026-09-22)"
+        },
+        {
+          "file": "content/matching-us11r-11.1-foundation-01-contextualization.json",
+          "lane": "skills",
+          "unit": "11.1",
+          "enabled": true,
+          "from": "Sam — Arena Foundation-tier matching pack (no hints written)"
+        },
+        {
+          "file": "content/matching-us11r-11.1-foundation-02-causation.json",
+          "lane": "skills",
+          "unit": "11.1",
+          "enabled": true,
+          "from": "Sam — Arena Foundation-tier matching pack (no hints written)"
+        },
+        {
+          "file": "content/matching-us11r-11.1-foundation-03-continuity-change.json",
+          "lane": "skills",
+          "unit": "11.1",
+          "enabled": true,
+          "from": "Sam — Arena Foundation-tier matching pack (no hints written)"
+        },
+        {
+          "file": "content/matching-us11r-11.1-foundation-04-turning-points.json",
+          "lane": "skills",
+          "unit": "11.1",
+          "enabled": true,
+          "from": "Sam — Arena Foundation-tier matching pack (no hints written)"
+        }
       ],
       "camp": [
-        { "file": "content/station-01-contextualization.json", "label": "Historical Context" },
-        { "file": "content/station-08-argument-development.json", "label": "Thesis" },
-        { "file": "content/station-05-sourcing-hipp.json", "label": "Document Use — sourcing" },
-        { "file": "content/station-06-opvl.json", "label": "Document Use — a source's value" }
+        {
+          "file": "content/station-01-contextualization.json",
+          "label": "Historical Context"
+        },
+        {
+          "file": "content/station-08-argument-development.json",
+          "label": "Thesis"
+        },
+        {
+          "file": "content/station-05-sourcing-hipp.json",
+          "label": "Document Use — sourcing"
+        },
+        {
+          "file": "content/station-06-opvl.json",
+          "label": "Document Use — a source's value"
+        }
       ]
     }
   }

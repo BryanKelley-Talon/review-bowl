@@ -160,6 +160,32 @@ function fromMatching(pack, meta) {
   }).filter(Boolean)
 }
 
+// Will's scenario-question shape (`will-pass-2026-09-21-scenario-questions-founding-set1.json`):
+//   { id, type: 'vocab' | 'move', term | move, prompt, resolution, hints }
+// It was authored for Nation Builder's scenario questions — a type-the-answer format —
+// so there are no options to show. The answer IS a term (or a skill move), and the file
+// carries enough of them to build a real four-option question: the right one, plus three
+// of its siblings. Lane comes per item from the pack's `lanes` map: vocabulary builds
+// Speed, the skill moves build Toughness.
+function fromScenarioTerm(pack, meta, items, kind) {
+  const answers = items.map(it => it.term || it.move)
+  return items.map((it, i) => {
+    const answer = it.term || it.move
+    const id = it.id || `${meta.file}#${kind}${i}`
+    const { options, correct } = fourOptions(answer, answers, id)
+    return base(pack, meta, {
+      id,
+      lane: (meta.lanes && meta.lanes[kind]) || meta.lane,
+      format: kind === 'move' ? 'match' : 'vocab',
+      prompt: it.prompt,
+      options,
+      correct,
+      hints: hintsOf(it),
+      rationale: it.resolution || null,
+    })
+  })
+}
+
 function fromArenaStimulus(pack, meta, it) {
   const s = it.stimulus || null
   return base(pack, meta, {
@@ -185,8 +211,15 @@ export function readPack(pack, meta, crops) {
   } else if (Array.isArray(pack.items)) {
     const vocab = pack.items.filter(it => it && it.term && it.definition)
     if (vocab.length) questions.push(...fromVocab(pack, meta, vocab))
+    // Scenario-question shape: grouped by type so each group supplies its own distractors.
+    for (const kind of ['vocab', 'move']) {
+      const group = pack.items.filter(it => it && it.prompt && (it.term || it.move) && !it.definition && !it.options && it.type === kind)
+      if (group.length >= 2) questions.push(...fromScenarioTerm(pack, meta, group, kind))
+      else for (const it of group) held.push({ id: it.id || '?', file: meta.file, reason: `only one ${kind} item — not enough for four options` })
+    }
     for (const it of pack.items) {
       if (!it || (it.term && it.definition)) continue
+      if (it.prompt && (it.term || it.move) && !it.options) continue          // handled above
       if (Array.isArray(it.options) && Number.isInteger(it.correct_index)) questions.push(fromWillMc(pack, meta, it))
       else if (it.options && typeof it.options === 'object' && it.stem && Array.isArray(it.stimulus_refs)) {
         const { q, held: h } = fromSamMc(pack, meta, it, crops)

@@ -38,8 +38,13 @@ const PACKS = [
   [IN('station-gs10r-10.1-partI-mc.json'), 'station-gs10r-10.1-partI-mc.json'],
   [IN('station-gs10r-10.2-checkpoint-practice.json'), 'station-gs10r-10.2-checkpoint-practice.json'],
   [ARENA('matching-gs10r-10-1.json'), 'matching-gs10r-10-1.json'],
+  [IN('will-pass-2026-09-21-scenario-questions-founding-set1.json'), 'scenario-questions-gs10r-founding-set1.json'],
   // US 11R — Sam
   [IN('partI-mc-us11r-unit01.json'), 'partI-mc-us11r-unit01.json'],
+  [IN('matching-us11r-11.1-foundation-01-contextualization.json'), 'matching-us11r-11.1-foundation-01-contextualization.json'],
+  [IN('matching-us11r-11.1-foundation-02-causation.json'), 'matching-us11r-11.1-foundation-02-causation.json'],
+  [IN('matching-us11r-11.1-foundation-03-continuity-change.json'), 'matching-us11r-11.1-foundation-03-continuity-change.json'],
+  [IN('matching-us11r-11.1-foundation-04-turning-points.json'), 'matching-us11r-11.1-foundation-04-turning-points.json'],
   [IN('vocab-us11r-11.1-content.json'), 'vocab-us11r-11.1-content.json'],
   [IN('vocab-us11r-reading-taskwords.json'), 'vocab-us11r-reading-taskwords.json'],
   [IN('context-statements-us11r-11.1.json'), 'context-statements-us11r-11.1.json'],
@@ -62,6 +67,17 @@ const CROP_BANKS = {
     dir: path.join(COWORK, 'us11r-curriculum/STIMULUS_BANK'),
     manifests: dir => fs.readdirSync(dir).filter(f => /^_crop_manifest_.*\.json$/.test(f)).map(f => path.join(dir, f)),
   },
+}
+
+// ── BK's named override, 2026-09-22 ─────────────────────────────────────────
+// The gate held `unit01-0626-mc01-lancaster-1744.png` in the first pass: Sam's cover
+// note said his crops were blessed, but that crop's own manifest record carries no
+// `blessed: true` (only a file-level blessing naming other crops). Flagged to BK, and
+// BK ruled: "his crops are blessed..use them."
+// This is a NAMED EXCEPTION for that one file, not a change to the gate. The gate below
+// is untouched and still governs every other crop, including any Sam sends tomorrow.
+const BK_OVERRIDE = {
+  'unit01-0626-mc01-lancaster-1744': 'BK, 2026-09-22: "his crops are blessed..use them." Named exception to the per-crop gate.',
 }
 
 fs.mkdirSync(OUT_CROPS, { recursive: true })
@@ -114,8 +130,9 @@ for (const ref of [...wanted].sort()) {
   const slug = ref.replace(/\.(png|jpe?g|webp)$/i, '')
   const rec = index[slug]
   const src = rec && rec.file ? path.join(bank.dir, rec.file) : null
+  const override = BK_OVERRIDE[slug]
   if (!rec) { report[ref] = { status: 'held', reason: 'named in no crop manifest on the owning desk' }; continue }
-  if (!rec.blessed) {
+  if (!rec.blessed && !override) {
     report[ref] = { status: 'held', reason: `no record sets blessed === true for this crop (${rec.manifests.join(', ')})`,
                     citation: rec.citation }
     continue
@@ -125,6 +142,8 @@ for (const ref of [...wanted].sort()) {
   // School-wifi weight rule: WebP, capped width. Text crops stay readable at 1100px.
   execFileSync('cwebp', ['-quiet', '-q', '82', '-resize', '1100', '0', src, '-o', path.join(OUT_CROPS, out)])
   report[ref] = { status: 'served', file: `stimulus/${out}`, alt: rec.alt, citation: rec.citation,
+                  served_by: rec.blessed ? 'per-crop blessing' : 'BK override',
+                  override: override || null,
                   alt_note: rec.alt ? null : 'image_alt not yet written on the owning desk — citation used as alt text' }
 }
 fs.writeFileSync(path.join(OUT, '_crops.json'), JSON.stringify({

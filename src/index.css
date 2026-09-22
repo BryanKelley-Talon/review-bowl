@@ -242,6 +242,15 @@ button:disabled{opacity:.5;cursor:default}
 .offseason .panel .grid{margin-top:8px}
 .toast-inline{background:var(--card-lit);border:1px solid var(--gold);border-radius:9px;padding:10px 14px;margin-bottom:14px}
 
+/* ---------- practice week · roster · levels (v3) ---------- */
+.practice .panel{border-left:3px solid transparent}
+.player-card{gap:6px}
+.player-card .jersey{color:var(--grey);font-weight:400}
+.level-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pips{color:var(--gold);letter-spacing:.18em;font-size:14px;line-height:1}
+.stand-line{color:var(--ok) !important;border-left:3px solid var(--ok);padding-left:10px;text-align:left}
+.practice .stat-parts{margin-left:0}
+
 .about ul{margin:6px 0 14px 18px} .about li{margin-bottom:6px} .about p{margin-bottom:10px} .about .h3{margin-top:18px}
 .about .tbl{margin:8px 0 10px}
 

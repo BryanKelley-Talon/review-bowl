@@ -13,15 +13,32 @@
 // Form is kept in whole points 0–15 so the save code carries it exactly.
 // ============================================================
 
+// CONTENT LANES — the five a question pack can belong to. A pack declares one of
+// these; answering it builds that lane's stat during a game.
 export const LANES = ['sources', 'context', 'vocab', 'reading', 'skills']
 export const STAT_OF = { sources: 'throwing', context: 'hands', vocab: 'speed', reading: 'blocking', skills: 'toughness' }
 export const LANE_OF = Object.fromEntries(Object.entries(STAT_OF).map(([l, s]) => [s, l]))
 export const STATS = LANES.map(l => STAT_OF[l])
 
+// DEFENSE — a sixth lane, and a real trainable stat as of v3 (iteration order §4).
+// It was the average of the other five, which meant no moment on the calendar trained
+// it. Now it has its own form, built ONLY in Practice Week (season.js / PracticeWeek.jsx),
+// and it pays off on the opponent's threatening drives rather than on your own snaps.
+// No pack maps to it: it is trained with borrowed vocab, as film study.
+export const DEFENSE = 'defense'
+export const ALL_LANES = [...LANES, DEFENSE]
+STAT_OF[DEFENSE] = DEFENSE
+LANE_OF[DEFENSE] = DEFENSE
+
 export const FORM_MAX = 15
 export const FORM_START = 4
 const GAIN = 2
 const LOSS = 1
+// Practice Week swings harder than an in-game answer, because BK's ruling is that the
+// week's answers set what the defense is worth in the NEXT game — the most recent week
+// has to be able to move it. Both are manifest knobs (rules.defense_gain / defense_loss).
+const DEFENSE_GAIN = 3
+const DEFENSE_LOSS = 2
 
 export const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v))
 
@@ -29,7 +46,9 @@ export const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v))
 // manifest says otherwise (rules.hint_form_discount).
 export function applyAnswer(form, lane, correct, hintsUsed = 0, rules = {}) {
   const discount = Math.max(0, Number(rules.hint_form_discount) || 0)
-  const delta = correct ? Math.max(1, GAIN - discount * hintsUsed) : -LOSS
+  const gain = lane === DEFENSE ? (rules.defense_gain ?? DEFENSE_GAIN) : GAIN
+  const loss = lane === DEFENSE ? (rules.defense_loss ?? DEFENSE_LOSS) : LOSS
+  const delta = correct ? Math.max(1, gain - discount * hintsUsed) : -loss
   return { ...form, [lane]: clamp((form[lane] ?? FORM_START) + delta, 0, FORM_MAX) }
 }
 
@@ -44,20 +63,30 @@ export function applyAnswerAll(form, lane, correct, hintsUsed, rules, emptyLanes
 
 export const contentPart = f => Math.round(clamp(f, 0, FORM_MAX) / FORM_MAX * 5)
 
-export function ratings({ form = {}, stars = {}, facilities = {}, boost = {} }) {
+// levels: one player per stat, level 1–4 (teams.js). Raised by training in Practice
+// Week or by signing a free agent. A player's level IS his contribution to his stat.
+export function ratings({ form = {}, levels = {}, facilities = {}, boost = {} }) {
   const out = {}
   for (const lane of LANES) {
     const stat = STAT_OF[lane]
     const parts = {
       content: contentPart(form[lane] ?? FORM_START),
-      roster: clamp((stars[stat] ?? 2) - 1, 0, 3),
+      roster: clamp((levels[stat] ?? 2) - 1, 0, 3),
       facility: clamp(facilities[stat] ?? 0, 0, 2),
       boost: boost[stat] || 0,
     }
     out[stat] = { value: clamp(parts.content + parts.roster + parts.facility + parts.boost, 1, 10), parts }
   }
-  // Defense is simulated, and it is built from everything: the average of the five.
-  out.defense = { value: clamp(Math.round(STATS.reduce((n, s) => n + out[s].value, 0) / STATS.length), 1, 10) }
+  // Defense: its own content form, its own facility (the film room) — and the roster
+  // part is the squad's average level, because the same eleven kids play both ways.
+  const squad = STATS.reduce((n, s) => n + clamp((levels[s] ?? 2) - 1, 0, 3), 0) / STATS.length
+  const dparts = {
+    content: contentPart(form[DEFENSE] ?? FORM_START),
+    roster: Math.round(squad),
+    facility: clamp(facilities[DEFENSE] ?? 0, 0, 2),
+    boost: boost[DEFENSE] || 0,
+  }
+  out[DEFENSE] = { value: clamp(dparts.content + dparts.roster + dparts.facility + dparts.boost, 1, 10), parts: dparts }
   return out
 }
 
@@ -92,6 +121,7 @@ export function explain(stat, v) {
     case 'speed': return `Ball carriers run ${p.runSpeed.toFixed(1)} yards a second.`
     case 'blocking': return `The line holds for about ${p.blockTime.toFixed(1)} seconds.`
     case 'toughness': return `${Math.round(p.breakTackle * 100)}% of tackles broken; fumbles on ${(p.fumble * 100).toFixed(1)}% of hits.`
+    case 'defense': return 'Stops the other team, and matters most the closer they get to your goal line.'
     default: return ''
   }
 }

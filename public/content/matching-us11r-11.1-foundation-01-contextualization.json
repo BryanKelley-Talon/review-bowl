@@ -1,0 +1,33 @@
+{
+  "_course": "US History & Government 11R",
+  "_unit": "11.1 - Colonial Foundations",
+  "_activity": "Contextualization — Foundation Tier",
+  "_built": "2026-09-21 by Sam (us11r-curriculum)",
+  "_licence": "Pulled directly from the blessed exemplar in station-01-contextualization.json (BK's own Unit 11.1 exam, Magna Carta 1215 / Fundamental Orders of Connecticut 1639). No new sourcing.",
+  "station": { "id": 1, "num": "I", "name": "Contextualization", "tier": "Foundation" },
+  "skill_tags": [1],
+  "skill_tag_labels": ["Historical Context"],
+  "intro": "Match each development to what it actually established.",
+  "left": [
+    { "key": "a", "label": "Magna Carta, 1215" },
+    { "key": "b", "label": "House of Burgesses, 1619" },
+    { "key": "c", "label": "Fundamental Orders of Connecticut, 1639" },
+    { "key": "d", "label": "Salutary Neglect (to 1763)" },
+    { "key": "e", "label": "\"No taxation without representation,\" after 1763" }
+  ],
+  "right": [
+    { "key": "1", "label": "The king cannot tax without the consent of a council representing the realm" },
+    { "key": "2", "label": "The first elected representative assembly in the American colonies" },
+    { "key": "3", "label": "Settlers write their own government and elect their own governor and magistrates" },
+    { "key": "4", "label": "Britain leaves the colonial assemblies alone for over a century, letting self-government take root" },
+    { "key": "5", "label": "Colonists claim a right they say is over 500 years old — not a new demand" }
+  ],
+  "correct": { "a": "1", "b": "2", "c": "3", "d": "4", "e": "5" },
+  "rationale": {
+    "a": "Magna Carta, 1215 — English barons forced King John to accept that he could not levy a tax on his own; he needed the consent of a council representing the realm.",
+    "b": "House of Burgesses, 1619 — Virginia seated the first elected representative assembly in the colonies.",
+    "c": "Fundamental Orders of Connecticut, 1639 — settlers chose their own governor and magistrates by yearly election.",
+    "d": "Salutary Neglect — for more than a century Britain's policy left colonial assemblies largely alone, letting self-government take root.",
+    "e": "After 1763, colonists argued they were being denied rights of Englishmen held since Magna Carta — a claim about a principle already 500 years old, not a new one."
+  }
+}

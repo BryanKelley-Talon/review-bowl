@@ -17,6 +17,11 @@ const GATES = {
   halftime: { label: 'Halftime' },
   press:    { label: 'Press conference', prefer: { context: 2, reading: 2 } },
   agency:   { label: 'Free agency' },
+  // Practice Week (v3): film study borrows the vocabulary lanes — short items, the
+  // shape a student can run three of between games. Training draws from the lane the
+  // player being trained plays for, so `lane` is always passed with it.
+  practice: { label: 'Film study', only: ['vocab', 'reading', 'skills'] },
+  training: { label: 'Training' },
 }
 
 export function makeDealer(pool, course, rules = {}, random = Math.random) {

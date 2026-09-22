@@ -1,0 +1,33 @@
+{
+  "_course": "US History & Government 11R",
+  "_unit": "11.1 - Colonial Foundations (Casefile B, Documents 13-15 and 6)",
+  "_activity": "Causation — Foundation Tier",
+  "_built": "2026-09-21 by Sam (us11r-curriculum)",
+  "_licence": "ORIGINAL connective wording, built around Casefile B's own document spine (Docs 6, 13, 14) and the unit plan's own framing of 1676 as the hinge year. No third-party text.",
+  "station": { "id": 2, "num": "II", "name": "Causation", "tier": "Foundation" },
+  "skill_tags": [4],
+  "skill_tag_labels": ["Explanation"],
+  "intro": "Match each cause to its effect in the hardening of race-based slavery.",
+  "left": [
+    { "key": "a", "label": "Laws in 1640, 1662, and 1669 (Document 13)" },
+    { "key": "b", "label": "Bacon's Rebellion, 1676" },
+    { "key": "c", "label": "Fear of a poor-white/enslaved alliance, after 1676" },
+    { "key": "d", "label": "The trade map listing enslaved people beside sugar and pepper (Document 6)" },
+    { "key": "e", "label": "The probate inventory (Document 14)" }
+  ],
+  "right": [
+    { "key": "1", "label": "Same offense, three people — but the sentences stop matching; the split has already begun before 1676" },
+    { "key": "2", "label": "Shows Virginia's elite what an alliance of poor whites and enslaved people can do" },
+    { "key": "3", "label": "Colonial assemblies write law that splits servitude sharply by race" },
+    { "key": "4", "label": "Enslaved people are treated as property in law and in commerce alike" },
+    { "key": "5", "label": "Enslaved people are listed under the same heading as livestock and household goods" }
+  ],
+  "correct": { "a": "1", "b": "2", "c": "3", "d": "4", "e": "5" },
+  "rationale": {
+    "a": "Document 13's own timeline: three separate rulings on the same kind of offense, but the sentences already stop lining up before 1676 — the pattern is bending, not yet split cleanly by race.",
+    "b": "Bacon's Rebellion is the event the unit plan itself names as the hinge — it shows Virginia's elite the danger of poor whites and enslaved people making common cause.",
+    "c": "That fear is what drives colonial assemblies, after 1676, to write law that divides servitude sharply along racial lines.",
+    "d": "Document 6's trade map prints human beings in the same list as sugar and pepper — commerce treats people as goods, the same logic the law comes to treat them under.",
+    "e": "Document 14's probate inventory lists enslaved people under the same heading as livestock and household goods — property in law, not just in commerce."
+  }
+}

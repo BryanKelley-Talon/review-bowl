@@ -1,0 +1,210 @@
+// ============================================================
+// PRACTICE WEEK — between every regular-season game (iteration order §5).
+//
+// The week off: the squad recovers, watches film, and works on something. Three
+// things can happen here and none of them are required — the always-unlocked ethos
+// means a student can walk straight out to the field and lose nothing they had.
+//
+//   1 · DEFENSIVE FILM STUDY — a few vocab items. These are what set the Defense
+//       rating for the next game (BK's ruling). The content is borrowed from the
+//       vocabulary lanes: it is the same words, studied for a different purpose.
+//   2 · PLAYER TRAINING — level one specific player. Cash AND a right answer from
+//       the lane he plays for. A miss costs nothing but the week's chance.
+//   3 · FACILITIES — first tier only. The second tier stays an off-season job.
+// ============================================================
+import { useMemo, useState } from 'react'
+import Question from './Question.jsx'
+import { FACILITY_COST, MAX_LEVEL, PRACTICE_FACILITY_MAX, trainCost } from '../game/season.js'
+import { DEFENSE, LANE_OF, ratings, values } from '../game/ratings.js'
+import { POSITION_OF, TEAMS, roster } from '../game/teams.js'
+
+const money = units => `$${units * 10}k`
+const pips = (n, max = MAX_LEVEL) => '●'.repeat(n) + '○'.repeat(Math.max(0, max - n))
+
+export default function PracticeWeek({ career, setCareer, dealer, manifest, opponent, weekLabel, onAnswer, onDone }) {
+  const rules = manifest.rules || {}
+  const want = rules.practice_defense_questions ?? 3
+  const [filmRun, setFilmRun] = useState(null)      // { i, right } while the film study is running
+  const [gate, setGate] = useState(null)
+  const [note, setNote] = useState(null)
+  const [trained, setTrained] = useState({})        // one attempt per player per week
+  const [filmDone, setFilmDone] = useState(!!career.practiceDone)
+
+  const r = ratings(career)
+  const v = values(r)
+  const players = useMemo(() => roster(career.seed, career.team, career.season, career.levels),
+    [career.seed, career.team, career.season, career.levels])
+  const statLabel = s => manifest.lanes[LANE_OF[s]]?.stat_label || s
+  const laneLabel = s => manifest.lanes[LANE_OF[s]]?.label || s
+
+  // ── 1 · defensive film study ───────────────────────────────────────────────
+  const askFilm = (i, right) => {
+    const q = dealer.draw('practice')
+    if (!q) { setNote('No vocabulary is loaded for this course yet, so there is no film to study.'); setFilmDone(true); return }
+    setFilmRun({ i, right })
+    setGate({
+      kind: 'film', q,
+      stakes: `Defensive film study — ${i + 1} of ${want}. What you get right here is what your defense is worth on Friday.`,
+      then: ok => {
+        const nextRight = right + (ok ? 1 : 0)
+        if (i + 1 < want) askFilm(i + 1, nextRight)
+        else {
+          setFilmRun(null)
+          setFilmDone(true)
+          setCareer(c => ({ ...c, practiceDone: true }))
+          setNote(`Film study done — ${nextRight} of ${want} right. That is what the defense carries into the game.`)
+        }
+      },
+    })
+  }
+
+  // ── 2 · player training ────────────────────────────────────────────────────
+  const train = stat => {
+    const q = dealer.draw('training', { lane: LANE_OF[stat] })
+    if (!q) { setNote('No questions are loaded for that lane yet.'); return }
+    setGate({
+      kind: 'training', q, stat,
+      stakes: `Training ${players[stat].name} costs ${money(trainCost(career.levels[stat]))} and a right answer. Miss it and the session is wasted — but you keep the money.`,
+      then: ok => {
+        setTrained(t => ({ ...t, [stat]: ok ? 'levelled' : 'missed' }))
+        if (ok) {
+          setCareer(c => ({
+            ...c,
+            cash: Math.max(0, c.cash - trainCost(c.levels[stat])),
+            levels: { ...c.levels, [stat]: Math.min(MAX_LEVEL, (c.levels[stat] ?? 2) + 1) },
+          }))
+          setNote(`${players[stat].name} put in the work — level ${(career.levels[stat] ?? 2) + 1}. ${statLabel(stat)} goes up with him.`)
+        } else setNote(`${players[stat].name} ran the drill anyway. No level this week, no money spent.`)
+      },
+    })
+  }
+
+  // ── 3 · facilities, first tier only ────────────────────────────────────────
+  const upgrade = stat => {
+    const lvl = career.facilities[stat] || 0
+    setCareer(c => ({ ...c, cash: c.cash - FACILITY_COST[lvl], facilities: { ...c.facilities, [stat]: lvl + 1 } }))
+    setNote(`${statLabel(stat)} facility is now level ${lvl + 1}.`)
+  }
+
+  const answered = ({ correct, hintsUsed, q }) => {
+    const cur = gate
+    if (!cur) return
+    setGate(null)
+    // Film study builds DEFENSE, not the lane the question came from: the words are
+    // borrowed, the work is defensive. Training builds its own lane as usual.
+    const change = onAnswer(q.lane, correct, hintsUsed, cur.kind === 'film' ? DEFENSE : null)
+    if (change && cur.kind === 'film' && change.after !== change.before) setNote(`Defense ${change.before} → ${change.after}`)
+    cur.then(correct, q)
+  }
+
+  const facilityStats = [...Object.keys(POSITION_OF), DEFENSE]
+
+  return (
+    <div className="offseason practice">
+      <section className="panel next-game">
+        <div className="eyebrow">Practice week · before {weekLabel}</div>
+        <h3 className="h3">{TEAMS[career.team].name} get a week</h3>
+        <p className="sub">Bumps and bruises heal, the film goes on, and somebody gets better. None of this is
+          required — you can walk out to the field right now and nothing you already have is lost. Cash: <b>{money(career.cash)}</b>.
+          Next up: <b>{TEAMS[opponent].name}</b>.</p>
+        {note && <p className="toast-inline" role="status">{note}</p>}
+      </section>
+
+      <section className="panel">
+        <h3 className="h3">Defensive film study</h3>
+        <p className="sub">
+          Your defense is the one unit that doesn't get better on Friday — it gets better this week.
+          {' '}{want} questions, and what you get right is what the defense is worth in the next game. It matters most
+          the closer the other team gets to your goal line.
+        </p>
+        <div className="stat-row" style={{ borderTop: 'none', paddingTop: 0 }}>
+          <div className="stat-top">
+            <b className="stat-label">Defense</b>
+            <span className="stat-bar big"><i style={{ width: `${v.defense * 10}%` }} /></span>
+            <b className="stat-num">{v.defense}</b>
+          </div>
+          <div className="stat-parts">
+            <span>From film study <b>{r.defense.parts.content}</b>/5</span>
+            <span>Squad level <b>{r.defense.parts.roster}</b>/3</span>
+            <span>Film room <b>{r.defense.parts.facility}</b>/2</span>
+          </div>
+        </div>
+        {filmDone
+          ? <p className="q-note">Film study is done for this week.</p>
+          : <button type="button" className="btn-primary" disabled={!!filmRun} onClick={() => askFilm(0, 0)}>
+              Watch film · {want} questions
+            </button>}
+      </section>
+
+      <section className="panel">
+        <h3 className="h3">The roster</h3>
+        <p className="sub">Every player has a level, and his level is what he is worth to the stat he plays for.
+          Training costs cash <b>and</b> a right answer from his lane. One session per player per week.</p>
+        <div className="grid">
+          {Object.keys(POSITION_OF).map(stat => {
+            const p = players[stat]
+            const lvl = career.levels[stat] ?? 2
+            const cost = trainCost(lvl)
+            const maxed = lvl >= MAX_LEVEL
+            const done = trained[stat]
+            const broke = career.cash < cost
+            return (
+              <div key={stat} className="card static player-card">
+                <div className="card-type">{p.position} · builds {statLabel(stat)}</div>
+                <div className="card-name">{p.name} <span className="jersey">#{p.number}</span></div>
+                <div className="level-row">
+                  <span className="pips" aria-label={`level ${lvl} of ${MAX_LEVEL}`}>{pips(lvl)}</span>
+                  <span className="card-blurb">Level {lvl} · +{lvl - 1} to {statLabel(stat)}</span>
+                </div>
+                {maxed ? <span className="flag">Fully developed</span>
+                  : done ? <span className="flag">{done === 'levelled' ? `Levelled up — now ${lvl}` : 'Missed this week'}</span>
+                  : <button type="button" className="btn-secondary" disabled={broke} onClick={() => train(stat)}>
+                      {broke ? `Needs ${money(cost)}` : `Train · ${money(cost)} + a ${laneLabel(stat)} question`}
+                    </button>}
+              </div>
+            )
+          })}
+        </div>
+      </section>
+
+      <section className="panel">
+        <h3 className="h3">Facilities</h3>
+        <p className="sub">A week buys the first tier of anything. The deeper second tier is an off-season job.</p>
+        <div className="grid">
+          {facilityStats.map(stat => {
+            const lvl = career.facilities[stat] || 0
+            const cost = FACILITY_COST[lvl]
+            const capped = lvl >= PRACTICE_FACILITY_MAX
+            return (
+              <div key={stat} className="card static">
+                <div className="card-name">{stat === DEFENSE ? 'Film room' : statLabel(stat)}</div>
+                <div className="card-blurb">Level {lvl} of 2</div>
+                {capped
+                  ? <span className="flag">{lvl >= 2 ? 'Maxed' : 'Off-season job'}</span>
+                  : <button type="button" className="btn-secondary" disabled={career.cash < cost} onClick={() => upgrade(stat)}>
+                      Upgrade · {money(cost)}
+                    </button>}
+              </div>
+            )
+          })}
+        </div>
+      </section>
+
+      <div className="row center">
+        <button type="button" className="btn-primary" onClick={onDone}>
+          {filmDone || Object.keys(trained).length ? `Take the field vs ${TEAMS[opponent].name}` : 'Skip for now — take the field'}
+        </button>
+      </div>
+
+      {gate && (
+        <Question key={gate.q.id + (gate.kind === 'film' ? `-${filmRun?.i ?? 0}` : '')} q={gate.q}
+                  gate={gate.kind === 'film' ? 'Film study' : `Training · ${players[gate.stat].name}`}
+                  hints={rules.hints_regular_season !== false} stakes={gate.stakes}
+                  statLine={gate.kind === 'film'
+                    ? `Builds Defense · ${manifest.lanes[gate.q.lane]?.label}`
+                    : `Builds ${manifest.lanes[gate.q.lane]?.stat_label} · ${manifest.lanes[gate.q.lane]?.label}`}
+                  onDone={answered} />
+      )}
+    </div>
+  )
+}

@@ -1,0 +1,33 @@
+{
+  "_course": "US History & Government 11R",
+  "_unit": "11.1 - Colonial Foundations (Casefile B, Documents 13, 17, 18)",
+  "_activity": "Continuity & Change — Foundation Tier",
+  "_built": "2026-09-21 by Sam (us11r-curriculum)",
+  "_licence": "ORIGINAL connective wording, built around Casefile B's own document spine. No third-party text.",
+  "station": { "id": 3, "num": "III", "name": "Continuity & Change", "tier": "Foundation" },
+  "skill_tags": [4],
+  "skill_tag_labels": ["Explanation"],
+  "intro": "Match each development to whether it shows continuity or change — and what changed.",
+  "left": [
+    { "key": "a", "label": "1640 ruling — unfree labor status, no racial split yet" },
+    { "key": "b", "label": "1662 and 1669 rulings" },
+    { "key": "c", "label": "Bacon's Rebellion, 1676" },
+    { "key": "d", "label": "Fundamental Orders of Connecticut, 1639 (Document 17)" },
+    { "key": "e", "label": "Blackstone on self-government (Document 18)" }
+  ],
+  "right": [
+    { "key": "1", "label": "Continuity — servitude of some kind already existed at the colony's founding" },
+    { "key": "2", "label": "Change — status begins to split by race; one sentence \"has an end,\" one does not" },
+    { "key": "3", "label": "Change — the turning point that accelerates the shift to permanent, race-based slavery" },
+    { "key": "4", "label": "Continuity — representative self-government, present from the colonies' founding" },
+    { "key": "5", "label": "Change — the same idea restated, but this document asks who self-government actually included" }
+  ],
+  "correct": { "a": "1", "b": "2", "c": "3", "d": "4", "e": "5" },
+  "rationale": {
+    "a": "The 1640 ruling shows unfree labor already existed — the continuity is that servitude of some kind was present from the start.",
+    "b": "By 1662 and 1669, the rulings stop matching by offense and start splitting by race — the change is underway before 1676.",
+    "c": "Bacon's Rebellion, 1676, is the accelerant — after it, the split hardens into a permanent, race-based system.",
+    "d": "The Fundamental Orders, 1639, show representative self-government was already part of the colonies' founding idea — the continuity that carries to Document 18.",
+    "e": "Blackstone restates the same self-government idea, but Document 18 #5 asks who it actually meant it for — the same principle, a changed (or exposed) scope."
+  }
+}

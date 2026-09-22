@@ -16,12 +16,13 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import DisclaimerBadge from './shared/DisclaimerBadge.jsx'
 import Match from './game/Match.jsx'
 import Offseason from './ui/Offseason.jsx'
+import PracticeWeek from './ui/PracticeWeek.jsx'
 import { loadDoor } from './content/pool.js'
 import { makeDealer } from './content/dealer.js'
-import { LANES, STAT_OF, applyAnswerAll, explain, ratings, values } from './game/ratings.js'
+import { DEFENSE, LANES, STAT_OF, applyAnswerAll, explain, ratings, values } from './game/ratings.js'
 import {
-  afterGame, applySeasonReview, bracket, jobOffers, newCareer, opponentFor, opponentStrength, playoffOpponent,
-  record, RESULT, schedule, seasonReview, standings, startNextSeason, takeJob,
+  afterGame, applySeasonReview, bracket, finishPractice, jobOffers, MAX_LEVEL, newCareer, opponentFor,
+  opponentStrength, playoffOpponent, record, RESULT, schedule, seasonReview, standings, startNextSeason, takeJob,
 } from './game/season.js'
 import { roster, TEAMS } from './game/teams.js'
 import { decodeSaveCode, encodeSaveCode } from './save/saveCode.js'
@@ -141,7 +142,7 @@ function CodeEntry({ manifest, onLoad, onBack }) {
 // ── the team screen ──────────────────────────────────────────────────────────
 function TeamPanel({ career, manifest, pool }) {
   const r = ratings(career)
-  const players = roster(career.seed, career.team, career.season, career.stars)
+  const players = roster(career.seed, career.team, career.season, career.levels)
   return (
     <section className="panel">
       <h3 className="h3">Your team's stats</h3>
@@ -162,7 +163,7 @@ function TeamPanel({ career, manifest, pool }) {
               </div>
               <div className="stat-parts">
                 <span>From answers <b>{p.content}</b>/5</span>
-                <span>{pl.position} {pl.name} #{pl.number} <b>{'★'.repeat(pl.stars)}</b></span>
+                <span>{pl.position} {pl.name} #{pl.number} · <b>level {pl.level}</b></span>
                 <span>Facility <b>{p.facility}</b>/2</span>
               </div>
               <div className="stat-why">
@@ -175,10 +176,15 @@ function TeamPanel({ career, manifest, pool }) {
         <div className="stat-row">
           <div className="stat-top">
             <b className="stat-label">Defense</b>
-            <span className="stat-bar big"><i style={{ width: `${r.defense.value * 10}%` }} /></span>
-            <b className="stat-num">{r.defense.value}</b>
+            <span className="stat-bar big"><i style={{ width: `${r[DEFENSE].value * 10}%` }} /></span>
+            <b className="stat-num">{r[DEFENSE].value}</b>
           </div>
-          <div className="stat-why">The average of the five. Every lane of content holds the other team's drives.</div>
+          <div className="stat-parts">
+            <span>From film study <b>{r[DEFENSE].parts.content}</b>/5</span>
+            <span>Squad level <b>{r[DEFENSE].parts.roster}</b>/3</span>
+            <span>Film room <b>{r[DEFENSE].parts.facility}</b>/2</span>
+          </div>
+          <div className="stat-why">Trained in Practice Week, not during a game. {explain(DEFENSE, r[DEFENSE].value)}</div>
         </div>
       </div>
     </section>
@@ -268,7 +274,7 @@ function Hub({ career, setCareer, manifest, door, onPlay, onAnswer, onQuit }) {
   const team = TEAMS[career.team]
   const rec = record(career.results)
   let next = null
-  if (career.phase === 'regular') {
+  if (career.phase === 'regular' || career.phase === 'practice') {
     const o = opponentFor(career.seed, career.season, career.team, career.week)
     next = { opp: o, label: `Week ${career.week + 1} of 8`, playoff: false }
   } else if (career.phase === 'playoffs') {
@@ -293,7 +299,13 @@ function Hub({ career, setCareer, manifest, door, onPlay, onAnswer, onQuit }) {
         <button type="button" className="btn-ghost hub-quit" onClick={onQuit}>Title screen</button>
       </div>
 
-      {next && (
+      {career.phase === 'practice' && door && next && (
+        <PracticeWeek career={career} setCareer={setCareer} dealer={door.dealer} manifest={manifest}
+                      opponent={next.opp} weekLabel={next.label} onAnswer={onAnswer}
+                      onDone={() => { const c = finishPractice(career); setCareer(c); onPlay({ ...next, career: c }) }} />
+      )}
+
+      {next && career.phase !== 'practice' && (
         <section className="panel next-game">
           <div className="eyebrow">{next.label}</div>
           <h3 className="h3">{team.name} vs {TEAMS[next.opp].name}</h3>
@@ -414,14 +426,19 @@ export default function App() {
   }, [manifest, course])
 
   // Every answer, anywhere: build the lane's form, and say what moved.
-  const onAnswer = useCallback((lane, correct, hintsUsed) => {
+  // asLane: the lane this answer BUILDS, when that is not the lane it came from —
+  // Practice Week's film study borrows vocabulary questions to build Defense.
+  const onAnswer = useCallback((lane, correct, hintsUsed, asLane) => {
     const c = careerRef.current
-    const stat = STAT_OF[lane]
+    const target = asLane || lane
+    const stat = STAT_OF[target]
     const before = values(ratings(c))[stat]
-    const form = applyAnswerAll(c.form, lane, correct, hintsUsed, manifest.rules, door?.dealer.emptyLanes)
+    const form = asLane
+      ? applyAnswerAll(c.form, target, correct, hintsUsed, manifest.rules, [])
+      : applyAnswerAll(c.form, lane, correct, hintsUsed, manifest.rules, door?.dealer.emptyLanes)
     const next = { ...c, form }
     setCareer(next)
-    return { label: manifest.lanes[lane].stat_label, before, after: values(ratings(next))[stat] }
+    return { label: manifest.lanes[target].stat_label, before, after: values(ratings(next))[stat] }
   }, [manifest, door, setCareer])
 
   if (error) return <div className="wrap"><p className="error">The game could not load its manifest: {error}</p></div>
