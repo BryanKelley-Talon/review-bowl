@@ -1,0 +1,36 @@
+/* ============================================================
+   THE ARENA — SUB-BRAND TOKENS (navy / gold / white / grey)
+   BK's direction, 2026-09-18.
+
+   SCOPE NOTE, read before reusing this file: the shared Flashpoint canvas
+   (--fp-ink #16120E) is a LOCKED decision in BUILD-ORDER and is NOT changed
+   here. This file overrides the canvas for thearena subdomain ONLY, extending
+   the existing "Arena is a deliberate sub-brand" carve-out. Every Crossroads
+   game still rides #16120E off flashpoint-tokens.css, untouched.
+   Whether navy travels to the rest of Flashpoint is BK's ruling, not this
+   file's assumption.
+
+   Contrast, measured against the navy canvas #0B1220:
+     gold  #E3B341 ..... 9.62:1   AAA
+     white #F4F6FA .... 17.30:1   AAA
+     grey  #8FA0B8 ..... 7.03:1   AAA
+   Every pairing clears AA (4.5:1) and AAA (7:1). The accessibility floor is
+   not a thing we got away with here; it is comfortably cleared.
+   ============================================================ */
+:root{
+  --arena-canvas:   #0B1220;  /* midnight navy — the Arena's ground        */
+  --arena-card:     #131C2E;  /* raised surface                            */
+  --arena-card-lit: #1A2538;  /* hover / active surface                    */
+  --arena-edge:     #22304A;  /* hairline borders                          */
+
+  --arena-gold:     #E3B341;  /* the accent. Structure, flags, rules.      */
+  --arena-gold-lit: #F5CB63;  /* focus ring + hover gold                   */
+  --arena-white:    #F4F6FA;  /* primary type                              */
+  --arena-grey:     #8FA0B8;  /* secondary type, captions                  */
+  --arena-grey-dim: #6E7F97;  /* disabled / not-yet-taught type            */
+
+  /* Course accents. Each is distinguishable from the other by LABEL first —
+     colour is never the only thing telling the two doors apart (§7.5). */
+  --course-global:  #7FB2D9;  /* cool blue   8.02:1 on the navy canvas     */
+  --course-us11r:   #E3B341;  /* the house gold, 9.62:1                    */
+}

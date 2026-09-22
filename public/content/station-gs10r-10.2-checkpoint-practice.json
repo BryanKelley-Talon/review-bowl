@@ -1,0 +1,195 @@
+{
+  "_README": "GS10R Unit 10.2 Casefile A checkpoint content, reshaped for an Arena practice room — same content BK is using on paper in class tomorrow (2026-09-22), passed here so it can also live in the Arena as self-check practice, per BK's ask to mirror Sam's Part 1 practice room for 11.1. Ungraded practice: no correctness score should carry any grade weight in the shell, same house rule BK set for the paper version — process/completion only.",
+  "course": "global10r",
+  "unit": "10.2",
+  "casefile": "A",
+  "station_id": "gs10r-10.2-checkpoint-practice",
+  "label": "Casefile A · Checkpoint Practice",
+  "content_shape": "multiple_choice",
+  "_shape_note": "This is a different content shape than the existing GS10R short-response stations (historical-context, document-use, enduring-issues) — those are type-an-answer reps; this is 4-option multiple choice, one correct answer, self-check with immediate feedback. Reshape the field names below to match whatever schema Sam used for the US11R 11.1 Part 1 practice room — the content is final, the JSON shape is not.",
+  "framing": "Practice, not a grade on accuracy. Answer all ten, then check your work. Full documents and short-answer practice on these same ten sources are also in the Casefile A packet in class.",
+  "items": [
+    {
+      "id": "cp-1",
+      "document": "Document 1 — John Locke, 1690",
+      "source": "John Locke, Two Treatises of Government, 1690",
+      "stimulus": "“If man in the state of nature is free, if he is absolute lord of his own person and possessions, why will he give up his freedom? Why will he put himself under the control of any person or institution? The obvious answer is that rights in the state of nature are constantly exposed to the attack of others. Since every man is equal and since most men do not concern themselves with equity and justice, the enjoyment of rights in the state of nature is unsafe and insecure. Hence each man joins in society with others to preserve his life, liberty, and property.”",
+      "prompt": "According to Locke, what problem do people face in the state of nature?",
+      "options": [
+        "The enjoyment of their rights is unsafe and insecure",
+        "Absolute monarchs protect property better than governments do",
+        "They are not free, because they own nothing",
+        "They are prevented from joining together in society"
+      ],
+      "correct_index": 0,
+      "hints": [
+        "Locke says rights exist in the state of nature — he's not questioning whether people HAVE rights. Reread for what he says can go wrong with them.",
+        "Look at the words right before “insecure” in the passage — Locke names the problem directly in that sentence."
+      ]
+    },
+    {
+      "id": "cp-2",
+      "document": "Document 2 — John Locke, on a legislature that overreaches",
+      "source": "John Locke, Two Treatises on Civil Government",
+      "stimulus": "“[When] the legislature shall . . . grasp [for] themselves, or put into the hands of any other, an absolute power over their lives, liberties, and estates of the people, . . . they forfeit the power the people had put into their hands for quite contrary ends, and it [passes] to the people, who have a right to resume their original liberty. . . .”",
+      "prompt": "According to this passage, what happens when a legislature seizes absolute power over the people?",
+      "options": [
+        "The people must obey until the next election is held",
+        "Power passes back to the people, who may resume their original liberty",
+        "The monarch regains the authority the legislature had taken",
+        "The legislature gains the right to tax without consent"
+      ],
+      "correct_index": 1,
+      "hints": [
+        "Locke is describing what happens AFTER a legislature breaks its side of the deal — not what happens to the legislature itself.",
+        "The phrase “resume their original liberty” tells you who ends up holding the power."
+      ]
+    },
+    {
+      "id": "cp-3",
+      "document": "Document 3 — Baron de Montesquieu, on the power of judging",
+      "source": "Montesquieu, The Spirit of the Laws",
+      "stimulus": "“. . . Nor is there liberty if the power of judging is not separate from legislative power and from executive power. If it were joined to legislative power, the power over the life and liberty of the citizens would be arbitrary, for the judge would be the legislator. If it were joined to executive power, the judge could have the force of an oppressor. . . .”",
+      "prompt": "This passage was written in which region, and during which movement?",
+      "options": [
+        "South Asia, during the Mughal Empire",
+        "East Asia, during the Tokugawa Shogunate",
+        "Europe, during the Renaissance",
+        "Europe, during the Enlightenment"
+      ],
+      "correct_index": 3,
+      "hints": [
+        "This is a “where and when” question, not a “what does it say” question — three of the four options aren't even real places/movements from this unit.",
+        "Montesquieu is one of the Enlightenment philosophers you've been building a list of all week — check that list."
+      ]
+    },
+    {
+      "id": "cp-4",
+      "document": "Document 4 — Baron de Montesquieu, on powers united",
+      "source": "Baron de Montesquieu, Spirit of the Laws",
+      "stimulus": "“When the legislative and executive powers are united in the same person, or in the same body of magistrates [government officials], there can be no liberty; because apprehensions [fears] may arise, lest the same monarch or senate should enact tyrannical laws to execute them in a tyrannical manner. . . .”",
+      "prompt": "What problem does Montesquieu identify in this passage?",
+      "options": [
+        "Concentration of power in the same hands",
+        "A shortage of natural resources",
+        "The dangers of direct democracy",
+        "Religious conflict between states"
+      ],
+      "correct_index": 0,
+      "hints": [
+        "The word “tyrannical” appears twice in this passage — that's the clue to the problem Montesquieu is naming.",
+        "He's describing what happens when legislative and executive power sit in the same hands — not a shortage of resources or a religious conflict."
+      ]
+    },
+    {
+      "id": "cp-5",
+      "document": "Document 6 — Jean-Jacques Rousseau, 1762",
+      "source": "Jean-Jacques Rousseau, The Social Contract, 1762. Translated by G. D. H. Cole, 1913. Book II, Chapter III.",
+      "stimulus": "“There is often a great deal of difference between the will of all and the general will; the latter takes account only of the common interest, while the former takes private interest into account, and is no more than a sum of particular wills.”",
+      "prompt": "According to Rousseau, how is the general will different from the will of all?",
+      "options": [
+        "The general will is decided by a vote of the majority",
+        "The general will protects each person’s private property",
+        "The general will takes account only of the common interest",
+        "The general will belongs to the king alone"
+      ],
+      "correct_index": 2,
+      "hints": [
+        "Find the phrase “common interest” in the passage — that's doing the work in this question.",
+        "The “will of all” is described as private interests added up. The general will is described differently — contrast the two clauses."
+      ]
+    },
+    {
+      "id": "cp-6",
+      "document": "Document 7 — Mary Wollstonecraft, 1792",
+      "source": "Mary Wollstonecraft, A Vindication of the Rights of Woman, 1792. Addressed to Talleyrand-Périgord, a member of the French National Assembly.",
+      "stimulus": "“. . . if she be not prepared by education to become the companion of man, she will stop the progress of knowledge. . . . If women are to be excluded . . . prove first . . . that they want [lack] reason, else this flaw in your NEW CONSTITUTION will ever show that man must . . . act like a tyrant. . . .”",
+      "prompt": "According to this passage, what does Wollstonecraft demand of those who would exclude women?",
+      "options": [
+        "That they educate women before judging them",
+        "That they first prove women lack reason",
+        "That they grant women the vote immediately",
+        "That they abolish the new constitution"
+      ],
+      "correct_index": 1,
+      "hints": [
+        "Look for the word “prove” in the passage — Wollstonecraft is issuing a challenge, not making a request.",
+        "She's not asking for education to happen first — she's daring her opponents to prove a claim before excluding women."
+      ]
+    },
+    {
+      "id": "cp-7",
+      "document": "Document 7 — Mary Wollstonecraft, 1792",
+      "source": "Mary Wollstonecraft, A Vindication of the Rights of Woman, 1792. Addressed to Talleyrand-Périgord, a member of the French National Assembly.",
+      "stimulus": "“. . . if she be not prepared by education to become the companion of man, she will stop the progress of knowledge. . . . If women are to be excluded . . . prove first . . . that they want [lack] reason, else this flaw in your NEW CONSTITUTION will ever show that man must . . . act like a tyrant. . . .”",
+      "prompt": "This document was written by",
+      "options": [
+        "a French revolutionary leader addressing the National Assembly",
+        "a Russian empress addressing her nobility",
+        "a British writer addressing a member of the French National Assembly",
+        "an English philosopher addressing Parliament"
+      ],
+      "correct_index": 2,
+      "hints": [
+        "Talleyrand-Périgord is named in the source line as the person this letter is addressed TO — what country was he part of?",
+        "Wollstonecraft herself was British — she's writing TO a French official, not writing as one."
+      ]
+    },
+    {
+      "id": "cp-8",
+      "document": "Document 7 — Mary Wollstonecraft, 1792",
+      "source": "Mary Wollstonecraft, A Vindication of the Rights of Woman, 1792. Addressed to Talleyrand-Périgord, a member of the French National Assembly.",
+      "stimulus": "“. . . if she be not prepared by education to become the companion of man, she will stop the progress of knowledge. . . . If women are to be excluded . . . prove first . . . that they want [lack] reason, else this flaw in your NEW CONSTITUTION will ever show that man must . . . act like a tyrant. . . .”",
+      "prompt": "Which enduring issue is best supported by this passage?",
+      "options": [
+        "Power and Its Abuse",
+        "Wealth and Resources",
+        "Technology and Environment",
+        "A Connected World"
+      ],
+      "correct_index": 0,
+      "hints": [
+        "The passage is about exclusion from reason and rights based on sex — think about which umbrella issue covers unequal treatment and authority.",
+        "This isn't about wealth, technology, or global connections — it's about who holds power over whom, and how."
+      ]
+    },
+    {
+      "id": "cp-9",
+      "document": "Document 9 — Catherine the Great of Russia",
+      "source": "Documents of Catherine the Great, W. F. Reddaway, ed., Cambridge University Press (adapted)",
+      "stimulus": "“. . . The Laws ought to be so framed, as to secure the Safety of every Citizen as much as possible. . . . The Equality of the Citizens consists in this; that they should all be subject to the same Laws. . . .”",
+      "prompt": "According to Catherine the Great, what does equality among citizens consist of?",
+      "options": [
+        "Equal ownership of land",
+        "All citizens being subject to the same laws",
+        "Equal representation in an elected assembly",
+        "Freedom from taxation"
+      ],
+      "correct_index": 1,
+      "hints": [
+        "The second sentence of the passage defines equality directly — find the word “Equality” in the text.",
+        "She's not talking about land or representation — reread the clause right after “consists in this.”"
+      ]
+    },
+    {
+      "id": "cp-10",
+      "document": "Document 9 — Catherine the Great of Russia",
+      "source": "Documents of Catherine the Great, W. F. Reddaway, ed., Cambridge University Press (adapted)",
+      "stimulus": "“. . . The Laws ought to be so framed, as to secure the Safety of every Citizen as much as possible. . . . The Equality of the Citizens consists in this; that they should all be subject to the same Laws. . . .”",
+      "prompt": "Catherine the Great ruled which state, and during which movement?",
+      "options": [
+        "France, during the French Revolution",
+        "Prussia, during the Reformation",
+        "Austria, during the Industrial Revolution",
+        "Russia, during the Enlightenment"
+      ],
+      "correct_index": 3,
+      "hints": [
+        "Catherine the Great is one of the “enlightened” monarchs — you've grouped her with rulers who read the Enlightenment philosophers.",
+        "Her country's name gives you half the answer; the movement takes more thought — check your enlightened despots list for the other half."
+      ]
+    }
+  ],
+  "_licence": "All ten items are BK-original questions written over public-domain primary source excerpts (Locke, Montesquieu, Rousseau, Wollstonecraft, Catherine the Great correspondence) — no New Visions or third-party question content. Sellable per house rule; nothing here needs a teach-only flag.",
+  "_hint_model": "2 escalating hints per item, available during the regular season only. Playoffs run cold (no hints), per BK's ruling 2026-09-22."
+}

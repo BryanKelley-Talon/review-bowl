@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0",
+  "station": {
+    "id": 8,
+    "num": "VIII",
+    "name": "Argument Development",
+    "tier": null
+  },
+  "skill_tags": [
+    2
+  ],
+  "skill_tag_labels": [
+    "Thesis"
+  ],
+  "critical_path": true,
+  "meta": false,
+  "attempts": 2,
+  "reps": [
+    {
+      "rep": 1,
+      "type": "everyday",
+      "source": "shell",
+      "note": "On-ramp already in the Arena shell. Do not replace."
+    },
+    {
+      "rep": 2,
+      "type": "regents",
+      "thread_tags": [
+        1,
+        3
+      ],
+      "note": "RE-CUT 2026-09-18 for 11.1, rep 2 only. Replaces the Beard cartoon 1884 + TR 1902 (11.5). REP 3 IS DELIBERATELY KEPT — Gordon Wood and Linda Monk are founding-era and sit honestly at 11.2; Josh flagged it as possibly in-era and he was right, so it is not thrown away. Needs ONE crop copied: unit01-bkbook-virginia-population-1640-1710.png.",
+      "prompt": "Task: Using these documents and your knowledge of United States history, write ONE thesis sentence answering this question: How democratic were the English colonies in North America? Take a position someone could argue with, and preview the line of your argument.",
+      "station_focus": null,
+      "stimulus": [
+        {
+          "kind": "text",
+          "content": ". . . It is Ordered, sentenced, and decreed, that there shall be yearly two General Assemblies or Courts . . . the first shall be called the Court of Election, wherein shall be yearly chosen from time to time, so many Magistrates and other public Officers as shall be found requisite [needed]: Whereof one to be chosen Governor for the year ensuing . . . which choice shall be made by all that are admitted freemen and have taken the Oath of Fidelity, and do cohabit within this Jurisdiction . . .",
+          "citation": "Source: Fundamental Orders of Connecticut, Section 1, January 14, 1639",
+          "provenance": "BK's CPP Unit 11.1 End-of-Unit Examination; crop record blessed on the bank"
+        },
+        {
+          "kind": "image",
+          "content": null,
+          "image_ref": "unit01-bkbook-virginia-population-1640-1710.png",
+          "image_alt": "A grouped bar chart titled Population of the Virginia Colony, 1640-1710. For each of four years - 1640, 1680, 1700 and 1710 - a tall blue bar shows the total population of Virginia and a shorter orange bar shows the enslaved population. The total rises from roughly 10,000 in 1640 to about 80,000 in 1710. The enslaved population is near zero in 1640 and climbs to roughly 24,000 by 1710, growing faster than the total in the later years.",
+          "citation": "Source: Population of the Virginia Colony, 1640-1710. Chart, from BK's Unit 1 book.",
+          "provenance": "BK's Unit 1 book; crop record blessed by BK 2026-09-18"
+        }
+      ],
+      "exemplar": "Weak: “The English colonies had some democratic features and some undemocratic features.” Nobody disagrees with that; it previews nothing.\n\nStronger: “The English colonies were genuinely more democratic than England for the men the law counted, and that is exactly why their growth depended on a population the law did not count at all.” That takes a position, it uses both documents, and it tells the reader the argument is going to hold two true things against each other rather than split the difference.\n\nAlso defensible, arguing the other way: “Calling the colonies democratic mistakes the franchise for the society: Connecticut's freemen elected their governor yearly while Virginia's enslaved population grew from almost none to roughly a quarter of the colony, and a system is not democratic for the people it is built on.”",
+      "compare_focus": "One sentence. It has to be arguable and it has to preview the argument. If your thesis could sit on top of an essay arguing the opposite, it is a topic, not a claim.",
+      "compare_checklist": [
+        "Does my thesis state a claim someone could disagree with?",
+        "Does it preview the line of argument, not just the topic?",
+        "Is it more than a restatement of the question?",
+        "Could this sentence sit on top of an essay arguing the opposite? If yes, rewrite it."
+      ]
+    },
+    {
+      "rep": 3,
+      "type": "regents",
+      "thread_tags": [
+        3
+      ],
+      "note": "JUNE 2026 PUSH-UPDATE (2026-07-22): the later-source push promised in the 7/10 bank-first ruling. This rep sources the exam the August student sat — Arena reps from it ARE her compliant review of that test (ruling 2026-07-06). Rep 2 (bank-first) retained; if the shell renders a single regents rep, this one takes precedence for the August sprint — confirm with Josh. Supplies Documents 1 and 5 of the six-document June 2026 CLE set; the full set exists in STIMULUS_BANK/Unit_02 (unit02-0626-cle-doc1 through doc6).",
+      "prompt": "Directions: Write a well-organized essay that includes an introduction, several paragraphs, and a conclusion. Use evidence from at least four documents in the body of the essay. Support your response with relevant facts, examples, and details. Include additional outside information.\n\nHistorical Context: Creation of a Stronger National Government\nThroughout United States history, many constitutional and civic issues have been debated by Americans. These debates have resulted in efforts by individuals, groups, and governments to address these issues. These efforts have achieved varying degrees of success. One of these constitutional and civic issues is the creation of a stronger national government.\n\nTask: Using information from the documents and your knowledge of United States history, write an essay in which you\n• Describe the historical circumstances surrounding this constitutional or civic issue\n• Explain efforts by individuals, groups, and/or governments to address this constitutional or civic issue\n• Discuss the impact of the efforts on the United States and/or on American society\n\nGuidelines: In your essay, be sure to\n• Develop all aspects of the task\n• Explain at least two efforts to address the issue\n• Incorporate information from at least four documents\n• Incorporate relevant outside information\n• Support the theme with relevant facts, examples, and details\n• Use a logical and clear plan of organization, including an introduction and a conclusion, that are beyond a restatement of the theme",
+      "exam_meta": {
+        "exam": "US History & Government (11R)",
+        "administration": "June 2026",
+        "part": "Part III B — Civic Literacy Essay",
+        "question_ref": "37"
+      },
+      "stimulus": [
+        {
+          "kind": "text",
+          "content": ". . . Almost immediately after the Confederation was created, many Americans, including [James] Madison, came to see that it was much too weak to do what they wanted. By the 1780s the problems were severe and conspicuous [obvious]. The Congress could not tax and pay its bills. It could not feed, clothe, or supply the army. It could not levy tariffs to regulate trade or to retaliate against the mercantilist European empires. It was even having trouble gathering a quorum to conduct business. Attempts to revise the Articles and grant the Congress the power to levy a 5 percent impost [tax] on imported European goods were thwarted by the need to get the unanimous consent of all thirteen states. Internationally the United States were being humiliated. In the Mediterranean the Barbary pirates were seizing American ships and selling their sailors into slavery, and the Confederation was powerless to do anything. It was unable even to guarantee the territorial integrity of the new nation. Great Britain continued to hold posts in the northwestern parts of United States territory in defiance of the peace treaty of 1783. In the southwest Spain was claiming territory that included much of present-day Alabama and Mississippi and plotting with American dissidents to break away from the Union. . . .",
+          "image_ref": "unit02-0626-cle-doc1-wood.png",
+          "image_alt": "Text excerpt from historian Gordon Wood describing the weaknesses of the national government under the Articles of Confederation in the 1780s.",
+          "citation": "Source: Gordon Wood, Revolutionary Characters: What Made the Founders Different, Penguin Press, 2006",
+          "provenance": "NYSED Regents US History & Government, June 2026, Part III"
+        },
+        {
+          "kind": "text",
+          "content": ". . . The weak national government under the Articles of Confederation created many problems. In 1787, these problems finally led to a convention to draft a new charter for the national government, the Constitution of the United States. But the Constitution’s lack of a bill of rights became the main reason many people opposed it. Many states refused to ratify the Constitution until they were assured a bill of rights would be added. Even after three-fourths of the states ratified the Constitution in 1788, some states threatened to call a second convention to weaken its powers. The struggle did not end until a bill of rights was finally added to the Constitution. . . .",
+          "image_ref": "unit02-0626-cle-doc5-monk.png",
+          "image_alt": "Text excerpt from Linda R. Monk describing opposition to the Constitution over its lack of a bill of rights and the struggle that ended when the Bill of Rights was added.",
+          "citation": "Source: Linda R. Monk, The Bill of Rights: A User’s Guide, Hachette Books, 2018",
+          "provenance": "NYSED Regents US History & Government, June 2026, Part III"
+        }
+      ],
+      "exemplar": "Although many Americans in the 1780s feared that a stronger national government would simply rebuild the tyranny they had just fought a revolution to escape, the creation of a stronger national government under the Constitution was both necessary and ultimately successful, because the Articles of Confederation had left Congress powerless to tax, defend the nation, or hold the states together — and because the Constitution’s critics won the very safeguard that answered their fear. Document 1 supplies the necessity: under the Articles, Congress “could not tax and pay its bills,” could not supply the army, and stood humiliated while Barbary pirates seized American sailors and Britain held forts on American soil in defiance of the 1783 peace treaty. The counterargument was serious, not foolish — Document 5 shows that the Constitution’s “lack of a bill of rights became the main reason many people opposed it,” and several states refused to ratify without one. But that opposition strengthened the final result rather than defeating it: the promise and delivery of the Bill of Rights in 1791 answered the Anti-Federalist objection inside the new framework, joining an energetic government — able to tax, raise an army, and regulate commerce — to written guarantees of individual liberty. A thesis that ignores the opposition misses what actually happened: the stronger national government succeeded because its fiercest critics forced it to limit itself.",
+      "compare_focus": "One move: the “Although … because …” sentence. Name the Anti-Federalist objection at its strongest inside your thesis, then answer it — one sentence that takes a position and absorbs the counterargument.",
+      "compare_checklist": [
+        "Does my thesis take a position someone could argue against?",
+        "Did I state the opposing argument fairly, at its strongest?",
+        "Did I answer the counterargument with evidence — here, the Bill of Rights — rather than just mentioning it?"
+      ]
+    }
+  ],
+  "recut": {
+    "on": "2026-09-18",
+    "by": "Sam (us11r-curriculum)",
+    "scope": "rep 2 only; every other rep untouched",
+    "why": "Josh 2026-09-18: seven of eight regents reps on the live stations were out of era.",
+    "pool": "Unit 1 crops blessed and carrying image_alt in STIMULUS_BANK — 18 as of today."
+  }
+}

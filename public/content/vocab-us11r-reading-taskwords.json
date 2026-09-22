@@ -1,0 +1,83 @@
+{
+  "_course": "US History & Government 11R",
+  "_unit": "Year-round \u2014 the exam's own task words",
+  "_activity": "General Reading Vocabulary \u2014 Regents task words",
+  "_built": "2026-09-22 by Sam (us11r-curriculum)",
+  "_licence": "Transcribed, not invented \u2014 from US11R_Glossary_v2_2026-09-02, Tier A. Several are NYSED's own printed exam definitions (cause, effect). Reusable year-round, not unit-bound.",
+  "reusable": true,
+  "items": [
+    {
+      "term": "historical context",
+      "definition": "What was already happening when the document was created. Asked directly on both SEQ sets.",
+      "hints": [
+        "Think about timing \u2014 what's already going on.",
+        "It's the situation surrounding the document, before the document itself happened."
+      ]
+    },
+    {
+      "term": "cause",
+      "definition": "Something that contributes to the occurrence of an event. NYSED prints this definition on the exam.",
+      "hints": [
+        "This is the 'why' side of a cause-effect pair.",
+        "NYSED's own printed definition: something that contributes to an event happening."
+      ]
+    },
+    {
+      "term": "effect",
+      "definition": "What happens as a consequence. NYSED prints this definition on the exam.",
+      "hints": [
+        "This is the 'what happened next' side.",
+        "NYSED's own printed definition: what happens as a consequence."
+      ]
+    },
+    {
+      "term": "turning point",
+      "definition": "A major event, idea, or development that brings about significant change.",
+      "hints": [
+        "Think big and lasting, not small and temporary.",
+        "An event or idea that brings about significant, lasting change."
+      ]
+    },
+    {
+      "term": "similarity / difference",
+      "definition": "How two documents line up or diverge. One of the three SEQ Set 1 relationships.",
+      "hints": [
+        "This is about comparing two documents to each other.",
+        "How they line up, or how they diverge \u2014 one of the three SEQ Set 1 relationships."
+      ]
+    },
+    {
+      "term": "audience / purpose / bias / point of view",
+      "definition": "The four reliability angles SEQ Set 2 asks about one named document.",
+      "hints": [
+        "These four all ask about the reliability of a single source.",
+        "Who made it, for whom, why, and from what angle \u2014 the SEQ Set 2 angles."
+      ]
+    },
+    {
+      "term": "identify",
+      "definition": "Name it. No explanation required \u2014 but naming it is required.",
+      "hints": [
+        "This is the lightest-lift task word \u2014 no reasoning required.",
+        "Just name it correctly \u2014 that's the whole task."
+      ]
+    },
+    {
+      "term": "describe",
+      "definition": "Say what it was, with enough detail that someone who wasn't there could picture it.",
+      "hints": [
+        "This one wants detail, not reasoning.",
+        "Enough detail that someone who wasn't there could picture it \u2014 but no 'because' required."
+      ]
+    },
+    {
+      "term": "explain",
+      "definition": "Say why or how. If your sentence has no \"because,\" \"which shows,\" or \"this proves,\" you probably described instead.",
+      "hints": [
+        "This is the task word that demands reasoning, not just detail.",
+        "If your sentence doesn't have 'because,' 'which shows,' or 'this proves,' you're probably still describing."
+      ]
+    }
+  ],
+  "_hint_model": "2 escalating hints per item, available during the regular season only. Playoffs run cold (no hints), per BK's ruling 2026-09-22."
+}

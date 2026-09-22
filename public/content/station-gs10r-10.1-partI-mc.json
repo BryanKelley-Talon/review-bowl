@@ -1,0 +1,300 @@
+{
+  "_README": "GS10R Unit 10.1 exam content (\"The World in 1750\"), reshaped as Part I stimulus-based MC for the Arena's Skills Review Bowl request (Josh, 2026-09-22) — built from the already-authored, already-verified Unit 10.1 Exam (v3, 2026-09-18) and its answer key, not newly sourced. Fifteen items, one per exam question, same order, same numbering as the printed exam and key so a mismatch can be caught by eye. This is the first content sent against the Skills Review Bowl request; the existing station-gs10r-10.2-checkpoint-practice.json (already in this folder) is the second — see the cover note for how the two connect.",
+  "course": "global10r",
+  "unit": "10.1",
+  "casefile": null,
+  "station_id": "gs10r-10.1-partI-mc",
+  "label": "Unit 10.1 · Part I Stimulus MC (\"The World in 1750\")",
+  "content_shape": "multiple_choice",
+  "_shape_note": "Same shape as station-gs10r-10.2-checkpoint-practice.json — 4-option multiple choice, one correct answer, self-check. Reuse that schema as-is.",
+  "framing": "Part I stimulus-based multiple choice, in the Regents' own format: read the source, then answer. Sourced from Unit 10.1's own printed exam — these are real exam-shaped items, not new writing.",
+  "items": [
+    {
+      "id": "u101-1",
+      "document": "Document A — Aurangzeb and religious toleration",
+      "source": "Donald J. Johnson et al., Through Indian Eyes, Apex Press, 1999 (adapted), from the NYS Global History and Geography II Regents Exam, June 2026",
+      "stimulus": "Unfortunately, the last great Moghul [Mughal] ruler, Aurangzeb, opposed religious toleration. A devout Muslim and a Puritan in his habits, Aurangzeb dismissed the court musicians, artists, and historians. He discouraged poets, who “dealt in falsehood”; banned history, which “gave rise to feelings of undue pride”; and suppressed drinking and gambling. His military campaigns drained his resources. He also dismissed the Hindu clerks in his service and reimposed a poll tax on all “unbelievers.” These oppressive measures against the Hindus were perhaps the most destructive acts of his reign, for memories of Aurangzeb’s oppressive rule lingered in the minds of Hindu Indians for generations. By his death in 1707, the Moghul Empire was on the edge of ruin. The British came to fill the power vacuum.",
+      "prompt": "The empire described in this passage was located in",
+      "options": [
+        "West Africa",
+        "South Asia",
+        "East Asia",
+        "Western Europe"
+      ],
+      "correct_index": 1,
+      "licence": "teach-only",
+      "hints": [
+        "This is the Mughal Empire — where on the map did you place that empire on Day 1?",
+        "It's not East Asia (that's China/Japan) and not West Africa or Europe — narrow it to the subcontinent."
+      ]
+    },
+    {
+      "id": "u101-2",
+      "document": "Document A — Aurangzeb and religious toleration",
+      "source": "Donald J. Johnson et al., Through Indian Eyes, Apex Press, 1999 (adapted), from the NYS Global History and Geography II Regents Exam, June 2026",
+      "stimulus": "Unfortunately, the last great Moghul [Mughal] ruler, Aurangzeb, opposed religious toleration. A devout Muslim and a Puritan in his habits, Aurangzeb dismissed the court musicians, artists, and historians. He discouraged poets, who “dealt in falsehood”; banned history, which “gave rise to feelings of undue pride”; and suppressed drinking and gambling. His military campaigns drained his resources. He also dismissed the Hindu clerks in his service and reimposed a poll tax on all “unbelievers.” These oppressive measures against the Hindus were perhaps the most destructive acts of his reign, for memories of Aurangzeb’s oppressive rule lingered in the minds of Hindu Indians for generations. By his death in 1707, the Moghul Empire was on the edge of ruin. The British came to fill the power vacuum.",
+      "prompt": "According to the passage, which action did Aurangzeb take?",
+      "options": [
+        "He expanded religious toleration to Hindus.",
+        "He increased his support for court musicians and poets.",
+        "He invited British merchants to serve in his government.",
+        "He reimposed a tax on people who were not Muslims."
+      ],
+      "correct_index": 3,
+      "licence": "teach-only",
+      "hints": [
+        "Reread the sentence about the poll tax in the passage — who is it imposed on?",
+        "The passage says Aurangzeb DISMISSED Hindu clerks and REIMPOSED a tax — two of the four options reverse what actually happened."
+      ]
+    },
+    {
+      "id": "u101-3",
+      "document": "Document B — The decline of the Ottoman Empire",
+      "source": "“Ottoman Empire (1301–1922),” BBC online, 2009 (adapted), from the NYS Global History and Geography Regents Exam, June 2015",
+      "stimulus": "The power of the [Ottoman] Empire was waning [fading] by 1683 when the second and last attempt was made to conquer Vienna. It failed. Without the conquest of Europe and the acquisition of significant new wealth, the Empire lost momentum and went into a slow decline. Several other factors contributed to the [Ottoman] Empire’s decline: Competition from trade from the Americas; Competition from cheap products from India and the Far East; Development of other trade routes; Rising unemployment within the Empire; Ottoman Empire became less centralised, and central control weakened; Sultans being less severe in maintaining rigorous standards of integrity in the administration of the Empire; Sultans becoming less sensitive to public opinion.",
+      "prompt": "Several of the factors listed in the passage describe problems the Ottoman Empire faced in the area of",
+      "options": [
+        "religious conflict",
+        "trade",
+        "naval warfare",
+        "succession to the throne"
+      ],
+      "correct_index": 1,
+      "licence": "teach-only",
+      "hints": [
+        "Count how many of the bulleted reasons mention trade, competition, or products — that's more than any other single category.",
+        "This isn't about religion, naval battles, or who becomes the next sultan — it's about money and markets."
+      ]
+    },
+    {
+      "id": "u101-4",
+      "document": "Document C — The Tōkaidō, the road that governed Japan",
+      "source": "Patricia J. Graham, “The Political and Economic Importance of the Tōkaidō,” Tōkaidō: Adventures on the Road in Old Japan, University of Kansas Spencer Museum of Art (adapted), from the NYS Global History and Geography Regents Exam, January 2012",
+      "stimulus": "The Tokugawa shogunate realized the importance of maintaining contact with distant provinces within Japan. The Tōkaidō was its most important highway. Perhaps the most crucial use of the road was for governmental communication with the provinces. Official messengers traveled by foot, horseback (in wartime), and palanquin [a seat, usually for the wealthy, carried by other people]. The government used a system of relays for messengers, with reliefs at every seven li [3.9 km]. Government messengers had priority over any other type of traveler. They had first access to ferries at river crossings along the way, and could freely pass government road barriers at all times of the day or night. Private citizens were not allowed to travel at night; a series of barriers and checkpoints along the road kept them from doing so.",
+      "prompt": "According to the passage, government messengers on the Tōkaidō",
+      "options": [
+        "paid a fee at each road barrier",
+        "were permitted to travel only during wartime",
+        "could pass road barriers at any hour of the day or night",
+        "waited their turn for ferries along with private travelers"
+      ],
+      "correct_index": 2,
+      "licence": "teach-only",
+      "hints": [
+        "Compare messengers to private travelers in the passage — the text says private citizens couldn't do this at night.",
+        "Look at the sentence right after “had priority over any other type of traveler” — it lists two things messengers could do that others couldn't."
+      ]
+    },
+    {
+      "id": "u101-5",
+      "document": "Document C — The Tōkaidō, the road that governed Japan",
+      "source": "Patricia J. Graham, “The Political and Economic Importance of the Tōkaidō,” Tōkaidō: Adventures on the Road in Old Japan, University of Kansas Spencer Museum of Art (adapted), from the NYS Global History and Geography Regents Exam, January 2012",
+      "stimulus": "The Tokugawa shogunate realized the importance of maintaining contact with distant provinces within Japan. The Tōkaidō was its most important highway. Perhaps the most crucial use of the road was for governmental communication with the provinces. Official messengers traveled by foot, horseback (in wartime), and palanquin [a seat, usually for the wealthy, carried by other people]. The government used a system of relays for messengers, with reliefs at every seven li [3.9 km]. Government messengers had priority over any other type of traveler. They had first access to ferries at river crossings along the way, and could freely pass government road barriers at all times of the day or night. Private citizens were not allowed to travel at night; a series of barriers and checkpoints along the road kept them from doing so.",
+      "prompt": "The Tokugawa government’s management of the Tōkaidō is best understood as an effort to",
+      "options": [
+        "hold authority over distant parts of Japan",
+        "expand trade with European merchants",
+        "encourage private citizens to settle new provinces",
+        "lower the cost of building and repairing roads"
+      ],
+      "correct_index": 0,
+      "licence": "teach-only",
+      "hints": [
+        "Think about WHY a government builds relay stations and checkpoints along its main road — what does that control let them do?",
+        "This isn't about trade with Europe or lowering road costs — it's about staying in contact with, and control of, distant provinces."
+      ]
+    },
+    {
+      "id": "u101-6",
+      "document": "Document D — The court at Versailles",
+      "source": "The Memoirs of the Duke de Saint-Simon, ed. F. Arkwright, Brentano’s, Vol. V (adapted), via the Internet Modern History Sourcebook, Fordham University",
+      "stimulus": "Very early in the reign of Louis XIV the Court was removed from Paris, never to return. He did not consider himself safe there, and thought cabals [secret plots] would be more easily detected if the Court was in the country. Not only did he expect all persons of distinction to be in continual attendance at Court, but he was quick to notice the absence of those of inferior degree. He loved splendour, magnificence, and profusion in all things, and encouraged similar tastes in his Court. Motives of policy had something to do with this; by making expensive habits the fashion, and, for people in a certain position, a necessity, he compelled his courtiers to live beyond their income, and gradually reduced them to depend on his bounty [generosity] for the means of subsistence [survival].",
+      "prompt": "According to Saint-Simon, Louis XIV encouraged expensive habits among his courtiers in order to",
+      "options": [
+        "improve the appearance of the palace",
+        "raise more tax money from the peasantry",
+        "impress ambassadors visiting from other countries",
+        "make the nobles depend on him for money"
+      ],
+      "correct_index": 3,
+      "licence": "teach-only",
+      "hints": [
+        "Reread the last sentence of the passage — it ends with a clear consequence for the nobles' finances.",
+        "Saint-Simon connects expensive fashion directly to nobles depending on the king's “bounty” — find that word and what it's attached to."
+      ]
+    },
+    {
+      "id": "u101-7",
+      "document": "Document D — The court at Versailles",
+      "source": "The Memoirs of the Duke de Saint-Simon, ed. F. Arkwright, Brentano’s, Vol. V (adapted), via the Internet Modern History Sourcebook, Fordham University",
+      "stimulus": "Very early in the reign of Louis XIV the Court was removed from Paris, never to return. He did not consider himself safe there, and thought cabals [secret plots] would be more easily detected if the Court was in the country. Not only did he expect all persons of distinction to be in continual attendance at Court, but he was quick to notice the absence of those of inferior degree. He loved splendour, magnificence, and profusion in all things, and encouraged similar tastes in his Court.",
+      "prompt": "Which statement about this document is accurate?",
+      "options": [
+        "It was written by a peasant who lived near Versailles.",
+        "It was written by a noble who lived at the court he is describing.",
+        "It was written by Louis XIV about his own reign.",
+        "It was written by a historian in the twentieth century."
+      ],
+      "correct_index": 1,
+      "licence": "teach-only",
+      "hints": [
+        "Saint-Simon holds the title “Duke” — what does that tell you about his position at the court he's describing?",
+        "He's describing what he personally observed at Versailles — that rules out “historian writing later” and “Louis XIV himself.”"
+      ]
+    },
+    {
+      "id": "u101-8",
+      "document": "Document E — Edict of 1635 Ordering the Closing of Japan",
+      "source": "David John Lu, Sources of Japanese History, McGraw-Hill, from the NYS Global History and Geography Regents Exam, January 2005",
+      "stimulus": "Japanese ships are strictly forbidden to leave for foreign countries. No Japanese is permitted to go abroad. If there is anyone who attempts to do so secretly, he must be executed. The ship so involved must be impounded and its owner arrested, and the matter must be reported to the higher authority. If any Japanese returns from overseas after residing there, he must be put to death. Any informer revealing the whereabouts of the followers of padres (Christians) must be rewarded accordingly. If anyone reveals the whereabouts of a high ranking padre, he must be given one hundred pieces of silver.",
+      "prompt": "This document was issued by the government of",
+      "options": [
+        "the Mughal Empire, in the 1500s",
+        "Qing China, in the 1800s",
+        "Tokugawa Japan, in the 1600s",
+        "Bourbon France, in the 1700s"
+      ],
+      "correct_index": 2,
+      "licence": "teach-only",
+      "hints": [
+        "This document bans travel abroad and punishes Christians who are found — which government you studied this week did exactly that?",
+        "Check the source line and the CONTEXT line above the document for the government and the century."
+      ]
+    },
+    {
+      "id": "u101-9",
+      "document": "Document E — Edict of 1635 Ordering the Closing of Japan",
+      "source": "David John Lu, Sources of Japanese History, McGraw-Hill, from the NYS Global History and Geography Regents Exam, January 2005",
+      "stimulus": "Japanese ships are strictly forbidden to leave for foreign countries. No Japanese is permitted to go abroad. If there is anyone who attempts to do so secretly, he must be executed. The ship so involved must be impounded and its owner arrested, and the matter must be reported to the higher authority. If any Japanese returns from overseas after residing there, he must be put to death.",
+      "prompt": "According to the edict, a Japanese person who returned home after living overseas was to be",
+      "options": [
+        "put to death",
+        "fined and then released",
+        "questioned and permitted to stay",
+        "rewarded with one hundred pieces of silver"
+      ],
+      "correct_index": 0,
+      "licence": "teach-only",
+      "hints": [
+        "Find the sentence that starts “If any Japanese returns from overseas” — the very next words are the answer.",
+        "The one hundred pieces of silver reward is for something else in the document — don't confuse the two different penalties/rewards."
+      ]
+    },
+    {
+      "id": "u101-10",
+      "document": "Document F — Emperor Jahangir’s letter to King James I of England, 1617",
+      "source": "Modified version of the Letter to James I, King of England, 1617, published on the Fordham University Indian History Sourcebook",
+      "stimulus": "The letter of love and friendship which you sent and the presents, tokens of your good affections toward me, I have received by the hands of your ambassador, Sir Thomas Roe. Upon which assurance of your royal love I have given my general command to all the kingdoms and ports of my dominions to receive all the merchants of the English nation as the subjects of my friend; that in what place soever they choose to live, they may have free liberty without any restraint; and in what city soever they shall have residence, I have commanded all my governors and captains to give them freedom answerable to their own desires; to sell, buy, and to transport into their country at their pleasure.",
+      "prompt": "Which statement best describes this document?",
+      "options": [
+        "A report written by an English merchant about conditions in India",
+        "A letter from the Mughal emperor granting trading rights to English merchants",
+        "A letter from a European ruler demanding trading rights",
+        "A treaty signed by both England and the Mughal Empire"
+      ],
+      "correct_index": 1,
+      "licence": "teach-only",
+      "hints": [
+        "Who is writing this letter, and who is it addressed to? Check the CONTEXT line above the document.",
+        "The letter GRANTS permission — it isn't a request, a demand, or a signed treaty between two sides."
+      ]
+    },
+    {
+      "id": "u101-11",
+      "document": "Document F — Emperor Jahangir’s letter to King James I of England, 1617",
+      "source": "Modified version of the Letter to James I, King of England, 1617, published on the Fordham University Indian History Sourcebook",
+      "stimulus": "Upon which assurance of your royal love I have given my general command to all the kingdoms and ports of my dominions to receive all the merchants of the English nation as the subjects of my friend; that in what place soever they choose to live, they may have free liberty without any restraint; and at what port soever they shall arrive, that neither Portugal nor any other shall dare to molest their quiet; and in what city soever they shall have residence, I have commanded all my governors and captains to give them freedom answerable to their own desires; to sell, buy, and to transport into their country at their pleasure.",
+      "prompt": "According to the letter, Jahangir ordered his governors to allow English merchants to",
+      "options": [
+        "collect taxes in his ports",
+        "build fortified trading posts on the coast",
+        "spread Christianity among his subjects",
+        "buy, sell, and transport goods as they wished"
+      ],
+      "correct_index": 3,
+      "licence": "teach-only",
+      "hints": [
+        "The last sentence of the excerpt lists exactly what English merchants may do — find the phrase “to sell, buy, and to transport.”",
+        "This isn't about taxes, forts, or religion — Jahangir's letter is entirely about trade."
+      ]
+    },
+    {
+      "id": "u101-12",
+      "document": "Chart — Selected states and empires, about 1750",
+      "source": "Chart written for this course from the NYS Grades 9–12 Social Studies Framework, Key Idea 10.1b. Original — no third-party license.",
+      "stimulus": "State or empire / Where it was / How much land it held about 1750 / Who governed it — Qing China: East Asia, very large (most of eastern Asia), Emperor through a bureaucracy of trained officials. Mughal Empire: South Asia, once very large but breaking apart into smaller states by 1750, emperor’s authority weakening as regional rulers took power. Ottoman Empire: Southwest Asia, southeastern Europe, and North Africa, large (reaching across three continents, shrinking at the edges), Sultan with weakening central control. Tokugawa Japan: East Asia, small (a group of islands), Shogun with tight control over the lords and over travel. Bourbon France: Western Europe, small next to the great land empires, King with nobles required to attend the royal court. Russian Empire: Northern Europe and northern Asia, very large and still expanding eastward, Tsar. Benin, Ashanti, Dahomey: West Africa, small to medium states, Kings with wealth drawn from trade.",
+      "prompt": "Based on the chart, which state is correctly paired with its region in 1750?",
+      "options": [
+        "Ottoman Empire — East Asia",
+        "Ashanti — South Asia",
+        "Tokugawa Japan — East Asia",
+        "Mughal Empire — Western Europe"
+      ],
+      "correct_index": 2,
+      "licence": "sellable",
+      "hints": [
+        "Check each pairing against the chart one at a time — three of the four options put a state in the wrong region.",
+        "The Ottoman Empire and the Mughal Empire are NOT in East Asia or Western Europe — cross those two off first."
+      ]
+    },
+    {
+      "id": "u101-13",
+      "document": "Chart — Selected states and empires, about 1750",
+      "source": "Chart written for this course from the NYS Grades 9–12 Social Studies Framework, Key Idea 10.1b. Original — no third-party license.",
+      "stimulus": "State or empire / Where it was / How much land it held about 1750 / Who governed it — Qing China: East Asia, very large. Mughal Empire: South Asia, breaking apart by 1750. Ottoman Empire: Southwest Asia, southeastern Europe, and North Africa, large (reaching across three continents). Tokugawa Japan: East Asia, small. Bourbon France: Western Europe, small. Russian Empire: Northern Europe and northern Asia, very large and still expanding. Benin, Ashanti, Dahomey: West Africa, small to medium.",
+      "prompt": "According to the chart, which empire held territory on three continents in 1750?",
+      "options": [
+        "Ottoman Empire",
+        "Tokugawa Japan",
+        "Kingdom of Benin",
+        "Bourbon France"
+      ],
+      "correct_index": 0,
+      "licence": "sellable",
+      "hints": [
+        "Only one empire on the chart is described as reaching across more than one continent, let alone three.",
+        "Reread that empire's “Where it was” column on the chart — it names three regions in one line."
+      ]
+    },
+    {
+      "id": "u101-14",
+      "document": "Chart — Selected states and empires, about 1750",
+      "source": "Chart written for this course from the NYS Grades 9–12 Social Studies Framework, Key Idea 10.1b. Original — no third-party license.",
+      "stimulus": "State or empire / Where it was / How much land it held about 1750 / Who governed it — Qing China: East Asia, very large. Mughal Empire: South Asia, breaking apart by 1750. Ottoman Empire: large, spanning three continents, shrinking at the edges. Tokugawa Japan: East Asia, small. Bourbon France: Western Europe, small next to the great land empires. Russian Empire: very large and still expanding eastward. Benin, Ashanti, Dahomey: West Africa, small to medium states.",
+      "prompt": "Which statement about the world in 1750 is best supported by the chart?",
+      "options": [
+        "European states controlled the largest land empires in the world.",
+        "African states were the largest political units in the world.",
+        "Most of the world’s largest land empires were in Asia.",
+        "Japan controlled more territory than China."
+      ],
+      "correct_index": 2,
+      "licence": "sellable",
+      "hints": [
+        "Count how many of the largest empires on the chart (Qing, Mughal, Ottoman, Russian) are located at least partly in Asia.",
+        "This isn't about Europe or Africa controlling the most land, and it isn't about Japan vs. China's size — recheck those two options against the chart."
+      ]
+    },
+    {
+      "id": "u101-15",
+      "document": "Chart — Selected states and empires, about 1750",
+      "source": "Chart written for this course from the NYS Grades 9–12 Social Studies Framework, Key Idea 10.1b. Original — no third-party license.",
+      "stimulus": "Mughal Empire: South Asia, once very large; breaking apart into smaller states by 1750; emperor’s authority weakening, regional rulers taking power. Tokugawa Japan: East Asia; small — a group of islands; Shogun with tight control over the lords and over travel.",
+      "prompt": "The chart shows the Mughal Empire covering a very large area while Tokugawa Japan covered a small one. Which conclusion is best supported?",
+      "options": [
+        "Only European states had strong central governments.",
+        "A state’s size did not always match how firmly its government controlled it.",
+        "The largest states were always the most firmly governed.",
+        "Small states were unable to govern themselves."
+      ],
+      "correct_index": 1,
+      "licence": "sellable",
+      "hints": [
+        "The Mughal row pairs “very large” with “authority weakening” — the Tokugawa row pairs “small” with “tight control.” What does that contrast show?",
+        "This rules out any option claiming size and control always match, or that small states can't govern themselves."
+      ]
+    }
+  ],
+  "_licence": "Mixed — flagged per item, matching this desk's intake rule (a tainted or restricted stimulus poisons every item built on it, so the split is drawn per item, not per file). Items u101-1 through u101-11 (11 items) are teach-only: BK-original questions welded to NYSED-released passages reaching this desk through New Visions (Aurangzeb, Ottoman, Tōkaidō, Edict of 1635) and the Fordham University Sourcebook (Saint-Simon, Jahangir). New Visions publishes CC BY-NC-SA 4.0 and its own Regents-question pages carry NYSED language forbidding reproduction for profit; Fordham permits educational use, not commercial use. Teach freely, do not sell. Items u101-12 through u101-15 (4 items) are sellable: the extents chart is BK's own original work, written for this course from the NYS Grades 9–12 Social Studies Framework's own language — no third-party text or image. This exact split (11 teach-only / 4 sellable) is recorded in GS10R_Unit10.1_MC-EXAM_KEY_v1_2026-09-10.docx §4 on this desk's own shelf; this file does not introduce a new ruling, it carries the existing one forward into the Arena schema. BK/CJ adjudicate sellability — this flag is the record at intake, not a decision.",
+  "_hint_model": "2 escalating hints per item, available during the regular season only. Playoffs run cold (no hints), per BK's ruling 2026-09-22."
+}

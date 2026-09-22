@@ -1,0 +1,55 @@
+{
+  "_course": "US History & Government 11R",
+  "_unit": "11.1 - Colonial Foundations",
+  "_activity": "Best Context Statement — 4-option pick-the-best-fit",
+  "_built": "2026-09-22 by Sam (us11r-curriculum)",
+  "_licence": "ORIGINAL. New authoring, reviewed and approved by BK in chat 2026-09-22.",
+  "_hint_model": "2 escalating hints per item, available during the regular season only. Playoffs run cold (no hints), per BK's ruling 2026-09-22.",
+  "items": [
+    {
+      "id": "ctx-01",
+      "stem": "Which statement best gives the historical context for Magna Carta, 1215?",
+      "options": {
+        "1": "The English monarchy had just been abolished",
+        "2": "English barons were pushing back against a king's power to tax without consent",
+        "3": "Parliament had already existed for centuries",
+        "4": "The colonies had just been founded"
+      },
+      "correct": "2",
+      "hints": [
+        "Think about what English barons wanted from their king.",
+        "It's about a limit on the king's power to tax without someone else's agreement."
+      ]
+    },
+    {
+      "id": "ctx-02",
+      "stem": "Which statement best explains why Bacon's Rebellion, 1676, mattered?",
+      "options": {
+        "1": "It ended slavery in Virginia",
+        "2": "It was the first election held in the colonies",
+        "3": "It showed Virginia's elite what an alliance of poor whites and enslaved people could do — and colonial law hardened along racial lines afterward",
+        "4": "It led directly to the Declaration of Independence"
+      },
+      "correct": "3",
+      "hints": [
+        "Think about who the rebellion actually united, briefly, against the colony's elite.",
+        "It's not about ending slavery or an election — it's about what elites feared afterward, and how the law responded."
+      ]
+    },
+    {
+      "id": "ctx-03",
+      "stem": "Which statement best places John Josselyn's 1674 account in time and cause?",
+      "options": {
+        "1": "Written after King Philip's War, describing Native population decline from disease and colonial conflict",
+        "2": "Written before any English settlement reached New England",
+        "3": "Describing a Native population that was growing due to peaceful relations",
+        "4": "Written by a Native leader protesting land loss"
+      },
+      "correct": "1",
+      "hints": [
+        "Think about the timing — what major conflict had just happened when Josselyn wrote?",
+        "It's not before English settlement, and it's not a story of growth or peace."
+      ]
+    }
+  ]
+}

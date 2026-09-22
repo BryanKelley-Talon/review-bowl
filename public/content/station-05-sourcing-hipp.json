@@ -1,0 +1,67 @@
+{
+ "schema_version": "1.0",
+ "exam_program": "US11R",
+ "item_type": "SEQ",
+ "station": {
+  "id": 5,
+  "num": "V",
+  "name": "Sourcing — HIPP",
+  "tier": "Sourcing"
+ },
+ "skill_tags": [
+  3
+ ],
+ "skill_tag_labels": [
+  "Document Use"
+ ],
+ "critical_path": false,
+ "meta": false,
+ "attempts": 2,
+ "reps": [
+  {
+   "rep": 1,
+   "type": "everyday",
+   "source": "shell",
+   "note": "On-ramp already in the Arena shell. Do not replace."
+  },
+  {
+   "rep": 2,
+   "type": "regents",
+   "thread_tags": [
+    1
+   ],
+   "note": "RE-CUT 2026-09-18 for 11.1. Replaces Levine + the Batchelor cartoon, 1936 (11.7). Two accounts of Native peoples written for opposite reasons — the sourcing contrast IS the unit. TEXT ONLY, no image_ref, so nothing renders a 'not cleared' placeholder.",
+   "prompt": "Analyze Document 1 and explain how audience, or purpose, or bias, or point of view affects this document's use as a reliable source of evidence. (Aug 2025 SEQ Set 2.)",
+   "station_focus": "Pick ONE of audience / purpose / bias / point of view, identify it specifically, and explain how it affects the document's reliability.",
+   "stimulus": [
+    {
+     "kind": "text",
+     "content": "Brothers, we must be as one as the English are, or we shall all be destroyed. You know our fathers had plenty of deer and skins and our plains were full of game and turkeys, and our coves and rivers were full of fish.\n\nBut, brothers, since these Englishmen have seized our country, they have cut down the grass with scythes, and the trees with axes. Their cows and horses eat up the grass, and their hogs spoil our bed of clams; and finally we shall all starve to death; therefore, stand not in your own light, I ask you, but resolve to act like men. All the sachems [tribal chiefs] both to the east and the west have joined with us, and we are resolved to fall upon them at a day appointed, and therefore I come secretly to you, cause you can persuade your Indians [Native Americans] to do what you will.",
+     "citation": "Source: Narragansett Chief Miantonomo",
+     "provenance": "NYSED released exam, January 2024; crop record unit01-0124-mc01, blessed"
+    },
+    {
+     "kind": "text",
+     "content": ". . . Having frequent Occasions to hold public Councils, they have acquired great Order and Decency in conducting them. The old Men sit in the foremost Ranks, the Warriors in the next, and the Women and Children in the hindmost. The Business of the Women is to take exact Notice of what passes, imprint it in their Memories (for they have no Writing), and communicate it to their Children. They are the Records of the Council, and they preserve Traditions of the Stipulations in Treaties 100 Years back; which, when we compare with our Writings, we always find exact. . . .",
+     "citation": "Source: Benjamin Franklin Papers (Wampum Chronicles) before January 7, 1784",
+     "provenance": "NYSED released exam, June 2024; crop record unit01-0624-mc01, blessed"
+    }
+   ],
+   "exemplar": "Take purpose on Document 1. Miantonomo is not describing his people to a curious reader — he is recruiting. He is speaking secretly to other sachems to build an alliance for a coordinated attack, and he says so in the last line. That purpose shapes everything before it: the abundance he describes before the English came is drawn as sharply as possible, and the ruin after is drawn as total, because a man arguing for war needs the contrast to be stark. That does not make the account false — the scythes, the axes, the hogs in the clam beds are ordinary settlement and they did happen. It makes it a document that tells you reliably what the English presence cost, and tells you much less reliably how much was left.\n\nDocument 2 is reliable in a different direction and for the opposite reason. Franklin has nothing to gain by praising Iroquois councils; he is an English printer admiring a practice he did not expect to admire, and he even tests it — he says their remembered treaty terms, checked against English writing, come out exact. An account that flatters its subject against the writer's own interest is stronger evidence, not weaker. But it is still an outsider watching from the edge of a council he was not part of.",
+   "compare_focus": "Name the specific purpose or point of view — who is this for and what do they want from the reader — then say what it makes the document good evidence OF, and what it makes it weak evidence of. Both halves, every time.",
+   "compare_checklist": [
+    "Did I name a specific audience, purpose, bias, or point of view?",
+    "Did I explain how it affects reliability, not just identify it?",
+    "Did I say what the document IS good evidence of, and not only what is wrong with it?"
+   ],
+   "_vocab_edit_2026-09-18": "BK ruled 2026-09-18 that the Arena uses the words he uses in class. OPVL is IB and HIPP is AP; 11R students have met neither. This field had the ACRONYM DELETED and nothing else - the plain words Sam wrote were already there and are untouched. Applied by Josh on BK's approval of the exact strings, not authored by this desk."
+  }
+ ],
+ "recut": {
+  "on": "2026-09-18",
+  "by": "Sam (us11r-curriculum)",
+  "scope": "rep 2 only; every other rep untouched",
+  "why": "Josh 2026-09-18: seven of eight regents reps on the live stations were out of era.",
+  "pool": "Unit 1 crops blessed and carrying image_alt in STIMULUS_BANK — 18 as of today."
+ }
+}

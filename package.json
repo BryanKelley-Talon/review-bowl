@@ -1,0 +1,22 @@
+{
+  "name": "review-bowl",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Skills Review Bowl (Flashpoint History) — arcade football where content mastery builds the team. Local build; beta target is its own Netlify site after BK reviews.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "stage": "node scripts/stage-content.mjs",
+    "test": "node scripts/test.mjs"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^4.5.2"
+  }
+}

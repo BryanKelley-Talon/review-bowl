@@ -1,0 +1,74 @@
+{
+  "_course": "US History & Government 11R",
+  "_unit": "11.1 - Colonial Foundations",
+  "_activity": "Content Vocabulary \u2014 unit-specific terms",
+  "_built": "2026-09-22 by Sam (us11r-curriculum)",
+  "_licence": "Exact wording from US11R_Glossary_v2_2026-09-02, Tier C, 11.1 rep-schedule terms. No new content.",
+  "items": [
+    {
+      "term": "suffrage",
+      "definition": "The right to vote. Watch who has it and who does not \u2014 the answer changes in almost every unit.",
+      "hints": [
+        "It's about a specific right tied to elections.",
+        "Whether or not someone is allowed to cast a ballot."
+      ]
+    },
+    {
+      "term": "democracy",
+      "definition": "Government in which the people hold power, directly or through representatives they elect.",
+      "hints": [
+        "Think about where the power sits \u2014 with the people, directly or indirectly.",
+        "It's the broader category; a republic is one specific type of it."
+      ]
+    },
+    {
+      "term": "republic",
+      "definition": "A government where citizens elect representatives to decide for them. The Founders chose a republic, not a direct democracy \u2014 and said so.",
+      "hints": [
+        "This is the specific kind of democracy the Founders actually chose.",
+        "Citizens don't vote on every law themselves \u2014 they elect people to do it for them."
+      ]
+    },
+    {
+      "term": "citizenship",
+      "definition": "Full membership in a nation, with its rights and duties. Who counts as a citizen is one of this course's longest arguments.",
+      "hints": [
+        "Think about membership, not just residency.",
+        "It comes with both rights and duties, and who qualifies for it changes over time in this course."
+      ]
+    },
+    {
+      "term": "mercantilism",
+      "definition": "The idea that colonies exist to enrich the mother country \u2014 supplying raw materials, buying finished goods.",
+      "hints": [
+        "This is about the economic purpose colonies were expected to serve.",
+        "Raw materials go one way, finished goods come back \u2014 who's meant to profit most?"
+      ]
+    },
+    {
+      "term": "salutary neglect",
+      "definition": "Britain's long stretch of loosely enforcing colonial trade laws. When enforcement returned after 1763, colonists experienced it as a change, not as normal.",
+      "hints": [
+        "This is about enforcement \u2014 or the lack of it.",
+        "Britain wasn't strictly enforcing its own trade laws for a long stretch, until 1763."
+      ]
+    },
+    {
+      "term": "House of Burgesses",
+      "definition": "Virginia's elected assembly, 1619 \u2014 the first representative body in the English colonies.",
+      "hints": [
+        "Virginia, 1619 \u2014 think 'first.'",
+        "It's the first elected representative body in the English colonies."
+      ]
+    },
+    {
+      "term": "Mayflower Compact",
+      "definition": "1620 agreement by Plymouth colonists to govern themselves by majority rule. An early case of consent of the governed.",
+      "hints": [
+        "Think 1620, and a ship.",
+        "Plymouth colonists agreeing, before they even landed, to govern themselves by majority rule."
+      ]
+    }
+  ],
+  "_hint_model": "2 escalating hints per item, available during the regular season only. Playoffs run cold (no hints), per BK's ruling 2026-09-22."
+}

@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "exam_program": "Global10R",
+  "item_type": "short-response",
+  "_note": "Built by Will 2026-09-21, same urgent request as the Historical Context station. Covers both Document Use sub-grains open at 10.1: 3a (pull a specific detail) and 3b (name the source explicitly). Short-response shape, not the US11R SEQ essay -- see the parallel note in station-gs10r-historical-context.json.",
+  "station": {
+    "id": "gs10r-document-use",
+    "name": "Document Use",
+    "tier": "Evidence"
+  },
+  "skill_tags": [],
+  "skill_tag_labels": [
+    "Document Use"
+  ],
+  "critical_path": true,
+  "meta": false,
+  "attempts": 2,
+  "reps": [
+    {
+      "rep": 1,
+      "type": "everyday",
+      "source": "shell",
+      "note": "On-ramp already in the Arena shell. Do not replace."
+    },
+    {
+      "rep": 2,
+      "type": "regents",
+      "sub_grain": "10.1a.2 -- 3a pull a specific detail",
+      "note": "Document already covered in class, Day 4 of Unit 10.1. Teach-only source -- see license block.",
+      "prompt": "Read the document below. Pull ONE specific detail from the text -- not a summary, the actual detail -- that shows who had priority on this road and why.",
+      "station_focus": "Pull an exact detail from the text. A pull is a specific fact, not a restatement of the whole passage.",
+      "exam_meta": {
+        "exam": "GS10R Unit 10.1 Exam (BK)",
+        "administration": "2026-27",
+        "part": "Part I item stem, expanded into a short-response rep",
+        "question_ref": "10.1 exam, items 4-5"
+      },
+      "stimulus": [
+        {
+          "kind": "text",
+          "content": "The Tokugawa shogunate realized the importance of maintaining contact with distant provinces within Japan. The Tokaido was its most important highway. . . . Perhaps the most crucial use of the road was for governmental communication with the provinces. Official messengers traveled by foot, horseback (in wartime), and palanquin. The government used a system of relays for messengers, with reliefs at every seven li [3.9 km]. Government messengers had priority over any other type of traveler. They had first access to ferries at river crossings along the way, and could freely pass government road barriers at all times of the day or night. Private citizens were not allowed to travel at night; a series of barriers and checkpoints along the road kept them from doing so.",
+          "citation": "Source: Patricia J. Graham, \"The Political and Economic Importance of the Tokaido,\" Tokaido: Adventures on the Road in Old Japan, University of Kansas Spencer Museum of Art (adapted), from the NYS Global History and Geography Regents Exam, January 2012",
+          "provenance": {
+            "license": "CC BY-NC-SA 4.0 (via New Visions) / Fordham educational-print permission",
+            "distribution": "teach-only",
+            "note": "NYSED-released passage reaching this desk through New Visions or the Fordham Internet Modern History Sourcebook. Teach freely, do not sell. Per GS10R_Unit10.1_MC-EXAM_KEY_v1_2026-09-10, Section 4."
+          }
+        }
+      ],
+      "exemplar": "Government messengers had priority over any other type of traveler -- they had first access to ferries and could pass road barriers at any hour, while private citizens couldn't even travel at night. The road was a tool of government control, not just transportation.",
+      "compare_focus": "A pull is a specific sentence or fact copied or closely paraphrased from the text -- not 'the road was important' or 'the government used the road.'",
+      "compare_checklist": [
+        "Did I name a specific detail, not a general summary of the passage?",
+        "Can I point to the exact sentence in the text my answer came from?",
+        "Did I explain what that detail shows, not just restate it?"
+      ]
+    },
+    {
+      "rep": 3,
+      "type": "regents",
+      "sub_grain": "10.1a.3 -- 3b name the source explicitly",
+      "note": "Document already covered in class, Day 4 of Unit 10.1. Teach-only source -- see license block.",
+      "prompt": "Read the document below. Name the source explicitly: who wrote this, and what was their position or relationship to the person/system they're describing? Explain in one sentence why that matters for how we read it.",
+      "station_focus": "Naming the source means saying who they were and why their position shapes what they wrote -- not just 'the author.'",
+      "exam_meta": {
+        "exam": "GS10R Unit 10.1 Exam (BK)",
+        "administration": "2026-27",
+        "part": "Part I item stem, expanded into a short-response rep",
+        "question_ref": "10.1 exam, items 6-7"
+      },
+      "stimulus": [
+        {
+          "kind": "text",
+          "content": "Very early in the reign of Louis XIV the Court was removed from Paris, never to return. . . . Not only did he expect all persons of distinction to be in continual attendance at Court, but he was quick to notice the absence of those of inferior degree; at his lever, his coucher, his meals, in the gardens of Versailles, he used to cast his eyes to right and left; nothing escaped him, he saw everybody. . . . He loved splendour, magnificence, and profusion in all things, and encouraged similar tastes in his Court. . . . by making expensive habits the fashion, and, for people in a certain position, a necessity, he compelled his courtiers to live beyond their income, and gradually reduced them to depend on his bounty for the means of subsistence.",
+          "citation": "Source: The Memoirs of the Duke de Saint-Simon, ed. F. Arkwright, Brentano's, Vol. V (adapted), via the Internet Modern History Sourcebook, Fordham University",
+          "provenance": {
+            "license": "CC BY-NC-SA 4.0 (via New Visions) / Fordham educational-print permission",
+            "distribution": "teach-only",
+            "note": "NYSED-released passage reaching this desk through New Visions or the Fordham Internet Modern History Sourcebook. Teach freely, do not sell. Per GS10R_Unit10.1_MC-EXAM_KEY_v1_2026-09-10, Section 4."
+          }
+        }
+      ],
+      "exemplar": "This was written by the Duke de Saint-Simon, a nobleman who actually lived at Versailles under Louis XIV. That matters because he's one of the very courtiers the system was designed to control -- he's describing, from the inside, exactly how the king kept nobles like himself financially dependent and constantly watched.",
+      "compare_focus": "Naming the source is not 'a duke wrote this.' It's saying who they were in relation to what they're describing -- an insider, an outsider, someone with something to gain or lose.",
+      "compare_checklist": [
+        "Did I name who the author actually was, not just 'the writer'?",
+        "Did I say what their position or relationship was to the system/event they're describing?",
+        "Did I explain, in one sentence, why that position changes how we should read the document?"
+      ]
+    }
+  ]
+}

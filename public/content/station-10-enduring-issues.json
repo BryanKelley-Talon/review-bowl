@@ -1,0 +1,146 @@
+{
+  "schema_version": "1.0",
+  "exam_program": "Global10R",
+  "item_type": "n/a",
+  "station": {
+    "id": 10,
+    "num": "X",
+    "name": "Enduring Issues",
+    "tier": "Global"
+  },
+  "skill_tags": [],
+  "skill_tag_labels": [
+    "Global 10R only"
+  ],
+  "critical_path": false,
+  "meta": false,
+  "attempts": 2,
+  "reps": [
+    {
+      "rep": 1,
+      "type": "everyday",
+      "source": "shell",
+      "note": "On-ramp already in the Arena shell. Do not replace."
+    },
+    {
+      "rep": 2,
+      "type": "regents",
+      "sub_grain": "10.1b.2/10.1b.3 -- 6a match the umbrella using the full card",
+      "note": "Original content -- BK-authored chart, sellable, no third-party license. Covered Day 1 of Unit 10.1.",
+      "prompt": "Look at the chart below. Pick ONE state or empire from it. Name the umbrella issue (from the Six Umbrellas: Power & Its Abuse, Conflict, Identity & Nationalism, Wealth & Resources, Technology & Environment, A Connected World) that its situation around 1750 matches best, and explain your match in 1-2 sentences using details from the chart.",
+      "station_focus": "Match a source to its umbrella using the full card -- region, extent, and who governed it -- not a one-word guess off the state's name alone.",
+      "exam_meta": {
+        "exam": "GS10R Unit 10.1 Exam (BK)",
+        "administration": "2026-27",
+        "part": "Part I item stem, expanded into a short-response rep",
+        "question_ref": "10.1 exam, items 12-15"
+      },
+      "stimulus": [
+        {
+          "kind": "table",
+          "content": {
+            "title": "Selected states and empires, about 1750",
+            "columns": [
+              "State or empire",
+              "Where it was",
+              "How much land it held about 1750",
+              "Who governed it"
+            ],
+            "rows": [
+              [
+                "Qing China",
+                "East Asia",
+                "Very large -- most of eastern Asia",
+                "Emperor, working through a bureaucracy of trained officials"
+              ],
+              [
+                "Mughal Empire",
+                "South Asia",
+                "Once very large; breaking apart into smaller states by 1750",
+                "Emperor's authority weakening; regional rulers taking power"
+              ],
+              [
+                "Ottoman Empire",
+                "Southwest Asia, southeastern Europe, and North Africa",
+                "Large -- reaching across three continents; shrinking at the edges",
+                "Sultan; central control weakening"
+              ],
+              [
+                "Tokugawa Japan",
+                "East Asia",
+                "Small -- a group of islands",
+                "Shogun; tight control over the lords and over travel"
+              ],
+              [
+                "Bourbon France",
+                "Western Europe",
+                "Small next to the great land empires",
+                "King; nobles required to attend the royal court"
+              ],
+              [
+                "Russian Empire",
+                "Northern Europe and northern Asia",
+                "Very large and still expanding eastward",
+                "Tsar"
+              ],
+              [
+                "Benin / Ashanti / Dahomey",
+                "West Africa",
+                "Small to medium states",
+                "Kings; wealth drawn from trade"
+              ]
+            ]
+          },
+          "citation": "Source: Chart written for this course from the NYS Grades 9-12 Social Studies Framework, Key Idea 10.1b.",
+          "provenance": {
+            "license": "none -- BK original",
+            "distribution": "sellable",
+            "note": "Written for this course from the NYS Grades 9-12 Social Studies Framework's own language. No third-party text or image."
+          }
+        }
+      ],
+      "exemplar": "The Mughal Empire around 1750 matches Power & Its Abuse: the chart shows the emperor's authority weakening while regional rulers take power, which is exactly the kind of shift in who holds power and how it's controlled that this umbrella is about.",
+      "compare_focus": "The full card is region + extent + who governed it, together -- not just the state's name or one column in isolation.",
+      "compare_checklist": [
+        "Did I use more than one column from the chart, not just the state's name?",
+        "Did I name one of the Six Umbrellas exactly, not a paraphrase of one?",
+        "Did I explain the match in my own words rather than just asserting it?"
+      ]
+    },
+    {
+      "rep": 3,
+      "type": "regents",
+      "sub_grain": "10.1a.2 -- 6a match the umbrella using the full card",
+      "note": "Teach-only source (New Visions) -- see license block. Covered Day 4 of Unit 10.1.",
+      "prompt": "Read the document below. Name the umbrella issue (from the Six Umbrellas) it matches best, and explain your match in 1-2 sentences using the document's own details.",
+      "station_focus": "Match a source to its umbrella using the full document, not a single loaded word in it.",
+      "exam_meta": {
+        "exam": "GS10R Unit 10.1 Exam (BK)",
+        "administration": "2026-27",
+        "part": "Part I item stem, expanded into a short-response rep",
+        "question_ref": "10.1 exam, item 5"
+      },
+      "stimulus": [
+        {
+          "kind": "text",
+          "content": "The Tokugawa shogunate realized the importance of maintaining contact with distant provinces within Japan. The Tokaido was its most important highway. . . . Government messengers had priority over any other type of traveler. They had first access to ferries at river crossings along the way, and could freely pass government road barriers at all times of the day or night. Private citizens were not allowed to travel at night; a series of barriers and checkpoints along the road kept them from doing so.",
+          "citation": "Source: Patricia J. Graham, \"The Political and Economic Importance of the Tokaido,\" Tokaido: Adventures on the Road in Old Japan, University of Kansas Spencer Museum of Art (adapted), from the NYS Global History and Geography Regents Exam, January 2012",
+          "provenance": {
+            "license": "CC BY-NC-SA 4.0 (via New Visions)",
+            "distribution": "teach-only",
+            "note": "NYSED-released passage reaching this desk through New Visions. Teach freely, do not sell."
+          }
+        }
+      ],
+      "exemplar": "This document matches Power & Its Abuse: the road wasn't just for travel, it was a tool the shogunate used to control who could move, when, and how fast -- government messengers got total freedom while ordinary people were boxed in by curfews and checkpoints.",
+      "compare_focus": "Read the road as control, not just transportation, before naming the umbrella.",
+      "compare_checklist": [
+        "Did I name one of the Six Umbrellas exactly?",
+        "Did I use a specific detail from the document, not just the general topic (a road)?",
+        "Did I explain why that detail fits the umbrella, not just assert that it does?"
+      ]
+    }
+  ],
+  "note": "Station X is GLOBAL 10R only — the Enduring Issues Essay. No US11R reps. Rep 2 content is supplied from the GS10R (Global) exam bank, not US11R. Kept in the circuit and tagged Global; not on the 11R critical path.",
+  "_josh_note": "exam_program corrected 2026-09-21 (was 'US11R', station's own note says GLOBAL 10R ONLY - copy-paste leftover, confirmed by Will). Reps 2-3 merged in from Will's proposed content, same date; existing Rep 1 kept untouched."
+}

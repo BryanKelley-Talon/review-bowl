@@ -1,0 +1,70 @@
+{
+ "schema_version": "1.0",
+ "exam_program": "US11R",
+ "item_type": "CLE",
+ "station": {
+  "id": 6,
+  "num": "VI",
+  "name": "OPVL",
+  "tier": "Sourcing"
+ },
+ "skill_tags": [
+  3
+ ],
+ "skill_tag_labels": [
+  "Document Use"
+ ],
+ "critical_path": false,
+ "meta": false,
+ "attempts": 2,
+ "reps": [
+  {
+   "rep": 1,
+   "type": "everyday",
+   "source": "shell",
+   "note": "On-ramp already in the Arena shell. Do not replace."
+  },
+  {
+   "rep": 2,
+   "type": "regents",
+   "thread_tags": [
+    1,
+    3
+   ],
+   "note": "RE-CUT 2026-09-18 for 11.1. Replaces the Anti-Saloon League poster, 1919 (11.5/11.6). An object and a historian, so value and limitation are concrete rather than abstract. Document 1 is Met CC0 — public domain, full museum citation, no licence question. Needs ONE crop copied: unit01-met-8206-kierstede-tankard-1700.jpg.",
+   "prompt": "Analyze this document: who produced it, why, what it is useful for, and where it falls short as evidence. (Jan 2026 CLE, Document 2.)",
+   "station_focus": "Move past “what it says” to who made it and why, then weigh its value and its limitation as evidence.",
+   "stimulus": [
+    {
+     "kind": "image",
+     "content": null,
+     "image_ref": "unit01-met-8206-kierstede-tankard-1700.jpg",
+     "image_alt": "A broad silver tankard with a flat hinged lid, photographed on a plain pale background. The lid carries an engraved circular crest. The scrolled handle is applied at the top with a woman's face in a wreath of fruit and flowers, and at the lower end with a cherub's head. A band of engraved pointed leaves runs around the foot.",
+     "citation": "Cornelius Kierstede (American, 1674–ca. 1757), Tankard, 1700–1720. Silver. New York, New York. The Metropolitan Museum of Art, Bequest of Edward L. Clarkson, 1928.",
+     "provenance": "The Metropolitan Museum of Art, CC0 1.0; crop record blessed with image_alt"
+    },
+    {
+     "kind": "text",
+     "content": "Consumption, trade, and slavery drew the colonies closer to Great Britain, but politics and government split them further apart. Democracy in Europe more closely resembled oligarchies rather than republics, with only elite members of society eligible to serve in elected positions. Most European states did not hold regular elections, with Britain and the Dutch Republic being the two major exceptions. However, even in these countries, only a tiny portion of males could vote. In the North American colonies, by contrast, white male suffrage was far more widespread. In addition to having greater popular involvement, colonial government also had more power in a variety of areas. Assemblies and legislatures regulated businesses, imposed new taxes, cared for the poor in their communities, built roads and bridges, and made most decisions concerning education.",
+     "citation": "Source: Emily Arendt et al., “Colonial Society” in The American Yawp, Stanford University Press, 2018",
+     "provenance": "crop record unit01-yawp-colonialsociety-2018-doc2, blessed"
+    }
+   ],
+   "exemplar": "Origin and purpose, Document 1: a silver tankard made in New York City between 1700 and 1720 by Cornelius Kierstede, a colonial silversmith working in the Dutch tradition. It was made to be owned and displayed — the engraved crest on the lid and the cast face and cherub on the handle are not what a drinking vessel needs, they are what a wealthy household wanted seen.\n\nIts value is that it is direct physical evidence of something a written source can only claim: that by 1700 the colonies had enough concentrated wealth, and enough skilled labor, to support luxury craft. Nobody wrote it down to persuade anyone; it simply is what it is. Its limitation is that one tankard is one household. It cannot tell you how many colonists lived that way, and the answer is very few — an object that survives because it was valuable will always over-represent the people who could afford it.\n\nDocument 2 is the reverse on both counts. Its value is that it speaks about the whole society at once and makes a comparison the tankard cannot — that colonial government had wider participation than England's. Its limitation is that it was written in 2018 by historians reading other people's evidence, and 'white male suffrage was far more widespread' is a sentence that quietly excludes most of the people who were actually there.",
+   "compare_focus": "Say who made it and why in one sentence, then give a value AND a limitation as evidence. 'It is biased' is not a limitation yet — say what it keeps you from knowing.",
+   "compare_checklist": [
+    "Did I state the origin and purpose in terms of who and why?",
+    "Did I give both a value AND a limitation as evidence?",
+    "Is my limitation about what I cannot learn from it, not just that it is one-sided?"
+   ],
+   "_vocab_edit_2026-09-18": "BK ruled 2026-09-18 that the Arena uses the words he uses in class. OPVL is IB and HIPP is AP; 11R students have met neither. This field had the ACRONYM DELETED and nothing else - the plain words Sam wrote were already there and are untouched. Applied by Josh on BK's approval of the exact strings, not authored by this desk."
+  }
+ ],
+ "recut": {
+  "on": "2026-09-18",
+  "by": "Sam (us11r-curriculum)",
+  "scope": "rep 2 only; every other rep untouched",
+  "why": "Josh 2026-09-18: seven of eight regents reps on the live stations were out of era.",
+  "pool": "Unit 1 crops blessed and carrying image_alt in STIMULUS_BANK — 18 as of today."
+ }
+}

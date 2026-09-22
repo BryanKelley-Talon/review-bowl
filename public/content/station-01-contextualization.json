@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0",
+  "station": {
+    "id": 1,
+    "num": "I",
+    "name": "Contextualization",
+    "tier": "Foundation"
+  },
+  "skill_tags": [
+    1
+  ],
+  "skill_tag_labels": [
+    "Historical Context"
+  ],
+  "critical_path": true,
+  "meta": false,
+  "attempts": 2,
+  "reps": [
+    {
+      "rep": 1,
+      "type": "everyday",
+      "source": "shell",
+      "note": "On-ramp already in the Arena shell. Do not replace."
+    },
+    {
+      "rep": 2,
+      "type": "regents",
+      "thread_tags": [
+        3
+      ],
+      "note": "RE-CUT 2026-09-18 for 11.1. Replaces a January 2026 SEQ set built on the Great Depression (unemployment chart + FDR First Inaugural, 1933) — correct skill, wrong era for a student in Colonial Foundations. Task wording is the NYSED SEQ prompt, unchanged. Both documents come from BK's own Unit 11.1 exam and are blessed with image_alt on the bank record. TEXT ONLY — no image_ref, so nothing renders a 'not cleared' placeholder.",
+      "prompt": "Read and analyze the following documents, applying your social studies knowledge and skills to write a short essay of two or three paragraphs in which you: • Describe the historical context surrounding these documents • Identify and explain the relationship between the events and/or ideas found in these documents (Cause and Effect, or Similarity/Difference, or Turning Point)",
+      "station_focus": "Drill the contextualization bullet: describe the broader historical circumstances — time, place, events — surrounding these documents. Do not summarize the documents.",
+      "exam_meta": {
+        "exam": "CPP Unit 11.1 End-of-Unit Examination (BK)",
+        "administration": "2026-27",
+        "part": "Part II — SEQ shape",
+        "question_ref": null
+      },
+      "stimulus": [
+        {
+          "kind": "text",
+          "content": "Clause 14: “To obtain the general consent for a tax in Great Britain [England] we will cause the great council, made up of men who represent the people of England to be summoned individually by letter… they will come together on a fixed day and at a fixed place. … the decision about creating or collecting taxes on that day will be made by a decision reached by vote of majority rule of the representatives of the people…The King shall follow the will of the great council, the King shall not raise or levy taxes on his own accord”",
+          "citation": "Source: Magna Carta, England, 1215",
+          "provenance": "BK's CPP Unit 11.1 End-of-Unit Examination; crop record unit01-magnacarta-1215-doc1, blessed"
+        },
+        {
+          "kind": "text",
+          "content": ". . . It is Ordered, sentenced, and decreed, that there shall be yearly two General Assemblies or Courts, the one the second Thursday in April, the other the second Thursday in September following; the first shall be called the Court of Election, wherein shall be yearly chosen from time to time, so many Magistrates and other public Officers as shall be found requisite [needed]: Whereof one to be chosen Governor for the year ensuing and another be chosen, and no other Magistrate to be chosen for more than one year: provided always there be six chosen besides the Governor . . . which choice shall be made by all that are admitted freemen and have taken the Oath of Fidelity . . .",
+          "citation": "Source: Fundamental Orders of Connecticut, Section 1, January 14, 1639",
+          "provenance": "BK's CPP Unit 11.1 End-of-Unit Examination; crop record unit01-fundamentalorders-1639-doc1, blessed"
+        }
+      ],
+      "exemplar": "The historical context surrounding these documents is the long English argument over who may tax, and how that argument crossed the Atlantic. In 1215 English barons forced King John to accept Magna Carta, which established that the king could not levy a tax on his own — he needed the consent of a council representing the realm. Over the next four centuries that council became Parliament, and the principle hardened into something the English thought of as a right rather than a favor. The colonists who crossed to North America in the 1600s carried that idea with them. Virginia seated the House of Burgesses in 1619, and in 1639 the settlers of Connecticut wrote the Fundamental Orders, choosing their own governor and magistrates by yearly election. For more than a century afterward, Britain's policy of salutary neglect left these assemblies largely alone.\n\nThe relationship between these documents is similarity, and it is a similarity across 424 years and three thousand miles. Both describe the same rule: the people governed choose representatives, and those representatives decide. That continuity is why the colonial argument after 1763 was not a demand for something new. When Parliament began taxing the colonies directly, colonists answered that they were being denied the rights of Englishmen they had held since Magna Carta — and 'no taxation without representation' was a claim about a principle already 500 years old.",
+      "compare_focus": "Name the era and the specific conditions — dates, names, events, not a mood — then write the sentence that ties both documents to the same idea. “By 1639 Connecticut's freemen elected their own governor yearly” beats “colonists wanted freedom.”",
+      "compare_checklist": [
+        "Did I name the specific period and what was happening in it, not just say “long ago”?",
+        "Did I use at least one specific fact — a date, a name, an event — from outside the documents?",
+        "Did I name the relationship type and state it in one clear sentence (“Both documents describe…”)?",
+        "Did I describe the circumstances around the documents rather than retell what they say?"
+      ]
+    },
+    {
+      "rep": 3,
+      "type": "regents",
+      "thread_tags": [
+        1,
+        3
+      ],
+      "note": "RE-CUT 2026-09-18 for 11.1. Replaces a June 2026 SEQ set built on Heumann 1988 + the ADA 1990 — 11.10 content on an 11.1 door. Serves the unit's own question: the thirteen colonies grew; what did that growth cost, and who paid it? Document 1 is text (no image_ref). Document 2 needs ONE crop copied: unit01-bkbook-virginia-population-1640-1710.png — blessed by BK 2026-09-18 and carrying image_alt on the bank record.",
+      "prompt": "Read and analyze the following documents, applying your social studies knowledge and skills to write a short essay of two or three paragraphs in which you: • Describe the historical context surrounding these documents • Identify and explain the relationship between the events and/or ideas found in these documents (Cause and Effect, or Similarity/Difference, or Turning Point)",
+      "station_focus": "Drill the contextualization bullet: describe the broader historical circumstances — time, place, events — surrounding these documents. Do not summarize the documents.",
+      "exam_meta": {
+        "exam": "CPP Unit 11.1 End-of-Unit Examination (BK)",
+        "administration": "2026-27",
+        "part": "Part II — SEQ shape",
+        "question_ref": null
+      },
+      "stimulus": [
+        {
+          "kind": "text",
+          "content": ". . . Not long before the English came into the Country, happened a great mortality amongst [Native Americans], especially where the English afterwards planted, the East and Northern parts were sore smitten with the Contagion; first by the plague, afterwards when the English came by the small pox, the three Kingdoms or Sagamorships of the Massachusetts were very populous, having under them seven Dukedoms or petti-Sagamorships, but by the plague were brought from 30,000 to 300. There are not many now to the Eastward, the Pequots were destroyed by the English: the Mohawks are about five hundred. . . .",
+          "citation": "Source: John Josselyn, An Account of Two Voyages to New-England, Made during the Years 1638, 1663",
+          "provenance": "BK's CPP Unit 11.1 End-of-Unit Examination; crop record unit01-josselyn-1674-doc1, blessed"
+        },
+        {
+          "kind": "image",
+          "content": null,
+          "image_ref": "unit01-bkbook-virginia-population-1640-1710.png",
+          "image_alt": "A grouped bar chart titled Population of the Virginia Colony, 1640-1710. For each of four years - 1640, 1680, 1700 and 1710 - a tall blue bar shows the total population of Virginia and a shorter orange bar shows the enslaved population. The total rises from roughly 10,000 in 1640 to about 80,000 in 1710. The enslaved population is near zero in 1640 and climbs to roughly 24,000 by 1710, growing faster than the total in the later years.",
+          "citation": "Source: Population of the Virginia Colony, 1640-1710. Chart, from BK's Unit 1 book.",
+          "provenance": "BK's Unit 1 book; crop record unit01-bkbook-virginia-population-1640-1710, blessed by BK 2026-09-18"
+        }
+      ],
+      "exemplar": "The historical context surrounding these documents is the first century of English colonization in North America, roughly 1600 to 1710. Europeans arriving on the Atlantic coast carried diseases — smallpox, measles, plague — that Native peoples had never been exposed to and had no immunity against. Epidemics ran ahead of settlement and through it, and warfare with colonists finished what disease began, as in the destruction of the Pequots in 1637. In the same decades the English colonial population climbed steadily, and in the Chesapeake the labor system shifted: planters who had relied on indentured servants from England turned after the 1670s to enslaved Africans, and Virginia's slave codes hardened that status into something permanent and inherited.\n\nThe relationship between these documents is cause and effect, and the cause is the same in both. Document 1 reports one Native population falling from thirty thousand to three hundred. Document 2 shows Virginia's population rising from about ten thousand in 1640 to roughly eighty thousand by 1710, with the enslaved share climbing from near zero to about twenty-four thousand. The colonization that produced the growth on the chart produced the collapse in the account. The growth was real, and these two documents together name who paid for it.",
+      "compare_focus": "Name the era and the specific conditions — dates and numbers, not a mood — then write the sentence that ties both documents to the same cause. “By 1710 roughly 24,000 of Virginia's 80,000 people were enslaved” beats “things changed.”",
+      "compare_checklist": [
+        "Did I name the specific period and what caused it, not just say “the colonies grew”?",
+        "Did I use at least one specific fact — a date, a number, an event — from outside the documents?",
+        "Did I name the relationship type and state it in one clear sentence (“The same cause produced…”)?",
+        "Did I say who paid for the growth, and not only that growth happened?"
+      ]
+    }
+  ],
+  "exam_program": "US11R",
+  "item_type": "SEQ",
+  "recut": {
+    "on": "2026-09-18",
+    "by": "Sam (us11r-curriculum)",
+    "why": "Josh's 2026-09-18 memo: seven of eight Regents reps on the four live stations were out of era. This station's two were 11.7 and 11.10.",
+    "pool": "Re-cut against Unit 1 crops already blessed and carrying image_alt in STIMULUS_BANK — 17 as of today.",
+    "schema": "Unchanged. Same path, same shape, rep1 untouched."
+  }
+}

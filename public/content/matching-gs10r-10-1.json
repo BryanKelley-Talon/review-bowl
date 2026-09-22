@@ -1,0 +1,85 @@
+{
+  "_course": "Global Studies and Geography 10R",
+  "_unit": "10.1 - The World in 1750",
+  "_activity": "Eight States, Eight Regions",
+  "_built": "2026-09-19 by Will (global10r-curriculum)",
+  "_licence": "ORIGINAL. Pulled from this desk's own Day 1 reading and Document 1 question. No third-party text, no crop, no image_ref. Sellable, no ShareAlike.",
+  "_region_note": "Five distinct regions cover eight states on purpose — Qing China and Tokugawa Japan share East Asia, Benin/Ashanti/Dahomey share West Africa. See the module docstring: that overlap is the point of the unit, not a shortcut.",
+  "intro": "Eight states from Day 1. Match each one to the region it actually sat in, about 1750 — not the region its size might suggest.",
+  "left": [
+    {
+      "key": "a",
+      "label": "Ottoman Empire"
+    },
+    {
+      "key": "b",
+      "label": "Mughal Empire"
+    },
+    {
+      "key": "c",
+      "label": "Qing China"
+    },
+    {
+      "key": "d",
+      "label": "Tokugawa Japan"
+    },
+    {
+      "key": "e",
+      "label": "Russian Empire"
+    },
+    {
+      "key": "f",
+      "label": "Benin"
+    },
+    {
+      "key": "g",
+      "label": "Ashanti"
+    },
+    {
+      "key": "h",
+      "label": "Dahomey"
+    }
+  ],
+  "right": [
+    {
+      "key": "1",
+      "label": "Southeastern Europe, southwest Asia, and North Africa"
+    },
+    {
+      "key": "2",
+      "label": "South Asia — the Indian subcontinent"
+    },
+    {
+      "key": "3",
+      "label": "East Asia"
+    },
+    {
+      "key": "4",
+      "label": "Northern Europe and northern Asia"
+    },
+    {
+      "key": "5",
+      "label": "West Africa"
+    }
+  ],
+  "correct": {
+    "a": "1",
+    "b": "2",
+    "c": "3",
+    "d": "3",
+    "e": "4",
+    "f": "5",
+    "g": "5",
+    "h": "5"
+  },
+  "rationale": {
+    "a": "The Ottoman Empire ruled from southeastern Europe through southwest Asia into North Africa — the one empire on this list that reached across three continents.",
+    "b": "The Mughal Empire ruled most of the Indian subcontinent — South Asia.",
+    "c": "Qing China was the largest and richest state in the world by almost any measure you can name, sitting in East Asia.",
+    "d": "Tokugawa Japan sat east of China and had deliberately shut itself off from nearly all foreign contact — same region as Qing China, East Asia, a very different relationship with the rest of the world.",
+    "e": "The Russian Empire was pushing east across Asia in 1750 — a land empire spanning northern Europe and northern Asia.",
+    "f": "Benin was one of the wealthy, well-organized kingdoms on the West African coast, trading gold, ivory, pepper, art, and captured people with Europeans who arrived by sea.",
+    "g": "Ashanti was one of the wealthy, well-organized kingdoms on the West African coast, trading gold, ivory, pepper, art, and captured people with Europeans who arrived by sea.",
+    "h": "Dahomey was one of the wealthy, well-organized kingdoms on the West African coast, trading gold, ivory, pepper, art, and captured people with Europeans who arrived by sea."
+  }
+}

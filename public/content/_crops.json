@@ -1,0 +1,91 @@
+{
+  "_README": "Written by scripts/stage-content.mjs. One row per stimulus crop the packs reference. status \"served\" = passed the per-crop gate and copied as WebP; \"held\" = not served, and every item built on it is kept out of the question pool. Do not hand-edit — re-run npm run stage.",
+  "staged": "2026-09-22T16:08:52.709Z",
+  "crops": {
+    "unit01-0124-mc01.png": {
+      "status": "served",
+      "file": "stimulus/unit01-0124-mc01.webp",
+      "alt": null,
+      "citation": "Source: Narragansett Chief Miantonomo",
+      "alt_note": "image_alt not yet written on the owning desk — citation used as alt text"
+    },
+    "unit01-0126-mc01.png": {
+      "status": "served",
+      "file": "stimulus/unit01-0126-mc01.webp",
+      "alt": null,
+      "citation": "Source: John Robinson, Farewell Address to the Pilgrims, August 5, 1620 (adapted)",
+      "alt_note": "image_alt not yet written on the owning desk — citation used as alt text"
+    },
+    "unit01-0624-mc01.png": {
+      "status": "served",
+      "file": "stimulus/unit01-0624-mc01.webp",
+      "alt": null,
+      "citation": "Source: Benjamin Franklin Papers (Wampum Chronicles) before January 7, 1784",
+      "alt_note": "image_alt not yet written on the owning desk — citation used as alt text"
+    },
+    "unit01-0625-mc01.png": {
+      "status": "served",
+      "file": "stimulus/unit01-0625-mc01.webp",
+      "alt": null,
+      "citation": "Source: Theodor de Bry, engraver, 1590 (adapted)",
+      "alt_note": "image_alt not yet written on the owning desk — citation used as alt text"
+    },
+    "unit01-0626-mc01-lancaster-1744.png": {
+      "status": "held",
+      "reason": "no record sets blessed === true for this crop (_crop_manifest_0626.json)",
+      "citation": "Source: The Lancaster Treaty of 1744"
+    },
+    "unit01-0824-mc01.png": {
+      "status": "served",
+      "file": "stimulus/unit01-0824-mc01.webp",
+      "alt": null,
+      "citation": "Source: Smithsonian National Museum of American History (adapted)",
+      "alt_note": "image_alt not yet written on the owning desk — citation used as alt text"
+    },
+    "unit01-0825-mc01.png": {
+      "status": "served",
+      "file": "stimulus/unit01-0825-mc01.webp",
+      "alt": null,
+      "citation": "Source: The Making of America, National Geographic Society (adapted)",
+      "alt_note": "image_alt not yet written on the owning desk — citation used as alt text"
+    },
+    "unit01-bostonharbor-mtvernon-pair.png": {
+      "status": "served",
+      "file": "stimulus/unit01-bostonharbor-mtvernon-pair.webp",
+      "alt": "Two hand-coloured pictures side by side. LEFT: a 1770s etching of Boston harbour seen across the water. Tall-masted merchant and naval ships lie at anchor in the foreground, one flying red pennants; behind them a dense waterfront of brick and timber buildings runs along the shore under a tall church steeple. Small figures in red coats stand on the grassy bank in front. Engraved captions in German and French run along the bottom. RIGHT: an 1853 painting of harvest at Mount Vernon. George Washington, in a dark coat, breeches and tricorn hat, stands at the right holding a cane and watching. Around him enslaved African-American men and women cut, rake, bundle and load grain; a boy sits on top of a loaded hay wagon drawn by two pale horses; a woman in a white dress and two children rest in the shade at the left. Rolling Virginia fields run back to a low horizon. The pair sets a northern port beside a southern plantation, and the two pictures were made about eighty years apart.",
+      "citation": [
+        "Source: View of Boston Harbor, hand-colored etching by Francois Xavier Habermann, 1770-1780",
+        "Source: Life of George Washington (1732-1799), The farmer. Washington standing among enslaved African-American field workers harvesting grain; his Virginia home, Mt. Vernon, in the background, by Junius Brutus Stearn, 1853"
+      ],
+      "alt_note": null
+    },
+    "unit01-fundamentalorders-1639-doc1.png": {
+      "status": "served",
+      "file": "stimulus/unit01-fundamentalorders-1639-doc1.webp",
+      "alt": "A boxed excerpt from a 1639 colonial frame of government. It orders that there shall be yearly two General Assemblies or Courts, the first on the second Thursday in April and the other on the second Thursday in September. The first shall be called the Court of Election, at which so many magistrates and other public officers as are needed shall be chosen yearly, one of them to be chosen Governor for the year ensuing, no magistrate to be chosen for more than one year, and always six chosen besides the Governor. Those chosen and sworn according to a recorded oath shall have power to administer justice according to the laws here established, and where none exist according to the Rule of the Word of God. The choice shall be made by all admitted freemen who have taken the Oath of Fidelity and who live within the jurisdiction, having been admitted inhabitants by the major part of the town. Printed text in a ruled box, no illustration.",
+      "citation": "Source: Fundamental Orders of Connecticut, Section 1, January 14, 1639",
+      "alt_note": null
+    },
+    "unit01-josselyn-1674-doc1.png": {
+      "status": "served",
+      "file": "stimulus/unit01-josselyn-1674-doc1.webp",
+      "alt": "A boxed excerpt from a seventeenth-century English traveller's account. It reports that not long before the English came into the country a great mortality struck Native peoples, especially where the English afterwards planted; the eastern and northern parts were sore smitten, first by plague and afterwards, when the English came, by smallpox. The three kingdoms or sagamorships of the Massachusetts, once very populous with seven petty sagamorships under them, were brought by the plague from thirty thousand to three hundred. Few remain to the eastward, the Pequots were destroyed by the English, and the Mohawks are about five hundred. Printed text in a ruled box, no illustration.",
+      "citation": "Source: John Josselyn, An Account of Two Voyages to New-England, Made during the Years 1638, 1663",
+      "alt_note": null
+    },
+    "unit01-magnacarta-1215-doc1.png": {
+      "status": "served",
+      "file": "stimulus/unit01-magnacarta-1215-doc1.webp",
+      "alt": "A boxed excerpt headed Clause 14. It states that to obtain the general consent for a tax in Great Britain the great council, made up of men who represent the people of England, will be summoned individually by letter and will come together on a fixed day at a fixed place. The decision about creating or collecting taxes on that day will be made by a decision reached by vote of majority rule of the representatives of the people. The King shall follow the will of the great council, and the King shall not raise or levy taxes on his own accord. Printed text in a ruled box, no illustration.",
+      "citation": "Source: Magna Carta, England, 1215",
+      "alt_note": null
+    },
+    "unit01-yawp-colonialsociety-2018-doc2.png": {
+      "status": "served",
+      "file": "stimulus/unit01-yawp-colonialsociety-2018-doc2.webp",
+      "alt": "A boxed passage of modern historical writing. It argues that consumption, trade and slavery drew the colonies closer to Great Britain while politics and government split them further apart. Democracy in Europe more closely resembled oligarchy than republic, with only elite members of society eligible to serve in elected positions; most European states did not hold regular elections, Britain and the Dutch Republic being the two exceptions, and even there only a tiny portion of males could vote. In the North American colonies, by contrast, white male suffrage was far more widespread, and colonial government also held more power in a variety of areas: assemblies and legislatures regulated businesses, imposed new taxes, cared for the poor, built roads and bridges, and made most decisions concerning education. Colonial Americans sued often, which gave local judges more power and more prestige to jury service, so lawyers became extremely important in American society and in turn played a greater role in American politics. Printed text in a ruled box, no illustration.",
+      "citation": "Source: Emily Arendt et al., “Colonial Society” in The American Yawp, Stanford University Press, 2018",
+      "alt_note": null
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "schema_version": "1.0",
+  "exam_program": "Global10R",
+  "item_type": "short-response",
+  "_note": "Built by Will 2026-09-21, urgent request from Josh (deadline: BK hands back the 10.1 test tomorrow morning, 2026-09-22). Matches the diagnostic sheet going home with that test, which sends students here by this exact skill name. NOT the US11R SEQ-essay shape -- Global 10R's Historical Context grain (10.1a.1/10.1b.1, '1a situate a source in its era and region') is a short, 1-3 sentence move, not a paragraph essay, so the prompt and exemplar are sized to that. Same outer schema (station/reps/stimulus/exemplar/compare_checklist) as the US11R stations so Josh's existing renderer should read it without changes -- flag back to me if the shape needs adjusting for a shorter response.",
+  "station": {
+    "id": "gs10r-historical-context",
+    "name": "Historical Context",
+    "tier": "Foundation"
+  },
+  "skill_tags": [],
+  "skill_tag_labels": [
+    "Historical Context"
+  ],
+  "critical_path": true,
+  "meta": false,
+  "attempts": 2,
+  "reps": [
+    {
+      "rep": 1,
+      "type": "everyday",
+      "source": "shell",
+      "note": "On-ramp already in the Arena shell. Do not replace."
+    },
+    {
+      "rep": 2,
+      "type": "regents",
+      "sub_grain": "10.1a.1 -- 1a situate a source in its era and region",
+      "note": "Document already covered in class, Day 2 of Unit 10.1 (per the exam item map). Teach-only source -- see license block.",
+      "prompt": "Read the document below. In 1-3 sentences, situate it: what era (approximate years or century) is it from, and what region of the world is it describing? Use two specific details from the text itself -- not the header -- to back up your answer.",
+      "station_focus": "Situate the source in its era and region using evidence from inside the passage, not just the citation line.",
+      "exam_meta": {
+        "exam": "GS10R Unit 10.1 Exam (BK)",
+        "administration": "2026-27",
+        "part": "Part I item stem, expanded into a short-response rep",
+        "question_ref": "10.1 exam, items 1-2"
+      },
+      "stimulus": [
+        {
+          "kind": "text",
+          "content": "Unfortunately, the last great Moghul [Mughal] ruler, Aurangzeb, opposed religious toleration. A devout Muslim and a Puritan in his habits, Aurangzeb dismissed the court musicians, artists, and historians. He discouraged poets, who \"dealt in falsehood\"; banned history, which \"gave rise to feelings of undue pride\"; and suppressed drinking and gambling. His military campaigns drained his resources. He also dismissed the Hindu clerks in his service and reimposed a poll tax on all \"unbelievers.\" These oppressive measures against the Hindus were perhaps the most destructive acts of his reign, for memories of Aurangzeb's oppressive rule lingered in the minds of Hindu Indians for generations. By his death in 1707, the Moghul Empire was on the edge of ruin. The British came to fill the power vacuum.",
+          "citation": "Source: Donald J. Johnson et al., Through Indian Eyes, Apex Press, 1999 (adapted), from the NYS Global History and Geography II Regents Exam, June 2026",
+          "provenance": {
+            "license": "CC BY-NC-SA 4.0 (via New Visions) / Fordham educational-print permission",
+            "distribution": "teach-only",
+            "note": "NYSED-released passage reaching this desk through New Visions or the Fordham Internet Modern History Sourcebook. Teach freely, do not sell. Per GS10R_Unit10.1_MC-EXAM_KEY_v1_2026-09-10, Section 4."
+          }
+        }
+      ],
+      "exemplar": "This document is from the early 1700s -- it names Aurangzeb's death in 1707 directly. It describes South Asia, specifically the Mughal Empire: the text names \"the Moghul Empire\" and \"Hindu Indians,\" and mentions the British arriving afterward, which places this in the Indian subcontinent.",
+      "compare_focus": "Name a specific year or century and a specific region -- not \"a long time ago in Asia.\" Then point to the exact words that told you.",
+      "compare_checklist": [
+        "Did I name an approximate era (a year, a decade, or a century) rather than just 'the past'?",
+        "Did I name a specific region, not just a continent?",
+        "Did I quote or point to two details from the text itself, not the citation line?",
+        "Did I keep this to 1-3 sentences?"
+      ]
+    },
+    {
+      "rep": 3,
+      "type": "regents",
+      "sub_grain": "10.1b.1 -- 1a situate a source in its era and region",
+      "note": "Document already covered in class, Day 3 of Unit 10.1. Teach-only source -- see license block.",
+      "prompt": "Read the document below. In 1-3 sentences, situate it: what era is it from, and what region of the world is it describing? Use two specific details from the text itself to back up your answer.",
+      "station_focus": "Situate the source in its era and region using evidence from inside the passage, not just the citation line.",
+      "exam_meta": {
+        "exam": "GS10R Unit 10.1 Exam (BK)",
+        "administration": "2026-27",
+        "part": "Part I item stem, expanded into a short-response rep",
+        "question_ref": "10.1 exam, item 8"
+      },
+      "stimulus": [
+        {
+          "kind": "text",
+          "content": "Japanese ships are strictly forbidden to leave for foreign countries. No Japanese is permitted to go abroad. If there is anyone who attempts to do so secretly, he must be executed. The ship so involved must be impounded and its owner arrested, and the matter must be reported to the higher authority. If any Japanese returns from overseas after residing there, he must be put to death. . . . Any informer revealing the whereabouts of the followers of padres (Christians) must be rewarded accordingly. If anyone reveals the whereabouts of a high ranking padre, he must be given one hundred pieces of silver.",
+          "citation": "Source: David John Lu, Sources of Japanese History, McGraw-Hill, from the NYS Global History and Geography Regents Exam, January 2005",
+          "provenance": {
+            "license": "CC BY-NC-SA 4.0 (via New Visions) / Fordham educational-print permission",
+            "distribution": "teach-only",
+            "note": "NYSED-released passage reaching this desk through New Visions or the Fordham Internet Modern History Sourcebook. Teach freely, do not sell. Per GS10R_Unit10.1_MC-EXAM_KEY_v1_2026-09-10, Section 4."
+          }
+        }
+      ],
+      "exemplar": "This is a 1635 edict, so it's from the early 1600s. It describes Japan under the Tokugawa shogunate -- the text bans Japanese people from leaving or returning, and singles out \"padres\" (Christian missionaries), which points to Japan's era of closing itself off from foreign contact and Christianity.",
+      "compare_focus": "Name a specific year or century and a specific region -- not \"a long time ago in Asia.\" Then point to the exact words that told you.",
+      "compare_checklist": [
+        "Did I name an approximate era rather than just 'the past'?",
+        "Did I name a specific region or country, not just a continent?",
+        "Did I quote or point to two details from the text itself?",
+        "Did I keep this to 1-3 sentences?"
+      ]
+    }
+  ]
+}

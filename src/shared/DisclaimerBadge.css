@@ -1,0 +1,32 @@
+/* Standing disclaimer badge — shared chrome. Self-contained: uses the Arena tokens
+   if the host defines them, and falls back to the same values if it does not. */
+.fp-disclaimer-badge{
+  position:fixed;left:12px;bottom:12px;z-index:60;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 12px;border-radius:999px;cursor:pointer;
+  background:var(--arena-card,#131C2E);color:var(--arena-white,#F4F6FA);
+  border:1px solid var(--arena-gold,#E3B341);
+  font:600 12.5px/1 'Barlow Condensed','Outfit',system-ui,sans-serif;
+  letter-spacing:.1em;text-transform:uppercase;
+  box-shadow:0 6px 18px -8px #000a;
+}
+.fp-disclaimer-badge:hover{background:var(--arena-card-lit,#1A2538)}
+.fp-disclaimer-badge:focus-visible{outline:3px solid var(--arena-gold-lit,#F5CB63);outline-offset:3px}
+.fp-disclaimer-dot{width:8px;height:8px;border-radius:50%;background:var(--arena-gold,#E3B341);flex:none}
+
+.fp-disclaimer-scrim{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:16px;
+  background:color-mix(in srgb,var(--arena-canvas,#0B1220) 78%,transparent);backdrop-filter:blur(3px)}
+.fp-disclaimer-card{max-width:520px;width:100%;text-align:center;padding:28px 26px 24px;border-radius:14px;
+  background:var(--arena-card,#131C2E);border:1px solid var(--arena-edge,#22304A);
+  border-top:3px solid var(--arena-gold,#E3B341);box-shadow:0 24px 60px -20px #000c}
+/* The Arena's own guide treatment, carried here so the component stands alone. */
+.fp-disclaimer-card .guide-face{width:64px;height:64px;border-radius:50%;flex:none;object-fit:cover;
+  border:2px solid var(--arena-gold,#E3B341)}
+.fp-disclaimer-card .guide-face.lg{width:140px;height:140px;border-width:3px;margin:0 auto 18px;display:block}
+.fp-disclaimer-title{font:700 24px/1.1 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.06em;
+  color:var(--arena-gold,#E3B341);margin:0 0 12px}
+.fp-disclaimer-text{color:var(--arena-white,#F4F6FA);font:400 17px/1.6 'Outfit',system-ui,sans-serif;margin:0 0 20px;text-align:left}
+.fp-disclaimer-close{padding:10px 22px;border-radius:9px;border:1px solid var(--arena-gold,#E3B341);cursor:pointer;
+  background:var(--arena-gold,#E3B341);color:var(--arena-canvas,#0B1220);
+  font:700 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase}
+@media (max-width:560px){ .fp-disclaimer-badge{left:8px;bottom:8px;font-size:11.5px} }
