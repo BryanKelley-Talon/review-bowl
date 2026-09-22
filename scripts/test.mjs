@@ -10,7 +10,8 @@ import { DEFENSE, applyAnswer, applyAnswerAll, physics, ratings, values } from '
 import { applyPlay, callTimeout, extraPoint, newGame } from '../src/game/matchRules.js'
 import {
   afterGame, applySeasonReview, bracket, finishPractice, MAX_LEVEL, newCareer, opponentStrength,
-  PRACTICE_FACILITY_MAX, RESULT, schedule, standings, startNextSeason, trainPlayer, upgradeFacility, WEEK_RAMP,
+  PLAYOFF_BITE, PRACTICE_FACILITY_MAX, RESULT, schedule, standings, startNextSeason, trainPlayer, upgradeFacility,
+  WEEK_RAMP,
 } from '../src/game/season.js'
 import { simDrive } from '../src/game/drive.js'
 import { isBigMoment, threatOf } from '../src/game/threat.js'
@@ -144,7 +145,18 @@ const wk = (week, phase = 'regular') => {
   return tot / n
 }
 ok(wk(0) < wk(3) && wk(3) < wk(7), `the schedule a student meets gets harder: ${wk(0).toFixed(1)} → ${wk(3).toFixed(1)} → ${wk(7).toFixed(1)}`)
-ok(wk(0, 'playoffs') > wk(7), 'the playoffs are harder than week 8')
+// BK, 2026-09-22: "playoffs bite."
+const semi = (week, round) => {
+  let tot = 0, n = 0
+  for (let seed = 0; seed < 40; seed++) {
+    const c = { ...newCareer('us11r', seed % 10, seed), week, phase: 'playoffs', playoffRound: round }
+    for (let opp = 0; opp < 10; opp++) { if (opp === c.team) continue; tot += opponentStrength(c, opp); n++ }
+  }
+  return tot / n
+}
+ok(semi(7, 1) > wk(7), `the semifinal is harder than week 8: ${semi(7, 1).toFixed(1)} vs ${wk(7).toFixed(1)}`)
+ok(semi(7, 2) > semi(7, 1), `the championship is harder than the semifinal: ${semi(7, 2).toFixed(1)} vs ${semi(7, 1).toFixed(1)}`)
+ok(PLAYOFF_BITE[2] > PLAYOFF_BITE[1] && PLAYOFF_BITE[1] > WEEK_RAMP(7), 'the bite is ordered: week 8 < semifinal < final')
 const freshStats = values(ratings(newCareer('us11r', 1, 4)))
 ok(Math.min(...Object.values(freshStats)) >= 3, `a fresh team starts competent, not broken (min ${Math.min(...Object.values(freshStats))})`)
 ok(Object.values(newCareer('us11r', 1, 4).levels).every(l => l >= 2), 'no level-1 starters on a fresh squad')

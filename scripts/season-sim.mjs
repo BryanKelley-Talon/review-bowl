@@ -122,7 +122,9 @@ if (decodeURIComponent(import.meta.url).endsWith(process.argv[1])) {
     ['week 1 · does practice, answers so-so', 3, 3, 4],
     ['week 4 · engaged all season', 6, 4, 7],
     ['week 8 · engaged all season', 8, 6, 9],
-    ['playoffs · engaged all season', 8, 7, 9],
+    ['semifinal · engaged all season', 8, 8, 9],
+    ['championship · engaged all season', 8, 9, 9],
+    ['championship · half-engaged', 6, 9, 6],
     ['week 8 · never engaged', 2, 6, 2],
   ]
   const N = 100

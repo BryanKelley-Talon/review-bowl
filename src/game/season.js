@@ -106,9 +106,16 @@ export function playoffOpponent(career) {
 // strength. The playoffs stay a step above that, and later seasons harder again.
 export const WEEK_RAMP = week => -2 + week * 0.42
 
+// BK, 2026-09-22: "playoffs bite." The regular season ramps up to the league's real
+// level; January is a step past it, and the championship is a step past THAT. A team
+// that coasted in on a soft schedule finds out here — which is the point of a playoff.
+export const PLAYOFF_BITE = { 1: 2.6, 2: 3.6 }
+
 export function opponentStrength(career, opp) {
   const base = teamStrength(career.seed, career.season, opp)
-  const ramp = career.phase === 'playoffs' ? 1.6 : WEEK_RAMP(career.week)
+  const ramp = career.phase === 'playoffs'
+    ? (PLAYOFF_BITE[career.playoffRound] ?? PLAYOFF_BITE[1])
+    : WEEK_RAMP(career.week)
   const era = Math.floor((career.season - 1) / 3)
   return clamp(Math.round(base + ramp + era), 2, 9)
 }
