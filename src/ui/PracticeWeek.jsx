@@ -129,7 +129,7 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
 
   return (
     <div className="offseason practice">
-      <Newspaper team={TEAMS[career.team]} teamIndex={career.team} season={career.season}
+      <Newspaper team={TEAMS[career.team]} season={career.season}
                  week={career.week + 1} weekLabel={weekLabel} opponent={TEAMS[opponent].name}
                  lastResult={career.week > 0
                    ? ({ [RESULT.W]: 'W', [RESULT.L]: 'L', [RESULT.T]: 'T' })[career.results[career.week - 1]] || null

@@ -13,9 +13,13 @@
 // because that is the thing this game is actually about.
 // ============================================================
 
-// One paper per town, so the masthead is the student's own. Order matches TEAMS.
-const PAPERS = ['Clarion', 'Star-Gazette', 'Journal', 'Press & Sun', 'Times', 'Sentinel',
-  'Dispatch', 'Herald', 'Advertiser', 'Bulletin']
+// ONE nondescript masthead, built from the team's own name (BK, 2026-09-22).
+// The first version gave each town its own paper title — and several of them landed on the
+// REAL papers of those real towns (the Elmira Star-Gazette, the Ithaca Journal and
+// Binghamton's Press & Sun-Bulletin all exist). Naming a real publication next to a real
+// town is the masthead version of using a real kid's name, so the whole scheme is gone.
+// One generic suffix, no variety, nothing that can collide with a masthead somebody owns.
+const PAPER_SUFFIX = 'Sporting News'
 
 const LANE_WORD = {
   sources: 'reading sources', context: 'historical context', vocab: 'vocabulary',
@@ -106,10 +110,10 @@ function briefs({ events, ratings }) {
   return out
 }
 
-export default function Newspaper({ team, teamIndex, season, week, weekLabel, opponent, lastResult, events = [], ratings }) {
+export default function Newspaper({ team, season, week, weekLabel, opponent, lastResult, events = [], ratings }) {
   const lead = leadStory({ events, team, lastResult, opponent, week })
   const notes = briefs({ events, ratings })
-  const paper = `The ${team.name} ${PAPERS[teamIndex % PAPERS.length]}`
+  const paper = `${team.name} ${PAPER_SUFFIX}`
 
   return (
     <section className="newsprint" aria-label="This week in the local paper">
