@@ -8,31 +8,94 @@
 // ============================================================
 
 export const TEAMS = [
-  { id: 'corning',    name: 'Corning',           abbr: 'COR', colors: ['#111111', '#C5B358'],            colorNames: 'Black / Vegas gold' },
-  { id: 'elmira',     name: 'Elmira',            abbr: 'ELM', colors: ['#9E1B32', '#111111', '#FFFFFF'], colorNames: 'Crimson / black / white' },
-  { id: 'horseheads', name: 'Horseheads',        abbr: 'HHD', colors: ['#0046BE', '#FFFFFF', '#8C9199'], colorNames: 'Best Buy blue / white / grey' },
-  { id: 'binghamton', name: 'Binghamton',        abbr: 'BNG', colors: ['#C8102E', '#FFFFFF'],            colorNames: 'Red / white' },
-  { id: 'ithaca',     name: 'Ithaca',            abbr: 'ITH', colors: ['#7A1F2B', '#FFCD00'],            colorNames: 'Maroon / yellow' },
-  { id: 'cwest',      name: 'Corning West',      abbr: 'CWS', colors: ['#2F5233', '#FFFFFF'],            colorNames: 'Hunter green / white' },
-  { id: 'ceast',      name: 'Corning East',      abbr: 'CEA', colors: ['#A6192E', '#FFFFFF'],            colorNames: 'Crimson / white' },
-  { id: 'southside',  name: 'Southside',         abbr: 'STH', colors: ['#355E3B', '#FFFFFF'],            colorNames: 'Hunter green / white' },
-  { id: 'efa',        name: 'EFA',               abbr: 'EFA', colors: ['#1B2A4A', '#FFFFFF'],            colorNames: 'Navy blue / white' },
-  { id: 'notredame',  name: 'Elmira Notre Dame', abbr: 'END', colors: ['#14244B', '#E0B43A'],            colorNames: 'Navy blue / gold' },
+  // BK's ten, with his colours. `kit` is what they wear at home: jersey, helmet, pants.
+  // `alt` is the change strip, worn when the home kit would clash with the other side or
+  // vanish into the grass. Helmets and pants are separate from the jersey on purpose —
+  // Binghamton's blue hat and blue pants are what keep their red readable (BK, 2026-09-22).
+  { id: 'corning', name: 'Corning', abbr: 'COR', colors: ['#111111', '#C5B358'], colorNames: 'Black / Vegas gold',
+    kit: { jersey: '#151515', helmet: '#C5B358', pants: '#C5B358' },
+    alt: { jersey: '#C5B358', helmet: '#151515', pants: '#151515' } },
+
+  { id: 'elmira', name: 'Elmira', abbr: 'ELM', colors: ['#9E1B32', '#111111', '#FFFFFF'], colorNames: 'Crimson / black / white',
+    kit: { jersey: '#9E1B32', helmet: '#151515', pants: '#151515' },
+    alt: { jersey: '#F2F2F2', helmet: '#9E1B32', pants: '#151515' } },
+
+  // "Best Buy blue" was BK's shorthand for the shade; the colour is just blue (BK, 2026-09-22).
+  { id: 'horseheads', name: 'Horseheads', abbr: 'HHD', colors: ['#1155CC', '#FFFFFF', '#8C9199'], colorNames: 'Blue / white / grey',
+    kit: { jersey: '#1155CC', helmet: '#FFFFFF', pants: '#8C9199' },
+    alt: { jersey: '#F2F2F2', helmet: '#1155CC', pants: '#1155CC' } },
+
+  // Blue helmets and blue pants to offset the red jersey — BK's direction, 2026-09-22.
+  { id: 'binghamton', name: 'Binghamton', abbr: 'BNG', colors: ['#C8102E', '#1D3FA8', '#FFFFFF'], colorNames: 'Red / blue / white',
+    kit: { jersey: '#C8102E', helmet: '#1D3FA8', pants: '#1D3FA8' },
+    alt: { jersey: '#F2F2F2', helmet: '#1D3FA8', pants: '#C8102E' } },
+
+  { id: 'ithaca', name: 'Ithaca', abbr: 'ITH', colors: ['#7A1F2B', '#FFCD00'], colorNames: 'Maroon / yellow',
+    kit: { jersey: '#7A1F2B', helmet: '#FFCD00', pants: '#FFCD00' },
+    alt: { jersey: '#FFCD00', helmet: '#7A1F2B', pants: '#7A1F2B' } },
+
+  // The two hunter-green schools never wear green on grass: white at home, dark on the road.
+  { id: 'cwest', name: 'Corning West', abbr: 'CWS', colors: ['#2F5233', '#FFFFFF'], colorNames: 'Hunter green / white',
+    kit: { jersey: '#F2F2F2', helmet: '#2F5233', pants: '#2F5233' },
+    alt: { jersey: '#16301B', helmet: '#F2F2F2', pants: '#F2F2F2' } },
+
+  { id: 'ceast', name: 'Corning East', abbr: 'CEA', colors: ['#A6192E', '#FFFFFF'], colorNames: 'Crimson / white',
+    kit: { jersey: '#A6192E', helmet: '#F2F2F2', pants: '#F2F2F2' },
+    alt: { jersey: '#F2F2F2', helmet: '#A6192E', pants: '#A6192E' } },
+
+  { id: 'southside', name: 'Southside', abbr: 'STH', colors: ['#355E3B', '#FFFFFF'], colorNames: 'Hunter green / white',
+    kit: { jersey: '#355E3B', helmet: '#F2F2F2', pants: '#F2F2F2' },
+    alt: { jersey: '#F2F2F2', helmet: '#355E3B', pants: '#355E3B' } },
+
+  { id: 'efa', name: 'EFA', abbr: 'EFA', colors: ['#1B2A4A', '#FFFFFF'], colorNames: 'Navy blue / white',
+    kit: { jersey: '#1B2A4A', helmet: '#F2F2F2', pants: '#F2F2F2' },
+    alt: { jersey: '#F2F2F2', helmet: '#1B2A4A', pants: '#1B2A4A' } },
+
+  { id: 'notredame', name: 'Elmira Notre Dame', abbr: 'END', colors: ['#14244B', '#E0B43A'], colorNames: 'Navy blue / gold',
+    kit: { jersey: '#14244B', helmet: '#E0B43A', pants: '#E0B43A' },
+    alt: { jersey: '#E0B43A', helmet: '#14244B', pants: '#14244B' } },
 ]
 
-// A green jersey vanishes on a green field, so green teams wear their white.
-const GREENISH = c => { const [r, g, b] = [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16)); return g > r + 12 && g > b }
-export function fieldKit(team) {
-  const [a, b] = team.colors
-  return GREENISH(a) ? { jersey: b, trim: a, zone: a } : { jersey: a, trim: b, zone: a }
+// ── telling two teams apart ─────────────────────────────────────────────────
+// Two sides in similar colours is the one thing that makes a pixel field unreadable,
+// and "are these the same colour?" is not a string comparison — Corning's black and
+// EFA's navy are different hex and the same jersey at this size. So compare perceptually
+// (redmean, close enough to how an eye weighs red/green/blue) and give every team a
+// change strip to fall back to.
+const rgb = hex => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16))
+
+export function colorDistance(a, b) {
+  const [r1, g1, b1] = rgb(a), [r2, g2, b2] = rgb(b)
+  const rm = (r1 + r2) / 2
+  return Math.sqrt((2 + rm / 256) * (r1 - r2) ** 2 + 4 * (g1 - g2) ** 2 + (2 + (255 - rm) / 256) * (b1 - b2) ** 2)
 }
-// When both sides would wear the same jersey, the defense flips to its trim.
+
+// Two thresholds, because they are two different jobs: telling the sides apart from each
+// other is a stricter test than telling a jersey from the grass. Black v navy measures 97,
+// which is why CLASH sits above it — at this sprite size they are the same shirt.
+export const CLASH = 115         // jerseys closer than this read as the same team
+export const GRASS_MIN = 85      // jerseys closer than this to the turf disappear into it
+const GRASS = ['#3B8A38', '#357F33']
+const CLASH_KIT = { jersey: '#2B2F36', helmet: '#F2F2F2', pants: '#F2F2F2' }   // last resort
+
+const readableOnGrass = kit => GRASS.every(g => colorDistance(kit.jersey, g) > GRASS_MIN)
+const strips = team => [team.kit, team.alt, CLASH_KIT]
+
+// The home side wears the first strip that does not vanish into the grass; the away side
+// wears the first that also reads clearly against what the home side is wearing.
 export function kits(offense, defense) {
-  const o = fieldKit(offense)
-  let d = fieldKit(defense)
-  if (d.jersey.toLowerCase() === o.jersey.toLowerCase()) d = { ...d, jersey: d.trim, trim: d.jersey }
-  if (d.jersey.toLowerCase() === o.jersey.toLowerCase()) d = { ...d, jersey: '#2A2A2A', trim: '#DDDDDD' }
-  return { offense: o, defense: d }
+  const o = strips(offense).find(readableOnGrass) || CLASH_KIT
+  const d = strips(defense).find(k => readableOnGrass(k) && colorDistance(k.jersey, o.jersey) > CLASH) || CLASH_KIT
+  return {
+    offense: { ...o, zone: offense.colors[0] },
+    defense: { ...d, zone: defense.colors[0] },
+  }
+}
+
+// Kept for the team-select swatches and anywhere else that wants one team's own look.
+export function fieldKit(team) {
+  const kit = strips(team).find(readableOnGrass) || CLASH_KIT
+  return { ...kit, zone: team.colors[0] }
 }
 
 // ── seeded randomness ────────────────────────────────────────────────────────

@@ -43,6 +43,12 @@ const STOP_AT_END = new Set(['curl', 'comeback'])
 const WR_ROUTES = Object.keys(ROUTES)
 const RB_ROUTES = ['flat', 'wheel', 'check', 'block']
 
+// Is this colour light enough that dark detail reads on top of it?
+const light = hex => {
+  const [r, g, b] = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16))
+  return (r * 299 + g * 587 + b * 114) / 1000 > 140
+}
+
 const rand = (a, b) => a + Math.random() * (b - a)
 const pick = arr => arr[Math.floor(Math.random() * arr.length)]
 const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y)
@@ -593,8 +599,11 @@ export class FieldEngine {
     // shadow, and a gold ring under whoever has the ball
     g.fillStyle = 'rgba(0,0,0,.3)'; g.fillRect(s.x - 5, s.y + 5, 11, 2)
     if (p === this.carrier) { g.fillStyle = 'rgba(245,203,99,.6)'; g.fillRect(s.x - 7, s.y + 5, 15, 2) }
+    // PANTS, HELMET and JERSEY are three separate colours (teams.js). That is what lets
+    // Binghamton's blue hat and blue pants carry their red jersey, and it is most of what
+    // makes two sides readable against each other at this size.
     // legs (they scissor as he runs), shoes
-    g.fillStyle = kit.trim
+    g.fillStyle = kit.pants
     g.fillRect(s.x - 3, y + 1, 2, 4 - stride)
     g.fillRect(s.x + 2, y + 1, 2, 4 + stride)
     g.fillStyle = '#1A1A1A'
@@ -602,13 +611,13 @@ export class FieldEngine {
     // arms
     g.fillStyle = '#E8C9A0'
     g.fillRect(s.x - 5, y - 5 + stride, 2, 5); g.fillRect(s.x + 4, y - 5 - stride, 2, 5)
-    // jersey and shoulder pads
+    // jersey, with the helmet colour across the shoulders
     g.fillStyle = kit.jersey; g.fillRect(s.x - 4, y - 7, 9, 9)
-    g.fillStyle = kit.trim; g.fillRect(s.x - 4, y - 7, 9, 2)
+    g.fillStyle = kit.helmet; g.fillRect(s.x - 4, y - 7, 9, 2)
     // helmet with a facemask facing the way he plays
-    g.fillStyle = kit.trim; g.fillRect(s.x - 4, y - 14, 9, 7)
+    g.fillStyle = kit.helmet; g.fillRect(s.x - 4, y - 14, 9, 7)
     g.fillStyle = 'rgba(0,0,0,.25)'; g.fillRect(s.x - 4, y - 14, 9, 2)
-    g.fillStyle = p.team === 'o' ? '#0B1220' : '#F4F6FA'
+    g.fillStyle = light(kit.helmet) ? '#1A1A1A' : '#E8E8E8'
     g.fillRect(p.team === 'o' ? s.x + 4 : s.x - 5, y - 11, 2, 3)
     if (p.stun > 0) {
       g.fillStyle = '#F4F6FA'

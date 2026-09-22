@@ -15,7 +15,7 @@ import {
 } from '../src/game/season.js'
 import { simDrive } from '../src/game/drive.js'
 import { isBigMoment, threatOf } from '../src/game/threat.js'
-import { player, roster } from '../src/game/teams.js'
+import { CLASH, GRASS_MIN, colorDistance, kits, player, roster, TEAMS } from '../src/game/teams.js'
 import { decodeSaveCode, encodeSaveCode } from '../src/save/saveCode.js'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
@@ -208,6 +208,26 @@ let bad = newCareer('global10r', 1, 9)
 bad.security = 8
 for (let w = 0; w < 8; w++) bad = afterGame(finishPractice(bad), { result: RESULT.L }).career
 eq(applySeasonReview(bad).phase, 'jobs', '0-8 with low security: fired')
+
+// ── kits: two sides a student can tell apart (BK, 2026-09-22) ───────────────
+const GRASS = ['#3B8A38', '#357F33']
+let worstPair = { d: Infinity, label: '' }
+for (const home of TEAMS) for (const away of TEAMS) {
+  if (home === away) continue
+  const k = kits(home, away)
+  const d = colorDistance(k.offense.jersey, k.defense.jersey)
+  if (d < worstPair.d) worstPair = { d, label: `${home.abbr} v ${away.abbr}` }
+  ok(d > CLASH, `${home.abbr} v ${away.abbr}: jerseys must read as different teams (${d.toFixed(0)})`)
+  for (const [side, kit] of [['home', k.offense], ['away', k.defense]])
+    for (const g of GRASS)
+      ok(colorDistance(kit.jersey, g) > GRASS_MIN, `${home.abbr} v ${away.abbr} ${side}: jersey must not vanish into the grass`)
+}
+ok(worstPair.d > CLASH, `closest of the 90 matchups is ${worstPair.d.toFixed(0)} (${worstPair.label})`)
+const bng = TEAMS.find(t => t.id === 'binghamton')
+eq([bng.kit.helmet, bng.kit.pants], ['#1D3FA8', '#1D3FA8'], 'Binghamton wears blue helmets and blue pants')
+ok(colorDistance(bng.kit.jersey, bng.kit.helmet) > CLASH, '…which offsets the red jersey')
+ok(!TEAMS.some(t => /best buy/i.test(t.colorNames)), 'Horseheads blue is just blue')
+ok(TEAMS.every(t => t.kit && t.alt && t.kit.jersey && t.alt.jersey), 'every team has a home kit and a change strip')
 
 // ── save code: the whole career, exactly ─────────────────────────────────────
 for (let i = 0; i < 300; i++) {

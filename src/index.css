@@ -91,8 +91,13 @@ button:disabled{opacity:.5;cursor:default}
 /* ---------- panels ---------- */
 .panel{background:var(--card);border:1px solid var(--edge);border-radius:12px;padding:20px 20px;margin-bottom:16px}
 .panel.center{text-align:center}
-.panel.center .ht-list{text-align:left;display:inline-block}
-.ht-list{margin:10px 0 14px 18px;color:var(--white)}
+/* The halftime/season-end list was inline-block, which let the button that follows sit
+   on the same line and cover the last item (BK caught it at halftime). `display:table`
+   still shrink-wraps and centres, but the button is forced onto its own line. */
+.panel.center .ht-list{text-align:left;display:table;margin:10px auto 20px}
+.ht-list{margin:10px 0 16px 18px;color:var(--white)}
+.panel.center .ht-list + .btn-primary,
+.panel.center .ht-list + .sub + .btn-primary{margin-top:4px}
 .ht-list li{margin-bottom:4px}
 .next-game{border-left:4px solid var(--gold)}
 .cols{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;align-items:start}
