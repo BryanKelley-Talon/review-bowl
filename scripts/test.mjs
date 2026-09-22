@@ -9,8 +9,8 @@ import { makeDealer } from '../src/content/dealer.js'
 import { DEFENSE, applyAnswer, applyAnswerAll, physics, ratings, values } from '../src/game/ratings.js'
 import { applyPlay, callTimeout, extraPoint, newGame } from '../src/game/matchRules.js'
 import {
-  afterGame, applySeasonReview, bracket, finishPractice, MAX_LEVEL, newCareer, RESULT, schedule, standings,
-  startNextSeason, trainCost, trainPlayer,
+  afterGame, applySeasonReview, bracket, finishPractice, MAX_LEVEL, newCareer, opponentStrength,
+  PRACTICE_FACILITY_MAX, RESULT, schedule, standings, startNextSeason, trainPlayer, upgradeFacility, WEEK_RAMP,
 } from '../src/game/season.js'
 import { simDrive } from '../src/game/drive.js'
 import { isBigMoment, threatOf } from '../src/game/threat.js'
@@ -125,7 +125,29 @@ eq(finishPractice(pc).phase, 'regular', 'finishing practice puts the game on')
 eq(finishPractice(pc).practiceDone, true, 'the week is marked done so a reload cannot farm it')
 const trained = trainPlayer({ ...pc, cash: 10 }, 'hands')
 eq(trained.levels.hands, pc.levels.hands + 1, 'training levels the player')
-eq(trained.cash, 10 - trainCost(pc.levels.hands), 'training spends the cash')
+// v4 §1: a right answer is the whole price in the weekly loop.
+eq(trained.cash, 10, 'training a player costs no cash')
+eq(upgradeFacility({ ...pc, cash: 0 }, 'hands').facilities.hands, (pc.facilities.hands || 0) + 1,
+   'a tier-1 facility opens with no cash either')
+eq(upgradeFacility({ ...pc, facilities: { ...pc.facilities, hands: PRACTICE_FACILITY_MAX } }, 'hands').facilities.hands,
+   PRACTICE_FACILITY_MAX, 'Practice Week cannot buy past tier 1 — tier 2 stays an off-season job')
+
+// ── v4 §2: the difficulty curve ────────────────────────────────────────────
+ok(WEEK_RAMP(0) < WEEK_RAMP(3) && WEEK_RAMP(3) < WEEK_RAMP(7), 'opponents ramp up across the season')
+ok(WEEK_RAMP(0) <= -2, 'week 1 is the softest week of the year')
+const wk = (week, phase = 'regular') => {
+  let tot = 0, n = 0
+  for (let seed = 0; seed < 40; seed++) {
+    const c = { ...newCareer('us11r', seed % 10, seed), week, phase }
+    for (let opp = 0; opp < 10; opp++) { if (opp === c.team) continue; tot += opponentStrength(c, opp); n++ }
+  }
+  return tot / n
+}
+ok(wk(0) < wk(3) && wk(3) < wk(7), `the schedule a student meets gets harder: ${wk(0).toFixed(1)} → ${wk(3).toFixed(1)} → ${wk(7).toFixed(1)}`)
+ok(wk(0, 'playoffs') > wk(7), 'the playoffs are harder than week 8')
+const freshStats = values(ratings(newCareer('us11r', 1, 4)))
+ok(Math.min(...Object.values(freshStats)) >= 3, `a fresh team starts competent, not broken (min ${Math.min(...Object.values(freshStats))})`)
+ok(Object.values(newCareer('us11r', 1, 4).levels).every(l => l >= 2), 'no level-1 starters on a fresh squad')
 let maxed = { ...pc, cash: 30, levels: { ...pc.levels, hands: MAX_LEVEL } }
 eq(trainPlayer(maxed, 'hands'), maxed, 'a fully developed player cannot be levelled again')
 ok(values(ratings(trained)).hands > values(ratings(pc)).hands, 'a levelled player raises his stat')

@@ -8,17 +8,18 @@
 //   1 · DEFENSIVE FILM STUDY — a few vocab items. These are what set the Defense
 //       rating for the next game (BK's ruling). The content is borrowed from the
 //       vocabulary lanes: it is the same words, studied for a different purpose.
-//   2 · PLAYER TRAINING — level one specific player. Cash AND a right answer from
-//       the lane he plays for. A miss costs nothing but the week's chance.
-//   3 · FACILITIES — first tier only. The second tier stays an off-season job.
+//   2 · PLAYER TRAINING — level one specific player. A right answer from the lane he
+//       plays for is the whole price (v4, BK: money was friction with no educational
+//       value). A miss costs the week's session on that player, nothing else.
+//   3 · FACILITIES — first tier, also on a right answer. The second tier stays an
+//       off-season job, bought with cash, because that is the bigger investment moment.
 // ============================================================
 import { useMemo, useState } from 'react'
 import Question from './Question.jsx'
-import { FACILITY_COST, MAX_LEVEL, PRACTICE_FACILITY_MAX, trainCost } from '../game/season.js'
+import { MAX_LEVEL, PRACTICE_FACILITY_MAX, trainPlayer, upgradeFacility } from '../game/season.js'
 import { DEFENSE, LANE_OF, ratings, values } from '../game/ratings.js'
 import { POSITION_OF, TEAMS, roster } from '../game/teams.js'
 
-const money = units => `$${units * 10}k`
 const pips = (n, max = MAX_LEVEL) => '●'.repeat(n) + '○'.repeat(Math.max(0, max - n))
 
 export default function PracticeWeek({ career, setCareer, dealer, manifest, opponent, weekLabel, onAnswer, onDone }) {
@@ -28,6 +29,7 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
   const [gate, setGate] = useState(null)
   const [note, setNote] = useState(null)
   const [trained, setTrained] = useState({})        // one attempt per player per week
+  const [facility, setFacility] = useState(null)    // one facility check per week
   const [filmDone, setFilmDone] = useState(!!career.practiceDone)
 
   const r = ratings(career)
@@ -64,26 +66,34 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
     if (!q) { setNote('No questions are loaded for that lane yet.'); return }
     setGate({
       kind: 'training', q, stat,
-      stakes: `Training ${players[stat].name} costs ${money(trainCost(career.levels[stat]))} and a right answer. Miss it and the session is wasted — but you keep the money.`,
+      stakes: `Get this right and ${players[stat].name} goes up a level. Miss it and he keeps working — you just don't get the level this week.`,
       then: ok => {
         setTrained(t => ({ ...t, [stat]: ok ? 'levelled' : 'missed' }))
         if (ok) {
-          setCareer(c => ({
-            ...c,
-            cash: Math.max(0, c.cash - trainCost(c.levels[stat])),
-            levels: { ...c.levels, [stat]: Math.min(MAX_LEVEL, (c.levels[stat] ?? 2) + 1) },
-          }))
+          setCareer(c => trainPlayer(c, stat))
           setNote(`${players[stat].name} put in the work — level ${(career.levels[stat] ?? 2) + 1}. ${statLabel(stat)} goes up with him.`)
-        } else setNote(`${players[stat].name} ran the drill anyway. No level this week, no money spent.`)
+        } else setNote(`${players[stat].name} ran the drill anyway. No level this week — try him again next week.`)
       },
     })
   }
 
-  // ── 3 · facilities, first tier only ────────────────────────────────────────
+  // ── 3 · facilities, first tier, one check a week ───────────────────────────
+  // The film room has no content lane of its own, so its check is film study's draw.
   const upgrade = stat => {
-    const lvl = career.facilities[stat] || 0
-    setCareer(c => ({ ...c, cash: c.cash - FACILITY_COST[lvl], facilities: { ...c.facilities, [stat]: lvl + 1 } }))
-    setNote(`${statLabel(stat)} facility is now level ${lvl + 1}.`)
+    const q = stat === DEFENSE ? dealer.draw('practice') : dealer.draw('training', { lane: LANE_OF[stat] })
+    if (!q) { setNote('No questions are loaded for that lane yet.'); return }
+    const name = stat === DEFENSE ? 'the film room' : `the ${statLabel(stat).toLowerCase()} facility`
+    setGate({
+      kind: 'facility', q, stat,
+      stakes: `Get this right and ${name} opens this week. One facility check a week, so choose where it helps most.`,
+      then: ok => {
+        setFacility(ok ? stat : 'missed')
+        if (ok) {
+          setCareer(c => upgradeFacility(c, stat))
+          setNote(`${stat === DEFENSE ? 'Film room' : statLabel(stat)} facility is open — level ${(career.facilities[stat] || 0) + 1}.`)
+        } else setNote('Not this week. The facility check comes back next week.')
+      },
+    })
   }
 
   const answered = ({ correct, hintsUsed, q }) => {
@@ -105,8 +115,8 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
         <div className="eyebrow">Practice week · before {weekLabel}</div>
         <h3 className="h3">{TEAMS[career.team].name} get a week</h3>
         <p className="sub">Bumps and bruises heal, the film goes on, and somebody gets better. None of this is
-          required — you can walk out to the field right now and nothing you already have is lost. Cash: <b>{money(career.cash)}</b>.
-          Next up: <b>{TEAMS[opponent].name}</b>.</p>
+          required — you can walk out to the field right now and nothing you already have is lost. <b>Right answers are
+          the only currency this week</b>; cash is for the off-season. Next up: <b>{TEAMS[opponent].name}</b>.</p>
         {note && <p className="toast-inline" role="status">{note}</p>}
       </section>
 
@@ -139,15 +149,14 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
       <section className="panel">
         <h3 className="h3">The roster</h3>
         <p className="sub">Every player has a level, and his level is what he is worth to the stat he plays for.
-          Training costs cash <b>and</b> a right answer from his lane. One session per player per week.</p>
+          <b> A right answer from his lane is the whole price.</b> One session per player per week — so a good week
+          can move all five.</p>
         <div className="grid">
           {Object.keys(POSITION_OF).map(stat => {
             const p = players[stat]
             const lvl = career.levels[stat] ?? 2
-            const cost = trainCost(lvl)
             const maxed = lvl >= MAX_LEVEL
             const done = trained[stat]
-            const broke = career.cash < cost
             return (
               <div key={stat} className="card static player-card">
                 <div className="card-type">{p.position} · builds {statLabel(stat)}</div>
@@ -158,8 +167,8 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
                 </div>
                 {maxed ? <span className="flag">Fully developed</span>
                   : done ? <span className="flag">{done === 'levelled' ? `Levelled up — now ${lvl}` : 'Missed this week'}</span>
-                  : <button type="button" className="btn-secondary" disabled={broke} onClick={() => train(stat)}>
-                      {broke ? `Needs ${money(cost)}` : `Train · ${money(cost)} + a ${laneLabel(stat)} question`}
+                  : <button type="button" className="btn-secondary" onClick={() => train(stat)}>
+                      Train · answer a {laneLabel(stat)} question
                     </button>}
               </div>
             )
@@ -169,21 +178,24 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
 
       <section className="panel">
         <h3 className="h3">Facilities</h3>
-        <p className="sub">A week buys the first tier of anything. The deeper second tier is an off-season job.</p>
+        <p className="sub">One facility check a week, and a right answer opens it — no money needed. The deeper
+          second tier is an off-season job, and that one still costs.</p>
         <div className="grid">
           {facilityStats.map(stat => {
             const lvl = career.facilities[stat] || 0
-            const cost = FACILITY_COST[lvl]
             const capped = lvl >= PRACTICE_FACILITY_MAX
+            const used = facility !== null
             return (
               <div key={stat} className="card static">
                 <div className="card-name">{stat === DEFENSE ? 'Film room' : statLabel(stat)}</div>
                 <div className="card-blurb">Level {lvl} of 2</div>
                 {capped
                   ? <span className="flag">{lvl >= 2 ? 'Maxed' : 'Off-season job'}</span>
-                  : <button type="button" className="btn-secondary" disabled={career.cash < cost} onClick={() => upgrade(stat)}>
-                      Upgrade · {money(cost)}
-                    </button>}
+                  : used
+                    ? <span className="flag">{facility === stat ? 'Opened this week' : 'Check used this week'}</span>
+                    : <button type="button" className="btn-secondary" onClick={() => upgrade(stat)}>
+                        Open it · answer a {stat === DEFENSE ? 'film' : laneLabel(stat)} question
+                      </button>}
               </div>
             )
           })}
@@ -198,7 +210,9 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
 
       {gate && (
         <Question key={gate.q.id + (gate.kind === 'film' ? `-${filmRun?.i ?? 0}` : '')} q={gate.q}
-                  gate={gate.kind === 'film' ? 'Film study' : `Training · ${players[gate.stat].name}`}
+                  gate={gate.kind === 'film' ? 'Film study'
+                    : gate.kind === 'facility' ? `Facilities · ${gate.stat === DEFENSE ? 'film room' : statLabel(gate.stat)}`
+                    : `Training · ${players[gate.stat].name}`}
                   hints={rules.hints_regular_season !== false} stakes={gate.stakes}
                   statLine={gate.kind === 'film'
                     ? `Builds Defense · ${manifest.lanes[gate.q.lane]?.label}`

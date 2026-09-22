@@ -99,23 +99,29 @@ export function playoffOpponent(career) {
   return career.playoffRound === 1 ? b.mine.find(i => i !== career.team) : b.otherWinner
 }
 
-// How strong the team across the line is today.
+// How strong the team across the line is TODAY — which is not the same as how good that
+// team is in the standings (simGame uses the raw strength for the rest of the league).
+// v4 difficulty pass: week 1 used to be as hard as week 8. Now the season ramps — the
+// early schedule gives a fresh squad a fair fight, and by week 8 the league is at full
+// strength. The playoffs stay a step above that, and later seasons harder again.
+export const WEEK_RAMP = week => -2 + week * 0.42
+
 export function opponentStrength(career, opp) {
-  const bump = career.phase === 'playoffs' ? 1 : 0
-  return Math.min(9, teamStrength(career.seed, career.season, opp) + bump + Math.floor((career.season - 1) / 3))
+  const base = teamStrength(career.seed, career.season, opp)
+  const ramp = career.phase === 'playoffs' ? 1.6 : WEEK_RAMP(career.week)
+  const era = Math.floor((career.season - 1) / 3)
+  return clamp(Math.round(base + ramp + era), 2, 9)
 }
 
 // ── the career ───────────────────────────────────────────────────────────────
 // A squad arrives at levels 1–3. Level is what a player is worth to his stat, and
 // Practice Week training (or a free-agent signing) is how it goes up. Max 4.
 export function levelsFor(seed, team, salt = 0) {
+  // v4: no level-1 starters. A squad you inherit is ordinary, not broken.
   const r = rng(mix(seed, team, 5, salt))
-  return Object.fromEntries(STATS.map(s => [s, r() < 0.2 ? 1 : r() < 0.85 ? 2 : 3]))
+  return Object.fromEntries(STATS.map(s => [s, r() < 0.6 ? 2 : 3]))
 }
 export const MAX_LEVEL = 4
-// What the next level costs, in $10k: 1→2, 2→3, 3→4.
-export const TRAIN_COST = [0, 2, 3, 4]
-export const trainCost = level => TRAIN_COST[clamp(level, 1, 3)] ?? 4
 
 export function newCareer(course, team, seed = Math.floor(Math.random() * 64)) {
   return {
@@ -215,12 +221,21 @@ export function finishPractice(career) {
   return { ...career, phase: 'regular', practiceDone: true }
 }
 
-// Training one player: cash AND a right answer from his lane (Practice Week).
+// Training one player (Practice Week). v4, BK's ruling: **a right answer is the whole
+// price.** Money was friction with no educational value in the weekly loop; the cash
+// economy now exists only for the off-season's deeper tier. The limit that keeps this
+// paced is one session per player per week, not a bank balance.
 export function trainPlayer(career, stat) {
   const level = career.levels[stat] ?? 2
   if (level >= MAX_LEVEL) return career
-  return { ...career, cash: clamp(career.cash - trainCost(level), 0, 31),
-           levels: { ...career.levels, [stat]: level + 1 } }
+  return { ...career, levels: { ...career.levels, [stat]: level + 1 } }
+}
+
+// A tier-1 facility in Practice Week, on the same terms: answer it, own it.
+export function upgradeFacility(career, stat, max = PRACTICE_FACILITY_MAX) {
+  const level = career.facilities[stat] || 0
+  if (level >= max) return career
+  return { ...career, facilities: { ...career.facilities, [stat]: level + 1 } }
 }
 
 // ── the off-season market ────────────────────────────────────────────────────

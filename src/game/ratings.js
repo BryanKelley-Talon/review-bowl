@@ -31,7 +31,11 @@ STAT_OF[DEFENSE] = DEFENSE
 LANE_OF[DEFENSE] = DEFENSE
 
 export const FORM_MAX = 15
-export const FORM_START = 4
+// v4 difficulty pass: a career used to open with every stat at 2 against opponents at 5,
+// which is a blowout before Practice Week has a chance to matter. Starting form is the
+// cheapest honest lever — the team a student inherits is competent, and what they answer
+// takes it from there.
+export const FORM_START = 7
 const GAIN = 2
 const LOSS = 1
 // Practice Week swings harder than an in-game answer, because BK's ruling is that the
@@ -96,19 +100,25 @@ export const values = r => Object.fromEntries(Object.entries(r).map(([k, v]) => 
 // Kept in one place so the team screen can print exactly what the engine uses.
 export function physics(v, opp, read = false) {
   const f = x => 0.82 + 0.03 * x                               // 1 → .85, 10 → 1.12
+  const runSpeed = 6.6 * f(v.speed)
   return {
     throwJitter: 0.35 + (10 - v.throwing) * 0.26,              // yards of scatter on a throw
-    catchRadius: 1.0 + 0.13 * v.hands,                         // yards a receiver can reach
-    catchBase: 0.58 + 0.035 * v.hands,                         // uncontested catch chance
-    runSpeed: 6.5 * f(v.speed),                                // yd/s, receivers and backs
+    catchRadius: 1.1 + 0.13 * v.hands,                         // yards a receiver can reach
+    catchBase: 0.60 + 0.035 * v.hands,                         // uncontested catch chance
+    runSpeed,                                                  // yd/s, receivers and backs
     qbSpeed: 5.6 * f(v.speed),
     blockTime: 1.25 + 0.22 * v.blocking,                       // seconds the line holds
     breakTackle: 0.04 + 0.022 * v.toughness,
     fumble: Math.max(0.005, 0.035 - 0.003 * v.toughness),
-    defSpeed: 6.7 * f(opp) * (read ? 0.84 : 1),                // coverage speed
-    pursuitSpeed: 7.45 * f(opp) * (read ? 0.92 : 1),
+    defSpeed: 6.72 * f(opp) * (read ? 0.84 : 1),               // coverage speed
+    // Pursuit is whichever is faster: what the opponent's rating gives them, or a step
+    // quicker than THIS ball carrier. The second term is what stops the top end running
+    // away — at Speed 9 the carrier outran every defender in the league, and half of all
+    // snaps ended in a touchdown. Now yards come from separation, jukes and broken
+    // tackles at every rating, and the chase always eventually arrives.
+    pursuitSpeed: Math.max(7.25 * f(opp), runSpeed * 1.08) * (read ? 0.92 : 1),
     rushSpeed: 5.4 * f(opp),
-    reaction: read ? 0.55 : 0.3,                               // seconds a defender trails his man
+    reaction: read ? 0.55 : 0.34,                              // seconds a defender trails his man
   }
 }
 

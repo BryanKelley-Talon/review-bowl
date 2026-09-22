@@ -9,7 +9,10 @@
     "build": "vite build",
     "preview": "vite preview",
     "stage": "node scripts/stage-content.mjs",
-    "test": "node scripts/test.mjs"
+    "test": "node scripts/test.mjs",
+    "balance": "node scripts/balance.mjs",
+    "offense": "node scripts/offense.mjs",
+    "sim": "node scripts/season-sim.mjs"
   },
   "dependencies": {
     "react": "^18.2.0",
