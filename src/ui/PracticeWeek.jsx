@@ -14,9 +14,10 @@
 //   3 · FACILITIES — first tier, also on a right answer. The second tier stays an
 //       off-season job, bought with cash, because that is the bigger investment moment.
 // ============================================================
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import Question from './Question.jsx'
-import { MAX_LEVEL, PRACTICE_FACILITY_MAX, trainPlayer, upgradeFacility } from '../game/season.js'
+import Newspaper from './Newspaper.jsx'
+import { MAX_LEVEL, PRACTICE_FACILITY_MAX, RESULT, trainPlayer, upgradeFacility } from '../game/season.js'
 import { DEFENSE, LANE_OF, ratings, values } from '../game/ratings.js'
 import { POSITION_OF, TEAMS, roster } from '../game/teams.js'
 
@@ -30,6 +31,14 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
   const [note, setNote] = useState(null)
   const [trained, setTrained] = useState({})        // one attempt per player per week
   const [facility, setFacility] = useState(null)    // one facility check per week
+  // What the local paper writes up. Dressing only: every entry is something that already
+  // happened on this screen, recorded as it happens so the page fills in while you work.
+  const [events, setEvents] = useState([])
+  const logEvent = e => setEvents(list => [...list, e])
+  // The rating the paper quotes has to be the one AFTER the week's answers landed. `career`
+  // in this closure is still the old one when a gate resolves, so the live value is taken
+  // from what onAnswer reports back instead.
+  const defenseNow = useRef(null)
   const [filmDone, setFilmDone] = useState(!!career.practiceDone)
 
   const r = ratings(career)
@@ -55,6 +64,8 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
           setFilmDone(true)
           setCareer(c => ({ ...c, practiceDone: true }))
           setNote(`Film study done — ${nextRight} of ${want} right. That is what the defense carries into the game.`)
+          logEvent({ kind: 'film', right: nextRight, of: want, lane: q && q.lane,
+                     defense: defenseNow.current ?? v.defense })
         }
       },
     })
@@ -72,6 +83,8 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
         if (ok) {
           setCareer(c => trainPlayer(c, stat))
           setNote(`${players[stat].name} put in the work — level ${(career.levels[stat] ?? 2) + 1}. ${statLabel(stat)} goes up with him.`)
+          logEvent({ kind: 'level', name: players[stat].name, position: players[stat].position,
+                  level: (career.levels[stat] ?? 2) + 1, statLabel: statLabel(stat), lane: LANE_OF[stat] })
         } else setNote(`${players[stat].name} ran the drill anyway. No level this week — try him again next week.`)
       },
     })
@@ -91,6 +104,8 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
         if (ok) {
           setCareer(c => upgradeFacility(c, stat))
           setNote(`${stat === DEFENSE ? 'Film room' : statLabel(stat)} facility is open — level ${(career.facilities[stat] || 0) + 1}.`)
+          logEvent({ kind: 'facility', label: stat === DEFENSE ? 'Film room' : `${statLabel(stat)} facility`,
+                  level: (career.facilities[stat] || 0) + 1 })
         } else setNote('Not this week. The facility check comes back next week.')
       },
     })
@@ -103,7 +118,10 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
     // Film study builds DEFENSE, not the lane the question came from: the words are
     // borrowed, the work is defensive. Training builds its own lane as usual.
     const change = onAnswer(q.lane, correct, hintsUsed, cur.kind === 'film' ? DEFENSE : null)
-    if (change && cur.kind === 'film' && change.after !== change.before) setNote(`Defense ${change.before} → ${change.after}`)
+    if (change && cur.kind === 'film') {
+      defenseNow.current = change.after
+      if (change.after !== change.before) setNote(`Defense ${change.before} → ${change.after}`)
+    }
     cur.then(correct, q)
   }
 
@@ -111,12 +129,17 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
 
   return (
     <div className="offseason practice">
+      <Newspaper team={TEAMS[career.team]} teamIndex={career.team} season={career.season}
+                 week={career.week + 1} weekLabel={weekLabel} opponent={TEAMS[opponent].name}
+                 lastResult={career.week > 0
+                   ? ({ [RESULT.W]: 'W', [RESULT.L]: 'L', [RESULT.T]: 'T' })[career.results[career.week - 1]] || null
+                   : null}
+                 events={events} ratings={v} />
+
       <section className="panel next-game">
-        <div className="eyebrow">Practice week · before {weekLabel}</div>
-        <h3 className="h3">{TEAMS[career.team].name} get a week</h3>
         <p className="sub">Bumps and bruises heal, the film goes on, and somebody gets better. None of this is
           required — you can walk out to the field right now and nothing you already have is lost. <b>Right answers are
-          the only currency this week</b>; cash is for the off-season. Next up: <b>{TEAMS[opponent].name}</b>.</p>
+          the only currency this week</b>; cash is for the off-season.</p>
         {note && <p className="toast-inline" role="status">{note}</p>}
       </section>
 

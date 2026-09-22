@@ -1,0 +1,134 @@
+// ============================================================
+// THE LOCAL PAPER — the between-game screen, written up as a sports page.
+// BK, 2026-09-22: "a newspaper style popout for the between game screens... it would be
+// cool to have a sports page type thing" and "the newspaper metric can be celebrating the
+// successes of content and skill growth...leading up to next game, i dont know. it's dressing."
+//
+// DRESSING, EXACTLY AS BK SAID. There is no new mechanic under this and no new state: every
+// line is written from things that already happened — last week's result, what the film room
+// scored, who levelled up, what facility opened, who is next. If the week is quiet the page
+// says so rather than inventing a story.
+//
+// It is written to CELEBRATE THE WORK: the headline names the content a student got right,
+// because that is the thing this game is actually about.
+// ============================================================
+
+// One paper per town, so the masthead is the student's own. Order matches TEAMS.
+const PAPERS = ['Clarion', 'Star-Gazette', 'Journal', 'Press & Sun', 'Times', 'Sentinel',
+  'Dispatch', 'Herald', 'Advertiser', 'Bulletin']
+
+const LANE_WORD = {
+  sources: 'reading sources', context: 'historical context', vocab: 'vocabulary',
+  reading: 'task words', skills: 'skills and principles', defense: 'film study',
+}
+
+// The week's biggest story, in priority order. Each returns a headline and the line under it.
+function leadStory({ events, team, lastResult, opponent, week }) {
+  const levels = events.filter(e => e.kind === 'level')
+  const film = events.find(e => e.kind === 'film')
+  const facility = events.find(e => e.kind === 'facility')
+
+  if (levels.length >= 2) {
+    return {
+      head: `${levels.length} MOVE UP IN A BIG WEEK`,
+      story: `${levels.map(l => l.name.split(' ').slice(-1)[0]).join(' and ')} both earned promotions on the practice ` +
+             `field, and the coaching staff credits the work in the room — every session was won on a question first.`,
+    }
+  }
+  if (levels.length === 1) {
+    const l = levels[0]
+    return {
+      head: `${l.name.split(' ').slice(-1)[0].toUpperCase()} EARNS A PROMOTION`,
+      story: `${l.name} is a level ${l.level} player this morning after answering a ${LANE_WORD[l.lane] || 'content'} ` +
+             `question to close out the session. ${team.name}'s ${l.statLabel.toLowerCase()} goes up with him.`,
+    }
+  }
+  if (film && film.right === film.of && film.of > 0) {
+    return {
+      head: 'FILM ROOM SWEEP',
+      story: `A clean ${film.right}-for-${film.of} in the film room. The defense goes into Friday rated ${film.defense} — ` +
+             `and it counts for most when the other team gets close to the goal line.`,
+    }
+  }
+  if (film && film.right > 0) {
+    return {
+      head: 'DEFENSE PUTS IN THE WORK',
+      story: `${film.right} of ${film.of} in the film room. The defense is rated ${film.defense} going into Friday; ` +
+             `another session next week moves it again.`,
+    }
+  }
+  if (film) {
+    return {
+      head: 'A LONG SESSION IN THE FILM ROOM',
+      story: `Nothing fell the right way this week, and the staff is honest about it. The tape will be there again ` +
+             `next week, and so will the questions.`,
+    }
+  }
+  if (facility) {
+    return {
+      head: `${facility.label.toUpperCase()} OPENS`,
+      story: `${team.name} opened the ${facility.label.toLowerCase()} this week — earned, as always, with an answer ` +
+             `rather than a cheque.`,
+    }
+  }
+  if (lastResult === 'W') {
+    return {
+      head: `${team.name.toUpperCase()} COME HOME WINNERS`,
+      story: `A win in hand and a week to build on it. The room is open all week: film in the morning, ` +
+             `position work after.`,
+    }
+  }
+  if (lastResult === 'L') {
+    return {
+      head: 'BACK TO WORK',
+      story: `Last Friday got away from them. The staff has the week to put it right, and the way to put it right ` +
+             `is the same as always — win the room first.`,
+    }
+  }
+  return {
+    head: `CAMP OPENS AT ${team.name.toUpperCase()}`,
+    story: `A new season, a full week to prepare, and everything still in front of them. ` +
+           `${week === 1 ? 'Week one' : 'The next one'} is the only one that matters right now.`,
+  }
+}
+
+// The short notes column: everything else that happened, one line each.
+function briefs({ events, ratings }) {
+  const out = []
+  for (const e of events) {
+    if (e.kind === 'level') out.push(`${e.position} ${e.name} — now level ${e.level}, ${e.statLabel} up.`)
+    if (e.kind === 'film') out.push(`Film room: ${e.right} of ${e.of} on ${LANE_WORD[e.lane] || 'content'}. Defense ${e.defense}.`)
+    if (e.kind === 'facility') out.push(`${e.label} now open, level ${e.level}.`)
+  }
+  if (!out.length) out.push('No sessions logged yet this week. The room is open.')
+  if (ratings) out.push(`Team card: throwing ${ratings.throwing}, hands ${ratings.hands}, speed ${ratings.speed}, ` +
+                        `blocking ${ratings.blocking}, toughness ${ratings.toughness}, defense ${ratings.defense}.`)
+  return out
+}
+
+export default function Newspaper({ team, teamIndex, season, week, weekLabel, opponent, lastResult, events = [], ratings }) {
+  const lead = leadStory({ events, team, lastResult, opponent, week })
+  const notes = briefs({ events, ratings })
+  const paper = `The ${team.name} ${PAPERS[teamIndex % PAPERS.length]}`
+
+  return (
+    <section className="newsprint" aria-label="This week in the local paper">
+      <div className="np-masthead">
+        <span className="np-title">{paper}</span>
+        <span className="np-dateline">Season {season} · {weekLabel} · Sports</span>
+      </div>
+      <h2 className="np-head">{lead.head}</h2>
+      <p className="np-story">{lead.story}</p>
+      <div className="np-cols">
+        <ul className="np-briefs">
+          {notes.map((n, i) => <li key={i}>{n}</li>)}
+        </ul>
+        <div className="np-next">
+          <span className="np-next-label">Up next</span>
+          <b>{opponent}</b>
+          <span className="np-next-note">Everything you win this week travels with you.</span>
+        </div>
+      </div>
+    </section>
+  )
+}

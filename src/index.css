@@ -247,6 +247,38 @@ button:disabled{opacity:.5;cursor:default}
 .offseason .panel .grid{margin-top:8px}
 .toast-inline{background:var(--card-lit);border:1px solid var(--gold);border-radius:9px;padding:10px 14px;margin-bottom:14px}
 
+/* ---------- the local paper (v5) ----------
+   Newsprint, not another navy panel: the between-game screen reads as a clipping so the
+   week's work feels like it was worth writing up. Serif body on cream, one heavy condensed
+   headline, thin rules. Same paper stock as the document stimulus so the game has one idea
+   of what paper looks like. */
+.newsprint{background:linear-gradient(160deg,#f7f1e2,#ece3cd);color:#231d13;border-radius:12px;
+  padding:18px 22px 16px;margin-bottom:16px;box-shadow:0 14px 34px -18px rgba(0,0,0,.75);
+  border:1px solid #cdbf9f}
+.np-masthead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;
+  border-bottom:2px solid #231d13;padding-bottom:6px;margin-bottom:10px}
+.np-title{font:900 clamp(20px,3.4vw,30px)/1 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.02em}
+.np-dateline{font:600 11.5px/1.2 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.14em;color:#6b5a38}
+.np-head{font:900 clamp(24px,4.6vw,38px)/1.02 'Barlow Condensed',sans-serif;text-transform:uppercase;
+  letter-spacing:-.01em;margin:2px 0 8px;color:#17120a}
+.np-story{font:400 16.5px/1.6 Georgia,'Times New Roman',serif;margin:0 0 12px;max-width:62ch}
+.np-story::first-letter{font-size:1.15em;font-weight:700}
+.np-cols{display:grid;grid-template-columns:1fr auto;gap:14px 22px;align-items:start;
+  border-top:1px solid #cdbf9f;padding-top:10px}
+.np-briefs{list-style:none;margin:0;padding:0;columns:2;column-gap:22px}
+.np-briefs li{font:400 13.5px/1.5 Georgia,serif;margin-bottom:5px;break-inside:avoid;
+  padding-left:10px;border-left:2px solid #cdbf9f}
+.np-next{text-align:right;min-width:150px;border-left:1px solid #cdbf9f;padding-left:16px}
+.np-next-label{display:block;font:600 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;
+  text-transform:uppercase;color:#6b5a38;margin-bottom:3px}
+.np-next b{font:900 20px/1.1 'Barlow Condensed',sans-serif;text-transform:uppercase;display:block;margin-bottom:4px}
+.np-next-note{font:italic 400 12.5px/1.4 Georgia,serif;color:#5d4f33;display:block}
+@media (max-width:640px){
+  .np-briefs{columns:1}
+  .np-cols{grid-template-columns:1fr}
+  .np-next{text-align:left;border-left:none;border-top:1px solid #cdbf9f;padding:10px 0 0}
+}
+
 /* ---------- practice week · roster · levels (v3) ---------- */
 .practice .panel{border-left:3px solid transparent}
 .player-card{gap:6px}
