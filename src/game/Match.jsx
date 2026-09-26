@@ -94,6 +94,40 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
     cur.then(correct, q)
   }
 
+  // ── field direction (BK, 2026-09-23/26): pick a side, or flip every quarter ──────
+  // Held for this game only. Nothing is stored: a setting is not worth a byte on a
+  // student's machine (canon §1), and the default is the way the game has always played.
+  const DIRS = ['ltr', 'rtl', 'flip']
+  const DIR_LABEL = { ltr: 'Field: left → right', rtl: 'Field: right → left', flip: 'Field: flips each quarter' }
+  const [dirMode, setDirMode] = useState('ltr')
+  const dirFor = gs => {
+    if (dirMode === 'ltr') return 1
+    if (dirMode === 'rtl') return -1
+    if (gs.ot) return 1
+    const q = Number(clockOf(gs).label.slice(1)) || 1   // Q1 → right, Q2 → left, Q3 → right, Q4 → left
+    return q % 2 ? 1 : -1
+  }
+
+  // ── full screen (BK, 2026-09-26: "make the playable space bigger") ───────────────
+  // The whole page goes full screen, not just the field, so every question card, the
+  // badge and the controls come with it. Esc (or the button) comes back out.
+  const [full, setFull] = useState(false)
+  useEffect(() => {
+    const on = () => {
+      const f = !!document.fullscreenElement
+      setFull(f); document.body.classList.toggle('rb-full', f)
+    }
+    document.addEventListener('fullscreenchange', on)
+    return () => { document.removeEventListener('fullscreenchange', on); document.body.classList.remove('rb-full') }
+  }, [])
+  const toggleFull = e => {
+    e.stopPropagation()
+    try {
+      if (document.fullscreenElement) document.exitFullscreen()
+      else document.documentElement.requestFullscreen?.()
+    } catch { /* not allowed here: the game still plays in the window */ }
+  }
+
   // ── the field ──────────────────────────────────────────────────────────────
   const canvasRef = useRef(null)
   const engine = useRef(null)
@@ -109,12 +143,13 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
 
   const setupField = useCallback(gs => {
     const pb = playBoost.current
+    engine.current.setDirection(dirFor(gs))
     engine.current.setup({
       ballOn: gs.ballOn, toGo: gs.toGo, goal: goalToGo(gs), kits,
       phys: physics(values(ratings({ form: career.form, levels: career.levels, facilities: career.facilities, boost })),
                     oppStrength, !!(pb && pb.read)),
     })
-  }, [kits, career, boost, oppStrength])
+  }, [kits, career, boost, oppStrength, dirMode])
 
   // Re-set the formation when ratings change between snaps (an answer just landed).
   useEffect(() => { if (stage === 'presnap') setupField(gRef.current) }, [stage, setupField, fieldVersion])
@@ -387,12 +422,19 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
 
       <div className="field-wrap" onClick={() => { if (stage === 'presnap' && !gate) snap() }}>
         <canvas ref={canvasRef} className="field" aria-label="The field. Live play." />
+        {document.fullscreenEnabled !== false && (
+          <button type="button" className="fs-btn" onClick={toggleFull} aria-pressed={full}>
+            {full ? 'Exit full screen' : 'Full screen'}
+          </button>
+        )}
         {toast && <div className="toast" role="status">{toast}</div>}
         {stage === 'presnap' && !gate && <div className="snap-hint">Tap the field or press Space to snap</div>}
         {stage === 'live' && help && <div className="snap-hint">{help}</div>}
       </div>
 
-      {flash && <div key={flash.id} className={`stat-flash ${flash.up ? 'up' : ''}`} role="status">{flash.text}</div>}
+      <div className="stat-flash-slot">
+        {flash && <div key={flash.id} className={`stat-flash ${flash.up ? 'up' : ''}`} role="status">{flash.text}</div>}
+      </div>
       <div className="stat-strip" aria-label="Your team's stats, built from your answers">
         {statCells.map(([k, label]) => (
           <div className={`stat-cell${flash && flash.stat === k ? ' lit' : ''}`} key={k} title={k === 'defense' ? 'Trained in Practice Week' : undefined}>
@@ -418,6 +460,9 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
               Timeout ({g.timeouts} left)
             </button>
           )}
+          <button type="button" className="btn-ghost" onClick={() => setDirMode(m => DIRS[(DIRS.indexOf(m) + 1) % DIRS.length])}>
+            {DIR_LABEL[dirMode]}
+          </button>
           {fourth && <span className="controls-note">4th down: go for it with Snap, or kick.</span>}
         </div>
       )}

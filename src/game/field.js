@@ -14,7 +14,11 @@
 //   ball carrier       hold and point up/down to steer · tap or Space to juke · ↑/↓ steer
 //
 // World units are yards. x runs 0–120 (0–10 own end zone, 110–120 theirs);
-// y runs across the field, 0–53.3. The offense always drives to the right.
+// y runs across the field, 0–53.3. In the WORLD the offense always drives toward
+// x = 120. On SCREEN it drives right (dir 1) or left (dir -1): BK, 2026-09-23/26,
+// "players should get to choose ... or it flips each quarter" (Tecmo Bowl did it).
+// The flip lives in _toScreen/_toWorld and the arrow keys, nowhere else, so every
+// rule, route and result is identical either way. Digits are never mirrored.
 // ============================================================
 
 export const VW = 480
@@ -82,6 +86,7 @@ export class FieldEngine {
     this.fx = { flash: 0, color: '#F5CB63', shake: 0 }
     this.calm = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
     this.t = 0
+    this.dir = 1
     this.last = performance.now()
     this._bind()
     // Dev only: lets a test script step the field when the tab is hidden (rAF pauses). Never in a build.
@@ -89,6 +94,9 @@ export class FieldEngine {
     this._loop = this._loop.bind(this)
     this.raf = requestAnimationFrame(this._loop)
   }
+
+  // 1 = offense drives left→right on screen; -1 = right→left. Set between snaps.
+  setDirection(d) { this.dir = d === -1 ? -1 : 1 }
 
   destroy() {
     cancelAnimationFrame(this.raf)
@@ -187,7 +195,9 @@ export class FieldEngine {
       }
     }
     this._key = (e, down) => {
-      const k = e.key
+      // Left/right arrows follow the SCREEN: with the field flipped, → still means "toward
+      // the right edge of the screen", which is now backward for the offense.
+      const k = this.dir === -1 && e.key === 'ArrowLeft' ? 'ArrowRight' : this.dir === -1 && e.key === 'ArrowRight' ? 'ArrowLeft' : e.key
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(k) && this.state !== 'presnap' && this.state !== 'idle') e.preventDefault()
       this.keys[k] = down
       if (k === ' ' && !down) this.spaceLocked = false
@@ -221,13 +231,13 @@ export class FieldEngine {
     const r = this.canvas.getBoundingClientRect()
     return { x: (e.clientX - r.left) / r.width * VW, y: (e.clientY - r.top) / r.height * VH }
   }
-  _toWorld(p) { return { x: (p.x - VW / 2) / PX + this.cam.x, y: (p.y - VH / 2) / PX + this.cam.y } }
-  _toScreen(x, y) { return { x: Math.round((x - this.cam.x) * PX + VW / 2), y: Math.round((y - this.cam.y) * PX + VH / 2) } }
+  _toWorld(p) { return { x: (p.x - VW / 2) / (PX * this.dir) + this.cam.x, y: (p.y - VH / 2) / PX + this.cam.y } }
+  _toScreen(x, y) { return { x: Math.round((x - this.cam.x) * PX * this.dir + VW / 2), y: Math.round((y - this.cam.y) * PX + VH / 2) } }
   _camX(x) { return clamp(x + 12, VIEW_W / 2 - 4, 120 - VIEW_W / 2 + 4) }
 
   _updateAim() {
     const p = this.pointer
-    let dx = (p.x0 - p.x) / PX * AIM_GAIN
+    let dx = (p.x0 - p.x) / PX * AIM_GAIN * this.dir
     let dy = (p.y0 - p.y) / PX * AIM_GAIN
     const d = Math.hypot(dx, dy)
     if (d > MAX_THROW) { dx *= MAX_THROW / d; dy *= MAX_THROW / d }
@@ -511,8 +521,9 @@ export class FieldEngine {
     if (this.ball) this._drawBall(g)
     else if (!this.carrier && this.qb && this.state !== 'idle') {
       const s = this._toScreen(this.qb.x, this.qb.y)
-      g.fillStyle = '#8B4A1C'; g.fillRect(s.x + 4, s.y - 6, 4, 3)
+      g.fillStyle = '#8B4A1C'; g.fillRect(this.dir === 1 ? s.x + 4 : s.x - 7, s.y - 6, 4, 3)
     }
+    if (['presnap', 'dropback'].includes(this.state)) this._drawRoutes(g)
     if (this.aim && this.state === 'dropback') this._drawAim(g)
     if (['presnap', 'dropback'].includes(this.state)) {
       for (const r of this.targets) {
@@ -618,7 +629,8 @@ export class FieldEngine {
     g.fillStyle = kit.helmet; g.fillRect(s.x - 4, y - 14, 9, 7)
     g.fillStyle = 'rgba(0,0,0,.25)'; g.fillRect(s.x - 4, y - 14, 9, 2)
     g.fillStyle = light(kit.helmet) ? '#1A1A1A' : '#E8E8E8'
-    g.fillRect(p.team === 'o' ? s.x + 4 : s.x - 5, y - 11, 2, 3)
+    const faceRight = (p.team === 'o') === (this.dir === 1)
+    g.fillRect(faceRight ? s.x + 4 : s.x - 5, y - 11, 2, 3)
     if (p.stun > 0) {
       g.fillStyle = '#F4F6FA'
       g.fillRect(s.x - 3, y - 19, 2, 2); g.fillRect(s.x + 3, y - 21, 2, 2)
@@ -639,6 +651,57 @@ export class FieldEngine {
     const t = this._toScreen(b.to.x, b.to.y)
     g.strokeStyle = 'rgba(245,203,99,.6)'; g.lineWidth = 1
     g.strokeRect(t.x - 2, t.y - 2, 5, 5)
+  }
+
+  // ── routes, drawn before the snap (BK, 2026-09-23/26) ───────────────────────
+  // The route each receiver will run, as a dotted path. Routes are already picked at
+  // random every snap (setup()); drawing them makes that variety visible and makes the
+  // throw a timing read instead of a guess. Same waypoints _runRoute() follows, so the
+  // drawing can never disagree with where the man actually goes.
+  _routePoints(r) {
+    const pts = [{ x: r.start.x, y: r.start.y }]
+    const cy = y => clamp(y, 0.8, FIELD_W - 0.8)
+    if (r.role === 'RB') {
+      const s = r.side
+      const path = { flat: [[2, 6 * s], [6, 12 * s]], wheel: [[2, 8 * s], [20, 12 * s]], check: [[4, 0], [6, 2 * s]] }[r.route]
+      if (!path) return null
+      for (const w of path) pts.push({ x: r.start.x + w[0], y: cy(r.start.y + w[1]) })
+      return pts
+    }
+    const path = ROUTES[r.route]
+    for (const w of path) pts.push({ x: r.start.x + w[0], y: cy(r.start.y + w[1] * r.s) })
+    if (!STOP_AT_END.has(r.route)) {          // he keeps running: show a few more yards
+      const a = pts[pts.length - 2], b = pts[pts.length - 1]
+      const d = Math.hypot(b.x - a.x, b.y - a.y) || 1
+      pts.push({ x: b.x + (b.x - a.x) / d * 8, y: cy(b.y + (b.y - a.y) / d * 8) })
+    }
+    return pts
+  }
+
+  _drawRoutes(g) {
+    // Bright before the snap, dimmer once the play is on, gone when the ball is thrown.
+    g.globalAlpha = this.state === 'presnap' ? 0.95 : 0.5
+    for (const r of this.targets) {
+      const pts = this._routePoints(r)
+      if (!pts) continue
+      const col = r.role === 'RB' ? '#BFD4F2' : '#F4F6FA'
+      g.fillStyle = col
+      let carry = 0
+      for (let i = 1; i < pts.length; i++) {
+        const a = this._toScreen(pts[i - 1].x, pts[i - 1].y), b = this._toScreen(pts[i].x, pts[i].y)
+        const len = Math.hypot(b.x - a.x, b.y - a.y)
+        for (let t = carry; t < len; t += 5) {
+          const k = t / len
+          g.fillRect(Math.round(a.x + (b.x - a.x) * k), Math.round(a.y + (b.y - a.y) * k), 2, 2)
+        }
+        carry = (carry + 5 - (len % 5)) % 5
+      }
+      // the end of the route: a small block, so "where he's going" reads at a glance
+      const e = this._toScreen(pts[pts.length - 1].x, pts[pts.length - 1].y)
+      g.fillStyle = '#F5CB63'; g.fillRect(e.x - 2, e.y - 2, 5, 5)
+      g.fillStyle = 'rgba(11,18,32,.9)'; g.fillRect(e.x - 1, e.y - 1, 3, 3)
+    }
+    g.globalAlpha = 1
   }
 
   // The reticle is the Throwing stat made visible: its ring is the scatter a throw

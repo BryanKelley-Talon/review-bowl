@@ -30,26 +30,33 @@ const OUT = path.join(BUILD, 'public/content')
 const OUT_CROPS = path.join(OUT, 'stimulus')
 
 const IN = p => path.join(DESK, 'In', p)
+// Authors' own shelves (house rules 2026-09-26: Josh pulls from the desks; In/ is for orders and
+// passes, and spent passes are archived, so a pack must not live only in In/).
+const SAM = p => path.join(COWORK, 'us11r-curriculum', p)
+// Staged copies whose only desk-level source was a pass in In/, archived in the 2026-09-26
+// sweep. The staged file in public/content (git-tracked) IS the record now; when the author
+// sends a new version, point its line at the author's OUTPUTS/ and it re-stages.
+const KEPT = p => path.join(OUT, p)
 const ARENA = p => path.join(DESK, 'builds/thearena/public/content', p)
 
 // Every pack the manifest may point at, and where it is copied from.
 const PACKS = [
   // Global 10R — Will
-  [IN('station-gs10r-10.1-partI-mc.json'), 'station-gs10r-10.1-partI-mc.json'],
-  [IN('station-gs10r-10.2-checkpoint-practice.json'), 'station-gs10r-10.2-checkpoint-practice.json'],
+  [KEPT('station-gs10r-10.1-partI-mc.json'), 'station-gs10r-10.1-partI-mc.json'],
+  [KEPT('station-gs10r-10.2-checkpoint-practice.json'), 'station-gs10r-10.2-checkpoint-practice.json'],
   [ARENA('matching-gs10r-10-1.json'), 'matching-gs10r-10-1.json'],
-  [IN('will-pass-2026-09-21-scenario-questions-founding-set1.json'), 'scenario-questions-gs10r-founding-set1.json'],
+  [KEPT('scenario-questions-gs10r-founding-set1.json'), 'scenario-questions-gs10r-founding-set1.json'],
   // US 11R — Sam
-  [IN('partI-mc-us11r-unit01.json'), 'partI-mc-us11r-unit01.json'],
-  [IN('matching-us11r-11.1-foundation-01-contextualization.json'), 'matching-us11r-11.1-foundation-01-contextualization.json'],
-  [IN('matching-us11r-11.1-foundation-02-causation.json'), 'matching-us11r-11.1-foundation-02-causation.json'],
-  [IN('matching-us11r-11.1-foundation-03-continuity-change.json'), 'matching-us11r-11.1-foundation-03-continuity-change.json'],
-  [IN('matching-us11r-11.1-foundation-04-turning-points.json'), 'matching-us11r-11.1-foundation-04-turning-points.json'],
-  [IN('vocab-us11r-11.1-content.json'), 'vocab-us11r-11.1-content.json'],
-  [IN('vocab-us11r-reading-taskwords.json'), 'vocab-us11r-reading-taskwords.json'],
-  [IN('context-statements-us11r-11.1.json'), 'context-statements-us11r-11.1.json'],
-  [IN('matching-us11r-vocab-six-skills.json'), 'matching-us11r-vocab-six-skills.json'],
-  [IN('matching-us11r-11.1-vocab-civic-principles.json'), 'matching-us11r-11.1-vocab-civic-principles.json'],
+  [KEPT('partI-mc-us11r-unit01.json'), 'partI-mc-us11r-unit01.json'],
+  [ARENA('matching-us11r-11.1-foundation-01-contextualization.json'), 'matching-us11r-11.1-foundation-01-contextualization.json'],
+  [ARENA('matching-us11r-11.1-foundation-02-causation.json'), 'matching-us11r-11.1-foundation-02-causation.json'],
+  [ARENA('matching-us11r-11.1-foundation-03-continuity-change.json'), 'matching-us11r-11.1-foundation-03-continuity-change.json'],
+  [ARENA('matching-us11r-11.1-foundation-04-turning-points.json'), 'matching-us11r-11.1-foundation-04-turning-points.json'],
+  [KEPT('vocab-us11r-11.1-content.json'), 'vocab-us11r-11.1-content.json'],
+  [KEPT('vocab-us11r-reading-taskwords.json'), 'vocab-us11r-reading-taskwords.json'],
+  [ARENA('context-statements-us11r-11.1.json'), 'context-statements-us11r-11.1.json'],
+  [KEPT('matching-us11r-vocab-six-skills.json'), 'matching-us11r-vocab-six-skills.json'],
+  [SAM('DRILL_PACKAGES/arena/matching-us11r-11.1-vocab-civic-principles.json'), 'matching-us11r-11.1-vocab-civic-principles.json'],
   // Circuit packs, repurposed for the off-season training camp (FULL-SPEC §5.4).
   // Only drills the Arena manifest itself publishes.
   [ARENA('station-01-contextualization.json'), 'station-01-contextualization.json'],
@@ -86,6 +93,7 @@ fs.mkdirSync(OUT_CROPS, { recursive: true })
 const copied = []
 for (const [src, name] of PACKS) {
   if (!fs.existsSync(src)) { console.warn(`MISSING  ${src}`); continue }
+  if (path.resolve(src) === path.resolve(path.join(OUT, name))) { copied.push(name); continue }   // KEPT: already staged
   JSON.parse(fs.readFileSync(src, 'utf8'))               // refuse to stage a pack that does not parse
   fs.copyFileSync(src, path.join(OUT, name))
   fs.chmodSync(path.join(OUT, name), 0o644)             // some desk files are owner-only; the site must read them

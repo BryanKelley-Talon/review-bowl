@@ -1,74 +1,28 @@
 {
   "_course": "US History & Government 11R",
   "_unit": "11.1 - Colonial Foundations",
-  "_activity": "Vocab Match \u2014 Civic Principles Named So Far",
-  "_built": "2026-09-21 by Sam (us11r-curriculum) \u00b7 hints added 2026-09-22 for Skills Review Bowl reuse",
-  "_licence": "Definitions for Rule of Law, Consent of the Governed, and Representative Government copied verbatim from US11R_Glossary_v2_2026-09-02, Tier B. \"Sovereignty (self-government)\" definition is Sam's own, matching how Day 4 (Document 5, Identification) taught the term \u2014 no glossary entry exists for it under that exact framing.",
-  "scope_note": "Limited on purpose to the four principles Unit 1 has actually named out loud by Day 10 (Rule of Law via Magna Carta/Station 1, Consent of the Governed as a Day 5 Reps term, Representative Government via Document 17, and Sovereignty via Document 5's Identification debut) \u2014 not the full 14-principle Tier B list, most of which the course hasn't reached yet.",
+  "_activity": "Vocab Match — Civic Principles",
+  "_built": "2026-09-26 by Sam (us11r-curriculum). Replaces the 2026-09-21 version.",
+  "_ruling": "BK 2026-09-26 14:45 ruled the closed list of 12 (the Civic Principles card). BK 14:50 approved these four pairs ('yes'). Labels and definitions are copied word for word from the card (skills/unit0-print/build_civic_principles_card.py, PRINCIPLES). 'Consent of the Governed' and 'Sovereignty (self-government)' are retired as separate principles and folded into Popular Sovereignty.",
+  "scope_note": "Four of the twelve, the ones 11.1 actually taught. Later units add pairs, always in the card's words.",
   "intro": "Match each principle to its definition.",
   "left": [
-    {
-      "key": "a",
-      "label": "Rule of Law",
-      "hints": [
-        "Think about whether the person in charge is bound by the same rules as everyone else.",
-        "Even a king is bound by it \u2014 that's the Magna Carta example."
-      ]
-    },
-    {
-      "key": "b",
-      "label": "Consent of the Governed",
-      "hints": [
-        "Think about what makes a government's power fair, or agreed to.",
-        "A government is just only if the people it governs actually agree to it."
-      ]
-    },
-    {
-      "key": "c",
-      "label": "Representative Government",
-      "hints": [
-        "Think about who does the actual deciding \u2014 the people themselves, or people they picked.",
-        "Citizens elect officials, and those officials make the decisions."
-      ]
-    },
-    {
-      "key": "d",
-      "label": "Sovereignty (self-government)",
-      "hints": [
-        "This one is about a people governing themselves, without someone else deciding for them.",
-        "Think back to Document 5's Identification debut \u2014 what a nation gets to do for itself."
-      ]
-    }
+    { "key": "a", "label": "Rule of Law" },
+    { "key": "b", "label": "Limited Government" },
+    { "key": "c", "label": "Popular Sovereignty (consent of the governed)" },
+    { "key": "d", "label": "Representative Government" }
   ],
   "right": [
-    {
-      "key": "1",
-      "label": "No one is above the law; leaders and citizens alike are bound by it"
-    },
-    {
-      "key": "2",
-      "label": "A government is just only with the agreement of the people it governs"
-    },
-    {
-      "key": "3",
-      "label": "Citizens elect officials to make decisions on their behalf"
-    },
-    {
-      "key": "4",
-      "label": "A people's right to govern themselves, free of outside control"
-    }
+    { "key": "1", "label": "No one is above the law, not even the people who make it." },
+    { "key": "2", "label": "Government can only do what the Constitution allows." },
+    { "key": "3", "label": "Government's power comes from the people, and it rules only with their agreement." },
+    { "key": "4", "label": "The people elect officials to make decisions for them." }
   ],
-  "correct": {
-    "a": "1",
-    "b": "2",
-    "c": "3",
-    "d": "4"
-  },
+  "correct": { "a": "1", "b": "2", "c": "3", "d": "4" },
   "rationale": {
-    "a": "Rule of Law \u2014 even a king is bound by it; Magna Carta is the unit's own example (Station 1).",
-    "b": "Consent of the Governed \u2014 a Day 5 Reps term, pointed at directly before Document 6.",
-    "c": "Representative Government \u2014 the principle Document 17 #4 names by name on Day 10.",
-    "d": "Sovereignty \u2014 the Identification debut on Document 5, Day 4; accept self-government as the working definition taught in class."
-  },
-  "_hint_model": "2 escalating hints per pair, available during the regular season only. Playoffs run cold (no hints), per BK's ruling 2026-09-22."
+    "a": "Magna Carta: even the king had to follow the law.",
+    "b": "Magna Carta capped the king's power. He could not raise taxes on his own.",
+    "c": "In 11.1 you met this as consent of the governed. Same idea: power comes from the people.",
+    "d": "Colonial assemblies: colonists elected their own lawmakers."
+  }
 }

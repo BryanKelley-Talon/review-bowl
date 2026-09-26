@@ -304,3 +304,20 @@ button:disabled{opacity:.5;cursor:default}
   .sb-score{font-size:26px} .sb-abbr{font-size:18px}
   .hub-head{flex-wrap:wrap}
 }
+
+/* ---------- full screen + field direction (BK, 2026-09-26) ---------- */
+.fs-btn{position:absolute;right:8px;top:8px;z-index:3;line-height:1.2;background:rgba(7,11,20,.82);color:var(--white);
+  border:1.5px solid #9DB2D4;border-radius:8px;padding:6px 10px;font:600 13px/1.2 'Outfit',sans-serif;cursor:pointer}
+.fs-btn:hover,.fs-btn:focus-visible{border-color:var(--gold);outline:none}
+/* Full screen: the page loses its margins and the field takes every pixel the scoreboard,
+   stat strip and controls leave it. On a 1366x768 Chromebook: about 1150 px wide, up from 793. */
+body.rb-full{overflow:hidden}
+body.rb-full .wrap,body.rb-full .wrap.wide{max-width:none;padding:6px 10px 0}
+/* 195 px = scoreboard 55 + the stat-change line 27 + stat strip 33 + controls 64 + margins.
+   The stat-change line always holds its row in full screen, so nothing jumps mid-game. */
+body.rb-full .match{max-width:min(100%,calc((100vh - 195px) * 1.7778))}
+body.rb-full .stat-flash-slot{min-height:27px}
+/* The standing badge moves to the bottom-right in full screen, clear of Snap and the stat strip.
+   It stays on screen: that is the point of it. */
+body.rb-full .fp-disclaimer-badge{left:auto;right:12px}
+body.rb-full .controls{margin:6px 0}
