@@ -54,10 +54,10 @@ eq(us.held.length, 0, 'US: nothing held back any more')
 eq(us.lanes.context.length, 3, 'US: 3 context statements')
 eq(us.lanes.vocab.length, 8, 'US: 8 content vocab')
 eq(us.lanes.reading.length, 9, 'US: 9 task words')
-eq(us.lanes.skills.length, 29, 'US: 6 skill lines + 4 principles + 19 foundation pairs')
+eq(us.lanes.skills.length, 50, 'US: 6 skill lines + 4 principles + 19 foundation pairs + 21 short CLE and civic items (Sam, 09-27)')
 // v3 §6: Global had no vocabulary or skills content of its own until Will's scenario set was wired.
 eq(gl.lanes.vocab.length, 15, 'Global: 8 region pairs + 7 Enlightenment terms')
-eq(gl.lanes.skills.length, 5, 'Global: 5 skill moves')
+eq(gl.lanes.skills.length, 25, 'Global: 5 skill moves + 20 short Enduring Issue items (Will, 09-27)')
 ok(gl.lanes.vocab.filter(q => q.id.startsWith('sq-')).every(q => q.hints.length === 2), 'Global: the scenario terms carry their hints')
 ok(gl.lanes.skills.every(q => q.options.length === 4), 'Global: skill moves render as four-option questions')
 eq(us.lanes.sources.filter(q => q.answerVerified === false).map(q => q.id).sort(),
@@ -67,6 +67,14 @@ ok(gl.lanes.sources.every(q => q.hints.length === 2), 'Global: every Part I item
 ok(us.lanes.sources.every(q => q.stimulus.images.length > 0), 'US: every Part I item shows its source crop')
 
 // ── the dealer ───────────────────────────────────────────────────────────────
+// ── BK's 10:13 launch: everything short of the rule is filled (Sam and Will, 09-27) ──
+for (const course of Object.keys(manifest.courses)) {
+  const on = buildPool(manifest, course, packsOf(course), crops)
+  eq(on.held.length, 0, `${course}: with the rule on, nothing is held back`)
+  ok(on.lanes.sources.every(q => q.size === 'long'), `${course}: every Part I document question is still long`)
+}
+ok(buildPool(manifest, 'us11r', packsOf('us11r'), crops).lanes.skills.some(q => q.id === 'cp-07' && q.size === 'short' && q.stimulus?.citation), 'cp-07: a one-line quote keeps its source line and stays short')
+
 // ── the hold-back rule (BK, 2026-09-27, "A") ──────────────────────────────────
 for (const course of Object.keys(manifest.courses)) {
   const held = buildPool({ ...manifest, rules: { ...manifest.rules, require_hints_and_reason: true } }, course, packsOf(course), crops)

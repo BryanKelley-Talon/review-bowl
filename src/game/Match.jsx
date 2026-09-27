@@ -547,7 +547,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
         <div className="panel center">
           <div className="eyebrow">Final{g.ot ? ` · ${clockOf(g).label}` : ''}</div>
           <h2 className="h2">{you.abbr} {g.you} – {g.opp} {them.abbr}</h2>
-          <p className="sub">{g.you > g.opp ? 'A win.' : g.you < g.opp ? 'A loss.' : 'A tie.'} Questions today: {tally.current.right} of {tally.current.total} right.</p>
+          <p className="sub">{g.you > g.opp ? 'A win.' : g.you < g.opp ? 'A loss.' : 'A tie.'} Questions today: {tally.current.total} answered.</p>
           <button type="button" className="btn-primary" autoFocus onClick={final}>Press conference</button>
         </div>
       )}

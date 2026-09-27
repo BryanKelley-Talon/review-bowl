@@ -1,5 +1,5 @@
 {
-  "_course": "Global Studies and Geography 10R",
+  "_course": "Global History and Geography 10R",
   "_unit": "10.1 - The World in 1750",
   "_activity": "Eight States, Eight Regions",
   "_built": "2026-09-19 by Will (global10r-curriculum)",
@@ -9,35 +9,67 @@
   "left": [
     {
       "key": "a",
-      "label": "Ottoman Empire"
+      "label": "Ottoman Empire",
+      "hints": [
+        "This empire was big enough to reach onto three continents.",
+        "Pick the region that names three parts of the world at once."
+      ]
     },
     {
       "key": "b",
-      "label": "Mughal Empire"
+      "label": "Mughal Empire",
+      "hints": [
+        "Aurangzeb ruled this empire. Think about where India is on the map.",
+        "It's the subcontinent: the big wedge of land south of the Himalayas."
+      ]
     },
     {
       "key": "c",
-      "label": "Qing China"
+      "label": "Qing China",
+      "hints": [
+        "This is China's ruling dynasty in 1750. Where is China on the map?",
+        "China shares its region with one other state on this list, a group of islands just to the east."
+      ]
     },
     {
       "key": "d",
-      "label": "Tokugawa Japan"
+      "label": "Tokugawa Japan",
+      "hints": [
+        "Japan is a group of islands. Which big mainland neighbor sits closest to it?",
+        "Japan and China sit in the same region."
+      ]
     },
     {
       "key": "e",
-      "label": "Russian Empire"
+      "label": "Russian Empire",
+      "hints": [
+        "This empire stretched from Europe all the way east to the Pacific.",
+        "Think far north, on two continents at once."
+      ]
     },
     {
       "key": "f",
-      "label": "Benin"
+      "label": "Benin",
+      "hints": [
+        "Benin traded gold, ivory and pepper with Europeans who arrived by sea.",
+        "Three states on this list share one region, on Africa's Atlantic coast."
+      ]
     },
     {
       "key": "g",
-      "label": "Ashanti"
+      "label": "Ashanti",
+      "hints": [
+        "Ashanti grew rich on gold. Its land is part of the country of Ghana today.",
+        "It sits on the same coast as Benin and Dahomey."
+      ]
     },
     {
       "key": "h",
-      "label": "Dahomey"
+      "label": "Dahomey",
+      "hints": [
+        "Dahomey was a kingdom on Africa's Atlantic coast that traded with Europeans who came by ship.",
+        "It shares a region with Benin and Ashanti."
+      ]
     }
   ],
   "right": [
@@ -81,5 +113,6 @@
     "f": "Benin was one of the wealthy, well-organized kingdoms on the West African coast, trading gold, ivory, pepper, art, and captured people with Europeans who arrived by sea.",
     "g": "Ashanti was one of the wealthy, well-organized kingdoms on the West African coast, trading gold, ivory, pepper, art, and captured people with Europeans who arrived by sea.",
     "h": "Dahomey was one of the wealthy, well-organized kingdoms on the West African coast, trading gold, ivory, pepper, art, and captured people with Europeans who arrived by sea."
-  }
+  },
+  "_filled": "2026-09-27 10:53 EDT by Will (global10r-curriculum), on BK's 10:47 order: 'take care of what josh needs please and send to him'. Added two hints per tile (left[].hints). Nothing else changed except _course (BK 10:28 course name)."
 }

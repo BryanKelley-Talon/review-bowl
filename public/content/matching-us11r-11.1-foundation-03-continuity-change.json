@@ -4,30 +4,101 @@
   "_activity": "Continuity & Change — Foundation Tier",
   "_built": "2026-09-21 by Sam (us11r-curriculum)",
   "_licence": "ORIGINAL connective wording, built around Casefile B's own document spine. No third-party text.",
-  "station": { "id": 3, "num": "III", "name": "Continuity & Change", "tier": "Foundation" },
-  "skill_tags": [4],
-  "skill_tag_labels": ["Explanation"],
+  "station": {
+    "id": 3,
+    "num": "III",
+    "name": "Continuity & Change",
+    "tier": "Foundation"
+  },
+  "skill_tags": [
+    4
+  ],
+  "skill_tag_labels": [
+    "Explanation"
+  ],
   "intro": "Match each development to whether it shows continuity or change — and what changed.",
   "left": [
-    { "key": "a", "label": "1640 ruling — unfree labor status, no racial split yet" },
-    { "key": "b", "label": "1662 and 1669 rulings" },
-    { "key": "c", "label": "Bacon's Rebellion, 1676" },
-    { "key": "d", "label": "Fundamental Orders of Connecticut, 1639 (Document 17)" },
-    { "key": "e", "label": "Blackstone on self-government (Document 18)" }
+    {
+      "key": "a",
+      "label": "Indentured servitude, from 1607 (Document 8)",
+      "hints": [
+        "Continuity means something that stayed the same. Was bound labor new, or there from the start?",
+        "Look for the continuity answer about bound labor."
+      ]
+    },
+    {
+      "key": "b",
+      "label": "The 1640 ruling on three runaway servants (Document 13)",
+      "hints": [
+        "Three servants ran away. What happened to John Punch that didn't happen to the other two?",
+        "Look for the change answer with a sentence that has no end."
+      ]
+    },
+    {
+      "key": "c",
+      "label": "Bacon's Rebellion, 1676",
+      "hints": [
+        "This is the event the unit calls the hinge.",
+        "Look for the words “turning point.”"
+      ]
+    },
+    {
+      "key": "d",
+      "label": "Fundamental Orders of Connecticut, 1639 (Document 17)",
+      "hints": [
+        "Self-government in the colonies: new in 1776, or there from early on?",
+        "Look for continuity and self-government."
+      ]
+    },
+    {
+      "key": "e",
+      "label": "Blackstone on coverture, 1765 (Document 18)",
+      "hints": [
+        "Blackstone wasn't proposing a new law. He was describing an old one.",
+        "Look for continuity and a married woman's legal status."
+      ]
+    }
   ],
   "right": [
-    { "key": "1", "label": "Continuity — servitude of some kind already existed at the colony's founding" },
-    { "key": "2", "label": "Change — status begins to split by race; one sentence \"has an end,\" one does not" },
-    { "key": "3", "label": "Change — the turning point that accelerates the shift to permanent, race-based slavery" },
-    { "key": "4", "label": "Continuity — representative self-government, present from the colonies' founding" },
-    { "key": "5", "label": "Change — the same idea restated, but this document asks who self-government actually included" }
+    {
+      "key": "1",
+      "label": "Continuity — bound labor was part of Virginia from the start"
+    },
+    {
+      "key": "2",
+      "label": "Change — same escape, but the Black servant, John Punch, is sentenced for life"
+    },
+    {
+      "key": "3",
+      "label": "Change — the turning point that accelerates the shift to permanent, race-based slavery"
+    },
+    {
+      "key": "4",
+      "label": "Continuity — representative self-government, present from the colonies' founding"
+    },
+    {
+      "key": "5",
+      "label": "Continuity — a married woman's legal erasure, centuries old, described, not newly passed"
+    }
   ],
-  "correct": { "a": "1", "b": "2", "c": "3", "d": "4", "e": "5" },
+  "correct": {
+    "a": "1",
+    "b": "2",
+    "c": "3",
+    "d": "4",
+    "e": "5"
+  },
   "rationale": {
-    "a": "The 1640 ruling shows unfree labor already existed — the continuity is that servitude of some kind was present from the start.",
-    "b": "By 1662 and 1669, the rulings stop matching by offense and start splitting by race — the change is underway before 1676.",
+    "a": "Indentured servants worked Virginia's tobacco from the colony's first years. Bound labor itself was not new; who got bound, and for how long, is what changed.",
+    "b": "Two white servants got extra years. John Punch, a Black man, got servitude for life. Same act, and for the first time on the record, a sentence split by race.",
     "c": "Bacon's Rebellion, 1676, is the accelerant — after it, the split hardens into a permanent, race-based system.",
     "d": "The Fundamental Orders, 1639, show representative self-government was already part of the colonies' founding idea — the continuity that carries to Document 18.",
-    "e": "Blackstone restates the same self-government idea, but Document 18 #5 asks who it actually meant it for — the same principle, a changed (or exposed) scope."
-  }
+    "e": "Blackstone describes coverture as settled English law. Nobody had to pass it. The casefile says so: it was simply how things were."
+  },
+  "_filled": [
+    "2026-09-27: two hints per pair from Sam's reviewbowl-us11r-fills-2026-09-27.json (BK's yes pending at port)"
+  ],
+  "_corrected": [
+    "2026-09-27: Sam's corrections (a, b, e) from reviewbowl-us11r-fills-2026-09-27.json: The old item called the 1640 ruling “no racial split yet.” Document 13 says the opposite: 1640 is the first split, John Punch sentenced for life. | The old item gave 1662 and 1669 the “one sentence has an end” split. That split is the 1640 ruling; 1662 and 1669 are different laws. | The old item called Document 18 “Blackstone on self-government.” It's Blackstone on marriage and coverture."
+  ]
 }

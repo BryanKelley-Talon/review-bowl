@@ -1,0 +1,367 @@
+{
+  "_course": "US History and Government 11R",
+  "_built": "2026-09-27 by Sam (us11r-curriculum) · build_bowl_us11r.py",
+  "_activity": "Review Bowl, short in-game questions: civic principles (Civic Principles card, word for word) and the Civic Literacy Essay (June 2026 exam wording)",
+  "_licence": "ORIGINAL. Principle names and definitions from skills/unit0-print/build_civic_principles_card.py (BK 2026-09-26). CLE task words from the June 2026 Regents (ushg62026exam.pdf, Part III). One quotation: the Declaration of Independence, public domain.",
+  "_units": "unit = the earliest unit that teaches it: 11.1+ means from 11.1 on; 11.2 means switch on when 11.2 opens (Thu 10/1).",
+  "items": [
+    {
+      "id": "cp-01",
+      "unit": "11.1+",
+      "stem": "“No one is above the law, not even the people who make it.” Which principle is this?",
+      "options": {
+        "1": "Rule of Law",
+        "2": "Limited Government",
+        "3": "Due Process",
+        "4": "Popular Sovereignty (consent of the governed)"
+      },
+      "correct": "1",
+      "hints": [
+        "Think about Magna Carta: even the king had to follow the rules.",
+        "The principle has the word “law” in its name."
+      ],
+      "reason": "Rule of Law: the law binds everyone, including the people who make it."
+    },
+    {
+      "id": "cp-02",
+      "unit": "11.1+",
+      "stem": "“Government can only do what the Constitution allows.” Which principle is this?",
+      "options": {
+        "1": "Federalism",
+        "2": "Limited Government",
+        "3": "Judicial Review",
+        "4": "Rule of Law"
+      },
+      "correct": "2",
+      "hints": [
+        "This principle puts a cap on government.",
+        "Look for the word that means “capped.”"
+      ],
+      "reason": "Limited Government: the Constitution sets the boundaries, and government stays inside them."
+    },
+    {
+      "id": "cp-03",
+      "unit": "11.2",
+      "stem": "Power is split among three branches: one makes laws, one carries them out, one judges them. Which principle is this?",
+      "options": {
+        "1": "Checks and Balances",
+        "2": "Federalism",
+        "3": "Separation of Powers",
+        "4": "Representative Government"
+      },
+      "correct": "3",
+      "hints": [
+        "The key word is “split,” with each branch doing its own job.",
+        "It's not about branches blocking each other. That's a different principle."
+      ],
+      "reason": "Separation of Powers: three branches, three different jobs."
+    },
+    {
+      "id": "cp-04",
+      "unit": "11.2",
+      "stem": "The president vetoes a bill, and Congress overrides the veto. Which principle is at work?",
+      "options": {
+        "1": "Separation of Powers",
+        "2": "Checks and Balances",
+        "3": "Judicial Review",
+        "4": "Popular Sovereignty (consent of the governed)"
+      },
+      "correct": "2",
+      "hints": [
+        "One branch blocks another, and then it gets blocked back.",
+        "Look for the principle about branches limiting each other."
+      ],
+      "reason": "Checks and Balances: each branch can block or limit the others. A veto and an override are both checks."
+    },
+    {
+      "id": "cp-05",
+      "unit": "11.2",
+      "stem": "Power is divided between the national government and the states. Which principle is this?",
+      "options": {
+        "1": "Separation of Powers",
+        "2": "Limited Government",
+        "3": "Representative Government",
+        "4": "Federalism"
+      },
+      "correct": "4",
+      "hints": [
+        "This split isn't between branches. It's between levels of government.",
+        "Think: the nation versus a state."
+      ],
+      "reason": "Federalism: power is shared between the nation and the states. When they clash, valid federal law wins."
+    },
+    {
+      "id": "cp-06",
+      "unit": "11.2",
+      "stem": "In Marbury v. Madison (1803), the Supreme Court strikes down part of a law passed by Congress. Which power does the Court claim?",
+      "options": {
+        "1": "Judicial Review",
+        "2": "Separation of Powers",
+        "3": "Federalism",
+        "4": "Due Process"
+      },
+      "correct": "1",
+      "hints": [
+        "The Court is deciding whether a law fits the Constitution.",
+        "The principle has “judicial” (courts) in its name."
+      ],
+      "reason": "Judicial Review: courts can strike down a law that breaks the Constitution. Marbury is where the Supreme Court claimed it."
+    },
+    {
+      "id": "cp-07",
+      "unit": "11.2",
+      "stem": "The Declaration says governments get “their just powers from the consent of the governed.” Which principle is this?",
+      "options": {
+        "1": "Natural Rights",
+        "2": "Popular Sovereignty (consent of the governed)",
+        "3": "Rule of Law",
+        "4": "Federalism"
+      },
+      "correct": "2",
+      "hints": [
+        "Where does this line say government's power comes from?",
+        "Consent of the governed sits inside one principle on your card."
+      ],
+      "reason": "Popular Sovereignty: government's power comes from the people, and it rules only with their agreement.",
+      "citation": "Declaration of Independence, July 4, 1776 (National Archives transcription)"
+    },
+    {
+      "id": "cp-08",
+      "unit": "11.2",
+      "stem": "Every person is born with rights (life, liberty, property) that government exists to protect. Which principle is this?",
+      "options": {
+        "1": "Individual Rights (civil liberties)",
+        "2": "Equal Protection",
+        "3": "Natural Rights",
+        "4": "Popular Sovereignty (consent of the governed)"
+      },
+      "correct": "3",
+      "hints": [
+        "The key words are “born with.”",
+        "These rights come from being human, not from a government."
+      ],
+      "reason": "Natural Rights: you're born with them, and government exists to protect them."
+    },
+    {
+      "id": "cp-09",
+      "unit": "11.1+",
+      "stem": "The people elect officials to make decisions for them. Which principle is this?",
+      "options": {
+        "1": "Popular Sovereignty (consent of the governed)",
+        "2": "Separation of Powers",
+        "3": "Rule of Law",
+        "4": "Representative Government"
+      },
+      "correct": "4",
+      "hints": [
+        "The key word is “elect.”",
+        "A representative is someone chosen to speak for you."
+      ],
+      "reason": "Representative Government: voters choose officials to decide for them."
+    },
+    {
+      "id": "cp-10",
+      "unit": "11.2",
+      "stem": "The Stamp Act Congress (1765) says only the colonies' own elected assemblies can tax them. Which principle are they claiming?",
+      "options": {
+        "1": "Representative Government",
+        "2": "Judicial Review",
+        "3": "Federalism",
+        "4": "Due Process"
+      },
+      "correct": "1",
+      "hints": [
+        "Who do the colonists say gets to tax them?",
+        "The key word is “elected.”"
+      ],
+      "reason": "Representative Government: no tax without lawmakers the people elected. That's “no taxation without representation.”"
+    },
+    {
+      "id": "cp-11",
+      "unit": "11.2",
+      "stem": "Freedoms government can't take away, like speech, religion, press and assembly. Which principle is this?",
+      "options": {
+        "1": "Natural Rights",
+        "2": "Individual Rights (civil liberties)",
+        "3": "Due Process",
+        "4": "Limited Government"
+      },
+      "correct": "2",
+      "hints": [
+        "Think of the First Amendment.",
+        "These are also called civil liberties."
+      ],
+      "reason": "Individual Rights (civil liberties): speech, religion, press and assembly, protected in the Bill of Rights."
+    },
+    {
+      "id": "cp-12",
+      "unit": "11.2",
+      "stem": "The Sedition Act of 1798 made it a crime to publish false or malicious writing against the government. Which principle is most at stake?",
+      "options": {
+        "1": "Federalism",
+        "2": "Judicial Review",
+        "3": "Individual Rights (civil liberties)",
+        "4": "Representative Government"
+      },
+      "correct": "3",
+      "hints": [
+        "What freedom does a newspaper editor need?",
+        "Think of the First Amendment: speech and press."
+      ],
+      "reason": "Individual Rights (civil liberties): freedom of speech and press. The Sedition Act tested them seven years after the Bill of Rights."
+    },
+    {
+      "id": "cp-13",
+      "unit": "11.1+",
+      "stem": "Someone is arrested and held for months with no trial. Which principle is at stake?",
+      "options": {
+        "1": "Equal Protection",
+        "2": "Rule of Law",
+        "3": "Limited Government",
+        "4": "Due Process"
+      },
+      "correct": "4",
+      "hints": [
+        "What does government owe you before it takes away your liberty?",
+        "The principle is about fair steps."
+      ],
+      "reason": "Due Process: government must follow fair steps, like a trial, before it takes your liberty."
+    },
+    {
+      "id": "cp-14",
+      "unit": "11.1+",
+      "stem": "A law treats one group of people differently, or shuts them out. Which principle is at stake?",
+      "options": {
+        "1": "Equal Protection",
+        "2": "Due Process",
+        "3": "Natural Rights",
+        "4": "Federalism"
+      },
+      "correct": "1",
+      "hints": [
+        "The key word is “equally.”",
+        "Which principle says the law must treat people the same?"
+      ],
+      "reason": "Equal Protection: the law must treat people equally. It comes into its own with the 14th Amendment in 11.4."
+    },
+    {
+      "id": "cp-15",
+      "unit": "11.2",
+      "stem": "In McCulloch v. Maryland (1819), Maryland tries to tax the national bank, and the Supreme Court says it can't. Which principle decides the case?",
+      "options": {
+        "1": "Separation of Powers",
+        "2": "Federalism",
+        "3": "Representative Government",
+        "4": "Due Process"
+      },
+      "correct": "2",
+      "hints": [
+        "It's a state against the national government.",
+        "When they clash, valid federal law wins."
+      ],
+      "reason": "Federalism: the nation and the states share power, and when they clash, valid federal law wins."
+    },
+    {
+      "id": "cle-01",
+      "unit": "11.1+",
+      "stem": "On the Civic Literacy Essay, “describe the historical circumstances” asks for which skill?",
+      "options": {
+        "1": "Thesis",
+        "2": "Historical Context",
+        "3": "Outside Evidence",
+        "4": "Civic Principle"
+      },
+      "correct": "2",
+      "hints": [
+        "Circumstances means what was going on around the issue.",
+        "It's the skill you practice in every CONTEXT CHECK."
+      ],
+      "reason": "Historical Context: what was happening, and what led to the issue, before you argue about it."
+    },
+    {
+      "id": "cle-02",
+      "unit": "11.1+",
+      "stem": "The Civic Literacy Essay says to use information from at least how many documents?",
+      "options": {
+        "1": "Two",
+        "2": "Three",
+        "3": "Four",
+        "4": "Six"
+      },
+      "correct": "3",
+      "hints": [
+        "It's more than half of the six documents.",
+        "More than three, fewer than six."
+      ],
+      "reason": "At least four. Using all six is fine, but four is the floor."
+    },
+    {
+      "id": "cle-03",
+      "unit": "11.1+",
+      "stem": "The Civic Literacy Essay asks you to explain at least how many efforts to address the issue?",
+      "options": {
+        "1": "One",
+        "2": "Two",
+        "3": "Three",
+        "4": "Four"
+      },
+      "correct": "2",
+      "hints": [
+        "An effort is something people or a government did about the issue.",
+        "More than one, fewer than three."
+      ],
+      "reason": "At least two efforts, by individuals, groups or governments."
+    },
+    {
+      "id": "cle-04",
+      "unit": "11.1+",
+      "stem": "What counts as outside information on the Civic Literacy Essay?",
+      "options": {
+        "1": "A quote copied from one of the documents",
+        "2": "Your opinion of the issue",
+        "3": "A relevant fact you know that isn't in any of the documents",
+        "4": "A summary of the historical context paragraph"
+      },
+      "correct": "3",
+      "hints": [
+        "“Outside” means outside the documents.",
+        "It has to be relevant, and it has to be a fact you bring."
+      ],
+      "reason": "The exam calls it outside information, and your gauge calls it Outside Evidence: relevant history you bring from outside the documents."
+    },
+    {
+      "id": "cle-05",
+      "unit": "11.1+",
+      "stem": "On the Civic Literacy Essay, “discuss the impact of the efforts” asks you to…",
+      "options": {
+        "1": "Retell what each document says",
+        "2": "Tell what changed because of the efforts, using facts and reasoning",
+        "3": "List the documents in order",
+        "4": "Give your opinion without evidence"
+      },
+      "correct": "2",
+      "hints": [
+        "“Impact” means effect.",
+        "Discuss means using facts, reasoning and argument."
+      ],
+      "reason": "Discuss the impact: what changed for the country or its people because of the efforts, backed with facts and reasoning."
+    },
+    {
+      "id": "cle-06",
+      "unit": "11.2",
+      "stem": "The June 2026 Civic Literacy Essay was about creating a stronger national government. Which plan of government showed the problem it was meant to fix?",
+      "options": {
+        "1": "Declaration of Independence",
+        "2": "Mayflower Compact",
+        "3": "Magna Carta",
+        "4": "Articles of Confederation"
+      },
+      "correct": "4",
+      "hints": [
+        "Which plan built a national government too weak to tax?",
+        "It came before the Constitution, in 1781."
+      ],
+      "reason": "The Articles of Confederation built a government too weak to tax or enforce its laws. The Constitution replaced it."
+    }
+  ]
+}

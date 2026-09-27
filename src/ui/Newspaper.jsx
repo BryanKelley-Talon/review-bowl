@@ -103,7 +103,7 @@ function briefs({ events, ratings }) {
   const out = []
   for (const e of events) {
     if (e.kind === 'level') out.push(`${e.position} ${e.name} — now level ${e.level}, ${e.statLabel} up.`)
-    if (e.kind === 'film') out.push(`Film room: ${e.right} of ${e.of} on ${LANE_WORD[e.lane] || 'content'}. Defense ${e.defense}.`)
+    if (e.kind === 'film') out.push(`Film room: a session on ${LANE_WORD[e.lane] || 'content'}. Defense ${e.defense}.`)
     if (e.kind === 'facility') out.push(`${e.label} now open, level ${e.level}.`)
   }
   if (!out.length) out.push('No sessions logged yet this week. The room is open.')

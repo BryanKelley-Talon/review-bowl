@@ -7,22 +7,70 @@
   "scope_note": "Four of the twelve, the ones 11.1 actually taught. Later units add pairs, always in the card's words.",
   "intro": "Match each principle to its definition.",
   "left": [
-    { "key": "a", "label": "Rule of Law" },
-    { "key": "b", "label": "Limited Government" },
-    { "key": "c", "label": "Popular Sovereignty (consent of the governed)" },
-    { "key": "d", "label": "Representative Government" }
+    {
+      "key": "a",
+      "label": "Rule of Law",
+      "hints": [
+        "Think of the king under Magna Carta. Did he get to ignore the rules?",
+        "Look for “no one is above the law.”"
+      ]
+    },
+    {
+      "key": "b",
+      "label": "Limited Government",
+      "hints": [
+        "“Limited” means there's a cap. A cap on what?",
+        "Look for what the Constitution allows."
+      ]
+    },
+    {
+      "key": "c",
+      "label": "Popular Sovereignty (consent of the governed)",
+      "hints": [
+        "“Popular” comes from “people.” “Sovereignty” means supreme power.",
+        "Look for power coming from the people."
+      ]
+    },
+    {
+      "key": "d",
+      "label": "Representative Government",
+      "hints": [
+        "A representative is someone chosen to speak for you.",
+        "Look for the word “elect.”"
+      ]
+    }
   ],
   "right": [
-    { "key": "1", "label": "No one is above the law, not even the people who make it." },
-    { "key": "2", "label": "Government can only do what the Constitution allows." },
-    { "key": "3", "label": "Government's power comes from the people, and it rules only with their agreement." },
-    { "key": "4", "label": "The people elect officials to make decisions for them." }
+    {
+      "key": "1",
+      "label": "No one is above the law, not even the people who make it."
+    },
+    {
+      "key": "2",
+      "label": "Government can only do what the Constitution allows."
+    },
+    {
+      "key": "3",
+      "label": "Government's power comes from the people, and it rules only with their agreement."
+    },
+    {
+      "key": "4",
+      "label": "The people elect officials to make decisions for them."
+    }
   ],
-  "correct": { "a": "1", "b": "2", "c": "3", "d": "4" },
+  "correct": {
+    "a": "1",
+    "b": "2",
+    "c": "3",
+    "d": "4"
+  },
   "rationale": {
     "a": "Magna Carta: even the king had to follow the law.",
     "b": "Magna Carta capped the king's power. He could not raise taxes on his own.",
     "c": "In 11.1 you met this as consent of the governed. Same idea: power comes from the people.",
     "d": "Colonial assemblies: colonists elected their own lawmakers."
-  }
+  },
+  "_filled": [
+    "2026-09-27: two hints per pair from Sam's reviewbowl-us11r-fills-2026-09-27.json (BK's yes pending at port)"
+  ]
 }

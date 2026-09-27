@@ -1,9 +1,9 @@
 {
   "_course": "US History & Government 11R",
   "_unit": "11.1 - Colonial Foundations",
-  "_activity": "Part I Stimulus-Based MC \u2014 content pool for Skills Review Bowl",
+  "_activity": "Part I Stimulus-Based MC — content pool for Skills Review Bowl",
   "_built": "2026-09-22 by Sam (us11r-curriculum)",
-  "_licence": "Reused as-is from this desk's own MC_BANK/Unit_01 \u2014 21 items, no new authoring. 15 are real NYSED-administration items (Jan/Aug/June 2024-2026), 6 are from BK's own CPP Unit 11.1 End-of-Unit Examination. All crops are BLESSED (blessing recorded 2026-09-02, In/ruling-2026-09-02-new-visions-and-crops.md, batches _crop_manifest_orphancut-2026-08-31.json and _crop_manifest_unit01-bkexam-2026-09-01.json).",
+  "_licence": "Reused as-is from this desk's own MC_BANK/Unit_01 — 21 items, no new authoring. 15 are real NYSED-administration items (Jan/Aug/June 2024-2026), 6 are from BK's own CPP Unit 11.1 End-of-Unit Examination. All crops are BLESSED (blessing recorded 2026-09-02, In/ruling-2026-09-02-new-visions-and-crops.md, batches _crop_manifest_orphancut-2026-08-31.json and _crop_manifest_unit01-bkexam-2026-09-01.json).",
   "_flag_answer_verified_false": [
     "cppu1-mc08",
     "cppu1-mc09",
@@ -12,7 +12,7 @@
     "cppu1-mc16",
     "cppu1-mc17"
   ],
-  "_flag_note": "The 6 items above (BK's own exam) carry answer_verified:false on this desk \u2014 meaning the answer key is Sam's derived read, not checked against an official NYSED key, since none exists for BK's own item. Not a blessing or accuracy concern, just unverified provenance. Flagging per standing verification practice rather than passing silently.",
+  "_flag_note": "The 6 items above (BK's own exam) carry answer_verified:false on this desk — meaning the answer key is Sam's derived read, not checked against an official NYSED key, since none exists for BK's own item. Not a blessing or accuracy concern, just unverified provenance. Flagging per standing verification practice rather than passing silently.",
   "item_count": 21,
   "items": [
     {
@@ -30,12 +30,12 @@
         "1": "Native Americans wasting valuable natural resources",
         "2": "European settlement in North America",
         "3": "intermarriage between British settlers and Native Americans",
-        "4": "sachems who had ordered the colonists\u2019 crops to be destroyed"
+        "4": "sachems who had ordered the colonists’ crops to be destroyed"
       },
       "correct": "2",
       "answer_source": "ushg-12024-sk.pdf",
       "rationale": "Correct=(2). Miantonomo describes land and game lost as English settlement spread. (1) inverts the complaint. (3) intermarriage is not mentioned. (4) misattributes the destruction.",
-      "rationale_source": "_catalog_nysed-ushg-0124.json (Sam's hand read; NYSED rating guides carry no MC rationales \u2014 verified across all ten guides 2026-07-09)",
+      "rationale_source": "_catalog_nysed-ushg-0124.json (Sam's hand read; NYSED rating guides carry no MC rationales — verified across all ten guides 2026-07-09)",
       "stimulus_refs": [
         "unit01-0124-mc01.png"
       ],
@@ -59,7 +59,7 @@
       "verified_against": "Test Questions by Key Idea chart, ushg-12024-rg1.pdf p47",
       "stimulus_refs_missing": [],
       "stimulus_refs_status": "on_disk",
-      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern \u2014 BK authorised application 2026-08-31; not individually ruled.",
+      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern — BK authorised application 2026-08-31; not individually ruled.",
       "subgrain_rules_fired": [
         "1a:context/situation-described:med"
       ],
@@ -68,7 +68,7 @@
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
         "Think about who is doing the taking, not who is being blamed.",
-        "Miantonomo is describing land and game already lost \u2014 losses caused by something arriving, not by the Native peoples themselves."
+        "Miantonomo is describing land and game already lost — losses caused by something arriving, not by the Native peoples themselves."
       ]
     },
     {
@@ -91,7 +91,7 @@
       "correct": "3",
       "answer_source": "ushg-12024-sk.pdf",
       "rationale": "Correct=(3). He urges the sachems to combine against the settlers. (1), (2), (4) name courses the speech rejects.",
-      "rationale_source": "_catalog_nysed-ushg-0124.json (Sam's hand read; NYSED rating guides carry no MC rationales \u2014 verified across all ten guides 2026-07-09)",
+      "rationale_source": "_catalog_nysed-ushg-0124.json (Sam's hand read; NYSED rating guides carry no MC rationales — verified across all ten guides 2026-07-09)",
       "stimulus_refs": [
         "unit01-0124-mc01.png"
       ],
@@ -114,7 +114,7 @@
       "verified_against": "Test Questions by Key Idea chart, ushg-12024-rg1.pdf p47",
       "stimulus_refs_missing": [],
       "stimulus_refs_status": "on_disk",
-      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern \u2014 BK authorised application 2026-08-31; not individually ruled.",
+      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern — BK authorised application 2026-08-31; not individually ruled.",
       "subgrain_rules_fired": [
         "3a:doc/what-does-support:high"
       ],
@@ -122,8 +122,8 @@
       "stimulus_refs_note": "Linked 2026-09-01. The NYSED administration ran this item without a stimulus; BK's Unit 1 exam supplies one. Crop cut from his paper, UNBLESSED.",
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
-        "He's a chief trying to rally other sachems \u2014 what does a leader ask allies to do together?",
-        "Look at the verb 'combine' \u2014 combining means joining forces, not making peace or leaving."
+        "He's a chief trying to rally other sachems — what does a leader ask allies to do together?",
+        "Look at the verb 'combine' — combining means joining forces, not making peace or leaving."
       ]
     },
     {
@@ -146,7 +146,7 @@
       "correct": "1",
       "answer_source": "ushg-12025-sk.pdf",
       "rationale": "Correct=(1). An elected governor and magistrates chosen by freemen is representative government. (2), (3), (4) are not in the Orders.",
-      "rationale_source": "_catalog_nysed-ushg-0125.json (Sam's hand read; NYSED rating guides carry no MC rationales \u2014 verified across all ten guides 2026-07-09)",
+      "rationale_source": "_catalog_nysed-ushg-0125.json (Sam's hand read; NYSED rating guides carry no MC rationales — verified across all ten guides 2026-07-09)",
       "stimulus_refs": [
         "unit01-fundamentalorders-1639-doc1.png"
       ],
@@ -170,13 +170,13 @@
       "verified_against": "Test Questions by Key Idea chart, ushg-12025-rg1.pdf p52",
       "stimulus_refs_missing": [],
       "stimulus_refs_status": "on_disk",
-      "subgrain_source": "HAND READ 2026-08-31 by Sam, on BK's order 'sub grain tagging needs to get to 100 percent'. Every item's stem and four options were read individually; no regex was used. PROPOSED \u2014 not individually ruled by BK.",
+      "subgrain_source": "HAND READ 2026-08-31 by Sam, on BK's order 'sub grain tagging needs to get to 100 percent'. Every item's stem and four options were read individually; no regex was used. PROPOSED — not individually ruled by BK.",
       "subgrain_scope_note": "RECOGNITION FORMS ONLY. A 4-option MC cannot test a writing grain, so no item carries b/c/d grains from Skills 2 (Thesis) or 4 (Explanation) beyond 4a, and none carries 1c, 1d, 3c, 3d, 5b-5d, or 6b-6d. Mapping used: 1a = the item asks what circumstance produced or surrounds the source. 1b = it asks who made it, why, or what a historian would use it for. 3a = it asks for a detail the source itself carries. 4a = it asks what conclusion the source supports. 5a = it requires a fact the source does NOT carry (this covers every no-stimulus item, which is exactly grain 5a in recognition form). 6a = the answer is a named constitutional principle, power, right, or amendment.",
       "stimulus_refs_note": "Linked 2026-09-01. The NYSED administration ran this item without a stimulus; BK's Unit 1 exam supplies one. Crop cut from his paper, UNBLESSED.",
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
         "Think about who gets chosen, and by whom, in this document.",
-        "An elected governor and magistrates chosen by freemen \u2014 that's a form of government where people pick their own representatives."
+        "An elected governor and magistrates chosen by freemen — that's a form of government where people pick their own representatives."
       ]
     },
     {
@@ -199,7 +199,7 @@
       "correct": "2",
       "answer_source": "ushg-12025-sk.pdf",
       "rationale": "Correct=(2). The Virginia House of Burgesses is the other early representative body. (1) is religious toleration, (3) and (4) are imperial restrictions.",
-      "rationale_source": "_catalog_nysed-ushg-0125.json (Sam's hand read; NYSED rating guides carry no MC rationales \u2014 verified across all ten guides 2026-07-09)",
+      "rationale_source": "_catalog_nysed-ushg-0125.json (Sam's hand read; NYSED rating guides carry no MC rationales — verified across all ten guides 2026-07-09)",
       "stimulus_refs": [
         "unit01-fundamentalorders-1639-doc1.png"
       ],
@@ -222,13 +222,13 @@
       "verified_against": "Test Questions by Key Idea chart, ushg-12025-rg1.pdf p52",
       "stimulus_refs_missing": [],
       "stimulus_refs_status": "on_disk",
-      "subgrain_source": "HAND READ 2026-08-31 by Sam, on BK's order 'sub grain tagging needs to get to 100 percent'. Every item's stem and four options were read individually; no regex was used. PROPOSED \u2014 not individually ruled by BK.",
+      "subgrain_source": "HAND READ 2026-08-31 by Sam, on BK's order 'sub grain tagging needs to get to 100 percent'. Every item's stem and four options were read individually; no regex was used. PROPOSED — not individually ruled by BK.",
       "subgrain_scope_note": "RECOGNITION FORMS ONLY. A 4-option MC cannot test a writing grain, so no item carries b/c/d grains from Skills 2 (Thesis) or 4 (Explanation) beyond 4a, and none carries 1c, 1d, 3c, 3d, 5b-5d, or 6b-6d. Mapping used: 1a = the item asks what circumstance produced or surrounds the source. 1b = it asks who made it, why, or what a historian would use it for. 3a = it asks for a detail the source itself carries. 4a = it asks what conclusion the source supports. 5a = it requires a fact the source does NOT carry (this covers every no-stimulus item, which is exactly grain 5a in recognition form). 6a = the answer is a named constitutional principle, power, right, or amendment.",
       "stimulus_refs_note": "Linked 2026-09-01. The NYSED administration ran this item without a stimulus; BK's Unit 1 exam supplies one. Crop cut from his paper, UNBLESSED.",
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
         "Look for another early colonial body that was also elected.",
-        "Virginia's assembly, seated in 1619 \u2014 the other 'first' representative body."
+        "Virginia's assembly, seated in 1619 — the other 'first' representative body."
       ]
     },
     {
@@ -241,7 +241,7 @@
       "cross_topical": false,
       "second_unit": null,
       "type": "MC",
-      "stem": "Based on this excerpt, what is the author\u2019s point of view about the role of government in the Plymouth Colony?",
+      "stem": "Based on this excerpt, what is the author’s point of view about the role of government in the Plymouth Colony?",
       "options": {
         "1": "Separate leaders for church and state should be elected.",
         "2": "People have the right to rebel against the government.",
@@ -250,7 +250,7 @@
       },
       "correct": "3",
       "answer_source": "ushg-12026-sk.pdf",
-      "rationale": null,
+      "rationale": "Robinson tells the Pilgrims their leaders will be “chosen by you into office of government.” The people pick who governs.",
       "rationale_source": null,
       "stimulus_refs": [
         "unit01-0126-mc01.png"
@@ -275,7 +275,7 @@
       "verified_against": "Test Questions by Key Idea chart, ushg-12026-rg.pdf p76",
       "stimulus_refs_missing": [],
       "stimulus_refs_status": "on_disk",
-      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern \u2014 BK authorised application 2026-08-31; not individually ruled.",
+      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern — BK authorised application 2026-08-31; not individually ruled.",
       "subgrain_rules_fired": [
         "1b:sourcing/point-of-view:high",
         "3a:doc/according-to:high"
@@ -284,8 +284,8 @@
       "stimulus_refs_note": "Linked 2026-08-31 by the orphan cut. The item referenced a document the catalog never recorded. Crop UNBLESSED and alt-pending.",
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
-        "This is Robinson's farewell address to the Pilgrims \u2014 what does he say about where authority comes from?",
-        "Not about splitting church and state, and not about absolute rulers \u2014 it's about where the power to govern actually sits."
+        "This is Robinson's farewell address to the Pilgrims — what does he say about where authority comes from?",
+        "Not about splitting church and state, and not about absolute rulers — it's about where the power to govern actually sits."
       ]
     },
     {
@@ -307,7 +307,7 @@
       },
       "correct": "1",
       "answer_source": "ushg-12026-sk.pdf",
-      "rationale": null,
+      "rationale": "The Mayflower Compact (1620) is the same Pilgrims, the same year, forming a “body politic” to govern themselves. It's Robinson's idea on paper.",
       "rationale_source": null,
       "stimulus_refs": [
         "unit01-0126-mc01.png"
@@ -331,7 +331,7 @@
       "verified_against": "Test Questions by Key Idea chart, ushg-12026-rg.pdf p76",
       "stimulus_refs_missing": [],
       "stimulus_refs_status": "on_disk",
-      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern \u2014 BK authorised application 2026-08-31; not individually ruled.",
+      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern — BK authorised application 2026-08-31; not individually ruled.",
       "subgrain_rules_fired": [
         "3a:doc/demonstrate-reflect:med"
       ],
@@ -340,7 +340,7 @@
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
         "Which 1620 document has the Pilgrims agreeing to govern themselves?",
-        "Same group, same year \u2014 the document they signed aboard the ship."
+        "Same group, same year — the document they signed aboard the ship."
       ]
     },
     {
@@ -362,8 +362,8 @@
       },
       "correct": "2",
       "answer_source": "ushg-62024-sk.pdf",
-      "rationale": "Correct=(2). Franklin reports that the women choose and can depose the chiefs \u2014 a significant role. (1) is the settler claim the passage does not make. (3) contradicts oral treaty practice described. (4) missionaries are not mentioned.",
-      "rationale_source": "_catalog_nysed-ushg-0624.json (Sam's hand read; NYSED rating guides carry no MC rationales \u2014 verified across all ten guides 2026-07-09)",
+      "rationale": "Correct=(2). Franklin reports that the women choose and can depose the chiefs — a significant role. (1) is the settler claim the passage does not make. (3) contradicts oral treaty practice described. (4) missionaries are not mentioned.",
+      "rationale_source": "_catalog_nysed-ushg-0624.json (Sam's hand read; NYSED rating guides carry no MC rationales — verified across all ten guides 2026-07-09)",
       "stimulus_refs": [
         "unit01-0624-mc01.png"
       ],
@@ -386,7 +386,7 @@
       "verified_against": "Test Questions by Key Idea chart, ushg-62024-rga.pdf p48",
       "stimulus_refs_missing": [],
       "stimulus_refs_status": "on_disk",
-      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern \u2014 BK authorised application 2026-08-31; not individually ruled.",
+      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern — BK authorised application 2026-08-31; not individually ruled.",
       "subgrain_rules_fired": [
         "3a:doc/supported-by:high"
       ],
@@ -395,7 +395,7 @@
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
         "Franklin is describing something specific about how leaders are chosen in this society.",
-        "Who does he say chooses \u2014 and can remove \u2014 the chiefs?"
+        "Who does he say chooses — and can remove — the chiefs?"
       ]
     },
     {
@@ -417,8 +417,8 @@
       },
       "correct": "4",
       "answer_source": "ushg-62025-sk.pdf",
-      "rationale": "Correct=(4). The engraving shows planned fields, dwellings and communal space \u2014 an organized way of life. (1), (2), (3) read into the image what is not there.",
-      "rationale_source": "_catalog_nysed-ushg-0625.json (Sam's hand read; NYSED rating guides carry no MC rationales \u2014 verified across all ten guides 2026-07-09)",
+      "rationale": "Correct=(4). The engraving shows planned fields, dwellings and communal space — an organized way of life. (1), (2), (3) read into the image what is not there.",
+      "rationale_source": "_catalog_nysed-ushg-0625.json (Sam's hand read; NYSED rating guides carry no MC rationales — verified across all ten guides 2026-07-09)",
       "stimulus_refs": [
         "unit01-0625-mc01.png"
       ],
@@ -441,7 +441,7 @@
       "verified_against": "Test Questions by Key Idea chart, ushg-62025-rg1.pdf p50",
       "stimulus_refs_missing": [],
       "stimulus_refs_status": "on_disk",
-      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern \u2014 BK authorised application 2026-08-31; not individually ruled.",
+      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern — BK authorised application 2026-08-31; not individually ruled.",
       "subgrain_rules_fired": [
         "3a:doc/suggests-infers:med"
       ],
@@ -449,7 +449,7 @@
       "stimulus_refs_note": "Linked 2026-08-31 by the orphan cut. The item referenced a document the catalog never recorded. Crop UNBLESSED and alt-pending.",
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
-        "Look at what the engraving actually shows \u2014 fields, dwellings, shared space.",
+        "Look at what the engraving actually shows — fields, dwellings, shared space.",
         "A planned layout is evidence of organization, not disorder or decline."
       ]
     },
@@ -472,8 +472,8 @@
       },
       "correct": "1",
       "answer_source": "ushg-62025-sk.pdf",
-      "rationale": "Correct=(1). A 1590 European engraving is evidence about Native societies before sustained colonization \u2014 read with care for its maker. (2), (3), (4) name uses the image cannot bear.",
-      "rationale_source": "_catalog_nysed-ushg-0625.json (Sam's hand read; NYSED rating guides carry no MC rationales \u2014 verified across all ten guides 2026-07-09)",
+      "rationale": "Correct=(1). A 1590 European engraving is evidence about Native societies before sustained colonization — read with care for its maker. (2), (3), (4) name uses the image cannot bear.",
+      "rationale_source": "_catalog_nysed-ushg-0625.json (Sam's hand read; NYSED rating guides carry no MC rationales — verified across all ten guides 2026-07-09)",
       "stimulus_refs": [
         "unit01-0625-mc01.png"
       ],
@@ -496,7 +496,7 @@
       "verified_against": "Test Questions by Key Idea chart, ushg-62025-rg1.pdf p50",
       "stimulus_refs_missing": [],
       "stimulus_refs_status": "on_disk",
-      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern \u2014 BK authorised application 2026-08-31; not individually ruled.",
+      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern — BK authorised application 2026-08-31; not individually ruled.",
       "subgrain_rules_fired": [
         "1b:sourcing/historian-use:high"
       ],
@@ -505,7 +505,7 @@
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
         "When was this image made, and what does that date tell you about what it can show?",
-        "1590 \u2014 early enough to show conditions before sustained European settlement took hold."
+        "1590 — early enough to show conditions before sustained European settlement took hold."
       ]
     },
     {
@@ -527,8 +527,8 @@
       },
       "correct": "4",
       "answer_source": "ushg-62026-sk.pdf",
-      "rationale": "Gachradodow explicitly contrasts two legal orders ('You have your Laws and Customs, so have we') inside a treaty council \u2014 the act of talking across difference is the answer. (1) inverts the speaker's complaint. (2) imports Pennsylvania's founding myth the text never mentions. (3) is contradicted by 'God did not approve of it.'",
-      "rationale_source": "_catalog_nysed-ushg-0626.json (Sam's hand read; NYSED rating guides carry no MC rationales \u2014 verified across all ten guides 2026-07-09)",
+      "rationale": "Gachradodow explicitly contrasts two legal orders ('You have your Laws and Customs, so have we') inside a treaty council — the act of talking across difference is the answer. (1) inverts the speaker's complaint. (2) imports Pennsylvania's founding myth the text never mentions. (3) is contradicted by 'God did not approve of it.'",
+      "rationale_source": "_catalog_nysed-ushg-0626.json (Sam's hand read; NYSED rating guides carry no MC rationales — verified across all ten guides 2026-07-09)",
       "stimulus_refs": [
         "unit01-0626-mc01-lancaster-1744.png"
       ],
@@ -552,15 +552,15 @@
       "verified_against": "Test Questions by Key Idea chart, ushg-62026-rg.pdf p80",
       "stimulus_refs_missing": [],
       "stimulus_refs_status": "on_disk",
-      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern \u2014 BK authorised application 2026-08-31; not individually ruled.",
+      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern — BK authorised application 2026-08-31; not individually ruled.",
       "subgrain_rules_fired": [
         "3a:doc/conclusion-drawn:high"
       ],
       "subgrain_scope_note": "MC items carry RECOGNITION grains only. Writing grains (1c 1d, 2b-2d, 3c 3d, 4c 4d, 5b-5d, 6b-6d) are SEQ/CLE territory and are deliberately not tagged here.",
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
-        "Gachradodow is speaking at a treaty council \u2014 what is that event itself an example of?",
-        "He directly contrasts 'your laws' and 'our laws' \u2014 that contrast is happening inside a negotiation."
+        "Gachradodow is speaking at a treaty council — what is that event itself an example of?",
+        "He directly contrasts 'your laws' and 'our laws' — that contrast is happening inside a negotiation."
       ]
     },
     {
@@ -582,8 +582,8 @@
       },
       "correct": "2",
       "answer_source": "ushg-62026-sk.pdf",
-      "rationale": "Outcome question, not a comprehension question. (1) and (4) are wish-fulfillment distractors \u2014 they tempt because the document is sympathetic. (3) is factually false (Brant, Oneida). Students who read tone instead of outcome pick (1).",
-      "rationale_source": "_catalog_nysed-ushg-0626.json (Sam's hand read; NYSED rating guides carry no MC rationales \u2014 verified across all ten guides 2026-07-09)",
+      "rationale": "Outcome question, not a comprehension question. (1) and (4) are wish-fulfillment distractors — they tempt because the document is sympathetic. (3) is factually false (Brant, Oneida). Students who read tone instead of outcome pick (1).",
+      "rationale_source": "_catalog_nysed-ushg-0626.json (Sam's hand read; NYSED rating guides carry no MC rationales — verified across all ten guides 2026-07-09)",
       "stimulus_refs": [
         "unit01-0626-mc01-lancaster-1744.png"
       ],
@@ -608,12 +608,12 @@
       "verified_against": "Test Questions by Key Idea chart, ushg-62026-rg.pdf p80",
       "stimulus_refs_missing": [],
       "stimulus_refs_status": "on_disk",
-      "subgrain_source": "HAND READ 2026-08-31 by Sam, on BK's order 'sub grain tagging needs to get to 100 percent'. Every item's stem and four options were read individually; no regex was used. PROPOSED \u2014 not individually ruled by BK.",
+      "subgrain_source": "HAND READ 2026-08-31 by Sam, on BK's order 'sub grain tagging needs to get to 100 percent'. Every item's stem and four options were read individually; no regex was used. PROPOSED — not individually ruled by BK.",
       "subgrain_scope_note": "RECOGNITION FORMS ONLY. A 4-option MC cannot test a writing grain, so no item carries b/c/d grains from Skills 2 (Thesis) or 4 (Explanation) beyond 4a, and none carries 1c, 1d, 3c, 3d, 5b-5d, or 6b-6d. Mapping used: 1a = the item asks what circumstance produced or surrounds the source. 1b = it asks who made it, why, or what a historian would use it for. 3a = it asks for a detail the source itself carries. 4a = it asks what conclusion the source supports. 5a = it requires a fact the source does NOT carry (this covers every no-stimulus item, which is exactly grain 5a in recognition form). 6a = the answer is a named constitutional principle, power, right, or amendment.",
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
-        "This asks for the outcome, not just the concern being raised \u2014 what actually happened next, historically?",
-        "Don't let the sympathetic tone of the passage lead you to a hopeful ending \u2014 check what you know actually followed."
+        "This asks for the outcome, not just the concern being raised — what actually happened next, historically?",
+        "Don't let the sympathetic tone of the passage lead you to a hopeful ending — check what you know actually followed."
       ]
     },
     {
@@ -636,7 +636,7 @@
       "correct": "3",
       "answer_source": "ushg-82024-sk.pdf",
       "rationale": "Correct=(3). The chart shows Native population collapse alongside European growth. (1) inverts one curve. (2) and (4) read events into a population chart.",
-      "rationale_source": "_catalog_nysed-ushg-0824.json (Sam's hand read; NYSED rating guides carry no MC rationales \u2014 verified across all ten guides 2026-07-09)",
+      "rationale_source": "_catalog_nysed-ushg-0824.json (Sam's hand read; NYSED rating guides carry no MC rationales — verified across all ten guides 2026-07-09)",
       "stimulus_refs": [
         "unit01-0824-mc01.png"
       ],
@@ -660,7 +660,7 @@
       "verified_against": "Test Questions by Key Idea chart, ushg-82024-rg1.pdf p52",
       "stimulus_refs_missing": [],
       "stimulus_refs_status": "on_disk",
-      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern \u2014 BK authorised application 2026-08-31; not individually ruled.",
+      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern — BK authorised application 2026-08-31; not individually ruled.",
       "subgrain_rules_fired": [
         "3a:doc/supported-by:high"
       ],
@@ -668,8 +668,8 @@
       "stimulus_refs_note": "Linked 2026-08-31 by the orphan cut. The item referenced a document the catalog never recorded. Crop UNBLESSED and alt-pending.",
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
-        "Compare the two lines on the chart \u2014 one is rising, one is falling. What does that gap show?",
-        "One population collapses while the other grows \u2014 that's not steady growth for both."
+        "Compare the two lines on the chart — one is rising, one is falling. What does that gap show?",
+        "One population collapses while the other grows — that's not steady growth for both."
       ]
     },
     {
@@ -692,7 +692,7 @@
       "correct": "4",
       "answer_source": "ushg-82024-sk.pdf",
       "rationale": "Correct=(4). Old World disease, and the technology that carried it, drove the collapse. (1), (2), (3) affect the settler population, not the Native decline.",
-      "rationale_source": "_catalog_nysed-ushg-0824.json (Sam's hand read; NYSED rating guides carry no MC rationales \u2014 verified across all ten guides 2026-07-09)",
+      "rationale_source": "_catalog_nysed-ushg-0824.json (Sam's hand read; NYSED rating guides carry no MC rationales — verified across all ten guides 2026-07-09)",
       "stimulus_refs": [
         "unit01-0824-mc01.png"
       ],
@@ -717,12 +717,12 @@
       "stimulus_refs_missing": [],
       "stimulus_refs_status": "on_disk",
       "stimulus_refs_note": "Linked 2026-08-31 by the orphan cut. The item referenced a document the catalog never recorded. Crop UNBLESSED and alt-pending.",
-      "subgrain_source": "HAND READ 2026-08-31 by Sam, on BK's order 'sub grain tagging needs to get to 100 percent'. Every item's stem and four options were read individually; no regex was used. PROPOSED \u2014 not individually ruled by BK.",
+      "subgrain_source": "HAND READ 2026-08-31 by Sam, on BK's order 'sub grain tagging needs to get to 100 percent'. Every item's stem and four options were read individually; no regex was used. PROPOSED — not individually ruled by BK.",
       "subgrain_scope_note": "RECOGNITION FORMS ONLY. A 4-option MC cannot test a writing grain, so no item carries b/c/d grains from Skills 2 (Thesis) or 4 (Explanation) beyond 4a, and none carries 1c, 1d, 3c, 3d, 5b-5d, or 6b-6d. Mapping used: 1a = the item asks what circumstance produced or surrounds the source. 1b = it asks who made it, why, or what a historian would use it for. 3a = it asks for a detail the source itself carries. 4a = it asks what conclusion the source supports. 5a = it requires a fact the source does NOT carry (this covers every no-stimulus item, which is exactly grain 5a in recognition form). 6a = the answer is a named constitutional principle, power, right, or amendment.",
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
         "Ask what's specifically causing a population decline, not a population's economy.",
-        "Indentured servants, land disputes, and enslaved labor affected the settler population \u2014 the Native population collapse has a different cause."
+        "Indentured servants, land disputes, and enslaved labor affected the settler population — the Native population collapse has a different cause."
       ]
     },
     {
@@ -744,7 +744,7 @@
       },
       "correct": "1",
       "answer_source": "ushg-82025-sk.pdf",
-      "rationale": null,
+      "rationale": "Raw materials leave the colonies and manufactured goods arrive from Britain. Under mercantilism, Britain kept the manufacturing for itself.",
       "rationale_source": null,
       "stimulus_refs": [
         "unit01-0825-mc01.png"
@@ -768,7 +768,7 @@
       "verified_against": "Test Questions by Key Idea chart, ushg-82025-rg.pdf p79",
       "stimulus_refs_missing": [],
       "stimulus_refs_status": "on_disk",
-      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern \u2014 BK authorised application 2026-08-31; not individually ruled.",
+      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern — BK authorised application 2026-08-31; not individually ruled.",
       "subgrain_rules_fired": [
         "3a:doc/supported-by:high"
       ],
@@ -776,7 +776,7 @@
       "stimulus_refs_note": "Linked 2026-08-31 by the orphan cut. The item referenced a document the catalog never recorded. Crop UNBLESSED and alt-pending.",
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
-        "Look at what the map is actually charting \u2014 trade routes and what goods move where.",
+        "Look at what the map is actually charting — trade routes and what goods move where.",
         "If the colonies are shown exporting raw goods and importing finished ones, what does that say about making things themselves?"
       ]
     },
@@ -792,14 +792,14 @@
       "type": "MC",
       "stem": "Which claim is best supported by the information on this map?",
       "options": {
-        "1": "The colonies played an important role in Great Britain\u2019s economy.",
+        "1": "The colonies played an important role in Great Britain’s economy.",
         "2": "The West Indies provided manufactured goods to the thirteen colonies.",
         "3": "Government in the thirteen colonies emphasized fair trade with other nations.",
         "4": "Great Britain promoted colonial economic independence."
       },
       "correct": "1",
       "answer_source": "ushg-82025-sk.pdf",
-      "rationale": null,
+      "rationale": "Lumber, furs, fish, tobacco and rice go to Britain, and the colonies buy its manufactured goods. The colonies fed Britain's economy coming and going.",
       "rationale_source": null,
       "stimulus_refs": [
         "unit01-0825-mc01.png"
@@ -823,7 +823,7 @@
       "verified_against": "Test Questions by Key Idea chart, ushg-82025-rg.pdf p79",
       "stimulus_refs_missing": [],
       "stimulus_refs_status": "on_disk",
-      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern \u2014 BK authorised application 2026-08-31; not individually ruled.",
+      "subgrain_source": "skills/subgrain-tag/tag.py 2026-08-31, restricted set. PROPOSED from stem pattern — BK authorised application 2026-08-31; not individually ruled.",
       "subgrain_rules_fired": [
         "3a:doc/supported-by:high"
       ],
@@ -843,7 +843,7 @@
       "cross_topical": false,
       "second_unit": null,
       "type": "MC",
-      "answer_source": "DERIVED \u2014 Sam 2026-09-01. Not a NYSED scoring key; no key exists for this item on this desk. NEEDS-BK.",
+      "answer_source": "DERIVED — Sam 2026-09-01. Not a NYSED scoring key; no key exists for this item on this desk. NEEDS-BK.",
       "answer_verified": false,
       "rationale_source": "Sam hand read 2026-09-01",
       "subgrain_matrix_version": "v2.1-LOCKED",
@@ -879,8 +879,8 @@
       "rationale": "Correct=(3). The passage names plague then smallpox, three populous Massachusetts kingdoms cut from 30,000 to 300, and the Pequots destroyed by the English. (2) inverts it. (1) is nowhere in the account. (4) is contradicted by the same sentence that names the destruction.",
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
-        "A 'turning point' needs a big, lasting shift \u2014 what changed permanently for the people described?",
-        "Look at the population numbers Josselyn gives \u2014 from 30,000 down to 300."
+        "A 'turning point' needs a big, lasting shift — what changed permanently for the people described?",
+        "Look at the population numbers Josselyn gives — from 30,000 down to 300."
       ]
     },
     {
@@ -891,7 +891,7 @@
       "cross_topical": false,
       "second_unit": null,
       "type": "MC",
-      "answer_source": "DERIVED \u2014 Sam 2026-09-01. Not a NYSED scoring key; no key exists for this item on this desk. NEEDS-BK.",
+      "answer_source": "DERIVED — Sam 2026-09-01. Not a NYSED scoring key; no key exists for this item on this desk. NEEDS-BK.",
       "answer_verified": false,
       "rationale_source": "Sam hand read 2026-09-01",
       "subgrain_matrix_version": "v2.1-LOCKED",
@@ -924,11 +924,11 @@
         "unit01-josselyn-1674-doc1.png"
       ],
       "citation": "Source: John Josselyn, An Account of Two Voyages to New-England, Made during the Years 1638, 1663",
-      "rationale": "Correct=(2). The mortality struck 'not long before the English came' and again by smallpox when they did \u2014 no previous exposure. (3) asserts deliberate poisoning the account never states, and is the distractor that punishes reading intent into a source. (1) is not addressed. (4) is a value judgment, not a claim the source supports.",
+      "rationale": "Correct=(2). The mortality struck 'not long before the English came' and again by smallpox when they did — no previous exposure. (3) asserts deliberate poisoning the account never states, and is the distractor that punishes reading intent into a source. (1) is not addressed. (4) is a value judgment, not a claim the source supports.",
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
-        "What does the account say happened right around when the English arrived \u2014 and again later?",
-        "'Not long before the English came' and then smallpox afterward \u2014 that's exposure, not intent."
+        "What does the account say happened right around when the English arrived — and again later?",
+        "'Not long before the English came' and then smallpox afterward — that's exposure, not intent."
       ]
     },
     {
@@ -939,7 +939,7 @@
       "cross_topical": false,
       "second_unit": null,
       "type": "MC",
-      "answer_source": "DERIVED \u2014 Sam 2026-09-01. Not a NYSED scoring key; no key exists for this item on this desk. NEEDS-BK.",
+      "answer_source": "DERIVED — Sam 2026-09-01. Not a NYSED scoring key; no key exists for this item on this desk. NEEDS-BK.",
       "answer_verified": false,
       "rationale_source": "Sam hand read 2026-09-01",
       "subgrain_matrix_version": "v2.1-LOCKED",
@@ -976,11 +976,11 @@
         "Source: View of Boston Harbor, hand-colored etching by Francois Xavier Habermann, 1770-1780",
         "Source: Life of George Washington (1732-1799), The farmer, by Junius Brutus Stearn, 1853"
       ],
-      "rationale": "Correct=(4). A northern port set beside a southern plantation \u2014 economies varied by region and geography. (1) is refuted by the pair itself. (2) cotton is wrong for both scenes and for New England. (3) only one image shows shipping.",
+      "rationale": "Correct=(4). A northern port set beside a southern plantation — economies varied by region and geography. (1) is refuted by the pair itself. (2) cotton is wrong for both scenes and for New England. (3) only one image shows shipping.",
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
-        "Look at what each image actually shows happening \u2014 are they the same kind of place?",
-        "A northern port town and a southern plantation aren't the same economy \u2014 geography shapes what each region does."
+        "Look at what each image actually shows happening — are they the same kind of place?",
+        "A northern port town and a southern plantation aren't the same economy — geography shapes what each region does."
       ]
     },
     {
@@ -991,7 +991,7 @@
       "cross_topical": false,
       "second_unit": null,
       "type": "MC",
-      "answer_source": "DERIVED \u2014 Sam 2026-09-01. Not a NYSED scoring key; no key exists for this item on this desk. NEEDS-BK.",
+      "answer_source": "DERIVED — Sam 2026-09-01. Not a NYSED scoring key; no key exists for this item on this desk. NEEDS-BK.",
       "answer_verified": false,
       "rationale_source": "Sam hand read 2026-09-01",
       "subgrain_matrix_version": "v2.1-LOCKED",
@@ -1029,7 +1029,7 @@
         "Source: Life of George Washington (1732-1799), The farmer, by Junius Brutus Stearn, 1853"
       ],
       "layout_dependency": "The stem says 'the image on the left'. This item breaks if the pair is split or reordered. The crop must stay one file.",
-      "rationale": "Correct=(3). Deep sheltered water is why the settlement grew where it did \u2014 geography precedes the port. (1) reverses the timber trade; New England exported it. (2) is not how harbors form. (4) never happened.",
+      "rationale": "Correct=(3). Deep sheltered water is why the settlement grew where it did — geography precedes the port. (1) reverses the timber trade; New England exported it. (2) is not how harbors form. (4) never happened.",
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
         "Think about why a city grows where it grows, before people, before ships.",
@@ -1044,7 +1044,7 @@
       "cross_topical": false,
       "second_unit": null,
       "type": "MC",
-      "answer_source": "DERIVED \u2014 Sam 2026-09-01. Not a NYSED scoring key; no key exists for this item on this desk. NEEDS-BK.",
+      "answer_source": "DERIVED — Sam 2026-09-01. Not a NYSED scoring key; no key exists for this item on this desk. NEEDS-BK.",
       "answer_verified": false,
       "rationale_source": "Sam hand read 2026-09-01",
       "subgrain_matrix_version": "v2.1-LOCKED",
@@ -1079,12 +1079,12 @@
       ],
       "citation": [
         "Source: Magna Carta, England, 1215",
-        "Source: Emily Arendt et al., \u201cColonial Society\u201d in The American Yawp, Stanford University Press, 2018"
+        "Source: Emily Arendt et al., “Colonial Society” in The American Yawp, Stanford University Press, 2018"
       ],
-      "rationale": "Correct=(3). Doc 1 supplies the English legal tradition \u2014 consent to taxation through a representative great council; Doc 2 supplies the colonial experience \u2014 wider white male suffrage and more local power. The word 'both' is doing the work. (1) is refuted by Doc 1's presence in the pair. (2) Doc 2 says colonial government had MORE popular involvement. (4) 'all adults' overreaches: Doc 2 says white male suffrage.",
+      "rationale": "Correct=(3). Doc 1 supplies the English legal tradition — consent to taxation through a representative great council; Doc 2 supplies the colonial experience — wider white male suffrage and more local power. The word 'both' is doing the work. (1) is refuted by Doc 1's presence in the pair. (2) Doc 2 says colonial government had MORE popular involvement. (4) 'all adults' overreaches: Doc 2 says white male suffrage.",
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
-        "The word 'both' matters here \u2014 what does each document contribute separately?",
+        "The word 'both' matters here — what does each document contribute separately?",
         "One document gives you English legal tradition; the other gives you what changed once colonists were on their own."
       ]
     },
@@ -1096,7 +1096,7 @@
       "cross_topical": false,
       "second_unit": null,
       "type": "MC",
-      "answer_source": "DERIVED \u2014 Sam 2026-09-01. Not a NYSED scoring key; no key exists for this item on this desk. NEEDS-BK.",
+      "answer_source": "DERIVED — Sam 2026-09-01. Not a NYSED scoring key; no key exists for this item on this desk. NEEDS-BK.",
       "answer_verified": false,
       "rationale_source": "Sam hand read 2026-09-01",
       "subgrain_matrix_version": "v2.1-LOCKED",
@@ -1131,16 +1131,19 @@
       ],
       "citation": [
         "Source: Magna Carta, England, 1215",
-        "Source: Emily Arendt et al., \u201cColonial Society\u201d in The American Yawp, Stanford University Press, 2018"
+        "Source: Emily Arendt et al., “Colonial Society” in The American Yawp, Stanford University Press, 2018"
       ],
-      "rationale": "Correct=(1). Doc 2: colonial assemblies 'regulated businesses, imposed new taxes, cared for the poor, built roads and bridges, and made most decisions concerning education' \u2014 'more power in a variety of areas'. That phrase is the answer nearly verbatim. (3) is the strong trap and the reason this item is worth BK's eye: both documents locate the taxing power in a representative body, so taxation is a SIMILARITY, not the difference. (2) and (4) are not discussed in either document.",
+      "rationale": "Correct=(1). Doc 2: colonial assemblies 'regulated businesses, imposed new taxes, cared for the poor, built roads and bridges, and made most decisions concerning education' — 'more power in a variety of areas'. That phrase is the answer nearly verbatim. (3) is the strong trap and the reason this item is worth BK's eye: both documents locate the taxing power in a representative body, so taxation is a SIMILARITY, not the difference. (2) and (4) are not discussed in either document.",
       "needs_bk": "Distractor (3) is a defensible reading if BK intended taxation as the difference. As written, the textual echo points at (1).",
       "course_unit_source": "_crosswalk_PROPOSED.json NYSED 11.1 -> course 11.1, confirmed_by_bk 2026-09-14.",
       "hints": [
-        "Careful \u2014 both documents actually agree on who could raise taxes, so that's not the difference.",
-        "Look at what colonial assemblies are doing beyond taxes \u2014 roads, schools, businesses. Compare that range to England's."
+        "Careful — both documents actually agree on who could raise taxes, so that's not the difference.",
+        "Look at what colonial assemblies are doing beyond taxes — roads, schools, businesses. Compare that range to England's."
       ]
     }
   ],
-  "_hint_model": "2 escalating hints per item, available during the regular season only. Playoffs run cold (no hints), per BK's ruling 2026-09-22."
+  "_hint_model": "2 escalating hints per item, available during the regular season only. Playoffs run cold (no hints), per BK's ruling 2026-09-22.",
+  "_filled": [
+    "2026-09-27: reason lines on 0126-mc01, 0126-mc02, 0825-mc01, 0825-mc02 from Sam's fills file."
+  ]
 }

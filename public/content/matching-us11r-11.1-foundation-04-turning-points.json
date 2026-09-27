@@ -4,27 +4,87 @@
   "_activity": "Turning Points — Foundation Tier",
   "_built": "2026-09-21 by Sam (us11r-curriculum)",
   "_licence": "ORIGINAL connective wording, built around Casefile B's own document spine (Doc 13's Bacon's Rebellion hinge, Doc 16's Join or Die). No third-party text.",
-  "station": { "id": 4, "num": "IV", "name": "Turning Points", "tier": "Foundation" },
-  "skill_tags": [4],
-  "skill_tag_labels": ["Explanation"],
+  "station": {
+    "id": 4,
+    "num": "IV",
+    "name": "Turning Points",
+    "tier": "Foundation"
+  },
+  "skill_tags": [
+    4
+  ],
+  "skill_tag_labels": [
+    "Explanation"
+  ],
   "intro": "Match each 'before' condition to what came after it.",
   "left": [
-    { "key": "a", "label": "Before 1676: servitude law treated cases individually, no fixed racial rule (1640-1669)" },
-    { "key": "b", "label": "Before 1676: poor white servants and enslaved Africans lived and labored under similar hard conditions" },
-    { "key": "c", "label": "Before 1676: no single event had shown elites what a servant-and-enslaved alliance could do" },
-    { "key": "d", "label": "Before 1754: the thirteen colonies acted separately, with no shared political structure" }
+    {
+      "key": "a",
+      "label": "Before 1676: the racial line is drawn case by case and law by law (1640–1669)",
+      "hints": [
+        "Before, the line was being drawn one case and one law at a time. What does “after” look like?",
+        "Look for the answer where the law splits servitude sharply by race."
+      ]
+    },
+    {
+      "key": "b",
+      "label": "Before 1676: poor white servants and enslaved Africans lived and labored under similar hard conditions",
+      "hints": [
+        "If two groups lived alike before, what did elites do after?",
+        "Look for “separate the two groups.”"
+      ]
+    },
+    {
+      "key": "c",
+      "label": "Before 1676: no single event had shown elites what a servant-and-enslaved alliance could do",
+      "hints": [
+        "Which event finally showed elites what they feared?",
+        "Look for the answer that names Bacon's Rebellion."
+      ]
+    },
+    {
+      "key": "d",
+      "label": "Before 1754: the thirteen colonies acted separately, with no shared political structure",
+      "hints": [
+        "What did Franklin's snake cartoon ask the colonies to do?",
+        "Look for Join or Die."
+      ]
+    }
   ],
   "right": [
-    { "key": "1", "label": "After: colonial assemblies write law that splits servitude sharply along racial lines" },
-    { "key": "2", "label": "After: elites move to separate the two groups legally and socially, using race" },
-    { "key": "3", "label": "After: Bacon's Rebellion becomes the proof elites point to from here forward" },
-    { "key": "4", "label": "After: Franklin's Join or Die cartoon (Document 16) becomes the first prominent call to unite against a shared threat" }
+    {
+      "key": "1",
+      "label": "After: colonial assemblies write law that splits servitude sharply along racial lines"
+    },
+    {
+      "key": "2",
+      "label": "After: elites move to separate the two groups legally and socially, using race"
+    },
+    {
+      "key": "3",
+      "label": "After: Bacon's Rebellion becomes the proof elites point to from here forward"
+    },
+    {
+      "key": "4",
+      "label": "After: Franklin's Join or Die cartoon (Document 16) becomes the first prominent call to unite against a shared threat"
+    }
   ],
-  "correct": { "a": "1", "b": "2", "c": "3", "d": "4" },
+  "correct": {
+    "a": "1",
+    "b": "2",
+    "c": "3",
+    "d": "4"
+  },
   "rationale": {
-    "a": "The pre-1676 pattern (Document 13) treats offenses case by case; after Bacon's Rebellion, the law itself splits along racial lines.",
+    "a": "Document 13 shows the line forming before 1676: the Punch ruling (1640), the law on children of enslaved mothers (1662). After Bacon's Rebellion, assemblies lock it in, ending in the 1705 code.",
     "b": "Similar conditions before 1676 give way, after, to a deliberate legal and social separation of poor whites from enslaved people.",
     "c": "Bacon's Rebellion is the single event elites point back to when justifying the harder line that follows.",
     "d": "Before 1754 the colonies had no shared political structure; Join or Die (Document 16) is the first prominent argument for uniting them."
-  }
+  },
+  "_filled": [
+    "2026-09-27: two hints per pair from Sam's reviewbowl-us11r-fills-2026-09-27.json (BK's yes pending at port)"
+  ],
+  "_corrected": [
+    "2026-09-27: Sam's corrections (a) from reviewbowl-us11r-fills-2026-09-27.json: The old cue said “no fixed racial rule” before 1676. The 1662 law and Maryland's 1664 law say otherwise."
+  ]
 }

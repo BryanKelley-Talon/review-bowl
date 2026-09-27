@@ -24,7 +24,7 @@
     "penalties_per_half": 1,
     "penalty_yards": 10,
     "two_point_questions": 2,
-    "_size_note": "BK, 2026-09-27: in-game questions stay short; document questions go where the game already stops (training, facilities, free agency), the bigger rewards. A question is LONG if it has an image, a cited source, or a cue longer than short_cue_words; or if cue + prompt + options run past short_max_words. In-game gates ask SHORT only (src/content/dealer.js).",
+    "_size_note": "BK, 2026-09-27: in-game questions stay short; document questions go where the game already stops (training, facilities, free agency), the bigger rewards. A question is LONG if it has an image or a cue longer than short_cue_words (a source line alone doesn't make it long); or if cue + prompt + options run past short_max_words. In-game gates ask SHORT only (src/content/dealer.js).",
     "short_cue_words": 45,
     "short_max_words": 90,
     "_require_note": "The Arena's rule (CONVENTIONS §7): two hints and a reason line on every question. true = a question short of that is held back and listed in the content report; it comes back the day its author's words land (BK chose this, 2026-09-27, 'A'). false = everything plays.",
@@ -121,6 +121,13 @@
           "unit": "10.2",
           "enabled": true,
           "from": "Will, 2026-09-21 — written for Nation Builder scenario questions, reused here (7 Enlightenment terms + 5 skill moves, hinted)"
+        },
+        {
+          "file": "content/short-gs10r-enduring-issues-set1.json",
+          "lane": "skills",
+          "unit": "10.1–10.2",
+          "enabled": true,
+          "from": "Will, 2026-09-27: 20 short Enduring Issue items (10.1, 10.2 Casefile A)"
         }
       ],
       "camp": [
@@ -220,6 +227,13 @@
           "unit": "11.1",
           "enabled": true,
           "from": "Sam — Arena Foundation-tier matching pack (no hints written)"
+        },
+        {
+          "file": "content/short-us11r-civic-cle-set1.json",
+          "lane": "skills",
+          "unit": "11.1–11.2",
+          "enabled": true,
+          "from": "Sam, 2026-09-27: 21 short CLE and civic-principle items, 11 of them 11.2 (BK 10:13: \"infuse 10.2 and 11.2\")"
         }
       ],
       "camp": [

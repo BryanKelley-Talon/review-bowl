@@ -7,12 +7,12 @@
   "label": "Casefile A · Checkpoint Practice",
   "content_shape": "multiple_choice",
   "_shape_note": "This is a different content shape than the existing GS10R short-response stations (historical-context, document-use, enduring-issues) — those are type-an-answer reps; this is 4-option multiple choice, one correct answer, self-check with immediate feedback. Reshape the field names below to match whatever schema Sam used for the US11R 11.1 Part 1 practice room — the content is final, the JSON shape is not.",
-  "framing": "Practice, not a grade on accuracy. Answer all ten, then check your work. Full documents and short-answer practice on these same ten sources are also in the Casefile A packet in class.",
+  "framing": "Practice, not a grade. Pick an answer and you'll see right away if it's right. The full documents are in your 10.2 Casefile A.",
   "items": [
     {
       "id": "cp-1",
       "document": "Document 1 — John Locke, 1690",
-      "source": "John Locke, Two Treatises of Government, 1690",
+      "source": "John Locke, Two Treatises of Government, 1690 (adapted)",
       "stimulus": "“If man in the state of nature is free, if he is absolute lord of his own person and possessions, why will he give up his freedom? Why will he put himself under the control of any person or institution? The obvious answer is that rights in the state of nature are constantly exposed to the attack of others. Since every man is equal and since most men do not concern themselves with equity and justice, the enjoyment of rights in the state of nature is unsafe and insecure. Hence each man joins in society with others to preserve his life, liberty, and property.”",
       "prompt": "According to Locke, what problem do people face in the state of nature?",
       "options": [
@@ -25,12 +25,13 @@
       "hints": [
         "Locke says rights exist in the state of nature — he's not questioning whether people HAVE rights. Reread for what he says can go wrong with them.",
         "Look at the words right before “insecure” in the passage — Locke names the problem directly in that sentence."
-      ]
+      ],
+      "rationale": "Locke says rights in the state of nature are constantly exposed to attack, so enjoying them is unsafe and insecure. People join a society to protect their life, liberty and property."
     },
     {
       "id": "cp-2",
       "document": "Document 2 — John Locke, on a legislature that overreaches",
-      "source": "John Locke, Two Treatises on Civil Government",
+      "source": "John Locke, Two Treatises of Government, 1690 (adapted)",
       "stimulus": "“[When] the legislature shall . . . grasp [for] themselves, or put into the hands of any other, an absolute power over their lives, liberties, and estates of the people, . . . they forfeit the power the people had put into their hands for quite contrary ends, and it [passes] to the people, who have a right to resume their original liberty. . . .”",
       "prompt": "According to this passage, what happens when a legislature seizes absolute power over the people?",
       "options": [
@@ -43,12 +44,13 @@
       "hints": [
         "Locke is describing what happens AFTER a legislature breaks its side of the deal — not what happens to the legislature itself.",
         "The phrase “resume their original liberty” tells you who ends up holding the power."
-      ]
+      ],
+      "rationale": "Locke says a legislature that grabs absolute power forfeits it. The power passes to the people, who have a right to resume their original liberty."
     },
     {
       "id": "cp-3",
       "document": "Document 3 — Baron de Montesquieu, on the power of judging",
-      "source": "Montesquieu, The Spirit of the Laws",
+      "source": "Baron de Montesquieu, The Spirit of the Laws, 1748 (adapted)",
       "stimulus": "“. . . Nor is there liberty if the power of judging is not separate from legislative power and from executive power. If it were joined to legislative power, the power over the life and liberty of the citizens would be arbitrary, for the judge would be the legislator. If it were joined to executive power, the judge could have the force of an oppressor. . . .”",
       "prompt": "This passage was written in which region, and during which movement?",
       "options": [
@@ -59,14 +61,15 @@
       ],
       "correct_index": 3,
       "hints": [
-        "This is a “where and when” question, not a “what does it say” question — three of the four options aren't even real places/movements from this unit.",
+        "This is a where-and-when question, not a what-does-it-say question. Montesquieu was French.",
         "Montesquieu is one of the Enlightenment philosophers you've been building a list of all week — check that list."
-      ]
+      ],
+      "rationale": "Montesquieu was a French writer of the Enlightenment, the European movement that questioned absolute rule. His argument for separating government powers is one of its best-known ideas."
     },
     {
       "id": "cp-4",
       "document": "Document 4 — Baron de Montesquieu, on powers united",
-      "source": "Baron de Montesquieu, Spirit of the Laws",
+      "source": "Baron de Montesquieu, The Spirit of the Laws, 1748 (adapted)",
       "stimulus": "“When the legislative and executive powers are united in the same person, or in the same body of magistrates [government officials], there can be no liberty; because apprehensions [fears] may arise, lest the same monarch or senate should enact tyrannical laws to execute them in a tyrannical manner. . . .”",
       "prompt": "What problem does Montesquieu identify in this passage?",
       "options": [
@@ -79,7 +82,8 @@
       "hints": [
         "The word “tyrannical” appears twice in this passage — that's the clue to the problem Montesquieu is naming.",
         "He's describing what happens when legislative and executive power sit in the same hands — not a shortage of resources or a religious conflict."
-      ]
+      ],
+      "rationale": "Montesquieu says that when the power to make laws and the power to enforce them sit with the same person or group, there can be no liberty. They could pass tyrannical laws and enforce them tyrannically."
     },
     {
       "id": "cp-5",
@@ -97,7 +101,8 @@
       "hints": [
         "Find the phrase “common interest” in the passage — that's doing the work in this question.",
         "The “will of all” is described as private interests added up. The general will is described differently — contrast the two clauses."
-      ]
+      ],
+      "rationale": "Rousseau says the will of all is just private interests added up. The general will looks only at the common interest: what is good for everyone together."
     },
     {
       "id": "cp-6",
@@ -115,7 +120,8 @@
       "hints": [
         "Look for the word “prove” in the passage — Wollstonecraft is issuing a challenge, not making a request.",
         "She's not asking for education to happen first — she's daring her opponents to prove a claim before excluding women."
-      ]
+      ],
+      "rationale": "Wollstonecraft dares anyone who would shut women out to prove first that women lack reason. Without that proof, she says, excluding them is acting like a tyrant."
     },
     {
       "id": "cp-7",
@@ -133,7 +139,8 @@
       "hints": [
         "Talleyrand-Périgord is named in the source line as the person this letter is addressed TO — what country was he part of?",
         "Wollstonecraft herself was British — she's writing TO a French official, not writing as one."
-      ]
+      ],
+      "rationale": "Wollstonecraft was a British writer. The source line shows she addressed her book to Talleyrand-Périgord, a member of the French National Assembly."
     },
     {
       "id": "cp-8",
@@ -151,7 +158,8 @@
       "hints": [
         "The passage is about exclusion from reason and rights based on sex — think about which umbrella issue covers unequal treatment and authority.",
         "This isn't about wealth, technology, or global connections — it's about who holds power over whom, and how."
-      ]
+      ],
+      "rationale": "Wollstonecraft argues that shutting women out of rights is how men act like tyrants. Who holds power over whom, and whether it's used unfairly, is Power and Its Abuse."
     },
     {
       "id": "cp-9",
@@ -169,7 +177,8 @@
       "hints": [
         "The second sentence of the passage defines equality directly — find the word “Equality” in the text.",
         "She's not talking about land or representation — reread the clause right after “consists in this.”"
-      ]
+      ],
+      "rationale": "Catherine defines it in the passage: the equality of citizens consists in all of them being subject to the same laws."
     },
     {
       "id": "cp-10",
@@ -187,9 +196,11 @@
       "hints": [
         "Catherine the Great is one of the “enlightened” monarchs — you've grouped her with rulers who read the Enlightenment philosophers.",
         "Her country's name gives you half the answer; the movement takes more thought — check your enlightened despots list for the other half."
-      ]
+      ],
+      "rationale": "Catherine the Great ruled Russia in the 1700s. She read the Enlightenment philosophers and borrowed their ideas for Russia's laws, which is why she's called an enlightened monarch."
     }
   ],
-  "_licence": "All ten items are BK-original questions written over public-domain primary source excerpts (Locke, Montesquieu, Rousseau, Wollstonecraft, Catherine the Great correspondence) — no New Visions or third-party question content. Sellable per house rule; nothing here needs a teach-only flag.",
-  "_hint_model": "2 escalating hints per item, available during the regular season only. Playoffs run cold (no hints), per BK's ruling 2026-09-22."
+  "_licence": "Questions written by Will (global10r-curriculum). Stimuli for items cp-1 to cp-4 and cp-9 to cp-10 are NYSED-released Regents passages routed through the New Visions Global II Part 1 bank: TEACH-ONLY, not sellable. Items cp-5 to cp-8 are public-domain texts (Rousseau, Cole translation 1913; Wollstonecraft 1792). Free Arena and Bowl use is non-commercial (BK, 2026-09-22).",
+  "_hint_model": "2 escalating hints per item, available during the regular season only. Playoffs run cold (no hints), per BK's ruling 2026-09-22.",
+  "_filled": "2026-09-27 10:53 EDT by Will (global10r-curriculum), on BK's 10:47 order: 'take care of what josh needs please and send to him'. Added rationale to all 10 items. Also: cp-1 to cp-4 source lines now carry (adapted) and one title per author (same strings as the Arena room, 9/26); cp-3 hint 1 replaced (the old one said the Mughal and Tokugawa choices weren't from this course, and they are); framing matches the Arena room's intro and drops 'packet'; _licence corrected (it said sellable, and items 1-4 and 9-10 are teach-only)."
 }

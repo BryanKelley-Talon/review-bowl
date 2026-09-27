@@ -19,7 +19,8 @@
       "hints": [
         "Think about what English barons wanted from their king.",
         "It's about a limit on the king's power to tax without someone else's agreement."
-      ]
+      ],
+      "rationale": "Barons forced King John to accept limits, including no taxes without the realm's consent. Colonists pointed back to it 550 years later."
     },
     {
       "id": "ctx-02",
@@ -34,22 +35,27 @@
       "hints": [
         "Think about who the rebellion actually united, briefly, against the colony's elite.",
         "It's not about ending slavery or an election — it's about what elites feared afterward, and how the law responded."
-      ]
+      ],
+      "rationale": "Bacon's Rebellion put poor whites and enslaved people on the same side against Virginia's elite. After it, colonial law split servitude sharply by race."
     },
     {
       "id": "ctx-03",
       "stem": "Which statement best places John Josselyn's 1674 account in time and cause?",
       "options": {
-        "1": "Written after King Philip's War, describing Native population decline from disease and colonial conflict",
+        "1": "Written after decades of contact, describing Native population decline from disease and war",
         "2": "Written before any English settlement reached New England",
         "3": "Describing a Native population that was growing due to peaceful relations",
         "4": "Written by a Native leader protesting land loss"
       },
       "correct": "1",
       "hints": [
-        "Think about the timing — what major conflict had just happened when Josselyn wrote?",
+        "Josselyn visited in 1638 and 1663. What had decades of contact already done to Native towns?",
         "It's not before English settlement, and it's not a story of growth or peace."
-      ]
+      ],
+      "rationale": "Josselyn traveled in 1638 and 1663 and published in 1674, after decades of epidemics and the Pequot War. King Philip's War came the next year."
     }
+  ],
+  "_corrected": [
+    "2026-09-27: reason lines on ctx-01..03 and Sam's ctx-03 correction (King Philip's War began 1675, after the 1674 account)."
   ]
 }

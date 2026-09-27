@@ -78,6 +78,9 @@ function fromWillMc(pack, meta, it) {
     options,
     correct: KEYS[it.correct_index],
     hints: hintsOf(it),
+    // Will caught this 2026-09-27: his shape carries `rationale`; without it every Will MC item
+    // failed the two-hints-and-a-reason rule however complete the file was.
+    rationale: it.rationale || it.reason || null,
     licence: it.licence || null,
   })
 }
@@ -116,8 +119,10 @@ function fromContext(pack, meta, it) {
     prompt: it.stem,
     options,
     correct: String(it.correct),
+    // A one-line quote in a short item carries its source line (Sam, cp-07).
+    stimulus: it.citation ? { text: null, title: null, citation: it.citation, images: [] } : null,
     hints: hintsOf(it),
-    rationale: it.rationale || null,
+    rationale: it.rationale || it.reason || null,
   })
 }
 
@@ -240,7 +245,7 @@ export function readPack(pack, meta, crops) {
 // The whole door's pool.
 // SHORT or LONG (BK, 2026-09-27: "keep the in game questions short… longer questions/docs going
 // with off season, between games, bigger reward items"). A question is LONG when it carries a
-// real document: an image, a cited source, or a passage longer than short_cue_words. A definition
+// real document: an image, or a passage longer than short_cue_words. A definition
 // or a one-line cue is not a document. It is also LONG when everything a student has to read
 // (cue, prompt and options) runs past short_max_words. Everything else is SHORT, and only SHORT
 // questions are asked in-game (dealer.js).
@@ -248,7 +253,8 @@ const wordsIn = s => (typeof s === 'string' ? s.trim().split(/\s+/).filter(Boole
 export function sizeOf(q, rules = {}) {
   const st = q.stimulus || {}
   const cue = wordsIn(st.text)
-  const isDoc = !!((st.images && st.images.length) || st.citation || cue > (rules.short_cue_words ?? 45))
+  // A citation alone is a source line under a one-line quote, not a document to read.
+  const isDoc = !!((st.images && st.images.length) || cue > (rules.short_cue_words ?? 45))
   if (isDoc) return 'long'
   const words = cue + wordsIn(q.prompt) + (q.options || []).reduce((n, o) => n + wordsIn(o.text), 0)
   return words > (rules.short_max_words ?? 90) ? 'long' : 'short'

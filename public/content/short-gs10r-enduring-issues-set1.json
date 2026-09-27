@@ -1,0 +1,334 @@
+{
+  "_README": "Short in-game questions for Review Bowl, Global 10R. Enduring Issues, set 1: 20 items. No document; each answerable in about 20 seconds. Built on 10.1 and 10.2 Casefile A (taught by 9/29) plus the Six Umbrellas and the Regents definition. French Revolution items come with the Casefile B Arena pack.",
+  "_built": "2026-09-27 10:53 EDT by Will (global10r-curriculum), on BK's 10:47 order: 'take care of what josh needs please and send to him'",
+  "_course": "Global History and Geography 10R",
+  "course": "global10r",
+  "unit": "10.1-10.2",
+  "station_id": "gs10r-short-enduring-issues-1",
+  "label": "Enduring Issues · Quick Questions",
+  "content_shape": "multiple_choice",
+  "_shape_note": "Will's MC shape (options list, correct_index), with rationale per item and no stimulus.",
+  "_licence": "ORIGINAL. Written by Will (global10r-curriculum). No third-party text. The enduring-issue definition paraphrases the June 2026 Regents definition box.",
+  "items": [
+    {
+      "id": "ei-01",
+      "prompt": "What is an enduring issue?",
+      "options": [
+        "A single event that happened once and ended",
+        "A challenge or problem that has been debated or discussed across time",
+        "A famous person from history",
+        "A law passed by one government"
+      ],
+      "correct_index": 1,
+      "hints": [
+        "\"Enduring\" means lasting.",
+        "The Regents definition ends with the words \"across time.\""
+      ],
+      "rationale": "The Regents defines an enduring issue as a challenge or problem that has been debated or discussed across time. An event, a person or a law can be an example, but not the issue itself."
+    },
+    {
+      "id": "ei-02",
+      "prompt": "Which of these is an enduring issue?",
+      "options": [
+        "The year 1789",
+        "Louis XIV",
+        "Power and its abuse",
+        "The palace of Versailles"
+      ],
+      "correct_index": 2,
+      "hints": [
+        "An issue is a problem, not a date, a person or a place.",
+        "Which choice could people argue about in 1690 and still argue about today?"
+      ],
+      "rationale": "Power and its abuse is a problem people have argued about across time. A date, a king and a palace are examples you might use as evidence, not issues."
+    },
+    {
+      "id": "ei-03",
+      "prompt": "What makes an issue enduring?",
+      "options": [
+        "It happened in only one country",
+        "It has already been solved",
+        "People have kept arguing about it across time",
+        "It shows up in only one document"
+      ],
+      "correct_index": 2,
+      "hints": [
+        "\"Enduring\" means it lasts.",
+        "Think then and now."
+      ],
+      "rationale": "An issue is enduring because people keep debating it across time and place. If it were solved, or only happened once, it wouldn't be enduring."
+    },
+    {
+      "id": "ei-04",
+      "prompt": "Which umbrella covers who gets land, money and goods, and who goes without?",
+      "options": [
+        "Conflict",
+        "Wealth and Resources",
+        "Identity and Nationalism",
+        "A Connected World"
+      ],
+      "correct_index": 1,
+      "hints": [
+        "Think about money and the things people need.",
+        "Land, money and goods are all resources."
+      ],
+      "rationale": "Wealth and Resources is about who has land, money and goods, and who doesn't."
+    },
+    {
+      "id": "ei-05",
+      "prompt": "Which umbrella covers wars, revolutions and violence between groups?",
+      "options": [
+        "Technology and Environment",
+        "Wealth and Resources",
+        "Conflict",
+        "A Connected World"
+      ],
+      "correct_index": 2,
+      "hints": [
+        "Think about fighting.",
+        "When groups fight, they're in..."
+      ],
+      "rationale": "Conflict covers wars, revolutions and violence between groups or nations."
+    },
+    {
+      "id": "ei-06",
+      "prompt": "Which umbrella covers how people see themselves: their religion, language, culture or nation?",
+      "options": [
+        "Identity and Nationalism",
+        "Technology and Environment",
+        "Wealth and Resources",
+        "A Connected World"
+      ],
+      "correct_index": 0,
+      "hints": [
+        "Think about who people are, not what they own.",
+        "A nation is one part of who people are."
+      ],
+      "rationale": "Identity and Nationalism is about who people are and who they belong to: religion, language, culture and nation."
+    },
+    {
+      "id": "ei-07",
+      "prompt": "Which umbrella covers new inventions, and how people change the land around them or are changed by it?",
+      "options": [
+        "Conflict",
+        "Identity and Nationalism",
+        "Technology and Environment",
+        "Power and Its Abuse"
+      ],
+      "correct_index": 2,
+      "hints": [
+        "Inventions and land are the two clues.",
+        "One umbrella puts inventions and the natural world together."
+      ],
+      "rationale": "Technology and Environment covers new tools and inventions, and how people and the land around them shape each other."
+    },
+    {
+      "id": "ei-08",
+      "prompt": "Japan closes its ports to most of the world. Which umbrella is about how societies connect with, or cut themselves off from, each other?",
+      "options": [
+        "Power and Its Abuse",
+        "A Connected World",
+        "Technology and Environment",
+        "Wealth and Resources"
+      ],
+      "correct_index": 1,
+      "hints": [
+        "The question tells you what the umbrella is about.",
+        "Connect or cut off: which umbrella has \"connected\" in its name?"
+      ],
+      "rationale": "A Connected World is about how societies reach each other through trade, travel and ideas, or cut themselves off, as Tokugawa Japan did."
+    },
+    {
+      "id": "ei-09",
+      "prompt": "Louis XIV moves his court to Versailles so he can watch the nobles and catch secret plots. Which enduring issue?",
+      "options": [
+        "Technology and Environment",
+        "A Connected World",
+        "Power and Its Abuse",
+        "Identity and Nationalism"
+      ],
+      "correct_index": 2,
+      "hints": [
+        "What is the king trying to hold on to?",
+        "Watching people so they can't plot against you is about control."
+      ],
+      "rationale": "Louis keeps the nobles close so he can control them. Holding on to power and using it over others is Power and Its Abuse."
+    },
+    {
+      "id": "ei-10",
+      "prompt": "Aurangzeb treats Hindus worse than Muslims because of their religion. Which enduring issue?",
+      "options": [
+        "Technology and Environment",
+        "A Connected World",
+        "Conflict",
+        "Identity and Nationalism"
+      ],
+      "correct_index": 3,
+      "hints": [
+        "Why are the Hindus treated differently?",
+        "Religion is part of who people are."
+      ],
+      "rationale": "The unequal treatment is based on religion, which is part of people's identity. It is also Power and Its Abuse. That's not a choice here, but one document can show more than one issue."
+    },
+    {
+      "id": "ei-11",
+      "prompt": "The Ottoman Empire loses money as new trade routes and cheap goods from India and the Far East take its customers. Which enduring issue?",
+      "options": [
+        "Identity and Nationalism",
+        "Wealth and Resources",
+        "Conflict",
+        "Power and Its Abuse"
+      ],
+      "correct_index": 1,
+      "hints": [
+        "What is the empire losing?",
+        "Money and trade point to one umbrella."
+      ],
+      "rationale": "Losing trade and money is Wealth and Resources. The Ottomans' wealth fell as trade moved elsewhere."
+    },
+    {
+      "id": "ei-12",
+      "prompt": "Hobbes says that without a strong ruler, life is a war of everyone against everyone. Which enduring issue?",
+      "options": [
+        "Conflict",
+        "Wealth and Resources",
+        "Technology and Environment",
+        "A Connected World"
+      ],
+      "correct_index": 0,
+      "hints": [
+        "Hobbes uses the word \"war.\"",
+        "A war of everyone against everyone is the purest form of..."
+      ],
+      "rationale": "Hobbes pictures life without government as a war of everyone against everyone. Fighting between people is Conflict."
+    },
+    {
+      "id": "ei-13",
+      "prompt": "Locke says a government that grabs absolute power has broken the deal, and the power goes back to the people. Which enduring issue?",
+      "options": [
+        "Power and Its Abuse",
+        "Technology and Environment",
+        "Wealth and Resources",
+        "A Connected World"
+      ],
+      "correct_index": 0,
+      "hints": [
+        "What does the government grab?",
+        "A government taking too much power is abusing it."
+      ],
+      "rationale": "Locke is warning about a government that takes absolute power over the people. That is Power and Its Abuse."
+    },
+    {
+      "id": "ei-14",
+      "prompt": "Montesquieu warns that when one person both makes the laws and enforces them, there is no liberty. Which enduring issue?",
+      "options": [
+        "Technology and Environment",
+        "A Connected World",
+        "Identity and Nationalism",
+        "Power and Its Abuse"
+      ],
+      "correct_index": 3,
+      "hints": [
+        "What goes wrong when one person holds all the power?",
+        "Montesquieu's word for it is \"tyrannical.\""
+      ],
+      "rationale": "Montesquieu wants power split up so no one can use it against the people. The danger he names is Power and Its Abuse."
+    },
+    {
+      "id": "ei-15",
+      "prompt": "A leader claims to speak for the general will and jails the people who disagree. Which enduring issue?",
+      "options": [
+        "Power and Its Abuse",
+        "Wealth and Resources",
+        "Technology and Environment",
+        "A Connected World"
+      ],
+      "correct_index": 0,
+      "hints": [
+        "What does the leader do to people who disagree?",
+        "Jailing critics is using power against people."
+      ],
+      "rationale": "Jailing people for disagreeing is using power to silence them. That is Power and Its Abuse."
+    },
+    {
+      "id": "ei-16",
+      "prompt": "Wollstonecraft says that shutting women out of rights makes men act like tyrants. Which enduring issue?",
+      "options": [
+        "Technology and Environment",
+        "A Connected World",
+        "Power and Its Abuse",
+        "Wealth and Resources"
+      ],
+      "correct_index": 2,
+      "hints": [
+        "Who is being shut out, and by whom?",
+        "A tyrant is someone who abuses power."
+      ],
+      "rationale": "Denying women their rights is one group holding power over another. Human rights sit under Power and Its Abuse."
+    },
+    {
+      "id": "ei-17",
+      "prompt": "Catherine writes that all citizens are subject to the same laws. Her government whips serfs who complain about their landlords. Which enduring issue?",
+      "options": [
+        "Technology and Environment",
+        "A Connected World",
+        "Identity and Nationalism",
+        "Power and Its Abuse"
+      ],
+      "correct_index": 3,
+      "hints": [
+        "What happens to serfs who complain?",
+        "Punishing people for complaining is using power against them."
+      ],
+      "rationale": "Catherine's words promise equal laws, but her government punishes serfs who complain. Using power against the people you rule is Power and Its Abuse."
+    },
+    {
+      "id": "ei-18",
+      "prompt": "Which sentence explains an enduring issue, not just names it?",
+      "options": [
+        "The issue is power.",
+        "Power and its abuse.",
+        "Catherine the Great.",
+        "Power and its abuse is when rulers use their control to hurt the people they rule, as Catherine's government did to serfs who complained."
+      ],
+      "correct_index": 3,
+      "hints": [
+        "Naming is a word or phrase. Explaining says what the problem is.",
+        "Look for the choice that defines the problem and points to a document."
+      ],
+      "rationale": "Explaining means defining the problem in one sentence, then showing where a document shows it. The other choices only name something."
+    },
+    {
+      "id": "ei-19",
+      "prompt": "Your issue is Power and Its Abuse. What's the best way to show it in the documents?",
+      "options": [
+        "Name as many rulers as you can",
+        "Point to a document where someone uses power to control or hurt others",
+        "Copy the first sentence of each document",
+        "Say that power is bad"
+      ],
+      "correct_index": 1,
+      "hints": [
+        "The issue has to show up in the evidence.",
+        "Which choice sends you into a document?"
+      ],
+      "rationale": "An enduring issue is only as strong as the evidence for it. Point to a document where someone uses power to control or hurt others, and say what it shows."
+    },
+    {
+      "id": "ei-20",
+      "prompt": "Two students pick different enduring issues for the same document. What's true?",
+      "options": [
+        "One of them has to be wrong",
+        "Enduring issues are opinions, so evidence doesn't matter",
+        "Only the teacher's answer counts",
+        "A document can show more than one issue. What matters is explaining your choice with evidence"
+      ],
+      "correct_index": 3,
+      "hints": [
+        "Can one document show more than one problem?",
+        "What makes an answer strong: the label, or the evidence behind it?"
+      ],
+      "rationale": "One document can show more than one enduring issue. A strong answer names one, explains it, and backs it with evidence from the documents."
+    }
+  ]
+}

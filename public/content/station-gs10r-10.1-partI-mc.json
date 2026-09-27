@@ -26,7 +26,8 @@
       "hints": [
         "This is the Mughal Empire — where on the map did you place that empire on Day 1?",
         "It's not East Asia (that's China/Japan) and not West Africa or Europe — narrow it to the subcontinent."
-      ]
+      ],
+      "rationale": "The passage names Aurangzeb as the last great Mughal ruler. The Mughal Empire ruled the Indian subcontinent, which is South Asia."
     },
     {
       "id": "u101-2",
@@ -45,7 +46,8 @@
       "hints": [
         "Reread the sentence about the poll tax in the passage — who is it imposed on?",
         "The passage says Aurangzeb DISMISSED Hindu clerks and REIMPOSED a tax — two of the four options reverse what actually happened."
-      ]
+      ],
+      "rationale": "The passage says Aurangzeb reimposed a poll tax on all unbelievers, meaning people who were not Muslim. Two of the other choices say the opposite of what he did."
     },
     {
       "id": "u101-3",
@@ -64,7 +66,8 @@
       "hints": [
         "Count how many of the bulleted reasons mention trade, competition, or products — that's more than any other single category.",
         "This isn't about religion, naval battles, or who becomes the next sultan — it's about money and markets."
-      ]
+      ],
+      "rationale": "Three of the listed factors are about trade: competition from the Americas, cheap products from India and the Far East, and new trade routes. No other topic comes up as often."
     },
     {
       "id": "u101-4",
@@ -83,7 +86,8 @@
       "hints": [
         "Compare messengers to private travelers in the passage — the text says private citizens couldn't do this at night.",
         "Look at the sentence right after “had priority over any other type of traveler” — it lists two things messengers could do that others couldn't."
-      ]
+      ],
+      "rationale": "The passage says government messengers could freely pass road barriers at all times of the day or night. Private citizens weren't allowed to travel at night at all."
     },
     {
       "id": "u101-5",
@@ -102,7 +106,8 @@
       "hints": [
         "Think about WHY a government builds relay stations and checkpoints along its main road — what does that control let them do?",
         "This isn't about trade with Europe or lowering road costs — it's about staying in contact with, and control of, distant provinces."
-      ]
+      ],
+      "rationale": "Relay stations, first place for government messengers, and checkpoints on travelers are all tools of control. The road let the shogun stay in charge of provinces far from the capital."
     },
     {
       "id": "u101-6",
@@ -121,7 +126,8 @@
       "hints": [
         "Reread the last sentence of the passage — it ends with a clear consequence for the nobles' finances.",
         "Saint-Simon connects expensive fashion directly to nobles depending on the king's “bounty” — find that word and what it's attached to."
-      ]
+      ],
+      "rationale": "Saint-Simon says the king made nobles live beyond their income until they depended on his bounty to survive. Expensive habits kept the nobles dependent on the king."
     },
     {
       "id": "u101-7",
@@ -140,7 +146,8 @@
       "hints": [
         "Saint-Simon holds the title “Duke” — what does that tell you about his position at the court he's describing?",
         "He's describing what he personally observed at Versailles — that rules out “historian writing later” and “Louis XIV himself.”"
-      ]
+      ],
+      "rationale": "Saint-Simon was a duke who lived at the court of Versailles and wrote about what he saw there. That makes him a noble describing his own court."
     },
     {
       "id": "u101-8",
@@ -159,7 +166,8 @@
       "hints": [
         "This document bans travel abroad and punishes Christians who are found — which government you studied this week did exactly that?",
         "Check the source line and the CONTEXT line above the document for the government and the century."
-      ]
+      ],
+      "rationale": "The edict closes Japan's borders and hunts for Christians. That is Tokugawa Japan's closed-country policy, and the edict dates to 1635, in the 1600s."
     },
     {
       "id": "u101-9",
@@ -178,7 +186,8 @@
       "hints": [
         "Find the sentence that starts “If any Japanese returns from overseas” — the very next words are the answer.",
         "The one hundred pieces of silver reward is for something else in the document — don't confuse the two different penalties/rewards."
-      ]
+      ],
+      "rationale": "The edict says anyone who returns after living overseas must be put to death. The hundred pieces of silver are a reward for revealing where a high-ranking priest is hiding."
     },
     {
       "id": "u101-10",
@@ -197,7 +206,8 @@
       "hints": [
         "Who is writing this letter, and who is it addressed to? Check the CONTEXT line above the document.",
         "The letter GRANTS permission — it isn't a request, a demand, or a signed treaty between two sides."
-      ]
+      ],
+      "rationale": "Jahangir, the Mughal emperor, writes to King James I and grants English merchants the right to trade. He gives permission. He isn't asking, demanding or signing a treaty."
     },
     {
       "id": "u101-11",
@@ -216,7 +226,8 @@
       "hints": [
         "The last sentence of the excerpt lists exactly what English merchants may do — find the phrase “to sell, buy, and to transport.”",
         "This isn't about taxes, forts, or religion — Jahangir's letter is entirely about trade."
-      ]
+      ],
+      "rationale": "The last lines order his governors to let the English sell, buy and transport goods as they wish. Nothing in the letter mentions taxes, forts or religion."
     },
     {
       "id": "u101-12",
@@ -235,7 +246,8 @@
       "hints": [
         "Check each pairing against the chart one at a time — three of the four options put a state in the wrong region.",
         "The Ottoman Empire and the Mughal Empire are NOT in East Asia or Western Europe — cross those two off first."
-      ]
+      ],
+      "rationale": "The chart lists Tokugawa Japan in East Asia. The other three choices put the Ottomans, Ashanti and the Mughals in regions the chart doesn't give them."
     },
     {
       "id": "u101-13",
@@ -254,7 +266,8 @@
       "hints": [
         "Only one empire on the chart is described as reaching across more than one continent, let alone three.",
         "Reread that empire's “Where it was” column on the chart — it names three regions in one line."
-      ]
+      ],
+      "rationale": "The Ottoman row is the only one that reaches across three continents: southwest Asia, southeastern Europe and North Africa."
     },
     {
       "id": "u101-14",
@@ -273,7 +286,8 @@
       "hints": [
         "Count how many of the largest empires on the chart (Qing, Mughal, Ottoman, Russian) are located at least partly in Asia.",
         "This isn't about Europe or Africa controlling the most land, and it isn't about Japan vs. China's size — recheck those two options against the chart."
-      ]
+      ],
+      "rationale": "The largest states on the chart are Qing China, the Mughal Empire, the Ottoman Empire and Russia, and all four held land in Asia. The chart calls France small and the African states small to medium."
     },
     {
       "id": "u101-15",
@@ -292,9 +306,11 @@
       "hints": [
         "The Mughal row pairs “very large” with “authority weakening” — the Tokugawa row pairs “small” with “tight control.” What does that contrast show?",
         "This rules out any option claiming size and control always match, or that small states can't govern themselves."
-      ]
+      ],
+      "rationale": "The Mughal Empire was very large, but its authority was weakening. Tokugawa Japan was small, but tightly controlled. Size and control don't always go together."
     }
   ],
   "_licence": "Mixed — flagged per item, matching this desk's intake rule (a tainted or restricted stimulus poisons every item built on it, so the split is drawn per item, not per file). Items u101-1 through u101-11 (11 items) are teach-only: BK-original questions welded to NYSED-released passages reaching this desk through New Visions (Aurangzeb, Ottoman, Tōkaidō, Edict of 1635) and the Fordham University Sourcebook (Saint-Simon, Jahangir). New Visions publishes CC BY-NC-SA 4.0 and its own Regents-question pages carry NYSED language forbidding reproduction for profit; Fordham permits educational use, not commercial use. Teach freely, do not sell. Items u101-12 through u101-15 (4 items) are sellable: the extents chart is BK's own original work, written for this course from the NYS Grades 9–12 Social Studies Framework's own language — no third-party text or image. This exact split (11 teach-only / 4 sellable) is recorded in GS10R_Unit10.1_MC-EXAM_KEY_v1_2026-09-10.docx §4 on this desk's own shelf; this file does not introduce a new ruling, it carries the existing one forward into the Arena schema. BK/CJ adjudicate sellability — this flag is the record at intake, not a decision.",
-  "_hint_model": "2 escalating hints per item, available during the regular season only. Playoffs run cold (no hints), per BK's ruling 2026-09-22."
+  "_hint_model": "2 escalating hints per item, available during the regular season only. Playoffs run cold (no hints), per BK's ruling 2026-09-22.",
+  "_filled": "2026-09-27 10:53 EDT by Will (global10r-curriculum), on BK's 10:47 order: 'take care of what josh needs please and send to him'. Added a student-facing rationale to all 15 items (field: rationale). NOT a port of the Arena's reasoning lines: those open with a grain code and several speak about students in the third person (teacher talk), so they were rewritten for the kid. Hints unchanged."
 }
