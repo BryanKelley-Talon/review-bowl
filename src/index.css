@@ -321,3 +321,17 @@ body.rb-full .stat-flash-slot{min-height:27px}
    It stays on screen: that is the point of it. */
 body.rb-full .fp-disclaimer-badge{left:auto;right:12px}
 body.rb-full .controls{margin:6px 0}
+
+/* Long questions, where the game has stopped (BK, 2026-09-27). Words, not colour, carry it. */
+.gate-chip{display:inline-block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);
+  border:1.5px solid var(--gold);border-radius:999px;padding:3px 10px;margin:0 0 10px}
+/* Be a Hawk: a boxed line on the sports page, same newsprint, a double rule like a sidebar. */
+.np-hawk{min-width:170px;max-width:230px;border:3px double #5d4f33;padding:8px 10px;align-self:flex-start;background:#f3ead3}
+.np-hawk-title{display:block;font:700 12px/1.2 Georgia,serif;letter-spacing:.14em;color:#2b2111}
+.np-hawk-line{display:block;font:italic 400 13.5px/1.4 Georgia,serif;color:#2b2111;margin-top:4px}
+@media (max-width:640px){ .np-hawk{max-width:none} }
+.np-cols:has(.np-hawk){grid-template-columns:1fr auto auto}
+@media (max-width:640px){ .np-cols:has(.np-hawk){grid-template-columns:1fr} }
+
+.cite-line{display:block}
+.cite-line + .cite-line{margin-top:3px}

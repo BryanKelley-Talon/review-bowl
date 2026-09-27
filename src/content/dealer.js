@@ -31,6 +31,9 @@ const GATES = {
   // The bigger rewards ask the bigger questions: a level, a facility, a signing.
   training: { label: 'Training', size: 'long' },
   agency:   { label: 'Free agency', size: 'long' },
+  // The Locker Room (BK, 2026-09-27): the first halftime question, once a game, never in the
+  // playoffs. It draws from the culture deck only: the Office theme's practice items.
+  locker:   { label: 'Locker room', culture: true },
 }
 
 export function makeDealer(pool, course, rules = {}, random = Math.random) {
@@ -78,8 +81,22 @@ export function makeDealer(pool, course, rules = {}, random = Math.random) {
 
     // gate: one of GATES. opts.lane forces a lane (free agency). opts.playoff marks
     // every gate as scoring — playoffs are summative.
+    // True when the Locker Room has something to ask.
+    hasCulture: (pool.culture || []).length > 0,
+
     draw(gate, opts = {}) {
       const g = GATES[gate] || {}
+      if (g.culture) {
+        const all = pool.culture || []
+        if (!all.length) return null
+        let deck = decks._culture || []
+        if (!deck.length) {
+          deck = all.map(q => q.id)
+          for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]] }
+        }
+        const id = deck.pop(); decks._culture = deck
+        return all.find(q => q.id === id)
+      }
       const scoring = !!(g.scoring || opts.playoff)
       const base = course.weights || {}
       const tryLanes = opts.lane ? [opts.lane] : g.only

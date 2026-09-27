@@ -78,7 +78,7 @@
   },
   "courses": {
     "global10r": {
-      "label": "Global Studies and Geography · 10R",
+      "label": "Global History and Geography 10R",
       "short": "Global 10R",
       "accent": "#7FB2D9",
       "_weights_note": "Relative draw weight per lane. 0 turns a lane off. A lane with no enabled pack is skipped automatically, and its stat is built from every answer until its content lands.",
@@ -136,10 +136,11 @@
           "file": "content/station-10-enduring-issues.json",
           "label": "Enduring Issue"
         }
-      ]
+      ],
+      "_label_ruling": "BK 2026-09-27 10:28: \"Global History and Geography 10R ( the 10R is specific to our in house language at school)---US History and Government 11R\". Consistent with the state's exam names (asked 10:26); replaces the 09-18 'Global Studies and Geography 10R' ruling."
     },
     "us11r": {
-      "label": "U.S. History & Government · 11R",
+      "label": "US History and Government 11R",
       "short": "US 11R",
       "accent": "#E3B341",
       "weights": {
@@ -238,7 +239,44 @@
           "file": "content/station-06-opvl.json",
           "label": "Document Use — a source's value"
         }
-      ]
+      ],
+      "_label_ruling": "BK 2026-09-27 10:28: \"Global History and Geography 10R ( the 10R is specific to our in house language at school)---US History and Government 11R\". Consistent with the state's exam names (asked 10:26); replaces the 09-18 'Global Studies and Geography 10R' ruling."
     }
+  },
+  "culture": {
+    "_README": "The culture layer (BK 2026-09-27 10:02: \"roll in the bk Office stuff...bake some of that personal growth/culture work into the game but not make it outrageously annoying\"; design approved 10:13, \"review bowl culture layer is great\"; words approved 10:13, \"3. yes\"). The Locker Room takes the FIRST of the three halftime questions, once a game, never in the playoffs: no extra taps. Its questions are the current Office theme's PRACTICE items only (the mystery items need the case to make sense), ported word for word from the Arena. The Be a Hawk box in the paper uses lines from Leo's LOCKED growth-coaching bank (BK 10:11), verbatim.",
+    "label": "Locker room",
+    "prompt": "Locker room. One question about how this team carries itself. Get it right and the whole team comes out with +1 Toughness.",
+    "stat_lane": "skills",
+    "packs": [
+      {
+        "file": "content/office-2026-09-starting-strong.json",
+        "section": "practice",
+        "month": "2026-09",
+        "enabled": true,
+        "from": "BK's Office theme 1, LOCKED by BK 2026-09-27 10:07 (copied from the Arena, byte for byte)"
+      }
+    ],
+    "hawk_box": {
+      "title": "BE A HAWK",
+      "_source": "In/ruling-2026-09-27-growth-coaching-bank-LOCKED.md §5 Habits, verbatim. After a win: Working with others. After a loss: When things get hard. Otherwise: Showing up and Using time well. Rotates by week.",
+      "after_win": [
+        "Being right only helps your partner if they can follow you.",
+        "Listen first, then answer. It's harder than it sounds and it works everywhere.",
+        "Good teammates make the whole group better. That's a skill too."
+      ],
+      "after_loss": [
+        "Bad day? Do one set. Small wins count.",
+        "Everybody hits a wall. The ones who get better are the ones who come back.",
+        "Asking for help is a skill, not a weakness."
+      ],
+      "otherwise": [
+        "Showing up is half of it. The other half is what you do once you're there.",
+        "Some days are hard just getting here. You got here. That counts.",
+        "Ten minutes of real focus beats an hour of half-attention.",
+        "Ten minutes, three times a week, beats two hours the night before. Same with anything you want to get good at."
+      ]
+    },
+    "long_chip": "Document question · take your time"
   }
 }

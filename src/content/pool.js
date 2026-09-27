@@ -279,14 +279,36 @@ export function buildPool(manifest, courseId, packsByFile, crops) {
       ;(lanes[q.lane] || (lanes[q.lane] = [])).push(q)
     }
   }
-  return { course: courseId, lanes, held }
+  return { course: courseId, lanes, held, culture: buildCulture(manifest, packsByFile) }
+}
+
+// The Locker Room's questions (BK, 2026-09-27): the current Office theme's practice items,
+// shared by both courses. They build the culture stat lane (Toughness) and never enter the
+// content lanes, so no content gate ever draws one. The same two-hints-and-a-reason rule applies.
+export function buildCulture(manifest, packsByFile) {
+  const c = manifest.culture
+  const out = []
+  if (!c) return out
+  for (const meta of c.packs || []) {
+    if (meta.enabled === false) continue
+    const pack = packsByFile[meta.file]
+    const items = pack?.[meta.section || 'practice']?.items
+    if (!Array.isArray(items)) continue
+    const { questions } = readPack({ items }, { lane: c.stat_lane || 'skills', file: meta.file, unit: meta.month || null }, {})
+    for (const q of questions) {
+      if ((manifest.rules || {}).require_hints_and_reason && (q.hints.length < 2 || !q.rationale)) continue
+      out.push({ ...q, culture: true, size: 'short' })
+    }
+  }
+  return out
 }
 
 // Everything the manifest points at for one door, fetched. Browser only.
 export async function loadDoor(manifest, courseId) {
   const course = manifest.courses[courseId]
   const files = [...(course.packs || []).filter(p => p.enabled !== false).map(p => p.file),
-                 ...(course.camp || []).map(c => c.file)]
+                 ...(course.camp || []).map(c => c.file),
+                 ...((manifest.culture?.packs) || []).filter(p => p.enabled !== false).map(p => p.file)]
   const packsByFile = {}
   await Promise.all(files.map(f => fetch(`/${f}`).then(r => r.ok ? r.json() : null)
     .then(d => { if (d) packsByFile[f] = d }).catch(() => {})))

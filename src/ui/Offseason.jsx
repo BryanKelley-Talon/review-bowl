@@ -124,6 +124,7 @@ export default function Offseason({ career, setCareer, camp, dealer, manifest, o
         <Question key={gate.a.stat} q={gate.q} gate={`Free agency · ${gate.p.name}`} hints={manifest.rules.hints_regular_season !== false}
                   stakes={`Answer right to sign him for ${money(gate.a.cost)}. Miss and he walks — no money spent.`}
                   statLine={`Builds ${manifest.lanes[gate.q.lane]?.stat_label} · ${manifest.lanes[gate.q.lane]?.label}`}
+                  chip={gate.q.size === 'long' ? manifest.culture?.long_chip : null}
                   onDone={signed} />
       )}
     </div>

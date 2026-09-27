@@ -75,6 +75,21 @@ for (const course of Object.keys(manifest.courses)) {
   console.log(`rule  ${course}  plays ${Object.values(held.lanes).flat().length}  held ${held.held.length}`)
 }
 
+// ── the Locker Room (BK, 2026-09-27) ──────────────────────────────────────────
+{
+  const packs = { ...packsOf('us11r') }
+  for (const p of manifest.culture.packs) packs[p.file] = pub(p.file)
+  const withC = buildPool(manifest, 'us11r', packs, crops)
+  eq(withC.culture.length, 5, 'the Locker Room reads the five Office practice items')
+  ok(withC.culture.every(q => q.hints.length === 2 && q.rationale && q.size === 'short' && q.culture), 'every Locker Room question is short, with two hints and a reason')
+  ok(Object.values(withC.lanes).flat().every(q => !q.culture), 'no Locker Room question ever enters a content lane')
+  const d = makeDealer(withC, manifest.courses.us11r, manifest.rules)
+  ok(d.hasCulture, 'the dealer knows the Locker Room has questions')
+  const seenC = new Set(); for (let i = 0; i < 5; i++) seenC.add(d.draw('locker').id)
+  eq(seenC.size, 5, 'the Locker Room deals all five before repeating')
+  for (let i = 0; i < 100; i++) ok(!d.draw('halftime').culture && !d.draw('xp').culture, 'content gates never draw a Locker Room question')
+}
+
 const dealer = makeDealer(us, manifest.courses.us11r, manifest.rules)
 // BK, 2026-09-27: in-game questions stay short; documents go where the game already stops.
 ok(us.lanes.sources.every(q => q.size === 'long'), 'US: every Part I item (a document) is sized long')

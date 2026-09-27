@@ -231,8 +231,19 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
       // Halftime: the locker room. Each right answer is an adjustment for the second half.
       const n = rules.halftime_questions ?? 3
       const results = []
+      // The Locker Room (BK, 2026-09-27) takes the FIRST of the halftime questions, once a
+      // game, never in the playoffs: no extra taps. Its words are BK's, from the manifest.
+      const locker = !playoff && dealer.hasCulture && manifest.culture?.prompt
       const next = i => {
         if (i >= n) { setHalftime(results); setStage('halftime'); return }
+        if (i === 0 && locker) {
+          ask('locker', manifest.culture.prompt, (correct, q) => {
+            if (q) results.push({ lane: q.lane, correct })
+            if (correct && q) setBoost(b => ({ ...b, [STAT_OF[q.lane]]: Math.min(2, (b[STAT_OF[q.lane]] || 0) + 1) }))
+            next(i + 1)
+          })
+          return
+        }
         ask('halftime', `Halftime adjustments — question ${i + 1} of ${n}. A right answer gives that unit +1 for the second half.`,
           (correct, q) => {
             if (q) results.push({ lane: q.lane, correct })
@@ -247,7 +258,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
     const g3 = startOvertime(gs)
     setToast(`Tied at the end of regulation. Overtime: your ball at the ${them.abbr} 25.`)
     toPresnap(g3)
-  }, [commit, rules, ask, finish, toPresnap, them])
+  }, [commit, rules, ask, finish, toPresnap, them, playoff, dealer, manifest])
   endHalfRef.current = endHalf
 
   // After a score of yours: kick off to them (or the next overtime step).
@@ -543,7 +554,8 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
 
       {gate && (
         <Question key={gate.serial} q={gate.q} gate={gateLabel(gate.kind)} stakes={gate.stakes} hints={hints}
-                  statLine={`Builds ${manifest.lanes[gate.q.lane]?.stat_label} · ${manifest.lanes[gate.q.lane]?.label}`}
+                  statLine={gate.q.culture ? `Builds ${manifest.lanes[gate.q.lane]?.stat_label} · Be a Hawk` : `Builds ${manifest.lanes[gate.q.lane]?.stat_label} · ${manifest.lanes[gate.q.lane]?.label}`}
+                  chip={gate.q.size === 'long' ? manifest.culture?.long_chip : null}
                   onDone={answered} />
       )}
     </div>

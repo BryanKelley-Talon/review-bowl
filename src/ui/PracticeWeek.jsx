@@ -134,7 +134,7 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
                  lastResult={career.week > 0
                    ? ({ [RESULT.W]: 'W', [RESULT.L]: 'L', [RESULT.T]: 'T' })[career.results[career.week - 1]] || null
                    : null}
-                 events={events} ratings={v} />
+                 events={events} ratings={v} hawkBox={manifest.culture?.hawk_box} />
 
       <section className="panel next-game">
         <p className="sub">Bumps and bruises heal, the film goes on, and somebody gets better. None of this is
@@ -240,6 +240,7 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
                   statLine={gate.kind === 'film'
                     ? `Builds Defense · ${manifest.lanes[gate.q.lane]?.label}`
                     : `Builds ${manifest.lanes[gate.q.lane]?.stat_label} · ${manifest.lanes[gate.q.lane]?.label}`}
+                  chip={gate.q.size === 'long' ? manifest.culture?.long_chip : null}
                   onDone={answered} />
       )}
     </div>

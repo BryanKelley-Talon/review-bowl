@@ -112,8 +112,18 @@ function briefs({ events, ratings }) {
   return out
 }
 
-export default function Newspaper({ team, season, week, weekLabel, opponent, lastResult, events = [], ratings }) {
+// BE A HAWK (BK, 2026-09-27): one line from Leo's LOCKED coaching bank, matched to the week:
+// after a win, working with others; after a loss, when things get hard; otherwise, showing up
+// and using time well. Rotates by week. Words live in the manifest, verbatim.
+function hawkLine(box, lastResult, week) {
+  if (!box) return null
+  const list = (lastResult === 'W' ? box.after_win : lastResult === 'L' ? box.after_loss : box.otherwise) || []
+  return list.length ? list[Math.abs(week || 0) % list.length] : null
+}
+
+export default function Newspaper({ team, season, week, weekLabel, opponent, lastResult, events = [], ratings, hawkBox }) {
   const lead = leadStory({ events, team, lastResult, opponent, week })
+  const hawk = hawkLine(hawkBox, lastResult, week)
   const notes = briefs({ events, ratings })
   const paper = `${team.name} ${PAPER_SUFFIX}`
 
@@ -129,6 +139,12 @@ export default function Newspaper({ team, season, week, weekLabel, opponent, las
         <ul className="np-briefs">
           {notes.map((n, i) => <li key={i}>{n}</li>)}
         </ul>
+        {hawk && (
+          <aside className="np-hawk" aria-label={hawkBox.title}>
+            <span className="np-hawk-title">{hawkBox.title}</span>
+            <span className="np-hawk-line">{hawk}</span>
+          </aside>
+        )}
         <div className="np-next">
           <span className="np-next-label">Up next</span>
           <b>{opponent}</b>

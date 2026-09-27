@@ -14,12 +14,14 @@ function Stimulus({ s }) {
         <img key={i} src={`/${img.src}`} alt={img.alt} loading="eager" />
       ))}
       {s.text && <p className="stimulus-text">{s.text}</p>}
-      {s.citation && <figcaption>{s.citation}</figcaption>}
+      {/* A compound source (two pictures) carries one citation per picture: one per line. */}
+      {s.citation && <figcaption>{Array.isArray(s.citation)
+        ? s.citation.map((c, i) => <span key={i} className="cite-line">{c}</span>) : s.citation}</figcaption>}
     </figure>
   )
 }
 
-export default function Question({ q, gate, stakes, hints = true, statLine, onDone }) {
+export default function Question({ q, gate, stakes, hints = true, statLine, chip, onDone }) {
   const [picked, setPicked] = useState(null)
   const [shown, setShown] = useState(0)
   const [done, setDone] = useState(false)
@@ -37,6 +39,8 @@ export default function Question({ q, gate, stakes, hints = true, statLine, onDo
           <span className="gate-kind" id="gate-title" tabIndex={-1} ref={headRef}>{gate}</span>
           {statLine && <span className="gate-stat">{statLine}</span>}
         </div>
+        {/* A document question at a moment where the game has stopped (BK's words, 2026-09-27). */}
+        {chip && <p className="gate-chip">{chip}</p>}
         {stakes && <p className="gate-stakes">{stakes}</p>}
         <Stimulus s={q.stimulus} />
         <div className="q-prompt">{q.prompt}</div>

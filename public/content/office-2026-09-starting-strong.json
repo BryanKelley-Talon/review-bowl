@@ -1,0 +1,445 @@
+{
+  "_README": "BK's Office · Theme 1 · Starting the year strong. LOCKED by BK 2026-09-27 10:07 (\"locked. news links can ship, they'll be checked by me monday..if i see a problem, i'll make the alteration\"). Ported word for word by Josh from flashpoint/Project Flashpoint/In/ruling-2026-09-27-bks-office-theme1-LOCKED.md (Leo drafted; Sam and Will reviewed). _label fields are review labels and never render. The proof questions' answers are BK's only and are deliberately not in this file.",
+  "lesson": {
+    "intro": "Four words run this building: Be Kind, Be Respectful, Be Responsible, Be Safe. Here's what they look like in the first month of school.",
+    "cards": [
+      {
+        "trait": "Be Responsible",
+        "heading": "Show up, then catch up",
+        "body": "Missed a day? It happens. Check Classroom that night, not the night before the test. Then ask one question about what you missed."
+      },
+      {
+        "trait": "Be Responsible",
+        "heading": "In the room, on time",
+        "body": "Getting here early only counts if you're in your seat when class starts. Drop your bag and leave for ten minutes, and you miss the start. The start is where the directions are."
+      },
+      {
+        "trait": "Be Respectful",
+        "heading": "Listen first, then answer",
+        "body": "When someone's talking, let them finish. It's harder than it sounds, and it works everywhere: class, work, home."
+      },
+      {
+        "trait": "Be Respectful",
+        "heading": "Every try helps",
+        "body": "A wrong answer said out loud is how a class learns. Nobody laughs at a try in our class."
+      },
+      {
+        "trait": "Be Kind",
+        "heading": "Learn one name",
+        "body": "Know the name of the person next to you by the end of the week. Partner work goes better when you're not strangers."
+      },
+      {
+        "trait": "Be Kind",
+        "heading": "Clear helps more",
+        "body": "Being right only helps your partner if they can follow you. Explain it the way you'd want it explained to you."
+      },
+      {
+        "trait": "Be Safe",
+        "heading": "Think before you share",
+        "body": "A screenshot can travel the whole school before first bell. If you can't tell who made it or where it came from, don't pass it on."
+      },
+      {
+        "trait": "Be Safe",
+        "heading": "Say so early",
+        "body": "Lost in class, or something feels off in the hallway or online? Tell an adult you trust. I can fix confused. I can't fix silent."
+      },
+      {
+        "trait": "Be Safe",
+        "heading": "Go, then come back",
+        "body": "Take the pass, go where you said, come straight back. Quiet hallways are safe hallways."
+      }
+    ]
+  },
+  "practice": {
+    "intro": "Five situations. Pick the choice that fits the four words best.",
+    "items": [
+      {
+        "n": 1,
+        "_label": "P1 · Be Responsible",
+        "question": "You were absent Tuesday. It's Wednesday morning. What's the best thing to do?",
+        "choices": [
+          {
+            "key": "A",
+            "text": "Wait and see if the teacher brings it up."
+          },
+          {
+            "key": "B",
+            "text": "Check Classroom, then ask one question about what you missed."
+          },
+          {
+            "key": "C",
+            "text": "Copy a friend's notes without reading them."
+          },
+          {
+            "key": "D",
+            "text": "Skip it. You weren't there, so it doesn't count."
+          }
+        ],
+        "correct": "B",
+        "hints": [
+          "Which choice has you doing something, not waiting?",
+          "Which one would still help you on the test?"
+        ],
+        "reasoning": "Checking and asking puts you back in the game fast. That's Be Responsible.",
+        "distractors": {
+          "A": "Waiting feels safe, but the work piles up while you wait.",
+          "C": "Copying gets the page done, but you still don't know how to do it.",
+          "D": "Missed work still shows up on the test."
+        }
+      },
+      {
+        "n": 2,
+        "_label": "P2 · Be Kind",
+        "question": "Your new partner hasn't said a word. How do you start?",
+        "choices": [
+          {
+            "key": "A",
+            "text": "Do the whole thing yourself so it gets done."
+          },
+          {
+            "key": "B",
+            "text": "Ask their name, then give them an easy way in: \"Want to go first, or should I?\""
+          },
+          {
+            "key": "C",
+            "text": "Ask the teacher for a different partner."
+          },
+          {
+            "key": "D",
+            "text": "Wait until they say something first."
+          }
+        ],
+        "correct": "B",
+        "hints": [
+          "Which choice gets you both talking?",
+          "How would you want someone to start with you?"
+        ],
+        "reasoning": "A name and an easy first step bring a quiet partner in. That's Be Kind.",
+        "distractors": {
+          "A": "It gets done, but your partner learns nothing and feels left out.",
+          "C": "Not yet. Give it one real try first. If it still isn't working, your teacher will step in.",
+          "D": "If you both wait, nothing happens."
+        }
+      },
+      {
+        "n": 3,
+        "_label": "P3 · Be Respectful",
+        "question": "A classmate gives a wrong answer out loud, and someone laughs. What do you do?",
+        "choices": [
+          {
+            "key": "A",
+            "text": "Laugh too. It was kind of funny."
+          },
+          {
+            "key": "B",
+            "text": "Don't laugh. If you know more, add to what they said."
+          },
+          {
+            "key": "C",
+            "text": "Say \"That's wrong\" so everyone knows."
+          },
+          {
+            "key": "D",
+            "text": "Stay quiet, and never answer out loud yourself."
+          }
+        ],
+        "correct": "B",
+        "hints": [
+          "Which choice makes it easier for the next person to try?",
+          "What would you want if it were your answer?"
+        ],
+        "reasoning": "Trying out loud is how a class learns. Protect the try. That's Be Respectful.",
+        "distractors": {
+          "A": "One laugh can keep someone quiet for the rest of the year.",
+          "C": "Being right isn't the same as being helpful.",
+          "D": "Staying silent to stay safe means nobody hears your ideas."
+        }
+      },
+      {
+        "n": 4,
+        "_label": "P4 · Be Responsible",
+        "question": "You get to class early. What do you do before the bell?",
+        "choices": [
+          {
+            "key": "A",
+            "text": "Drop your bag and take your time. The bag saves your spot."
+          },
+          {
+            "key": "B",
+            "text": "If you need the bathroom, go now, and be back in your seat when class starts."
+          },
+          {
+            "key": "C",
+            "text": "Drop your bag and walk the halls till you feel like coming back."
+          },
+          {
+            "key": "D",
+            "text": "Wait till class starts, then ask to leave."
+          }
+        ],
+        "correct": "B",
+        "hints": [
+          "Which choice has you in your seat when class starts?",
+          "When does the teacher give the day's directions?"
+        ],
+        "reasoning": "Early only counts if you're in the room when it starts. That's Be Responsible.",
+        "distractors": {
+          "A": "Your bag is on time. You aren't.",
+          "C": "A hallway is how you get somewhere, not a place to be.",
+          "D": "Asking to leave at the start means missing the directions for everything after."
+        }
+      },
+      {
+        "n": 5,
+        "_label": "P5 · Be Safe",
+        "question": "Someone posts an embarrassing photo of a classmate in the group chat. What do you do?",
+        "choices": [
+          {
+            "key": "A",
+            "text": "Share it. Everyone's already seen it."
+          },
+          {
+            "key": "B",
+            "text": "React with a laughing emoji, but don't share it."
+          },
+          {
+            "key": "C",
+            "text": "Don't share it or react. Tell an adult you trust."
+          },
+          {
+            "key": "D",
+            "text": "Nothing. It's not your business."
+          }
+        ],
+        "correct": "C",
+        "hints": [
+          "Which choice stops it from spreading?",
+          "What would you want someone to do if it were your photo?"
+        ],
+        "reasoning": "Not spreading it and getting help protects your classmate. That's Be Safe, and Be Kind.",
+        "distractors": {
+          "A": "Each share makes it worse, even if others already saw it.",
+          "B": "A reaction still tells the poster it worked.",
+          "D": "Doing nothing lets it keep going. Telling an adult isn't snitching. It's looking out."
+        }
+      }
+    ]
+  },
+  "mystery": {
+    "title": "The Case of the Midnight Screenshot",
+    "intro": "Monday, 7:30 a.m. A screenshot is everywhere: NO BATHROOM PASSES. ALL DAY. STARTING TODAY. Half the school is mad before first bell. Before you pass it on, work the case. (This case is made up. The skills are real.)",
+    "underneath": "sourcing and context. You use the same skills on documents in Social Studies.",
+    "items": [
+      {
+        "n": 1,
+        "_label": "M1 · Sourcing",
+        "question": "Before you react to the screenshot, what's the first question to ask?",
+        "choices": [
+          {
+            "key": "A",
+            "text": "How many people have shared it?"
+          },
+          {
+            "key": "B",
+            "text": "Who made it, and where did it first come from?"
+          },
+          {
+            "key": "C",
+            "text": "Is the rule fair?"
+          },
+          {
+            "key": "D",
+            "text": "Are my friends mad about it?"
+          }
+        ],
+        "correct": "B",
+        "hints": [
+          "Before you argue about a rule, make sure it's real.",
+          "Which question is about the source?"
+        ],
+        "reasoning": "Who made it, where it came from, and what they wanted tell you how far to trust it. That's sourcing.",
+        "distractors": {
+          "A": "Lots of shares means it spread fast, not that it's true.",
+          "C": "Fair or not only matters if the rule is real.",
+          "D": "Your friends might be reacting to the same fake."
+        }
+      },
+      {
+        "n": 2,
+        "_label": "M2 · Context",
+        "question": "The screenshot shows a text stamped Sunday, 11:52 p.m. The top is cropped off. What does the crop tell you?",
+        "choices": [
+          {
+            "key": "A",
+            "text": "Nothing. Crops are normal."
+          },
+          {
+            "key": "B",
+            "text": "Something was cut out. You can't see who sent it or what came before."
+          },
+          {
+            "key": "C",
+            "text": "It must be official, since it has a time on it."
+          },
+          {
+            "key": "D",
+            "text": "It was sent by a teacher."
+          }
+        ],
+        "correct": "B",
+        "hints": [
+          "What would you see if the top weren't cut off?",
+          "A time stamp tells you when, not who."
+        ],
+        "reasoning": "What's cut out is part of the story. Ask what came before it. That's context.",
+        "distractors": {
+          "A": "Some crops are harmless, but you can't know until you see what's missing.",
+          "C": "Every phone puts a time on a text.",
+          "D": "Nothing in the picture tells you who sent it."
+        }
+      },
+      {
+        "n": 3,
+        "_label": "M3 · Sourcing",
+        "question": "The first account to post it is @hawk.updates. It was created six days ago and has three posts. What does that suggest?",
+        "choices": [
+          {
+            "key": "A",
+            "text": "It's the school's official account."
+          },
+          {
+            "key": "B",
+            "text": "It's brand new and unknown, so check the real source."
+          },
+          {
+            "key": "C",
+            "text": "Three posts means it's reliable."
+          },
+          {
+            "key": "D",
+            "text": "New accounts are always fake, so the rule is fake."
+          }
+        ],
+        "correct": "B",
+        "hints": [
+          "How long has the account been around?",
+          "Where would a real rule actually be posted?"
+        ],
+        "reasoning": "A new account with a school-sounding name isn't proof. Go to the real source.",
+        "distractors": {
+          "A": "A name that sounds official isn't the same as being official.",
+          "C": "Three posts is barely a track record.",
+          "D": "New doesn't mean fake. It means you check before you trust."
+        }
+      },
+      {
+        "n": 4,
+        "_label": "M4 · Comparing",
+        "question": "You find the real post: Mr. Kelley's Classroom announcement from Friday. It says: \"In my class, no bathroom passes in the first ten minutes. That's when I give directions.\" What changed in the screenshot?",
+        "choices": [
+          {
+            "key": "A",
+            "text": "Nothing. It's the same rule."
+          },
+          {
+            "key": "B",
+            "text": "Two things. One class became everyone, and ten minutes became all day."
+          },
+          {
+            "key": "C",
+            "text": "The screenshot added a punishment."
+          },
+          {
+            "key": "D",
+            "text": "Only the date changed."
+          }
+        ],
+        "correct": "B",
+        "hints": [
+          "Compare who the rule covers in each one.",
+          "Compare how much of class each one covers."
+        ],
+        "reasoning": "The real rule covered one class for ten minutes. The screenshot made it everyone, all day. That's how a rumor grows.",
+        "distractors": {
+          "A": "Read them side by side. Two big things are different.",
+          "C": "Neither one mentions a punishment.",
+          "D": "Look at who and how long, not the date."
+        }
+      },
+      {
+        "n": 5,
+        "_label": "M5 · What you do",
+        "question": "Your friend texts you the screenshot: \"can u believe this??\" What do you do?",
+        "choices": [
+          {
+            "key": "A",
+            "text": "Forward it to three more people."
+          },
+          {
+            "key": "B",
+            "text": "Say \"It's fake,\" and leave it there."
+          },
+          {
+            "key": "C",
+            "text": "Send the real announcement and say what changed, without making fun of whoever posted it."
+          },
+          {
+            "key": "D",
+            "text": "Ignore it. Rumors fix themselves."
+          }
+        ],
+        "correct": "C",
+        "hints": [
+          "Which choice actually stops the rumor?",
+          "Which choice is kind to the person who fell for it?"
+        ],
+        "reasoning": "Real source, plain facts, no making fun. That's Be Responsible, Be Respectful and Be Kind at once.",
+        "distractors": {
+          "A": "That's how 11:52 p.m. turned into the whole school by 7:30.",
+          "B": "True, but your friend has no reason to believe you without the source.",
+          "D": "They don't. They spread until someone brings the facts."
+        }
+      }
+    ]
+  },
+  "proof_questions": [
+    "In the case, how long did the real rule say no passes?",
+    "What time was on the screenshot?",
+    "How old was @hawk.updates when it posted the screenshot?"
+  ],
+  "news": [
+    {
+      "title": "New York school phone ban has made lunch loud again",
+      "source": "Gothamist, Nov. 5, 2025",
+      "url": "https://gothamist.com/news/ny-smartphone-ban-has-made-lunch-loud-again",
+      "question": "What did students start doing once phones were gone? Which of the four traits do you see?",
+      "filter_checked": "BK ships 09-27; checks Mon 09-28"
+    },
+    {
+      "title": "Teachers react to one year of cell phones in school ban",
+      "source": "Spectrum News, Aug. 28, 2026",
+      "url": "https://spectrumlocalnews.com/nys/hudson-valley/news/2026/08/28/cell-phone-school-ban",
+      "question": "Teachers said bullying went down. Why might that be?",
+      "filter_checked": "BK ships 09-27; checks Mon 09-28"
+    },
+    {
+      "title": "Southern Illinois senior achieves 13 years of perfect attendance",
+      "source": "KFVS12, May 7, 2026",
+      "url": "https://www.kfvs12.com/2026/05/07/southern-illinois-senior-achieves-13-years-perfect-attendance/",
+      "question": "She set her goal in eighth grade. What's one goal you'd set this year, and who helps you keep it?",
+      "filter_checked": "BK ships 09-27; checks Mon 09-28"
+    }
+  ],
+  "bonus": {
+    "title": "One Goal, One Month",
+    "instructions": [
+      "Pick one habit from the lesson you want to own by the end of the month.",
+      "Write three to five sentences: what you'll do, when you'll do it (name the days), and how you'll know it's working.",
+      "Paste it into your email under BONUS. Mr. Kelley reads these."
+    ]
+  },
+  "coaching": [
+    "That's a day. You're a little better than when you walked in."
+  ],
+  "_coaching_source": "Leo's LOCKED growth-coaching bank (BK 10:11, \"locked\"), 'BK's Office finish screen': the one line for this slot, verbatim."
+}

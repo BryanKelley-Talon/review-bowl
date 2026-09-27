@@ -1,8 +1,10 @@
 // ============================================================
 // STANDING DISCLAIMER BADGE — shared chrome, not a Review Bowl feature.
 // Wording approved by BK 2026-09-22, verbatim, from
-// Out/ruling-capture-2026-09-22-standing-disclaimer-badge.md. Do not edit the words
-// here; a change to them is a change to the ruling.
+// Out/ruling-capture-2026-09-22-standing-disclaimer-badge.md, AMENDED 2026-09-27:
+// CJ's catch ("whose is it?"), BK 10:24: "Made by a Teacher at CPP is safe...keeps
+// district badging and responsibility off them"; the course names BK ruled at 10:28.
+// Do not edit the words here; a change to them is a change to the ruling.
 //
 // Built to lift as-is into the Arena and every other Flashpoint build: one file,
 // one stylesheet (DisclaimerBadge.css), no dependency on this game. Pass the
@@ -15,8 +17,8 @@ import './DisclaimerBadge.css'
 
 export const DISCLAIMER_BADGE = 'Skills Review · Educational Tool'
 export const DISCLAIMER_TEXT =
-  'This is a Corning-Painted Post Skills Review resource for Global History & Geography and US History & ' +
-  'Government. It’s meant for review on your own time, or when a teacher allows it in class — no teacher ' +
+  'Made by a teacher at CPP. This is a Skills Review resource for Global History and Geography 10R and ' +
+  'US History and Government 11R. It’s meant for review on your own time, or when a teacher allows it in class — no teacher ' +
   'requires it, and it’s never permission to skip work in another class. If someone asks what this is, this is it.'
 
 export default function DisclaimerBadge({ portrait = '/images/arena/guide-bk.png' }) {

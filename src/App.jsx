@@ -365,7 +365,8 @@ function About({ manifest, door, onBack }) {
         <li>The other team's drives are simulated. Your Defense rating holds them.</li>
       </ul>
       <h3 className="h3">Where the questions come in</h3>
-      <p>Only when the football stops: the coin toss, every extra point, a timeout, halftime, the press conference, and free agency. Sometimes a big 3rd down or red-zone snap offers one too — that one is optional. <b>A wrong extra-point answer never costs the touchdown.</b> The six are already on the board.</p>
+      {/* BK approved this paragraph 2026-09-27 10:13 ("3. yes"), word for word. */}
+      <p>During games, the questions are quick: a term, a skill, a principle or an issue. They come when the football stops: the coin toss, every extra point, a timeout, halftime and the press conference. Sometimes a big 3rd down or red-zone snap offers one too, and that one is optional. Between games and in the off-season, the questions get bigger: a document to read, and a bigger payoff, like a player's level, a new facility, or a free agent's signature. <b>A wrong extra-point answer never costs the touchdown.</b> The six are already on the board.</p>
       <p>Every answer builds one of your team's five stats. Know the material and your team gets better on the field. Regular season: two hints per question. Playoffs: no hints.</p>
       <h3 className="h3">Saving</h3>
       <p>After every game you get a save code. It holds your whole career and nothing about you. This computer also keeps a copy, but school computers can erase it — the code is the real save.</p>
