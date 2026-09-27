@@ -23,7 +23,12 @@
     "penalty_min_gain": 15,
     "penalties_per_half": 1,
     "penalty_yards": 10,
-    "two_point_questions": 2
+    "two_point_questions": 2,
+    "_size_note": "BK, 2026-09-27: in-game questions stay short; document questions go where the game already stops (training, facilities, free agency), the bigger rewards. A question is LONG if it has an image, a cited source, or a cue longer than short_cue_words; or if cue + prompt + options run past short_max_words. In-game gates ask SHORT only (src/content/dealer.js).",
+    "short_cue_words": 45,
+    "short_max_words": 90,
+    "_require_note": "The Arena's rule (CONVENTIONS §7): two hints and a reason line on every question. true = a question short of that is held back and listed in the content report; it comes back the day its author's words land (BK chose this, 2026-09-27, 'A'). false = everything plays.",
+    "require_hints_and_reason": true
   },
   "lanes": {
     "_note": "Each content lane builds ONE team stat. That is the stat layer (FULL-SPEC §2.2): a team that knows the material throws tighter and breaks more tackles. Labels are what a student reads.",

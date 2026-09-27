@@ -30,11 +30,14 @@ function eq(a, b, msg) { ok(canon(a) === canon(b), `${msg}\n      got ${canon(a)
 // ── content pipeline, on the real files ──────────────────────────────────────
 const manifest = pub('bowl.manifest.json')
 const crops = pub('content/_crops.json').crops
+// The pipeline tests read every item the desks sent, so they build with the hold-back rule off.
+// What the rule itself holds back is tested on its own, further down.
+const everything = { ...manifest, rules: { ...manifest.rules, require_hints_and_reason: false } }
+const packsOf = course => Object.fromEntries(manifest.courses[course].packs.map(p => [p.file, pub(p.file)]))
 const pools = {}
 for (const course of Object.keys(manifest.courses)) {
-  const packs = {}
-  for (const p of manifest.courses[course].packs) packs[p.file] = pub(p.file)
-  const pool = buildPool(manifest, course, packs, crops)
+  const packs = packsOf(course)
+  const pool = buildPool(everything, course, packs, crops)
   pools[course] = pool
   const counts = Object.fromEntries(Object.entries(pool.lanes).map(([k, v]) => [k, v.length]))
   console.log(`pool  ${course}  ${JSON.stringify(counts)}  held ${pool.held.length}`)
@@ -64,19 +67,46 @@ ok(gl.lanes.sources.every(q => q.hints.length === 2), 'Global: every Part I item
 ok(us.lanes.sources.every(q => q.stimulus.images.length > 0), 'US: every Part I item shows its source crop')
 
 // ── the dealer ───────────────────────────────────────────────────────────────
+// ── the hold-back rule (BK, 2026-09-27, "A") ──────────────────────────────────
+for (const course of Object.keys(manifest.courses)) {
+  const held = buildPool({ ...manifest, rules: { ...manifest.rules, require_hints_and_reason: true } }, course, packsOf(course), crops)
+  for (const q of Object.values(held.lanes).flat()) ok(q.hints.length === 2 && !!q.rationale, `${q.id}: with the rule on, every question that plays has two hints and a reason`)
+  ok(held.held.filter(h => /needs/.test(h.reason)).length > 0 || Object.values(pools[course].lanes).flat().every(q => q.hints.length === 2 && q.rationale), `${course}: anything short of the rule is named in the report`)
+  console.log(`rule  ${course}  plays ${Object.values(held.lanes).flat().length}  held ${held.held.length}`)
+}
+
 const dealer = makeDealer(us, manifest.courses.us11r, manifest.rules)
+// BK, 2026-09-27: in-game questions stay short; documents go where the game already stops.
+ok(us.lanes.sources.every(q => q.size === 'long'), 'US: every Part I item (a document) is sized long')
+ok(gl.lanes.sources.every(q => q.size === 'long'), 'Global: every Part I item (a document) is sized long')
+for (const gate of ['coin', 'xp', 'timeout', 'live', 'halftime', 'press', 'penalty', 'practice']) {
+  const d = makeDealer(us, manifest.courses.us11r, manifest.rules)
+  const dg = makeDealer(gl, manifest.courses.global10r, manifest.rules)
+  for (let i = 0; i < 150; i++) {
+    const q = d.draw(gate), qg = dg.draw(gate)
+    ok(!q || q.size === 'short', `US: the ${gate} gate never asks a long question`)
+    ok(!qg || qg.size === 'short', `Global: the ${gate} gate never asks a long question`)
+  }
+}
 for (let i = 0; i < 200; i++) {
   const q = dealer.draw('xp')
-  ok(q.lane === 'sources', 'xp gate draws Part I only')
-  ok(q.answerVerified !== false, 'xp gate never draws an unverified key')
+  ok(q && q.lane !== 'sources', 'xp gate never draws a Part I document')
+  ok(q && q.answerVerified !== false, 'xp gate never draws an unverified key')
 }
 for (let i = 0; i < 200; i++) ok(dealer.draw('halftime', { playoff: true }).answerVerified !== false, 'playoff gates never draw an unverified key')
+for (const lane of ['sources']) {
+  const d = makeDealer(us, manifest.courses.us11r, manifest.rules)
+  for (let i = 0; i < 30; i++) ok(d.draw('training', { lane }).size === 'long', 'training asks the long questions first')
+}
+ok(makeDealer(us, manifest.courses.us11r, manifest.rules).draw('agency', { lane: 'sources' }).size === 'long', 'free agency asks the long questions first')
+ok(makeDealer(us, manifest.courses.us11r, manifest.rules).draw('training', { lane: 'reading' }).size === 'short', 'a lane with no long questions falls back to short ones for training')
+const nSources = us.lanes.sources.length
 const fresh = makeDealer(us, manifest.courses.us11r, manifest.rules)
-const seen = new Set(); for (let i = 0; i < 13; i++) seen.add(fresh.draw('xp').id)
-eq(seen.size, 13, 'a lane deals every item before it repeats (13 verified Part I items)')
+const seen = new Set(); for (let i = 0; i < nSources; i++) seen.add(fresh.draw('agency', { lane: 'sources' }).id)
+eq(seen.size, nSources, `a lane deals every item before it repeats (${nSources} Part I items)`)
 const mixed = makeDealer(us, manifest.courses.us11r, manifest.rules)
-const mixSeen = new Set(); for (let i = 0; i < 16; i++) mixSeen.add(mixed.draw(i % 2 ? 'xp' : 'agency', { lane: 'sources' }).id)
-eq(mixSeen.size, 16, 'scoring and non-scoring gates share one deck: no repeats across gate types')
+const mixSeen = new Set(); for (let i = 0; i < nSources; i++) mixSeen.add(mixed.draw(i % 2 ? 'training' : 'agency', { lane: 'sources' }).id)
+eq(mixSeen.size, nSources, 'training and free agency share one deck: no repeats across gate types')
 eq(makeDealer(gl, manifest.courses.global10r, manifest.rules).emptyLanes, ['context', 'reading'], 'Global: only context and task words are still empty')
 ok(makeDealer(us, manifest.courses.us11r, manifest.rules).draw('practice'), 'the film-study gate can draw')
 ok(makeDealer(us, manifest.courses.us11r, manifest.rules).draw('training', { lane: 'reading' }).lane === 'reading', 'training draws from the player\'s own lane')

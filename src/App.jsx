@@ -378,7 +378,9 @@ function About({ manifest, door, onBack }) {
               {LANES.map(l => <tr key={l}><th scope="row">{manifest.lanes[l].label}</th><td>{manifest.lanes[l].stat_label}</td><td>{door.pool.lanes[l].length}</td></tr>)}
             </tbody>
           </table>
-          {!!door.pool.held.length && (
+          {/* The held list is a report for the desks, not something a student reads. It shows
+              in a dev build only; the desks get the same list in their passes. */}
+          {import.meta.env.DEV && !!door.pool.held.length && (
             <p className="sub small">Held out of the pool: {door.pool.held.map(h => `${h.id} (${h.reason})`).join('; ')}.</p>
           )}
         </>

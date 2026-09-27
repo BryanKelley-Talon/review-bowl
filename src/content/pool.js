@@ -238,6 +238,22 @@ export function readPack(pack, meta, crops) {
 }
 
 // The whole door's pool.
+// SHORT or LONG (BK, 2026-09-27: "keep the in game questions short… longer questions/docs going
+// with off season, between games, bigger reward items"). A question is LONG when it carries a
+// real document: an image, a cited source, or a passage longer than short_cue_words. A definition
+// or a one-line cue is not a document. It is also LONG when everything a student has to read
+// (cue, prompt and options) runs past short_max_words. Everything else is SHORT, and only SHORT
+// questions are asked in-game (dealer.js).
+const wordsIn = s => (typeof s === 'string' ? s.trim().split(/\s+/).filter(Boolean).length : 0)
+export function sizeOf(q, rules = {}) {
+  const st = q.stimulus || {}
+  const cue = wordsIn(st.text)
+  const isDoc = !!((st.images && st.images.length) || st.citation || cue > (rules.short_cue_words ?? 45))
+  if (isDoc) return 'long'
+  const words = cue + wordsIn(q.prompt) + (q.options || []).reduce((n, o) => n + wordsIn(o.text), 0)
+  return words > (rules.short_max_words ?? 90) ? 'long' : 'short'
+}
+
 export function buildPool(manifest, courseId, packsByFile, crops) {
   const course = manifest.courses[courseId]
   const lanes = {}
@@ -249,7 +265,19 @@ export function buildPool(manifest, courseId, packsByFile, crops) {
     if (!pack) { held.push({ id: '—', file: meta.file, reason: 'pack did not load' }); continue }
     const r = readPack(pack, meta, crops)
     held.push(...r.held)
-    for (const q of r.questions) (lanes[q.lane] || (lanes[q.lane] = [])).push(q)
+    for (const q of r.questions) {
+      // The Arena's rule (CONVENTIONS §7, 2026-09-25): every question carries two hints and a
+      // reason line. With require_hints_and_reason on, a question short of that is held back,
+      // named in the content report, and comes back the day its author's words land.
+      const rules = manifest.rules || {}
+      if (rules.require_hints_and_reason && (q.hints.length < 2 || !q.rationale)) {
+        held.push({ id: q.id, file: meta.file,
+                    reason: [q.hints.length < 2 && 'needs two hints', !q.rationale && 'needs a reason line'].filter(Boolean).join(' and ') })
+        continue
+      }
+      q.size = sizeOf(q, rules)
+      ;(lanes[q.lane] || (lanes[q.lane] = [])).push(q)
+    }
   }
   return { course: courseId, lanes, held }
 }
