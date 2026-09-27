@@ -63,7 +63,7 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
           setFilmRun(null)
           setFilmDone(true)
           setCareer(c => ({ ...c, practiceDone: true }))
-          setNote(`Film study done — ${nextRight} of ${want} right. That is what the defense carries into the game.`)
+          setNote(`Film study done. That is what the defense carries into the game.`)
           logEvent({ kind: 'film', right: nextRight, of: want, lane: q && q.lane,
                      defense: defenseNow.current ?? v.defense })
         }

@@ -59,7 +59,7 @@ function leadStory({ events, team, lastResult, opponent, week }) {
   if (film && film.right > 0) {
     return {
       head: 'DEFENSE PUTS IN THE WORK',
-      story: `${film.right} of ${film.of} in the film room. The defense is rated ${film.defense} going into Friday; ` +
+      story: `A session in the film room. The defense is rated ${film.defense} going into Friday; ` +
              `another session next week moves it again.`,
     }
   }
