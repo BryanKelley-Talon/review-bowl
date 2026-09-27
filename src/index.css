@@ -335,3 +335,6 @@ body.rb-full .controls{margin:6px 0}
 
 .cite-line{display:block}
 .cite-line + .cite-line{margin-top:3px}
+
+/* BK's coaching lines (locked bank) in the Bowl: his voice, set apart in italics. */
+.coach-code{font-style:italic;color:var(--gold);font-size:15px;line-height:1.5;margin:8px 0 0}

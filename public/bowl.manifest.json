@@ -278,5 +278,16 @@
       ]
     },
     "long_chip": "Document question · take your time"
+  },
+  "coaching": {
+    "_source": "Leo's LOCKED growth-coaching bank (BK 2026-09-27 10:11), verbatim: the save-code lines, which belong to the Bowl because it has seasons and codes. Shown under the save code after each game (code_new) and once on the team page after a code restores (code_restored).",
+    "code_new": [
+      "New code. Screenshot it or write it down. It's your whole season.",
+      "Screenshot that code. Future you will thank you."
+    ],
+    "code_restored": [
+      "Code worked. Your season's back. Nothing lost.",
+      "You saved your code and it paid off. That's planning ahead."
+    ]
   }
 }

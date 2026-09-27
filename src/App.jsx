@@ -40,13 +40,20 @@ function Swatch({ team }) {
   )
 }
 
-function CodeBox({ career, big }) {
+// One line from BK's locked coaching bank, chosen once per mount.
+function CoachLine({ lines }) {
+  const [line] = useState(() => (Array.isArray(lines) && lines.length ? lines[Math.floor(Math.random() * lines.length)] : null))
+  return line ? <p className="coach-code">{line}</p> : null
+}
+
+function CodeBox({ career, big, coach }) {
   const code = encodeSaveCode(career)
   return (
     <div className={`codebox${big ? ' big' : ''}`}>
       <div className="eyebrow">Your save code</div>
       <p className="code" aria-label="Your save code">{code}</p>
       <p className="sub">Write it on your worksheet or take a screenshot. On any computer, <b>Enter a save code</b> picks up exactly here — team, record, cash, stats, all of it. It holds nothing about you.</p>
+      {coach && <CoachLine lines={coach} />}
     </div>
   )
 }
@@ -270,7 +277,7 @@ function Jobs({ career, onTake }) {
   )
 }
 
-function Hub({ career, setCareer, manifest, door, onPlay, onAnswer, onQuit }) {
+function Hub({ career, setCareer, manifest, door, onPlay, onAnswer, onQuit, restored }) {
   const team = TEAMS[career.team]
   const rec = record(career.results)
   let next = null
@@ -324,6 +331,7 @@ function Hub({ career, setCareer, manifest, door, onPlay, onAnswer, onQuit }) {
       <div className="cols">
         <TeamPanel career={career} manifest={manifest} pool={door?.pool} />
         <div>
+          {restored && <CoachLine lines={manifest.coaching?.code_restored} />}
           <CodeBox career={career} />
           <Schedule career={career} />
           <Standings career={career} />
@@ -334,7 +342,7 @@ function Hub({ career, setCareer, manifest, door, onPlay, onAnswer, onQuit }) {
 }
 
 // After every game: the save code is the first-class step, not an option (§4).
-function Postgame({ career, last, onDone }) {
+function Postgame({ career, last, onDone, coach }) {
   const t = TEAMS[career.team], o = TEAMS[last.opp]
   return (
     <div className="wrap narrow">
@@ -344,7 +352,7 @@ function Postgame({ career, last, onDone }) {
         <p className="sub">{last.result === RESULT.W ? 'Win.' : last.result === RESULT.L ? 'Loss.' : 'Tie.'} Questions right: {last.right} of {last.total}. Press conference: {last.press ? 'the room liked it (+$10k, +1 security)' : 'no bonus'}.</p>
         <p className="sub">Earned {money(last.earned)} · job security {last.security >= 0 ? '+' : ''}{last.security}</p>
       </div>
-      <CodeBox career={career} big />
+      <CodeBox career={career} big coach={coach} />
       <div className="row center">
         <button type="button" className="btn-primary" onClick={onDone}>I wrote it down — continue</button>
       </div>
@@ -396,6 +404,7 @@ export default function App() {
   const [manifest, setManifest] = useState(null)
   const [error, setError] = useState(null)
   const [screen, setScreen] = useState('title')
+  const [restored, setRestored] = useState(false)   // a code just worked: one coaching line on the team page
   const [career, setCareerState] = useState(null)
   const careerRef = useRef(null)
   const [door, setDoor] = useState(null)
@@ -472,7 +481,7 @@ export default function App() {
   else if (screen === 'team') body = <TeamPick onBack={() => setScreen('door')}
                                                onPick={i => { clearAutosave(); setCareer(newCareer(pendingCourse, i)); setScreen('hub') }} />
   else if (screen === 'code') body = <CodeEntry manifest={manifest} onBack={() => setScreen('title')}
-                                                onLoad={c => { setCareer(c); setScreen('hub') }} />
+                                                onLoad={c => { setCareer(c); setRestored(true); setScreen('hub') }} />
   else if (screen === 'about') body = <About manifest={manifest} door={door} onBack={() => setScreen(career ? 'hub' : 'title')} />
   else if (screen === 'match' && game && door) body = (
     <div className="wrap wide">
@@ -482,9 +491,9 @@ export default function App() {
     </div>
   )
   else if (screen === 'match') body = <div className="wrap"><p className="sub">Loading the question pool…</p></div>
-  else if (screen === 'post' && last) body = <Postgame career={career} last={last} onDone={() => setScreen('hub')} />
+  else if (screen === 'post' && last) body = <Postgame career={career} last={last} coach={manifest.coaching?.code_new} onDone={() => { setRestored(false); setScreen('hub') }} />
   else if (career) body = (
-    <Hub career={career} setCareer={setCareer} manifest={manifest} door={door} onPlay={play} onAnswer={onAnswer}
+    <Hub career={career} setCareer={setCareer} manifest={manifest} door={door} onPlay={play} onAnswer={onAnswer} restored={restored}
          onQuit={() => setScreen('title')} />
   )
   else body = <Title manifest={manifest} onNew={() => setScreen('door')} onContinue={c => { setCareer(c); setScreen('hub') }}
