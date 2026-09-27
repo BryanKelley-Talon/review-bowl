@@ -349,7 +349,7 @@ function Postgame({ career, last, onDone, coach }) {
       <div className="panel center">
         <div className="eyebrow">{last.label} · Final</div>
         <h2 className="h2">{t.abbr} {last.you} – {last.oppScore} {o.abbr}</h2>
-        <p className="sub">{last.result === RESULT.W ? 'Win.' : last.result === RESULT.L ? 'Loss.' : 'Tie.'} Questions right: {last.right} of {last.total}. Press conference: {last.press ? 'the room liked it (+$10k, +1 security)' : 'no bonus'}.</p>
+        <p className="sub">{last.result === RESULT.W ? 'Win.' : last.result === RESULT.L ? 'Loss.' : 'Tie.'} Questions today: {last.total} answered. Press conference: {last.press ? 'the room liked it (+$10k, +1 security)' : 'no bonus'}.</p>
         <p className="sub">Earned {money(last.earned)} · job security {last.security >= 0 ? '+' : ''}{last.security}</p>
       </div>
       <CodeBox career={career} big coach={coach} />
