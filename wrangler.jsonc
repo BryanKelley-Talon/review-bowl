@@ -1,0 +1,14 @@
+// Cloudflare Workers static-assets config for Skills Review Bowl (Josh, 2026-09-27).
+// Same pattern as The Arena (2026-09-25): no server code; Cloudflare serves the built
+// dist/ folder and nothing else. Nothing is stored or sent: the save code lives on
+// the student's device (Ed Law 2-d). Netlify ignores this file.
+{
+  "name": "review-bowl",
+  "compatibility_date": "2025-09-01",
+  // Branch pushes build a private preview (wrangler preview needs this block).
+  "previews": {},
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
