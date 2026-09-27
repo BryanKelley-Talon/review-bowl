@@ -73,7 +73,7 @@
   },
   "courses": {
     "global10r": {
-      "label": "Global History & Geography · 10R",
+      "label": "Global Studies and Geography · 10R",
       "short": "Global 10R",
       "accent": "#7FB2D9",
       "_weights_note": "Relative draw weight per lane. 0 turns a lane off. A lane with no enabled pack is skipped automatically, and its stat is built from every answer until its content lands.",
