@@ -366,9 +366,11 @@ for (const a of TEAMS) for (const b of TEAMS) if (a !== b) {
 }
 eq(clashes, 0, 'all 132 matchups: the two sides wear different-looking jerseys')
 eq(cvdClashes, 0, 'all 132 matchups: still different to a red-green colour-blind eye')
-// Known since 2026-09-22: Corning West at home (in white, green vanishes on grass) v Southside, whose
-// white change strip matches. Southside falls back to the grey strip. Reported to BK, not changed.
-eq(lastResort, ['CWS-SHS'], 'only Corning West v Southside falls back to the plain grey strip')
+// Corning West v Southside used to need the grey strip; BK's two greens (2026-09-28) fixed it.
+eq(lastResort, [], 'no matchup falls back to the plain grey strip')
+const cws = TEAMS.find(t => t.id === 'cwest'), shs = TEAMS.find(t => t.id === 'southside')
+eq(kits(cws, shs).offense.jersey, cws.kit.jersey, 'Corning West wear their own green at home v Southside')
+eq(kits(shs, cws).offense.jersey, shs.kit.jersey, 'Southside wear their own hunter green at home v Corning West')
 const heights = TEAMS.findIndex(t => t.id === 'heights'), bing = TEAMS.findIndex(t => t.id === 'binghamton')
 eq(kits(TEAMS[heights], TEAMS[bing]).offense.jersey, '#F2F2F2', 'Elmira Heights wear white against Binghamton (home)')
 eq(kits(TEAMS[bing], TEAMS[heights]).defense.jersey, '#F2F2F2', 'Elmira Heights wear white against Binghamton (away)')

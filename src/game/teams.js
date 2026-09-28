@@ -39,19 +39,21 @@ export const TEAMS = [
     kit: { jersey: '#7A1F2B', helmet: '#FFCD00', pants: '#FFCD00' },
     alt: { jersey: '#FFCD00', helmet: '#7A1F2B', pants: '#7A1F2B' } },
 
-  // The two hunter-green schools never wear green on grass: white at home, dark on the road.
-  { id: 'cwest', name: 'Corning West', abbr: 'CWS', era: 'legacy', colors: ['#2F5233', '#FFFFFF'], colorNames: 'Hunter green / white',
-    kit: { jersey: '#F2F2F2', helmet: '#2F5233', pants: '#2F5233' },
-    alt: { jersey: '#16301B', helmet: '#F2F2F2', pants: '#F2F2F2' } },
+  // Corning West is the LIGHTER green, with a white helmet and white pants; Southside is the darker
+  // hunter green, with green helmet and pants (BK, 2026-09-28). Both greens are chosen to stay
+  // readable on the grass, and they are far enough apart that the two never need the grey strip.
+  { id: 'cwest', name: 'Corning West', abbr: 'CWS', era: 'legacy', colors: ['#5DA36A', '#FFFFFF'], colorNames: 'Green / white',
+    kit: { jersey: '#5DA36A', helmet: '#F2F2F2', pants: '#F2F2F2' },
+    alt: { jersey: '#F2F2F2', helmet: '#F2F2F2', pants: '#5DA36A' } },
 
   // Darker crimson / maroon: maroon helmet and jersey, white pants (BK, 2026-09-28).
   { id: 'ceast', name: 'Corning East', abbr: 'CEA', era: 'legacy', colors: ['#6A1B2A', '#FFFFFF'], colorNames: 'Maroon / white',
     kit: { jersey: '#6A1B2A', helmet: '#6A1B2A', pants: '#F2F2F2' },
     alt: { jersey: '#F2F2F2', helmet: '#6A1B2A', pants: '#6A1B2A' } },
 
-  { id: 'southside', name: 'Southside', abbr: 'SHS', era: 'legacy', colors: ['#355E3B', '#FFFFFF'], colorNames: 'Hunter green / white',
-    kit: { jersey: '#355E3B', helmet: '#F2F2F2', pants: '#F2F2F2' },
-    alt: { jersey: '#F2F2F2', helmet: '#355E3B', pants: '#355E3B' } },
+  { id: 'southside', name: 'Southside', abbr: 'SHS', era: 'legacy', colors: ['#2F5233', '#FFFFFF'], colorNames: 'Hunter green / white',
+    kit: { jersey: '#2F5233', helmet: '#2F5233', pants: '#2F5233' },
+    alt: { jersey: '#F2F2F2', helmet: '#2F5233', pants: '#2F5233' } },
 
   { id: 'efa', name: 'EFA', abbr: 'EFA', era: 'legacy', colors: ['#1B2A4A', '#FFFFFF'], colorNames: 'Navy blue / white',
     kit: { jersey: '#1B2A4A', helmet: '#F2F2F2', pants: '#F2F2F2' },
