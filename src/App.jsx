@@ -105,16 +105,22 @@ function TeamPick({ onPick, onBack }) {
       <button type="button" className="back" onClick={onBack}>← Back</button>
       <h2 className="h2">Pick your team</h2>
       <p className="sub">Any team, any colors — it's just the jersey. Players are made up.</p>
-      <div className="grid teams">
-        {TEAMS.map((t, i) => (
-          <button key={t.id} type="button" className="card team" onClick={() => onPick(i)}
-                  style={{ borderTopColor: t.colors[1] === '#FFFFFF' || t.colors[1] === '#111111' ? t.colors[0] : t.colors[1] }}>
-            <Swatch team={t} />
-            <div className="card-name">{t.name}</div>
-            <div className="card-blurb">{t.colorNames}</div>
-          </button>
-        ))}
-      </div>
+      {/* Six modern schools, six legacy schools (BK, 2026-09-28: headers "Modern" and "Legacy"). */}
+      {[['modern', 'Modern'], ['legacy', 'Legacy']].map(([era, label]) => (
+        <section key={era} className="era" aria-labelledby={`era-${era}`}>
+          <h3 id={`era-${era}`} className="h3 era-head">{label}</h3>
+          <div className="grid teams">
+            {TEAMS.map((t, i) => t.era !== era ? null : (
+              <button key={t.id} type="button" className="card team" onClick={() => onPick(i)}
+                      style={{ borderTopColor: t.colors[1] === '#FFFFFF' || t.colors[1] === '#111111' ? t.colors[0] : t.colors[1] }}>
+                <Swatch team={t} />
+                <div className="card-name">{t.name}</div>
+                <div className="card-blurb">{t.colorNames}</div>
+              </button>
+            ))}
+          </div>
+        </section>
+      ))}
     </div>
   )
 }
@@ -351,6 +357,9 @@ function Postgame({ career, last, onDone, coach }) {
         <h2 className="h2">{t.abbr} {last.you} – {last.oppScore} {o.abbr}</h2>
         <p className="sub">{last.result === RESULT.W ? 'Win.' : last.result === RESULT.L ? 'Loss.' : 'Tie.'} Questions today: {last.total} answered. Press conference: {last.press ? 'the room liked it (+$10k, +1 security)' : 'no bonus'}.</p>
         <p className="sub">Earned {money(last.earned)} · job security {last.security >= 0 ? '+' : ''}{last.security}</p>
+        {/* The Arena plug (BK, 2026-09-28: "i like the done for today lines"). Opens in a new tab, so the career stays put. */}
+        <p className="sub arena-plug">Done for today? Keep climbing in the Arena.</p>
+        <a className="btn-ghost arena-plug-link" href="https://thearena.flashpointhistory.com" target="_blank" rel="noopener">Open the Arena</a>
       </div>
       <CodeBox career={career} big coach={coach} />
       <div className="row center">

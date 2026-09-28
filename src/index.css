@@ -338,3 +338,11 @@ body.rb-full .controls{margin:6px 0}
 
 /* BK's coaching lines (locked bank) in the Bowl: his voice, set apart in italics. */
 .coach-code{font-style:italic;color:var(--gold);font-size:15px;line-height:1.5;margin:8px 0 0}
+
+/* Team picker: Modern and Legacy (BK, 2026-09-28) */
+.era{margin-top:18px}
+@media (min-width:720px){.era .grid.teams{grid-template-columns:repeat(3,1fr)}}
+.era-head{margin:0 0 10px;letter-spacing:.08em;text-transform:uppercase;color:var(--arena-gold,#E3B341)}
+/* Postgame: the Arena plug */
+.arena-plug{margin-top:14px}
+a.arena-plug-link{display:inline-block;text-decoration:none;margin-top:4px}

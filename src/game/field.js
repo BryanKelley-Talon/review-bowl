@@ -9,7 +9,8 @@
 //
 // CONTROLS (trackpad / mouse / touch first, keyboard in full):
 //   before the throw   drag BACK from anywhere, release to throw (slingshot)
-//                      quick tap = the quarterback takes off running
+//                      tap a receiver = throw to him (led, like keys 1–4)
+//                      quick tap anywhere else = the quarterback takes off running
 //                      keys 1–4 throw to that receiver · Space runs · ↑/↓ slide in the pocket
 //   ball carrier       hold and point up/down to steer · tap or Space to juke · ↑/↓ steer
 //
@@ -28,8 +29,24 @@ const VIEW_W = VW / PX
 const VIEW_H = VH / PX
 export const FIELD_W = 53.33
 const C = FIELD_W / 2
-const AIM_GAIN = 2.6
+// The slingshot (BK, 2026-09-28: "aiming, power, and moving receiver can be tough at times").
+// AIM_GAIN: yards of throw per yard of pull. 3.6 puts a 55-yard throw inside a quarter of the
+// field's width, a pull a trackpad can make (it was 2.6, about a third).
+// MAGNET: an aim that lands within this many yards of a receiver, or of his LEAD SPOT (where he
+// will be when the ball gets there), or of the line between them, locks onto him, and the throw
+// is led at release, so a moving receiver is caught up with. The Throwing stat still sets the scatter ring around every throw.
+const AIM_GAIN = 3.6
 const MAX_THROW = 55
+const MAGNET = 3.5
+const TAP_HIT = 16            // logical px: a tap this close to a receiver (or his number) throws to him
+const flightTime = d => clamp(d / 24, 0.35, 1.9)
+// Distance from point p to the segment a–b.
+const segDist = (p, a, b) => {
+  const vx = b.x - a.x, vy = b.y - a.y, L = vx * vx + vy * vy
+  const k = L ? Math.max(0, Math.min(1, ((p.x - a.x) * vx + (p.y - a.y) * vy) / L)) : 0
+  return Math.hypot(p.x - (a.x + vx * k), p.y - (a.y + vy * k))
+}
+const arcOf = T => Math.min(6, T * 3.2)
 
 const DIGITS = {
   0: ['111', '101', '101', '101', '111'], 1: ['010', '110', '010', '010', '111'], 2: ['111', '001', '111', '100', '111'],
@@ -187,8 +204,14 @@ export class FieldEngine {
       this.pointer = null
       if (!ptr) return
       if (this.state === 'dropback') {
-        if (this.aim && ptr.moved > 10) this._throw(this.aim.x, this.aim.y)
-        else if (ptr.moved <= 10) this._qbRun()
+        if (this.aim && ptr.moved > 10) {
+          if (this.aim.r) this._throwTo(this.aim.r)
+          else this._throw(this.aim.x, this.aim.y)
+        } else if (ptr.moved <= 10) {
+          const r = this._tappedReceiver(ptr)
+          if (r) this._throwTo(r)
+          else this._qbRun()
+        }
         this.aim = null
       } else if (this.state === 'run') {
         if (ptr.moved <= 10 && performance.now() - ptr.t0 < 260) this._doJuke()
@@ -241,7 +264,44 @@ export class FieldEngine {
     let dy = (p.y0 - p.y) / PX * AIM_GAIN
     const d = Math.hypot(dx, dy)
     if (d > MAX_THROW) { dx *= MAX_THROW / d; dy *= MAX_THROW / d }
-    this.aim = { x: this.qb.x + dx, y: this.qb.y + dy }
+    const raw = { x: this.qb.x + dx, y: this.qb.y + dy }
+    // Lock onto a receiver when the aim lands on him, on his lead spot, or anywhere on the
+    // line between the two. Aim at the man and the ball goes where he will be.
+    let best = null
+    for (const r of this.targets) {
+      if (r.role === 'RB' && r.route === 'block') continue
+      const s = this._leadSpot(r)
+      const dd = segDist(raw, r, s)
+      if (dd <= MAGNET && (!best || dd < best.dd)) best = { r, s, dd }
+    }
+    this.aim = best ? { x: best.s.x, y: best.s.y, r: best.r } : raw
+  }
+
+  // Where a receiver will be when a ball thrown to him now arrives: his ROUTE is run forward
+  // for the ball's flight time (the same _runRoute() he will actually run), so the lead follows
+  // his cut instead of a straight line off his current heading. Keyboard, tap and locked
+  // slingshot throws all use it; the flight time is the one _throw() gives the ball.
+  _leadSpot(r) {
+    const ahead = T => {
+      const g = { ...r }
+      for (let t = 0; t < T; t += 1 / 60) this._runRoute(g, 1 / 60)
+      return g
+    }
+    let spot = r
+    for (let i = 0; i < 3; i++) spot = ahead(flightTime(Math.hypot(spot.x - this.qb.x, spot.y - this.qb.y)))
+    return { x: spot.x, y: spot.y }
+  }
+
+  // A tap on a receiver, or on the number above him, picks him.
+  _tappedReceiver(ptr) {
+    let best = null
+    for (const r of this.targets) {
+      if (r.role === 'RB' && r.route === 'block') continue
+      const s = this._toScreen(r.x, r.y)
+      const dd = Math.min(Math.hypot(ptr.x0 - s.x, ptr.y0 - s.y), Math.hypot(ptr.x0 - s.x, ptr.y0 - (s.y - 20)))
+      if (dd <= TAP_HIT && (!best || dd < best.dd)) best = { r, dd }
+    }
+    return best ? best.r : null
   }
 
   _pressure() {
@@ -254,20 +314,17 @@ export class FieldEngine {
     const ang = Math.random() * Math.PI * 2
     const to = { x: tx + Math.cos(ang) * scatter, y: ty + Math.sin(ang) * scatter }
     const d = Math.hypot(to.x - this.qb.x, to.y - this.qb.y)
-    const T = clamp(d / 24, 0.35, 1.9)
-    this.ball = { from: { x: this.qb.x, y: this.qb.y }, to, t: 0, T, arc: Math.min(6, T * 3.2) }
+    const T = flightTime(d)
+    this.ball = { from: { x: this.qb.x, y: this.qb.y }, to, t: 0, T, arc: arcOf(T) }
     this.state = 'air'
     this._phase('air')
   }
 
-  // Keyboard throw: lead the receiver to where he will be when the ball arrives.
+  // Keyboard, tap and locked-slingshot throws: lead the receiver to where he will be
+  // when the ball arrives.
   _throwTo(r) {
-    let tx = r.x, ty = r.y
-    for (let i = 0; i < 3; i++) {
-      const T = clamp(Math.hypot(tx - this.qb.x, ty - this.qb.y) / 24, 0.35, 1.9)
-      tx = r.x + r.vx * T; ty = r.y + r.vy * T
-    }
-    this._throw(tx, ty)
+    const s = this._leadSpot(r)
+    this._throw(s.x, s.y)
   }
 
   _qbRun() {
@@ -707,18 +764,41 @@ export class FieldEngine {
   // The reticle is the Throwing stat made visible: its ring is the scatter a throw
   // can land in. Better sources reading, smaller ring.
   _drawAim(g) {
+    const p = this.pointer
+    // The pull itself: a faint band from where the finger went down to where it is now.
+    if (p) {
+      const n = Math.max(2, Math.floor(Math.hypot(p.x - p.x0, p.y - p.y0) / 5))
+      g.fillStyle = 'rgba(244,246,250,.5)'
+      for (let i = 0; i <= n; i++) g.fillRect(Math.round(p.x0 + (p.x - p.x0) * i / n), Math.round(p.y0 + (p.y - p.y0) * i / n), 2, 2)
+    }
+    // Every receiver's lead spot: where he will be when the ball gets there.
+    for (const rc of this.targets) {
+      if (rc.role === 'RB' && rc.route === 'block') continue
+      const ls = this._leadSpot(rc), s = this._toScreen(ls.x, ls.y)
+      const on = this.aim.r === rc
+      g.strokeStyle = on ? '#F5CB63' : 'rgba(244,246,250,.7)'; g.lineWidth = 1
+      g.beginPath(); g.moveTo(s.x, s.y - 4); g.lineTo(s.x + 4, s.y); g.lineTo(s.x, s.y + 4); g.lineTo(s.x - 4, s.y); g.closePath(); g.stroke()
+    }
     const a = this._toScreen(this.qb.x, this.qb.y)
     const t = this._toScreen(this.aim.x, this.aim.y)
+    // The flight: the same arc the ball will fly (flight time and height as _throw() sets them).
+    const dYards = Math.hypot(this.aim.x - this.qb.x, this.aim.y - this.qb.y)
+    const arc = arcOf(flightTime(dYards))
     const n = Math.max(2, Math.floor(Math.hypot(t.x - a.x, t.y - a.y) / 6))
     g.fillStyle = 'rgba(244,246,250,.85)'
     for (let i = 1; i < n; i++) {
       const k = i / n
-      const h = 4 * Math.min(6, 3) * k * (1 - k) * PX * 0.35
+      const h = 4 * arc * k * (1 - k) * PX * 0.7
       g.fillRect(Math.round(a.x + (t.x - a.x) * k), Math.round(a.y + (t.y - a.y) * k - h), 2, 2)
     }
     const r = Math.max(3, this.phys.throwJitter * (this._pressure() ? 1.6 : 1) * PX)
-    g.strokeStyle = '#F5CB63'; g.lineWidth = 1
+    g.strokeStyle = '#F5CB63'; g.lineWidth = this.aim.r ? 2 : 1
     g.beginPath(); g.arc(t.x + 0.5, t.y + 0.5, r, 0, Math.PI * 2); g.stroke()
     g.fillStyle = '#F5CB63'; g.fillRect(t.x - 1, t.y - 1, 3, 3)
+    // Locked on: his number beside the ring, so the lock never rests on colour alone.
+    if (this.aim.r) {
+      g.fillStyle = 'rgba(11,18,32,.88)'; g.fillRect(t.x + r + 2, t.y - 7, 9, 13)
+      this._digit(g, this.aim.r.label, t.x + r + 4, t.y - 4, 2, '#F5CB63')
+    }
   }
 }
