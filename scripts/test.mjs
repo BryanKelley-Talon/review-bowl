@@ -385,5 +385,17 @@ eq(kits(TEAMS[bing], TEAMS[heights]).defense.jersey, '#F2F2F2', 'Elmira Heights 
   ok(culture.every(q => q.hints.length === 2 && q.rationale), 'every Locker Room question has two hints and a reason')
 }
 
+// ── the podium (BK, 2026-09-28, Plan A) ───────────────────────────────────────
+{
+  const man = JSON.parse(fs.readFileSync(path.join(ROOT, 'public/bowl.manifest.json'), 'utf8'))
+  const packs = {}
+  for (const p of man.culture.packs) packs[p.file] = JSON.parse(fs.readFileSync(path.join(ROOT, 'public', p.file), 'utf8'))
+  const culture = buildCulture(man, packs)
+  const d = makeDealer({ lanes: {}, culture }, { weights: {} }, {})
+  const seen = []
+  for (let game = 0; game < 8; game++) { const a = d.draw('locker'), b = d.draw('podium'); ok(a && b && a.culture && b.culture && a.id !== b.id, `game ${game + 1}: halftime and podium ask two different culture questions`); seen.push(a.id, b.id) }
+  eq(new Set(seen.slice(0, 16)).size, 16, 'the first 16 culture questions of a season are all different')
+}
+
 console.log(`\n${passed} passed, ${failed} failed`)
 process.exit(failed ? 1 : 0)

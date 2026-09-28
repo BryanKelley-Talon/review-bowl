@@ -34,6 +34,10 @@ const GATES = {
   // The Locker Room (BK, 2026-09-27): the first halftime question, once a game, never in the
   // playoffs. It draws from the culture deck only: the Office theme's practice items.
   locker:   { label: 'Locker room', culture: true },
+  // The press conference in the regular season (BK, 2026-09-28, Plan A): a culture question
+  // from the same deck as the Locker Room, so the two never repeat within a game. The playoffs
+  // keep the history question ('press' above).
+  podium:   { label: 'Press conference', culture: true },
 }
 
 export function makeDealer(pool, course, rules = {}, random = Math.random) {
