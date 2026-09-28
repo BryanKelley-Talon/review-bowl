@@ -4,7 +4,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { buildPool } from '../src/content/pool.js'
+import { buildCulture, buildPool } from '../src/content/pool.js'
 import { makeDealer } from '../src/content/dealer.js'
 import { DEFENSE, applyAnswer, applyAnswerAll, physics, ratings, values } from '../src/game/ratings.js'
 import { applyPenalty, applyPlay, callTimeout, extraPoint, isPenaltySpot, newGame, twoPoint } from '../src/game/matchRules.js'
@@ -89,7 +89,7 @@ for (const course of Object.keys(manifest.courses)) {
   const packs = { ...packsOf('us11r') }
   for (const p of manifest.culture.packs) packs[p.file] = pub(p.file)
   const withC = buildPool(manifest, 'us11r', packs, crops)
-  eq(withC.culture.length, 5, 'the Locker Room reads the five Office practice items')
+  eq(withC.culture.length, 17, 'the Locker Room reads both Office themes: 5 + 12 practice items')
   ok(withC.culture.every(q => q.hints.length === 2 && q.rationale && q.size === 'short' && q.culture), 'every Locker Room question is short, with two hints and a reason')
   ok(Object.values(withC.lanes).flat().every(q => !q.culture), 'no Locker Room question ever enters a content lane')
   const d = makeDealer(withC, manifest.courses.us11r, manifest.rules)
@@ -374,6 +374,16 @@ eq(kits(shs, cws).offense.jersey, shs.kit.jersey, 'Southside wear their own hunt
 const heights = TEAMS.findIndex(t => t.id === 'heights'), bing = TEAMS.findIndex(t => t.id === 'binghamton')
 eq(kits(TEAMS[heights], TEAMS[bing]).offense.jersey, '#F2F2F2', 'Elmira Heights wear white against Binghamton (home)')
 eq(kits(TEAMS[bing], TEAMS[heights]).defense.jersey, '#F2F2F2', 'Elmira Heights wear white against Binghamton (away)')
+
+// ── the Locker Room pool (BK's Office themes 1 and 2, 2026-09-28) ─────────────
+{
+  const man = JSON.parse(fs.readFileSync(path.join(ROOT, 'public/bowl.manifest.json'), 'utf8'))
+  const packs = {}
+  for (const p of man.culture.packs) packs[p.file] = JSON.parse(fs.readFileSync(path.join(ROOT, 'public', p.file), 'utf8'))
+  const culture = buildCulture(man, packs)
+  eq(culture.length, 17, 'Locker Room pool: theme 1 (5) + theme 2 (12), none held back')
+  ok(culture.every(q => q.hints.length === 2 && q.rationale), 'every Locker Room question has two hints and a reason')
+}
 
 console.log(`\n${passed} passed, ${failed} failed`)
 process.exit(failed ? 1 : 0)

@@ -269,6 +269,13 @@
         "month": "2026-09",
         "enabled": true,
         "from": "BK's Office theme 1, LOCKED by BK 2026-09-27 10:07 (copied from the Arena, byte for byte)"
+      },
+      {
+        "file": "content/office-2026-10-halftime-adjustments.json",
+        "section": "practice",
+        "month": "2026-10",
+        "enabled": true,
+        "from": "BK's Office theme 2, practice items H1-H12, LOCKED by BK 2026-09-28 11:16 (Leo's ruling In/ruling-2026-09-28-bks-office-theme2-LOCKED.md); copied from In/, byte for byte. Theme 1 stays in the pool alongside it: 17 questions."
       }
     ],
     "hawk_box": {

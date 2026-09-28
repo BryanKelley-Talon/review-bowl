@@ -1,0 +1,421 @@
+{
+ "_README": "BK's Office · Theme 2 · Halftime Adjustments (October). LOCKED by BK 2026-09-28 11:16 (\"h12: yes that's accurate. H10 thats safe to say. im not replacing a dr. its common sense h6: safe to say it like that. we can send right to josh on this one. he will know how it fits.\"). Theme approved 11:10 (\"i like the theme. lets roll with it.\"). Leo drafted; BK waived the Sam/Will review for this set. Practice items only, in theme 1's shape, for the Review Bowl Locker Room. Port word for word. _label fields never render.",
+ "theme": {
+  "n": 2,
+  "title": "Halftime Adjustments",
+  "month": "2026-10"
+ },
+ "practice": {
+  "intro": "Twelve situations for the second half. Pick the choice that fits the four words best.",
+  "items": [
+   {
+    "n": 1,
+    "_label": "H1 · Be Responsible",
+    "question": "Progress reports come out. One skill is lower than you wanted. What's the best first step?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Decide history just isn't your thing."
+     },
+     {
+      "key": "B",
+      "text": "Wait for the next marking period to start fresh."
+     },
+     {
+      "key": "C",
+      "text": "Redo everything at once this weekend."
+     },
+     {
+      "key": "D",
+      "text": "Pick that one skill and ask what would raise it one step."
+     }
+    ],
+    "correct": "D",
+    "hints": [
+     "Which one is small enough to actually do this week?",
+     "Which one uses what the progress report told you?"
+    ],
+    "reasoning": "One change you'll actually make beats ten you won't. That's Be Responsible.",
+    "distractors": {
+     "A": "A skill shows where you are now, not who you are.",
+     "B": "The work you do now still counts. Waiting skips chances you already have.",
+     "C": "Ten changes by Sunday usually means none by Wednesday."
+    }
+   },
+   {
+    "n": 2,
+    "_label": "H2 · Be Responsible",
+    "question": "It's a school night, and you don't feel like doing the reading. What works best?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Skip it. You'll do better when you feel like it."
+     },
+     {
+      "key": "B",
+      "text": "Start at your usual time, even if it's just the first page."
+     },
+     {
+      "key": "C",
+      "text": "Save it all for the night before the test."
+     },
+     {
+      "key": "D",
+      "text": "Ask a friend what it said instead."
+     }
+    ],
+    "correct": "B",
+    "hints": [
+     "Which choice doesn't depend on your mood?",
+     "What gets easier once you've started?"
+    ],
+    "reasoning": "Habits carry you on the days motivation doesn't show up. That's Be Responsible.",
+    "distractors": {
+     "A": "The feeling might never show up. The reading still will.",
+     "C": "One night can't hold a whole unit.",
+     "D": "Their summary is their thinking, not yours."
+    }
+   },
+   {
+    "n": 3,
+    "_label": "H3 · Be Responsible",
+    "question": "You've been lost in class for a week, and the test is next week. When do you ask for help?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Now, while there's still time to fix it."
+     },
+     {
+      "key": "B",
+      "text": "The day before the test."
+     },
+     {
+      "key": "C",
+      "text": "After the test, once you see how it went."
+     },
+     {
+      "key": "D",
+      "text": "Never. Asking makes it look like you weren't paying attention."
+     }
+    ],
+    "correct": "A",
+    "hints": [
+     "When does help have the most time to work?",
+     "Which choice gets you unstuck before it counts?"
+    ],
+    "reasoning": "Asking early gives help time to work. That's Be Responsible.",
+    "distractors": {
+     "B": "One day isn't enough to catch up on a week.",
+     "C": "After the test, the help comes too late for that test.",
+     "D": "Asking means you noticed what you don't get. That is paying attention."
+    }
+   },
+   {
+    "n": 4,
+    "_label": "H4 · Be Respectful",
+    "question": "In a class discussion, you think someone's point is flat wrong. What's the best way in?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "\"That makes no sense.\""
+     },
+     {
+      "key": "B",
+      "text": "Roll your eyes and wait for the teacher to fix it."
+     },
+     {
+      "key": "C",
+      "text": "\"I see it differently. Here's why.\""
+     },
+     {
+      "key": "D",
+      "text": "Say nothing, then complain about it after class."
+     }
+    ],
+    "correct": "C",
+    "hints": [
+     "Which choice argues with the idea, not the person?",
+     "Which one gives a reason?"
+    ],
+    "reasoning": "Disagree with the idea, give a reason, and leave the person out of it. That's Be Respectful.",
+    "distractors": {
+     "A": "It gives no reason, and it lands on the person.",
+     "B": "An eye roll says plenty, and none of it helps.",
+     "D": "The class never hears your side, and the complaint helps nobody."
+    }
+   },
+   {
+    "n": 5,
+    "_label": "H5 · Be Respectful",
+    "question": "You get paired with someone you don't really get along with. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Ask to switch before you even start."
+     },
+     {
+      "key": "B",
+      "text": "Keep it about the work, and do it together."
+     },
+     {
+      "key": "C",
+      "text": "Split it up so you never have to talk."
+     },
+     {
+      "key": "D",
+      "text": "Let them do it all. It's their problem."
+     }
+    ],
+    "correct": "B",
+    "hints": [
+     "Which choice still gets the work done well?",
+     "What will you have to do at a job someday?"
+    ],
+    "reasoning": "You don't have to be friends to work well together. That's Be Respectful.",
+    "distractors": {
+     "A": "Give it a real try first. If it still isn't working, a teacher will step in.",
+     "C": "Two halves that never met don't make one good answer.",
+     "D": "Then your name is on work you didn't do."
+    }
+   },
+   {
+    "n": 6,
+    "_label": "H6 · Be Respectful",
+    "question": "There's a substitute today. The plan says to do the reading and answer the questions. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Do the work like it's any other day."
+     },
+     {
+      "key": "B",
+      "text": "Treat it like a free period. The sub won't know."
+     },
+     {
+      "key": "C",
+      "text": "Tell the sub your teacher never makes you do this."
+     },
+     {
+      "key": "D",
+      "text": "Do half, and save the rest for when your teacher's back."
+     }
+    ],
+    "correct": "A",
+    "hints": [
+     "Which choice would look the same if your teacher walked in?",
+     "Whose plan is the sub following?"
+    ],
+    "reasoning": "The work and the adult running the room get the same respect every day. That's Be Respectful.",
+    "distractors": {
+     "B": "The work still counts, and so does the adult in the room.",
+     "C": "Making up rules puts the sub in a bad spot and you in a worse one.",
+     "D": "Tomorrow comes with its own work."
+    }
+   },
+   {
+    "n": 7,
+    "_label": "H7 · Be Kind",
+    "question": "A rumor about someone is going around the group chat. You don't know if it's true. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Pass it on, but add \"idk if this is true.\""
+     },
+     {
+      "key": "B",
+      "text": "Ask the chat who started it."
+     },
+     {
+      "key": "C",
+      "text": "Don't pass it on, and don't add to it."
+     },
+     {
+      "key": "D",
+      "text": "Screenshot it in case it turns out to be true."
+     }
+    ],
+    "correct": "C",
+    "hints": [
+     "Which choice stops it with you?",
+     "What would you want if the rumor were about you?"
+    ],
+    "reasoning": "A rumor stops when someone stops passing it. Be that someone. That's Be Kind.",
+    "distractors": {
+     "A": "\"idk\" doesn't unsend it. It still spreads.",
+     "B": "Chasing who started it keeps everyone talking about it.",
+     "D": "A screenshot is one more copy."
+    }
+   },
+   {
+    "n": 8,
+    "_label": "H8 · Be Kind",
+    "question": "The lunch groups have settled. Someone has been sitting alone for weeks. What could you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Nothing. They probably like it that way."
+     },
+     {
+      "key": "B",
+      "text": "Wait for someone else to do something."
+     },
+     {
+      "key": "C",
+      "text": "Talk about it with your friends, and leave it there."
+     },
+     {
+      "key": "D",
+      "text": "Say hi, or ask if they want to sit with you."
+     }
+    ],
+    "correct": "D",
+    "hints": [
+     "Which choice takes ten seconds and costs you nothing?",
+     "What would it feel like to be the one sitting alone?"
+    ],
+    "reasoning": "A hello takes ten seconds and can change someone's whole week. That's Be Kind.",
+    "distractors": {
+     "A": "Maybe. Asking is the only way to find out.",
+     "B": "If everyone waits for someone else, nobody goes.",
+     "C": "Talking about someone isn't the same as talking to them."
+    }
+   },
+   {
+    "n": 9,
+    "_label": "H9 · Be Kind",
+    "question": "You get a paper back, and it didn't go well. What's the most helpful thing to tell yourself?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "\"I'm just bad at this.\""
+     },
+     {
+      "key": "B",
+      "text": "\"It doesn't matter anyway.\""
+     },
+     {
+      "key": "C",
+      "text": "\"That one didn't go well. What's one thing I can fix next time?\""
+     },
+     {
+      "key": "D",
+      "text": "\"I'm never looking at that again.\""
+     }
+    ],
+    "correct": "C",
+    "hints": [
+     "Which one would you say to a friend?",
+     "Which one gives you something to do next?"
+    ],
+    "reasoning": "Talk to yourself the way you'd talk to a friend: honest, then helpful. That's Be Kind.",
+    "distractors": {
+     "A": "That's where you are today, not where you have to stay.",
+     "B": "It does matter. That's why it stings, and why it's worth fixing.",
+     "D": "The notes on it are the map to the next one."
+    }
+   },
+   {
+    "n": 10,
+    "_label": "H10 · Be Safe",
+    "question": "It's 1 a.m., you're still scrolling, and you have a test tomorrow. What's the best call?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Phone across the room, lights out."
+     },
+     {
+      "key": "B",
+      "text": "Stay up and study, since you're awake anyway."
+     },
+     {
+      "key": "C",
+      "text": "One more video, then sleep."
+     },
+     {
+      "key": "D",
+      "text": "Keep scrolling. You'll catch up on sleep this weekend."
+     }
+    ],
+    "correct": "A",
+    "hints": [
+     "Which choice gets you the most sleep from here?",
+     "Which one takes the phone out of reach?"
+    ],
+    "reasoning": "A rested brain remembers more. Sleep is part of getting ready. That's Be Safe.",
+    "distractors": {
+     "B": "Studying at 1 a.m. trades the sleep you need for notes you won't remember.",
+     "C": "\"One more\" is how it got to be 1 a.m.",
+     "D": "The weekend doesn't help tomorrow's test."
+    }
+   },
+   {
+    "n": 11,
+    "_label": "H11 · Be Safe",
+    "question": "Someone you know is getting piled on in the comments, and it's getting mean. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Jump in and fight back for them in the comments."
+     },
+     {
+      "key": "B",
+      "text": "Don't join in. Check on them privately, and tell an adult if it keeps going."
+     },
+     {
+      "key": "C",
+      "text": "Scroll past. It's not your fight."
+     },
+     {
+      "key": "D",
+      "text": "Like a few of the comments so they leave you alone."
+     }
+    ],
+    "correct": "B",
+    "hints": [
+     "Which choice doesn't add fuel?",
+     "Which one actually helps the person getting piled on?"
+    ],
+    "reasoning": "Staying out of the fight and getting help protects them and you. That's Be Safe.",
+    "distractors": {
+     "A": "Fighting in the comments usually makes the pile bigger.",
+     "C": "It might not be your fight. It's still someone you know.",
+     "D": "Joining in to stay safe makes you part of it."
+    }
+   },
+   {
+    "n": 12,
+    "_label": "H12 · Be Safe",
+    "question": "For a couple of weeks, something has felt off, and it's more than one bad day. What's the best step?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Keep it to yourself. Everyone has bad weeks."
+     },
+     {
+      "key": "B",
+      "text": "Wait. It will probably pass on its own."
+     },
+     {
+      "key": "C",
+      "text": "Post something vague and see who notices."
+     },
+     {
+      "key": "D",
+      "text": "Tell an adult you trust."
+     }
+    ],
+    "correct": "D",
+    "hints": [
+     "Which choice gets someone on your side?",
+     "Is \"a couple of weeks\" still just a bad day?"
+    ],
+    "reasoning": "Saying so early is how things start to get better. That's Be Safe.",
+    "distractors": {
+     "A": "Everyone does have bad weeks. That's exactly why there are adults whose job is to help.",
+     "B": "Waiting is how a couple of weeks turns into a couple of months.",
+     "C": "Hoping someone notices is a hard way to ask. Asking straight works better."
+    }
+   }
+  ]
+ }
+}
