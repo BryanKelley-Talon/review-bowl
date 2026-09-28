@@ -408,7 +408,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   const kickable = canKick(g) && (fourth || g.halfLeft <= 40 || g.ot)
   const statCells = [['throwing', 'Throw'], ['hands', 'Hands'], ['speed', 'Speed'], ['blocking', 'Block'], ['toughness', 'Tough'], ['defense', 'Def']]
   const help = {
-    dropback: 'Drag back and release to throw · tap to run · keys 1–4 throw · Space runs',
+    dropback: 'Pull back and release to throw · tap a receiver to throw to him · tap the field to run · keys 1–4 throw · Space runs',   // BK approved 2026-09-28 13:53
     air: 'Ball in the air…',
     run: 'Hold and point to steer · tap or Space to juke · ↑/↓ steer',
   }[phase]

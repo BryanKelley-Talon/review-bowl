@@ -74,6 +74,8 @@ export default function Question({ q, gate, stakes, hints = true, statLine, chip
         {answered && (
           <div className="q-reveal" role="status">
             <p className={`q-verdict ${right ? 'ok' : 'miss'}`}>{right ? 'Correct.' : `Not quite — the answer is (${q.correct}).`}</p>
+            {/* Leo's "why not" line for the choice the kid picked (culture questions; BK 2026-09-28). */}
+            {!right && q.culture && q.whyNot?.[picked] && <p className="q-whynot"><b>({picked})</b> {q.whyNot[picked]}</p>}
             {q.rationale && <p className="q-why">{q.rationale}</p>}
             {q.answerVerified === false && (
               <p className="q-note">Answer key for this one comes from your class exam, not an official Regents key.</p>

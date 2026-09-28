@@ -203,6 +203,9 @@ function fromArenaStimulus(pack, meta, it) {
     correct: String(it.correct),
     hints: hintsOf(it),
     rationale: it.reasoning || null,
+    // The "why not" line for each wrong choice (Arena/Office shape). Shown after a wrong
+    // pick on culture questions (BK, 2026-09-28: "yes show it").
+    whyNot: it.distractors && typeof it.distractors === 'object' ? it.distractors : null,
   })
 }
 

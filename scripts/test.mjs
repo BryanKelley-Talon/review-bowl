@@ -397,5 +397,15 @@ eq(kits(TEAMS[bing], TEAMS[heights]).defense.jersey, '#F2F2F2', 'Elmira Heights 
   eq(new Set(seen.slice(0, 16)).size, 16, 'the first 16 culture questions of a season are all different')
 }
 
+// ── the why-not line (BK 2026-09-28) ─────────────────────────────────────────
+{
+  const man = JSON.parse(fs.readFileSync(path.join(ROOT, 'public/bowl.manifest.json'), 'utf8'))
+  const packs = {}
+  for (const p of man.culture.packs) packs[p.file] = JSON.parse(fs.readFileSync(path.join(ROOT, 'public', p.file), 'utf8'))
+  const culture = buildCulture(man, packs)
+  ok(culture.every(q => q.whyNot && q.options.filter(o => o.key !== q.correct).every(o => typeof q.whyNot[o.key] === 'string' && q.whyNot[o.key].length)),
+     'every culture question carries a why-not line for each wrong choice')
+}
+
 console.log(`\n${passed} passed, ${failed} failed`)
 process.exit(failed ? 1 : 0)

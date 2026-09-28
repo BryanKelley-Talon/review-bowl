@@ -346,3 +346,5 @@ body.rb-full .controls{margin:6px 0}
 /* Postgame: the Arena plug */
 .arena-plug{margin-top:14px}
 a.arena-plug-link{display:inline-block;text-decoration:none;margin-top:4px}
+/* The why-not line after a wrong culture pick (BK 2026-09-28) */
+.q-whynot{margin:6px 0 4px;color:var(--white,#F4F6FA);font-size:15px;line-height:1.45}
