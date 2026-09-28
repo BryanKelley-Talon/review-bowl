@@ -345,7 +345,7 @@ eq(TEAMS.filter(t => t.era === 'legacy').length, 6, 'six legacy')
 // A save code stores the team's place in the list, so the first ten never move.
 eq(TEAMS.slice(0, 10).map(t => t.id), ['corning', 'elmira', 'horseheads', 'binghamton', 'ithaca', 'cwest', 'ceast', 'southside', 'efa', 'notredame'], 'the first ten keep their places')
 eq(new Set(TEAMS.map(t => t.abbr)).size, N_TEAMS, 'every scoreboard code is different')
-eq(TEAMS.map(t => t.abbr).join(' '), 'COR EHS HHD BNG ITH CWS CEA SHS EFA ND TAE TRO', 'the scoreboard codes BK set')
+eq(TEAMS.map(t => t.abbr).join(' '), 'CPP ELM HHD BNG ITH WHS EHS SHS EFA ND TAE THS', 'the scoreboard codes BK set')
 for (const i of [10, 11]) {
   const x = newCareer('us11r', i, 5)
   eq(decodeSaveCode(encodeSaveCode(x)).team, i, `a ${TEAMS[i].name} save code comes back as ${TEAMS[i].name}`)

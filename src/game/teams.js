@@ -8,6 +8,8 @@
 // ============================================================
 
 export const TEAMS = [
+  // Scoreboard codes and names as BK set them, 2026-09-28 13:23: CPP, ELM, WHS, EHS (Corning East), THS,
+  // and Elmira Free Academy spelled out on its card (EFA on the scoreboard).
   // BK's twelve, with his colours: six modern schools and six legacy schools (BK, 2026-09-28).
   // ORDER IS LOCKED. A save code stores the team as its place in this list, so a team never
   // moves and a new team is only ever added at the end. `era` is BK's grouping; nothing shows it yet.
@@ -16,12 +18,12 @@ export const TEAMS = [
   // `alt` is the change strip, worn when the home kit would clash with the other side or
   // vanish into the grass. Helmets and pants are separate from the jersey on purpose —
   // Binghamton's blue hat and blue pants are what keep their red readable (BK, 2026-09-22).
-  { id: 'corning', name: 'Corning', abbr: 'COR', era: 'modern', colors: ['#111111', '#C5B358'], colorNames: 'Black / Vegas gold',
+  { id: 'corning', name: 'Corning', abbr: 'CPP', era: 'modern', colors: ['#111111', '#C5B358'], colorNames: 'Black / Vegas gold',
     kit: { jersey: '#151515', helmet: '#C5B358', pants: '#C5B358' },
     alt: { jersey: '#C5B358', helmet: '#151515', pants: '#151515' } },
 
-  // Elmira High (EHS): black jersey, scarlet helmet and pants; a scarlet jersey is the change strip (BK, 2026-09-28).
-  { id: 'elmira', name: 'Elmira', abbr: 'EHS', era: 'modern', colors: ['#141414', '#D9261C'], colorNames: 'Black / scarlet',
+  // Elmira (ELM): black jersey, scarlet helmet and pants; a scarlet jersey is the change strip (BK, 2026-09-28).
+  { id: 'elmira', name: 'Elmira', abbr: 'ELM', era: 'modern', colors: ['#141414', '#D9261C'], colorNames: 'Black / scarlet',
     kit: { jersey: '#141414', helmet: '#D9261C', pants: '#D9261C' },
     alt: { jersey: '#D9261C', helmet: '#D9261C', pants: '#141414' } },
 
@@ -42,12 +44,12 @@ export const TEAMS = [
   // Corning West is the LIGHTER green, with a white helmet and white pants; Southside is the darker
   // hunter green, with green helmet and pants (BK, 2026-09-28). Both greens are chosen to stay
   // readable on the grass, and they are far enough apart that the two never need the grey strip.
-  { id: 'cwest', name: 'Corning West', abbr: 'CWS', era: 'legacy', colors: ['#5DA36A', '#FFFFFF'], colorNames: 'Green / white',
+  { id: 'cwest', name: 'Corning West', abbr: 'WHS', era: 'legacy', colors: ['#5DA36A', '#FFFFFF'], colorNames: 'Green / white',
     kit: { jersey: '#5DA36A', helmet: '#F2F2F2', pants: '#F2F2F2' },
     alt: { jersey: '#F2F2F2', helmet: '#F2F2F2', pants: '#5DA36A' } },
 
   // Darker crimson / maroon: maroon helmet and jersey, white pants (BK, 2026-09-28).
-  { id: 'ceast', name: 'Corning East', abbr: 'CEA', era: 'legacy', colors: ['#6A1B2A', '#FFFFFF'], colorNames: 'Maroon / white',
+  { id: 'ceast', name: 'Corning East', abbr: 'EHS', era: 'legacy', colors: ['#6A1B2A', '#FFFFFF'], colorNames: 'Maroon / white',
     kit: { jersey: '#6A1B2A', helmet: '#6A1B2A', pants: '#F2F2F2' },
     alt: { jersey: '#F2F2F2', helmet: '#6A1B2A', pants: '#6A1B2A' } },
 
@@ -55,7 +57,7 @@ export const TEAMS = [
     kit: { jersey: '#2F5233', helmet: '#2F5233', pants: '#2F5233' },
     alt: { jersey: '#F2F2F2', helmet: '#2F5233', pants: '#2F5233' } },
 
-  { id: 'efa', name: 'EFA', abbr: 'EFA', era: 'legacy', colors: ['#1B2A4A', '#FFFFFF'], colorNames: 'Navy blue / white',
+  { id: 'efa', name: 'Elmira Free Academy', abbr: 'EFA', era: 'legacy', colors: ['#1B2A4A', '#FFFFFF'], colorNames: 'Navy blue / white',
     kit: { jersey: '#1B2A4A', helmet: '#F2F2F2', pants: '#F2F2F2' },
     alt: { jersey: '#F2F2F2', helmet: '#1B2A4A', pants: '#1B2A4A' } },
 
@@ -74,7 +76,7 @@ export const TEAMS = [
     changeAgainst: ['binghamton'] },
 
   // Troy: bright red helmet and jersey, white pants; white jersey on the road.
-  { id: 'troy', name: 'Troy', abbr: 'TRO', era: 'legacy', colors: ['#E4002B', '#FFFFFF'], colorNames: 'Red / white',
+  { id: 'troy', name: 'Troy', abbr: 'THS', era: 'legacy', colors: ['#E4002B', '#FFFFFF'], colorNames: 'Red / white',
     kit: { jersey: '#E4002B', helmet: '#E4002B', pants: '#F2F2F2' },
     alt: { jersey: '#F2F2F2', helmet: '#E4002B', pants: '#F2F2F2' } },
 ]
