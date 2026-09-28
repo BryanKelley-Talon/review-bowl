@@ -17,6 +17,8 @@
  * Nothing in it identifies a student: no name, no school, no answers — only the team's state.
  */
 
+import { TEAMS } from '../game/teams.js';
+
 const ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
 // VERSION 2 (v3 iteration): Defense became a real trainable stat with its own form and
 // facility, Practice Week added a phase and a per-week flag, and "stars" became player
@@ -134,7 +136,7 @@ export function decodeSaveCode(input) {
 
   if (values.version !== VERSION)
     throw new Error('That code is from a different version of Review Bowl.');
-  if (values.team > 9 || values.phase >= PHASES.length)
+  if (values.team >= TEAMS.length || values.phase >= PHASES.length)   // 12 teams since 2026-09-28; the field holds 16
     throw new Error('That code doesn’t match any team in this league. Check it against your worksheet.');
 
   const results = [];

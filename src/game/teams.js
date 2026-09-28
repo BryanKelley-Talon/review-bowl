@@ -8,52 +8,73 @@
 // ============================================================
 
 export const TEAMS = [
-  // BK's ten, with his colours. `kit` is what they wear at home: jersey, helmet, pants.
+  // BK's twelve, with his colours: six modern schools and six legacy schools (BK, 2026-09-28).
+  // ORDER IS LOCKED. A save code stores the team as its place in this list, so a team never
+  // moves and a new team is only ever added at the end. `era` is BK's grouping; nothing shows it yet.
+  //
+  // BK's ten (2026-09-22), with his colours. `kit` is what they wear at home: jersey, helmet, pants.
   // `alt` is the change strip, worn when the home kit would clash with the other side or
   // vanish into the grass. Helmets and pants are separate from the jersey on purpose —
   // Binghamton's blue hat and blue pants are what keep their red readable (BK, 2026-09-22).
-  { id: 'corning', name: 'Corning', abbr: 'COR', colors: ['#111111', '#C5B358'], colorNames: 'Black / Vegas gold',
+  { id: 'corning', name: 'Corning', abbr: 'COR', era: 'modern', colors: ['#111111', '#C5B358'], colorNames: 'Black / Vegas gold',
     kit: { jersey: '#151515', helmet: '#C5B358', pants: '#C5B358' },
     alt: { jersey: '#C5B358', helmet: '#151515', pants: '#151515' } },
 
-  { id: 'elmira', name: 'Elmira', abbr: 'ELM', colors: ['#9E1B32', '#111111', '#FFFFFF'], colorNames: 'Crimson / black / white',
-    kit: { jersey: '#9E1B32', helmet: '#151515', pants: '#151515' },
-    alt: { jersey: '#F2F2F2', helmet: '#9E1B32', pants: '#151515' } },
+  // Elmira High (EHS): black jersey, scarlet helmet and pants; a scarlet jersey is the change strip (BK, 2026-09-28).
+  { id: 'elmira', name: 'Elmira', abbr: 'EHS', era: 'modern', colors: ['#141414', '#D9261C'], colorNames: 'Black / scarlet',
+    kit: { jersey: '#141414', helmet: '#D9261C', pants: '#D9261C' },
+    alt: { jersey: '#D9261C', helmet: '#D9261C', pants: '#141414' } },
 
   // "Best Buy blue" was BK's shorthand for the shade; the colour is just blue (BK, 2026-09-22).
-  { id: 'horseheads', name: 'Horseheads', abbr: 'HHD', colors: ['#1155CC', '#FFFFFF', '#8C9199'], colorNames: 'Blue / white / grey',
+  { id: 'horseheads', name: 'Horseheads', abbr: 'HHD', era: 'modern', colors: ['#1155CC', '#FFFFFF', '#8C9199'], colorNames: 'Blue / white / grey',
     kit: { jersey: '#1155CC', helmet: '#FFFFFF', pants: '#8C9199' },
     alt: { jersey: '#F2F2F2', helmet: '#1155CC', pants: '#1155CC' } },
 
   // Blue helmets and blue pants to offset the red jersey — BK's direction, 2026-09-22.
-  { id: 'binghamton', name: 'Binghamton', abbr: 'BNG', colors: ['#C8102E', '#1D3FA8', '#FFFFFF'], colorNames: 'Red / blue / white',
+  { id: 'binghamton', name: 'Binghamton', abbr: 'BNG', era: 'modern', colors: ['#C8102E', '#1D3FA8', '#FFFFFF'], colorNames: 'Red / blue / white',
     kit: { jersey: '#C8102E', helmet: '#1D3FA8', pants: '#1D3FA8' },
     alt: { jersey: '#F2F2F2', helmet: '#1D3FA8', pants: '#C8102E' } },
 
-  { id: 'ithaca', name: 'Ithaca', abbr: 'ITH', colors: ['#7A1F2B', '#FFCD00'], colorNames: 'Maroon / yellow',
+  { id: 'ithaca', name: 'Ithaca', abbr: 'ITH', era: 'modern', colors: ['#7A1F2B', '#FFCD00'], colorNames: 'Maroon / yellow',
     kit: { jersey: '#7A1F2B', helmet: '#FFCD00', pants: '#FFCD00' },
     alt: { jersey: '#FFCD00', helmet: '#7A1F2B', pants: '#7A1F2B' } },
 
   // The two hunter-green schools never wear green on grass: white at home, dark on the road.
-  { id: 'cwest', name: 'Corning West', abbr: 'CWS', colors: ['#2F5233', '#FFFFFF'], colorNames: 'Hunter green / white',
+  { id: 'cwest', name: 'Corning West', abbr: 'CWS', era: 'legacy', colors: ['#2F5233', '#FFFFFF'], colorNames: 'Hunter green / white',
     kit: { jersey: '#F2F2F2', helmet: '#2F5233', pants: '#2F5233' },
     alt: { jersey: '#16301B', helmet: '#F2F2F2', pants: '#F2F2F2' } },
 
-  { id: 'ceast', name: 'Corning East', abbr: 'CEA', colors: ['#A6192E', '#FFFFFF'], colorNames: 'Crimson / white',
-    kit: { jersey: '#A6192E', helmet: '#F2F2F2', pants: '#F2F2F2' },
-    alt: { jersey: '#F2F2F2', helmet: '#A6192E', pants: '#A6192E' } },
+  // Darker crimson / maroon: maroon helmet and jersey, white pants (BK, 2026-09-28).
+  { id: 'ceast', name: 'Corning East', abbr: 'CEA', era: 'legacy', colors: ['#6A1B2A', '#FFFFFF'], colorNames: 'Maroon / white',
+    kit: { jersey: '#6A1B2A', helmet: '#6A1B2A', pants: '#F2F2F2' },
+    alt: { jersey: '#F2F2F2', helmet: '#6A1B2A', pants: '#6A1B2A' } },
 
-  { id: 'southside', name: 'Southside', abbr: 'STH', colors: ['#355E3B', '#FFFFFF'], colorNames: 'Hunter green / white',
+  { id: 'southside', name: 'Southside', abbr: 'SHS', era: 'legacy', colors: ['#355E3B', '#FFFFFF'], colorNames: 'Hunter green / white',
     kit: { jersey: '#355E3B', helmet: '#F2F2F2', pants: '#F2F2F2' },
     alt: { jersey: '#F2F2F2', helmet: '#355E3B', pants: '#355E3B' } },
 
-  { id: 'efa', name: 'EFA', abbr: 'EFA', colors: ['#1B2A4A', '#FFFFFF'], colorNames: 'Navy blue / white',
+  { id: 'efa', name: 'EFA', abbr: 'EFA', era: 'legacy', colors: ['#1B2A4A', '#FFFFFF'], colorNames: 'Navy blue / white',
     kit: { jersey: '#1B2A4A', helmet: '#F2F2F2', pants: '#F2F2F2' },
     alt: { jersey: '#F2F2F2', helmet: '#1B2A4A', pants: '#1B2A4A' } },
 
-  { id: 'notredame', name: 'Elmira Notre Dame', abbr: 'END', colors: ['#14244B', '#E0B43A'], colorNames: 'Navy blue / gold',
+  { id: 'notredame', name: 'Elmira Notre Dame', abbr: 'ND', era: 'legacy', colors: ['#14244B', '#E0B43A'], colorNames: 'Navy blue / gold',
     kit: { jersey: '#14244B', helmet: '#E0B43A', pants: '#E0B43A' },
     alt: { jersey: '#E0B43A', helmet: '#14244B', pants: '#14244B' } },
+
+  // Added 2026-09-28 (BK). Elmira Heights plays as Thomas A. Edison (TAE): orange jersey, blue helmet
+  // and pants, the Broncos' '80s look.
+  { id: 'heights', name: 'Elmira Heights', abbr: 'TAE', era: 'modern', colors: ['#FB4F14', '#1D3F8F'], colorNames: 'Orange / blue',
+    kit: { jersey: '#FB4F14', helmet: '#1D3F8F', pants: '#1D3F8F' },
+    alt: { jersey: '#F2F2F2', helmet: '#1D3F8F', pants: '#1D3F8F' },
+    // Binghamton wears the same blue helmet and pants over a red jersey. Rendered side by side
+    // (2026-09-28) the two read as one team at sprite size, worst for a red-green colour-blind
+    // eye, so against Binghamton the Heights wear white.
+    changeAgainst: ['binghamton'] },
+
+  // Troy: bright red helmet and jersey, white pants; white jersey on the road.
+  { id: 'troy', name: 'Troy', abbr: 'TRO', era: 'legacy', colors: ['#E4002B', '#FFFFFF'], colorNames: 'Red / white',
+    kit: { jersey: '#E4002B', helmet: '#E4002B', pants: '#F2F2F2' },
+    alt: { jersey: '#F2F2F2', helmet: '#E4002B', pants: '#F2F2F2' } },
 ]
 
 // ── telling two teams apart ─────────────────────────────────────────────────
@@ -78,14 +99,31 @@ export const GRASS_MIN = 85      // jerseys closer than this to the turf disappe
 const GRASS = ['#3B8A38', '#357F33']
 const CLASH_KIT = { jersey: '#2B2F36', helmet: '#F2F2F2', pants: '#F2F2F2' }   // last resort
 
+// Red-green colour blindness (about one boy in twelve) folds red, maroon and orange together.
+// Two jerseys must also stay apart as a deuteranope and a protanope see them (Machado 2009
+// matrices, full severity). Red v maroon measures about 10 here: one shirt (2026-09-28).
+const CVD = {
+  deut: [[0.367, 0.861, -0.228], [0.280, 0.673, 0.047], [-0.012, 0.043, 0.969]],
+  prot: [[0.152, 1.053, -0.205], [0.115, 0.786, 0.099], [-0.004, -0.048, 1.052]],
+}
+const toHex = c => '#' + c.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('')
+const seenAs = (hex, m) => { const c = rgb(hex); return toHex(CVD[m].map(r => r[0] * c[0] + r[1] * c[1] + r[2] * c[2])) }
+export function cvdDistance(a, b) {
+  return Math.min(...Object.keys(CVD).map(m => colorDistance(seenAs(a, m), seenAs(b, m))))
+}
+export const CVD_CLASH = 40      // below this, a colour-blind kid sees one team
+export const apart = (a, b) => colorDistance(a, b) > CLASH && cvdDistance(a, b) > CVD_CLASH
+
 const readableOnGrass = kit => GRASS.every(g => colorDistance(kit.jersey, g) > GRASS_MIN)
-const strips = team => [team.kit, team.alt, CLASH_KIT]
+// A team with `changeAgainst` skips its home strip when it meets one of those teams.
+const strips = (team, other) => [team.kit, team.alt, CLASH_KIT]
+  .filter((k, i) => !(i === 0 && (team.changeAgainst || []).includes(other.id)))
 
 // The home side wears the first strip that does not vanish into the grass; the away side
 // wears the first that also reads clearly against what the home side is wearing.
 export function kits(offense, defense) {
-  const o = strips(offense).find(readableOnGrass) || CLASH_KIT
-  const d = strips(defense).find(k => readableOnGrass(k) && colorDistance(k.jersey, o.jersey) > CLASH) || CLASH_KIT
+  const o = strips(offense, defense).find(readableOnGrass) || CLASH_KIT
+  const d = strips(defense, offense).find(k => readableOnGrass(k) && apart(k.jersey, o.jersey)) || CLASH_KIT
   return {
     offense: { ...o, zone: offense.colors[0] },
     defense: { ...d, zone: defense.colors[0] },
@@ -94,7 +132,7 @@ export function kits(offense, defense) {
 
 // Kept for the team-select swatches and anywhere else that wants one team's own look.
 export function fieldKit(team) {
-  const kit = strips(team).find(readableOnGrass) || CLASH_KIT
+  const kit = [team.kit, team.alt, CLASH_KIT].find(readableOnGrass) || CLASH_KIT
   return { ...kit, zone: team.colors[0] }
 }
 

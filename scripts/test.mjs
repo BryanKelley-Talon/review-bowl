@@ -15,8 +15,9 @@ import {
 } from '../src/game/season.js'
 import { simDrive } from '../src/game/drive.js'
 import { isBigMoment, threatOf } from '../src/game/threat.js'
-import { CLASH, GRASS_MIN, colorDistance, kits, player, roster, TEAMS } from '../src/game/teams.js'
+import { CLASH, CVD_CLASH, GRASS_MIN, colorDistance, cvdDistance, kits, player, roster, TEAMS } from '../src/game/teams.js'
 import { decodeSaveCode, encodeSaveCode } from '../src/save/saveCode.js'
+const N_TEAMS = TEAMS.length
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const pub = p => JSON.parse(fs.readFileSync(path.join(ROOT, 'public', p), 'utf8'))
@@ -263,18 +264,18 @@ ok(!isPenaltySpot({ type: 'sack', gained: -7 }, { kind: 'continue' }, manifest.r
 
 // ── season, league, career ───────────────────────────────────────────────────
 const sch = schedule(7, 1)
-ok(sch.length === 8 && sch.every(r => r.length === 5), '8 rounds of 5 games')
-ok(sch.every(r => new Set(r.flat()).size === 10), 'every team plays once a round')
+ok(sch.length === 8 && sch.every(r => r.length === N_TEAMS / 2), `8 rounds of ${N_TEAMS / 2} games`)
+ok(sch.every(r => new Set(r.flat()).size === N_TEAMS), 'every team plays once a round')
 let c = newCareer('us11r', 3, 7)
 for (let w = 0; w < 8; w++) {
   eq(c.phase, 'practice', `week ${w + 1} opens with a practice week`)
-  eq(standings(c).reduce((n, r) => n + r.w + r.l + r.t, 0), w * 10, 'standings count only the weeks actually played')
+  eq(standings(c).reduce((n, r) => n + r.w + r.l + r.t, 0), w * N_TEAMS, 'standings count only the weeks actually played')
   c = finishPractice(c)
   c = afterGame(c, { result: RESULT.W, press: true }).career
 }
 eq(c.phase, 'playoffs', '8-0 makes the playoffs — and no practice week before a playoff game')
 const st = standings(c)
-eq(st.reduce((n, r) => n + r.w + r.l + r.t, 0), 80, 'standings add up (10 teams × 8 games)')
+eq(st.reduce((n, r) => n + r.w + r.l + r.t, 0), N_TEAMS * 8, `standings add up (${N_TEAMS} teams × 8 games)`)
 ok(bracket(c).mine.includes(3), 'an 8-0 team is in the bracket')
 c = afterGame(c, { result: RESULT.W }).career
 c = afterGame(c, { result: RESULT.W }).career
@@ -334,6 +335,43 @@ ok(pts / 2000 > 1.5 && pts / 2000 < 3.5, `an even matchup averages 1.5–3.5 poi
 let strong = 0, weak = 0
 for (let i = 0; i < 2000; i++) { strong += simDrive({ opp: 5, defense: 9 }).points; weak += simDrive({ opp: 5, defense: 2 }).points }
 ok(strong < weak, 'a better Defense rating allows fewer points')
+
+
+
+// ── the twelve (BK, 2026-09-28) ─────────────────────────────────────────────
+eq(N_TEAMS, 12, 'twelve teams')
+eq(TEAMS.filter(t => t.era === 'modern').length, 6, 'six modern')
+eq(TEAMS.filter(t => t.era === 'legacy').length, 6, 'six legacy')
+// A save code stores the team's place in the list, so the first ten never move.
+eq(TEAMS.slice(0, 10).map(t => t.id), ['corning', 'elmira', 'horseheads', 'binghamton', 'ithaca', 'cwest', 'ceast', 'southside', 'efa', 'notredame'], 'the first ten keep their places')
+eq(new Set(TEAMS.map(t => t.abbr)).size, N_TEAMS, 'every scoreboard code is different')
+eq(TEAMS.map(t => t.abbr).join(' '), 'COR EHS HHD BNG ITH CWS CEA SHS EFA ND TAE TRO', 'the scoreboard codes BK set')
+for (const i of [10, 11]) {
+  const x = newCareer('us11r', i, 5)
+  eq(decodeSaveCode(encodeSaveCode(x)).team, i, `a ${TEAMS[i].name} save code comes back as ${TEAMS[i].name}`)
+}
+for (let seed = 0; seed < 64; seed++) for (let s = 1; s <= 16; s++) {
+  const sc = schedule(seed, s)
+  const opp = new Map()
+  for (const r of sc) for (const [a, b] of r) { if (a === b) throw new Error('a team scheduled against itself'); (opp.get(a) || opp.set(a, new Set()).get(a)).add(b); (opp.get(b) || opp.set(b, new Set()).get(b)).add(a) }
+  if (![...opp.values()].every(v => v.size === 8)) throw new Error(`seed ${seed} season ${s}: a repeat opponent`)
+}
+ok(true, '64 leagues × 16 seasons: eight different opponents, nobody plays himself')
+let clashes = 0, cvdClashes = 0, lastResort = []
+for (const a of TEAMS) for (const b of TEAMS) if (a !== b) {
+  const k = kits(a, b)
+  if (colorDistance(k.offense.jersey, k.defense.jersey) <= CLASH) clashes++
+  if (cvdDistance(k.offense.jersey, k.defense.jersey) <= CVD_CLASH) cvdClashes++
+  if (k.defense.jersey === '#2B2F36' || k.offense.jersey === '#2B2F36') lastResort.push(`${a.abbr}-${b.abbr}`)
+}
+eq(clashes, 0, 'all 132 matchups: the two sides wear different-looking jerseys')
+eq(cvdClashes, 0, 'all 132 matchups: still different to a red-green colour-blind eye')
+// Known since 2026-09-22: Corning West at home (in white, green vanishes on grass) v Southside, whose
+// white change strip matches. Southside falls back to the grey strip. Reported to BK, not changed.
+eq(lastResort, ['CWS-SHS'], 'only Corning West v Southside falls back to the plain grey strip')
+const heights = TEAMS.findIndex(t => t.id === 'heights'), bing = TEAMS.findIndex(t => t.id === 'binghamton')
+eq(kits(TEAMS[heights], TEAMS[bing]).offense.jersey, '#F2F2F2', 'Elmira Heights wear white against Binghamton (home)')
+eq(kits(TEAMS[bing], TEAMS[heights]).defense.jersey, '#F2F2F2', 'Elmira Heights wear white against Binghamton (away)')
 
 console.log(`\n${passed} passed, ${failed} failed`)
 process.exit(failed ? 1 : 0)
