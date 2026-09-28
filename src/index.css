@@ -348,3 +348,6 @@ body.rb-full .controls{margin:6px 0}
 a.arena-plug-link{display:inline-block;text-decoration:none;margin-top:4px}
 /* The why-not line after a wrong culture pick (BK 2026-09-28) */
 .q-whynot{margin:6px 0 4px;color:var(--white,#F4F6FA);font-size:15px;line-height:1.45}
+/* The dropback tip: the short version on phones (BK 2026-09-28) */
+.tip-short{display:none}
+@media (max-width:600px){.tip-full{display:none}.tip-short{display:inline}}

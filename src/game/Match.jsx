@@ -412,6 +412,8 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
     air: 'Ball in the air…',
     run: 'Hold and point to steer · tap or Space to juke · ↑/↓ steer',
   }[phase]
+  // Phones have no keys: a shorter dropback tip on narrow screens (BK 2026-09-28 13:58, "yes").
+  const helpShort = { dropback: 'Pull back to throw · tap a receiver · tap the field to run' }[phase]
 
   return (
     <div className="match">
@@ -441,7 +443,9 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
         )}
         {toast && <div className="toast" role="status">{toast}</div>}
         {stage === 'presnap' && !gate && <div className="snap-hint">Tap the field or press Space to snap</div>}
-        {stage === 'live' && help && <div className="snap-hint">{help}</div>}
+        {stage === 'live' && help && (helpShort
+          ? <div className="snap-hint"><span className="tip-full">{help}</span><span className="tip-short">{helpShort}</span></div>
+          : <div className="snap-hint">{help}</div>)}
       </div>
 
       <div className="stat-flash-slot">
