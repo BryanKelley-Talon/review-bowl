@@ -99,6 +99,28 @@ for (const course of Object.keys(manifest.courses)) {
   for (let i = 0; i < 100; i++) ok(!d.draw('halftime').culture && !d.draw('xp').culture, 'content gates never draw a Locker Room question')
 }
 
+// ── the podium set (Leo's LOCKED set, BK 2026-09-29 12:35) ─────────────────────
+{
+  const packs = { ...packsOf('us11r') }
+  for (const p of manifest.culture.packs) packs[p.file] = pub(p.file)
+  packs[manifest.culture.podium.file] = pub(manifest.culture.podium.file)
+  const pool = buildPool(manifest, 'us11r', packs, crops)
+  eq(pool.podium.length, 16, 'the podium set loads all 16 questions')
+  eq(pool.podium.filter(q => q.after === 'win').length, 8, '8 of them are asked after a win')
+  eq(pool.podium.filter(q => q.after === 'loss').length, 8, '8 after a loss or a tie')
+  ok(pool.podium.every(q => q.culture && q.hints.length === 2 && q.rationale && q.whyNot), 'every podium question is a culture question with two hints, a reason and why-not lines')
+  const raw = pub(manifest.culture.podium.file).items
+  ok(pool.podium.every(q => { const it = raw.find(r => q.id.endsWith('#' + r.n)); return it && q.options.map(o => o.key).join('') === it.choices.map(c => c.key).join('') }), 'podium choices keep the order Leo wrote them in')
+  const d = makeDealer(pool, manifest.courses.us11r, manifest.rules)
+  ok(d.hasPodium, 'the dealer knows the podium set is loaded')
+  const wins = new Set(); for (let i = 0; i < 8; i++) { const q = d.draw('podium', { after: 'win' }); ok(q.after === 'win', 'after a win, a win question'); wins.add(q.id) }
+  eq(wins.size, 8, 'all eight win questions before a repeat')
+  for (let i = 0; i < 20; i++) ok(d.draw('podium', { after: 'loss' }).after === 'loss', 'after a loss, a loss question')
+  for (let i = 0; i < 20; i++) ok(d.draw('podium', {}).after === 'loss', 'a tie (no result given) draws from the loss set')
+  ok(!Object.values(pool.lanes).flat().some(q => q.after), 'no podium question enters a content lane')
+  for (let i = 0; i < 50; i++) ok(!pool.podium.includes(d.draw('locker')), 'the Locker Room never draws a podium question')
+}
+
 const dealer = makeDealer(us, manifest.courses.us11r, manifest.rules)
 // BK, 2026-09-27: in-game questions stay short; documents go where the game already stops.
 ok(us.lanes.sources.every(q => q.size === 'long'), 'US: every Part I item (a document) is sized long')

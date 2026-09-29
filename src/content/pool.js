@@ -288,7 +288,7 @@ export function buildPool(manifest, courseId, packsByFile, crops) {
       ;(lanes[q.lane] || (lanes[q.lane] = [])).push(q)
     }
   }
-  return { course: courseId, lanes, held, culture: buildCulture(manifest, packsByFile) }
+  return { course: courseId, lanes, held, culture: buildCulture(manifest, packsByFile), podium: buildPodium(manifest, packsByFile) }
 }
 
 // The Locker Room's questions (BK, 2026-09-27): the current Office theme's practice items,
@@ -312,12 +312,33 @@ export function buildCulture(manifest, packsByFile) {
   return out
 }
 
+// The podium after a regular-season game (Leo's LOCKED set, BK 2026-09-29 12:35): 16
+// questions, each marked `after: "win" | "loss"`. A tie draws from the loss set (the
+// dealer decides that). Culture questions: they build the same stat lane as the Locker
+// Room and show Leo's why-not lines. Choices keep the order they were written in.
+export function buildPodium(manifest, packsByFile) {
+  const meta = manifest.culture?.podium
+  const pack = meta && packsByFile[meta.file]
+  const out = []
+  if (!Array.isArray(pack?.items)) return out
+  for (const it of pack.items) {
+    if (it.after !== 'win' && it.after !== 'loss') continue
+    const { questions } = readPack({ items: [it] }, { lane: manifest.culture.stat_lane || 'skills', file: meta.file, unit: null }, {})
+    const q = questions[0]
+    if (!q) continue
+    if ((manifest.rules || {}).require_hints_and_reason && (q.hints.length < 2 || !q.rationale)) continue
+    out.push({ ...q, culture: true, size: 'short', after: it.after })
+  }
+  return out
+}
+
 // Everything the manifest points at for one door, fetched. Browser only.
 export async function loadDoor(manifest, courseId) {
   const course = manifest.courses[courseId]
   const files = [...(course.packs || []).filter(p => p.enabled !== false).map(p => p.file),
                  ...(course.camp || []).map(c => c.file),
-                 ...((manifest.culture?.packs) || []).filter(p => p.enabled !== false).map(p => p.file)]
+                 ...((manifest.culture?.packs) || []).filter(p => p.enabled !== false).map(p => p.file),
+                 ...(manifest.culture?.podium?.file ? [manifest.culture.podium.file] : [])]
   const packsByFile = {}
   await Promise.all(files.map(f => fetch(`/${f}`).then(r => r.ok ? r.json() : null)
     .then(d => { if (d) packsByFile[f] = d }).catch(() => {})))

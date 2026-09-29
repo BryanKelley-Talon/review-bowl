@@ -445,7 +445,10 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
 
   const final = () => {
     // Regular season: Leo's culture question at the podium (BK, 2026-09-28, Plan A). Playoffs: history.
-    ask(!playoff && dealer.hasCulture ? 'podium' : 'press', 'Press conference. The room wants an answer. A good one earns the fans’ trust and a bonus.', correct => {
+    // Leo's podium set (BK 2026-09-29 12:35) is asked by result: a tie counts as a loss.
+    const g0 = gRef.current
+    const after = g0.you > g0.opp ? 'win' : 'loss'
+    ask(!playoff && (dealer.hasPodium || dealer.hasCulture) ? 'podium' : 'press', 'Press conference. The room wants an answer. A good one earns the fans’ trust and a bonus.', correct => {
       const gs = gRef.current
       onFinish({
         you: gs.you, opp: gs.opp,
@@ -453,7 +456,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
         press: correct === true,
         right: tally.current.right, total: tally.current.total,
       })
-    })
+    }, { after })
   }
 
   // ── render ─────────────────────────────────────────────────────────────────

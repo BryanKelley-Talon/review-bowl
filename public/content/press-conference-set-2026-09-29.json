@@ -1,0 +1,566 @@
+{
+ "_README": "_canon · built 2026-09-29 by Leo_ · LOCKED by BK 2026-09-29 12:35 (\"lock.\"), drafted (2026-09-29 12:34 EDT (Tuesday)). Answers Josh's ask (Out/josh-to-leo-2026-09-28-press-conference-set-ask.md). 16 items, 8 after a win and 8 after a loss (a tie draws from the loss set). Each key A to D is right twice per set, and the right answer is never the longest choice. Practice-item shape plus 'after'. _label never renders. No real people, no names, no scores, no dates; 'move' never used. Port word for word.",
+ "intro_note": "Asked at the podium after a game. after = win or loss; a tie draws from the loss set.",
+ "items": [
+  {
+   "n": 1,
+   "_label": "W1 · Be Kind",
+   "after": "win",
+   "question": "Great win today. Who gets the credit?",
+   "choices": [
+    {
+     "key": "A",
+     "text": "The line. Every play started with them."
+    },
+    {
+     "key": "B",
+     "text": "Me. I called every play out there, so I'll take this one."
+    },
+    {
+     "key": "C",
+     "text": "Honestly, the other team just wasn't very good today."
+    },
+    {
+     "key": "D",
+     "text": "Nobody yet. We should have won by a lot more than that."
+    }
+   ],
+   "correct": "A",
+   "hints": [
+    "Which answer names somebody besides the coach?",
+    "Who does the work nobody films?"
+   ],
+   "reasoning": "Credit the people nobody sees. That's Be Kind.",
+   "distractors": {
+    "B": "Calling plays matters. So does everyone who ran them.",
+    "C": "Knocking the other team makes your win smaller, not bigger.",
+    "D": "A win is a chance to thank people, not to complain."
+   }
+  },
+  {
+   "n": 2,
+   "_label": "W2 · Be Respectful",
+   "after": "win",
+   "question": "What do you want to say about the team you just beat?",
+   "choices": [
+    {
+     "key": "A",
+     "text": "They should be embarrassed after a game like that."
+    },
+    {
+     "key": "B",
+     "text": "Nothing. They don't matter to us anymore."
+    },
+    {
+     "key": "C",
+     "text": "They played hard. They made us earn it."
+    },
+    {
+     "key": "D",
+     "text": "They got lucky it stayed as close as it did."
+    }
+   ],
+   "correct": "C",
+   "hints": [
+    "Which answer would you want said about your team after a loss?",
+    "Which one respects the effort, not just the result?"
+   ],
+   "reasoning": "Respect the people who pushed you. That's Be Respectful.",
+   "distractors": {
+    "A": "Embarrassing someone in public doesn't make your team look strong.",
+    "B": "They're the reason you had to play well.",
+    "D": "Calling it luck takes something away from both teams."
+   }
+  },
+  {
+   "n": 3,
+   "_label": "W3 · Be Responsible",
+   "after": "win",
+   "question": "That's a winning streak now. What changes this week?",
+   "choices": [
+    {
+     "key": "A",
+     "text": "Nothing. We've got this thing figured out."
+    },
+    {
+     "key": "B",
+     "text": "We fix what almost went wrong."
+    },
+    {
+     "key": "C",
+     "text": "We take it easy at practice. We've earned a break."
+    },
+    {
+     "key": "D",
+     "text": "We'll worry about fixing things if we ever lose."
+    }
+   ],
+   "correct": "B",
+   "hints": [
+    "Which answer still has work in it?",
+    "What's easier to fix: a mistake that almost hurt you, or one that did?"
+   ],
+   "reasoning": "Winning is the best time to fix things, while it's cheap. That's Be Responsible.",
+   "distractors": {
+    "A": "Every team you beat is studying how you did it.",
+    "C": "Rest is fine. Coasting is how streaks end.",
+    "D": "Waiting for a loss means waiting for the mistake to cost you."
+   }
+  },
+  {
+   "n": 4,
+   "_label": "W4 · Be Kind",
+   "after": "win",
+   "question": "Your backup came in late and made the big play. What do you say about that?",
+   "choices": [
+    {
+     "key": "A",
+     "text": "Lucky timing. The starter is still the starter, no question."
+    },
+    {
+     "key": "B",
+     "text": "Nice play, but don't get used to being out there."
+    },
+    {
+     "key": "C",
+     "text": "Honestly, I didn't expect much from that spot."
+    },
+    {
+     "key": "D",
+     "text": "They were ready when we needed them. That's practice."
+    }
+   ],
+   "correct": "D",
+   "hints": [
+    "Which answer notices the work before the moment?",
+    "Which one would make a teammate want to keep working?"
+   ],
+   "reasoning": "Notice the work behind the moment, out loud. That's Be Kind.",
+   "distractors": {
+    "A": "Calling it luck skips the practice that made it happen.",
+    "B": "Warning them off makes a good moment smaller.",
+    "C": "Low expectations said in public stick to a person."
+   }
+  },
+  {
+   "n": 5,
+   "_label": "W5 · Be Safe",
+   "after": "win",
+   "question": "The fans want to rush the field. What do you tell them?",
+   "choices": [
+    {
+     "key": "A",
+     "text": "Go for it. Nobody's going to get hurt out there."
+    },
+    {
+     "key": "B",
+     "text": "That's up to them. It's not my problem."
+    },
+    {
+     "key": "C",
+     "text": "Celebrate from the stands. Everybody gets home."
+    },
+    {
+     "key": "D",
+     "text": "Only the bigger fans should go out there."
+    }
+   ],
+   "correct": "C",
+   "hints": [
+    "Which answer thinks about everyone on the field, not just the fans?",
+    "What's the one thing that ruins a good night?"
+   ],
+   "reasoning": "A good night ends with everybody safe. That's Be Safe.",
+   "distractors": {
+    "A": "Crowds hurt people even when nobody means it.",
+    "B": "When people are listening to you, it's your problem too.",
+    "D": "Size doesn't make a crowd safe."
+   }
+  },
+  {
+   "n": 6,
+   "_label": "W6 · Be Respectful",
+   "after": "win",
+   "question": "A close call went your way on the last drive. Was it the right call?",
+   "choices": [
+    {
+     "key": "A",
+     "text": "Close call, and a hard job for the refs. We want to win clearly."
+    },
+    {
+     "key": "B",
+     "text": "Obviously it was. The refs finally got one right for us for once."
+    },
+    {
+     "key": "C",
+     "text": "Who cares? We won, and that's all that counts."
+    },
+    {
+     "key": "D",
+     "text": "The other team always complains. Just ignore them."
+    }
+   ],
+   "correct": "A",
+   "hints": [
+    "Which answer is fair to everybody on the field?",
+    "What would take the call out of the story next time?"
+   ],
+   "reasoning": "Respect the refs even when a call helps you, and aim to win clearly. That's Be Respectful.",
+   "distractors": {
+    "B": "\"Finally\" is a shot at the refs, even in a win.",
+    "C": "How you won is part of winning.",
+    "D": "Waving off the other team won't settle anything."
+   }
+  },
+  {
+   "n": 7,
+   "_label": "W7 · Be Responsible",
+   "after": "win",
+   "question": "Your team turned the ball over twice and still won. How do you feel about that?",
+   "choices": [
+    {
+     "key": "A",
+     "text": "Great. A win's a win, and that's all I'm looking at."
+    },
+    {
+     "key": "B",
+     "text": "Those turnovers were on the receivers, not the plan."
+    },
+    {
+     "key": "C",
+     "text": "Turnovers don't really matter if you win the game."
+    },
+    {
+     "key": "D",
+     "text": "Happy with the win. The turnovers are on me."
+    }
+   ],
+   "correct": "D",
+   "hints": [
+    "Which answer can be happy and honest at the same time?",
+    "Who does a coach point to first?"
+   ],
+   "reasoning": "Own the mistakes, even on a good day. That's Be Responsible.",
+   "distractors": {
+    "A": "A win can hide a problem until the next game.",
+    "B": "Pointing at teammates in public costs trust.",
+    "C": "The same turnovers against a better team decide the game."
+   }
+  },
+  {
+   "n": 8,
+   "_label": "W8 · Be Kind",
+   "after": "win",
+   "question": "Your student section was loud all game. Anything for them?",
+   "choices": [
+    {
+     "key": "A",
+     "text": "They were okay tonight. Could have been a little better, I guess."
+    },
+    {
+     "key": "B",
+     "text": "Thank you. The players heard you when it was close."
+    },
+    {
+     "key": "C",
+     "text": "They should be a lot louder next time."
+    },
+    {
+     "key": "D",
+     "text": "We would have won without them anyway."
+    }
+   ],
+   "correct": "B",
+   "hints": [
+    "Which answer names what they actually did?",
+    "What makes a thank-you feel real?"
+   ],
+   "reasoning": "A real thank-you names what someone did. That's Be Kind.",
+   "distractors": {
+    "A": "\"Okay\" is what you say when you didn't notice.",
+    "C": "Asking for more before saying thanks lands wrong.",
+    "D": "Maybe true, but it takes a good moment away from people who showed up."
+   }
+  },
+  {
+   "n": 9,
+   "_label": "L1 · Be Responsible",
+   "after": "loss",
+   "question": "Tough loss. What happened out there?",
+   "choices": [
+    {
+     "key": "A",
+     "text": "The refs cost us this game, plain and simple."
+    },
+    {
+     "key": "B",
+     "text": "The weather was terrible, and it hurt our passing game all day."
+    },
+    {
+     "key": "C",
+     "text": "Nothing, really. We played fine today."
+    },
+    {
+     "key": "D",
+     "text": "We didn't stop the run. That's on me. We fix it this week."
+    }
+   ],
+   "correct": "D",
+   "hints": [
+    "Which answer names one thing the team controls?",
+    "Which answer ends with a plan?"
+   ],
+   "reasoning": "Own it, name one fix, get to work. That's Be Responsible.",
+   "distractors": {
+    "A": "Blaming the refs means nothing changes on your side.",
+    "B": "Both teams played in the same weather.",
+    "C": "If nothing went wrong, there's nothing to fix, and the next game goes the same way."
+   }
+  },
+  {
+   "n": 10,
+   "_label": "L2 · Be Respectful",
+   "after": "loss",
+   "question": "What do you want to say about the team that beat you?",
+   "choices": [
+    {
+     "key": "A",
+     "text": "They got lucky on a couple of big plays at the end."
+    },
+    {
+     "key": "B",
+     "text": "They were better today. Credit to them."
+    },
+    {
+     "key": "C",
+     "text": "They cheated. Everybody knows it."
+    },
+    {
+     "key": "D",
+     "text": "I'm not going to talk about them."
+    }
+   ],
+   "correct": "B",
+   "hints": [
+    "Which answer gives credit and still looks ahead?",
+    "Which one would you respect if the other coach said it about you?"
+   ],
+   "reasoning": "Give credit when you lose. It costs nothing, and it's true. That's Be Respectful.",
+   "distractors": {
+    "A": "Luck is the excuse that stops you from learning anything.",
+    "C": "A claim like that needs proof, not a microphone.",
+    "D": "Refusing to answer tells the room you're not taking it well."
+   }
+  },
+  {
+   "n": 11,
+   "_label": "L3 · Be Kind",
+   "after": "loss",
+   "question": "Your kicker missed the last kick. What do you say to them?",
+   "choices": [
+    {
+     "key": "A",
+     "text": "One kick didn't lose this game. I've got their back."
+    },
+    {
+     "key": "B",
+     "text": "They have to make that kick. That's their whole job out there."
+    },
+    {
+     "key": "C",
+     "text": "We might need to look for a new kicker."
+    },
+    {
+     "key": "D",
+     "text": "I'm not going to talk about that."
+    }
+   ],
+   "correct": "A",
+   "hints": [
+    "How many plays were in the whole game, besides that one?",
+    "Which answer would help that player show up tomorrow?"
+   ],
+   "reasoning": "Nobody loses a game alone. Stand with the teammate who's hurting most. That's Be Kind.",
+   "distractors": {
+    "B": "They already know. Saying it on camera only adds weight.",
+    "C": "Moving on from someone in public, on their worst day, is hard to take back.",
+    "D": "Silence reads like you agree it's their fault."
+   }
+  },
+  {
+   "n": 12,
+   "_label": "L4 · Be Safe",
+   "after": "loss",
+   "question": "Your best player got hurt in the third quarter. Why didn't they go back in?",
+   "choices": [
+    {
+     "key": "A",
+     "text": "Honestly, we should have put them back in. We might have won."
+    },
+    {
+     "key": "B",
+     "text": "They wanted back in, so next time we'll let them decide."
+    },
+    {
+     "key": "C",
+     "text": "You don't play through an injury. One game isn't worth it."
+    },
+    {
+     "key": "D",
+     "text": "They were being soft about it."
+    }
+   ],
+   "correct": "C",
+   "hints": [
+    "Which lasts longer: one game, or an injury?",
+    "Who should decide when a hurt player is ready?"
+   ],
+   "reasoning": "No game is worth a player's health. That's Be Safe.",
+   "distractors": {
+    "A": "A win isn't worth a worse injury.",
+    "B": "Players almost always want back in. That's why an adult decides.",
+    "D": "Being hurt isn't being soft."
+   }
+  },
+  {
+   "n": 13,
+   "_label": "L5 · Be Responsible",
+   "after": "loss",
+   "question": "Three losses in a row. Is the season over?",
+   "choices": [
+    {
+     "key": "A",
+     "text": "Yeah, probably. It's been a rough stretch."
+    },
+    {
+     "key": "B",
+     "text": "No. We fix one thing at a time and show up Monday."
+    },
+    {
+     "key": "C",
+     "text": "We'll just try harder, that's all."
+    },
+    {
+     "key": "D",
+     "text": "It's the schedule. We've played the toughest teams in the league."
+    }
+   ],
+   "correct": "B",
+   "hints": [
+    "Which answer has an actual plan in it?",
+    "What does \"one thing at a time\" do for a team that's down?"
+   ],
+   "reasoning": "A slump ends one fix at a time. That's Be Responsible.",
+   "distractors": {
+    "A": "Quitting out loud makes it true.",
+    "C": "Trying harder at the same thing gets the same result.",
+    "D": "You can't change the schedule. You can change how you play it."
+   }
+  },
+  {
+   "n": 14,
+   "_label": "L6 · Be Respectful",
+   "after": "loss",
+   "question": "Some fans booed at the end. How do you respond?",
+   "choices": [
+    {
+     "key": "A",
+     "text": "Those aren't real fans anyway."
+    },
+    {
+     "key": "B",
+     "text": "Honestly? Boo them right back."
+    },
+    {
+     "key": "C",
+     "text": "Whatever. I don't care what they think of us out there."
+    },
+    {
+     "key": "D",
+     "text": "They want better. So do we. We'll earn it back."
+    }
+   ],
+   "correct": "D",
+   "hints": [
+    "Which answer turns frustration into something shared?",
+    "Can you respect someone who's upset with you?"
+   ],
+   "reasoning": "Take the frustration seriously, and answer it with work. That's Be Respectful.",
+   "distractors": {
+    "A": "Deciding who counts as a fan picks a fight you don't need.",
+    "B": "Answering anger with anger makes the night worse.",
+    "C": "Saying you don't care usually means you do, and it shows."
+   }
+  },
+  {
+   "n": 15,
+   "_label": "L7 · Be Kind",
+   "after": "loss",
+   "question": "Your players look down in the locker room. What do you tell them?",
+   "choices": [
+    {
+     "key": "A",
+     "text": "Heads up. One thing we did well, one thing we fix."
+    },
+    {
+     "key": "B",
+     "text": "That one's basically on all of you."
+    },
+    {
+     "key": "C",
+     "text": "Nobody talks until tomorrow. Go home."
+    },
+    {
+     "key": "D",
+     "text": "Some of you didn't show up today, and you know who you are."
+    }
+   ],
+   "correct": "A",
+   "hints": [
+    "Which answer lifts the room and still gets to work?",
+    "What happens when a team hears only what went wrong?"
+   ],
+   "reasoning": "Lift the room first, then fix one thing. That's Be Kind.",
+   "distractors": {
+    "B": "Blaming everyone at once gives nobody a way forward.",
+    "C": "Silence lets everyone pick the worst story.",
+    "D": "Calling out \"some of you\" in front of everybody hits the whole room."
+   }
+  },
+  {
+   "n": 16,
+   "_label": "L8 · Be Responsible",
+   "after": "loss",
+   "question": "Your team drew a lot of penalties today. What's the plan?",
+   "choices": [
+    {
+     "key": "A",
+     "text": "The refs were looking for us all game, from the first snap."
+    },
+    {
+     "key": "B",
+     "text": "Penalties happen. There's nothing you can do."
+    },
+    {
+     "key": "C",
+     "text": "We clean it up at practice. It hurts the whole team."
+    },
+    {
+     "key": "D",
+     "text": "A few players need to sit next game."
+    }
+   ],
+   "correct": "C",
+   "hints": [
+    "Which answer treats penalties as something the team controls?",
+    "Where do fixes happen: in the game, or before it?"
+   ],
+   "reasoning": "Discipline gets built at practice, not in the game. That's Be Responsible.",
+   "distractors": {
+    "A": "If the refs were the problem, nothing gets fixed, and the penalties keep coming.",
+    "B": "Most penalties come from habits, and habits can change.",
+    "D": "Benching people doesn't fix the habit that caused it."
+   }
+  }
+ ]
+}

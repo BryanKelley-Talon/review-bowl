@@ -88,9 +88,28 @@ export function makeDealer(pool, course, rules = {}, random = Math.random) {
     // every gate as scoring — playoffs are summative.
     // True when the Locker Room has something to ask.
     hasCulture: (pool.culture || []).length > 0,
+    // True when Leo's podium set is loaded (BK 2026-09-29 12:35).
+    hasPodium: (pool.podium || []).length > 0,
 
     draw(gate, opts = {}) {
       const g = GATES[gate] || {}
+      // The podium draws from its own set by result: after a win, the win questions;
+      // after a loss or a tie, the loss questions (opts.after). Its own deck per result,
+      // so a kid doesn't see a repeat until the set runs out. Empty set: the culture deck.
+      if (gate === 'podium' && (pool.podium || []).length) {
+        const after = opts.after === 'win' ? 'win' : 'loss'
+        const set = pool.podium.filter(q => q.after === after)
+        if (set.length) {
+          const key = `_podium_${after}`
+          let deck = decks[key] || []
+          if (!deck.length) {
+            deck = set.map(q => q.id)
+            for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]] }
+          }
+          const id = deck.pop(); decks[key] = deck
+          return set.find(q => q.id === id)
+        }
+      }
       if (g.culture) {
         const all = pool.culture || []
         if (!all.length) return null

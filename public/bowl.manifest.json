@@ -298,7 +298,11 @@
         "Ten minutes, three times a week, beats two hours the night before. Same with anything you want to get good at."
       ]
     },
-    "long_chip": "Document question · take your time"
+    "long_chip": "Document question · take your time",
+    "podium": {
+      "file": "content/press-conference-set-2026-09-29.json",
+      "_source": "Leo's ruling 2026-09-29 12:35 (BK \"lock.\"), In/ruling-2026-09-29-press-conference-set-LOCKED.md; copied from In/press-conference-set-2026-09-29-LOCKED.json byte for byte. 16 items: 8 after a win, 8 after a loss; a tie draws from the loss set. Choices keep the written order. The podium no longer draws from the Office themes (the Locker Room still does); the playoffs keep their history question."
+    }
   },
   "coaching": {
     "_source": "Leo's LOCKED growth-coaching bank (BK 2026-09-27 10:11), verbatim: the save-code lines, which belong to the Bowl because it has seasons and codes. Shown under the save code after each game (code_new) and once on the team page after a code restores (code_restored).",
