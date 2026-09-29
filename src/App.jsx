@@ -378,7 +378,8 @@ function About({ manifest, door, onBack }) {
       <ul>
         <li><b>Throw:</b> after the snap, drag back from anywhere and let go — like a slingshot. The gold ring shows where the ball can land; better Throwing, smaller ring.</li>
         <li><b>Run:</b> tap once before throwing and the quarterback takes off. With the ball, hold and point up or down to steer; tap to juke.</li>
-        <li><b>Keyboard:</b> Enter snaps. Keys 1–4 throw to that receiver. Space runs, then jukes. Arrow keys steer.</li>
+        <li><b>Dive and Jump:</b> Dive to finish a run and protect the ball. Jump to hop a tackler, but a hit right after you land brings a ball-security question. Big hits can shake the ball loose: answer the question and you hold on.</li>
+        <li><b>Keyboard:</b> Enter snaps. Keys 1–4 throw to that receiver. Space runs, then jukes. D dives, J jumps. Arrow keys steer.</li>
         <li>The other team's drives are simulated. Your Defense rating holds them.</li>
       </ul>
       <h3 className="h3">Where the questions come in</h3>

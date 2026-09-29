@@ -13,6 +13,7 @@
 //                      quick tap anywhere else = the quarterback takes off running
 //                      keys 1–4 throw to that receiver · Space runs · ↑/↓ slide in the pocket
 //   ball carrier       hold and point up/down to steer · tap or Space to juke · ↑/↓ steer
+//                      Dive button or D = dive · Jump button or J = jump (BK 2026-09-29 11:42)
 //
 // World units are yards. x runs 0–120 (0–10 own end zone, 110–120 theirs);
 // y runs across the field, 0–53.3. In the WORLD the offense always drives toward
@@ -39,6 +40,17 @@ const AIM_GAIN = 3.6
 const MAX_THROW = 55
 const MAGNET = 3.5
 const TAP_HIT = 16            // logical px: a tap this close to a receiver (or his number) throws to him
+// DIVE and JUMP (BK 2026-09-29, the kids' ask; words approved 11:42).
+// DIVE: the carrier leaves his feet and falls forward DIVE_YDS. Nobody can tackle or
+//   strip him mid-dive, and the play ends where he lands: the ball is safe, the run is over.
+// JUMP: a hop over a low tackle. For JUMP_T nobody can bring him down. The cost: for
+//   LAND_T after he lands, any tackle brings a ball-security question (Match asks it,
+//   at the dead ball, like a flag; this file only marks the hit).
+const DIVE_YDS = 1.6
+const DIVE_T = 0.3
+const JUMP_T = 0.45
+const JUMP_CD = 1.6
+const LAND_T = 1.0
 const flightTime = d => clamp(d / 24, 0.35, 1.9)
 // Distance from point p to the segment a–b.
 const segDist = (p, a, b) => {
@@ -133,6 +145,10 @@ export class FieldEngine {
     this.result = null
     this.juke = 0
     this.jukeCd = 0
+    this.dive = 0
+    this.jump = 0
+    this.jumpCd = 0
+    this.landT = 0
     this.t = 0
     const L = this.los
     const P = (role, team, x, y, extra = {}) => ({ role, team, x, y, vx: 0, vy: 0, hist: [], stun: 0, ...extra })
@@ -229,7 +245,11 @@ export class FieldEngine {
       if (this.state === 'dropback') {
         if (/^[1-4]$/.test(k)) { const r = this.targets.find(t => t.label === Number(k)); if (r) this._throwTo(r) }
         else if (space) this._qbRun()
-      } else if (this.state === 'run' && space) this._doJuke()
+      } else if (this.state === 'run') {
+        if (space) this._doJuke()
+        else if (k === 'd' || k === 'D') this._doDive()
+        else if (k === 'j' || k === 'J') this._doJump()
+      }
     }
     this._kd = e => this._key(e, true)
     this._ku = e => this._key(e, false)
@@ -335,8 +355,25 @@ export class FieldEngine {
     this._phase('run')
   }
 
+  // The on-screen Dive and Jump buttons call these.
+  dive() { this._doDive() }
+  jump() { this._doJump() }
+
+  _doDive() {
+    if (this.state !== 'run' || this.dive > 0) return
+    this.dive = DIVE_T
+    this.jump = 0
+    this.juke = 0
+  }
+
+  _doJump() {
+    if (this.state !== 'run' || this.dive > 0 || this.jump > 0 || this.jumpCd > 0) return
+    this.jump = JUMP_T
+    this.jumpCd = JUMP_CD
+  }
+
   _doJuke() {
-    if (this.state !== 'run' || this.jukeCd > 0) return
+    if (this.state !== 'run' || this.jukeCd > 0 || this.dive > 0) return
     this.juke = 0.38
     this.jukeCd = 1.2
     const near = this.defense.filter(d => !d.stun).sort((a, b) => dist(a, this.carrier) - dist(b, this.carrier))[0]
@@ -494,6 +531,20 @@ export class FieldEngine {
     const c = this.carrier
     const ph = this.phys
     if (this.jukeCd > 0) this.jukeCd -= dt
+    if (this.jumpCd > 0) this.jumpCd -= dt
+    if (this.landT > 0) this.landT -= dt
+    // Mid-dive: straight ahead, no steering, no tackles. Down where he lands.
+    if (this.dive > 0) {
+      this.dive -= dt
+      c.vx = DIVE_YDS / DIVE_T
+      c.vy *= 0.8
+      c.x += c.vx * dt
+      c.y += c.vy * dt
+      if (c.x >= 110) return this._end('td', c)
+      if (c.y < 0.2 || c.y > FIELD_W - 0.2) return this._end('oob', c)
+      if (this.dive <= 0) { c.down = true; return this._end('tackle', c, { dive: true }) }
+      return
+    }
     let vy = 0
     if (this.keys.ArrowUp) vy = -4.6
     else if (this.keys.ArrowDown) vy = 4.6
@@ -509,6 +560,11 @@ export class FieldEngine {
     if (c.x >= 110) return this._end('td', c)
     if (c.y < 0.2 || c.y > FIELD_W - 0.2) return this._end('oob', c)
     if (this.juke > 0) return
+    if (this.jump > 0) {
+      this.jump -= dt
+      if (this.jump <= 0) this.landT = LAND_T
+      return
+    }
     for (const d of this.defense) {
       if (d.stun > 0 || dist(d, c) > 0.8) continue
       if (Math.random() < ph.breakTackle) {
@@ -517,8 +573,10 @@ export class FieldEngine {
         if (this.cb.onEvent) this.cb.onEvent({ type: 'broken' })
         continue
       }
-      if (Math.random() < ph.fumble) return this._end('fumble', c)
-      return this._end('tackle', c)
+      // The old fumble roll no longer loses the ball by itself. It marks a hit hard enough
+      // to shake it loose (shaky), and a hit just after a jump is always one (afterJump).
+      // Match turns either into a ball-security question at the dead ball.
+      return this._end('tackle', c, { shaky: Math.random() < ph.fumble, afterJump: this.landT > 0 })
     }
   }
 
@@ -663,10 +721,21 @@ export class FieldEngine {
     const moving = Math.abs(p.vx) + Math.abs(p.vy) > 0.5
     const bob = moving ? Math.round(Math.sin(time * 15 + p.y)) : 0
     const stride = moving ? Math.round(Math.sin(time * 15 + p.y)) : 0
-    const y = s.y + bob
+    const isC = p === this.carrier
+    const lift = isC && this.jump > 0 ? Math.round(Math.sin((1 - this.jump / JUMP_T) * Math.PI) * 7) : 0
+    const y = s.y + bob - lift
+    // A diving carrier tips forward and lies flat where he lands (a quarter turn, so the
+    // pixels stay square). The shadow and ring stay on the ground under him.
+    const tip = isC && (this.dive > 0 || p.down) ? Math.min(1, p.down ? 1 : (DIVE_T - this.dive) / 0.1) : 0
     // shadow, and a gold ring under whoever has the ball
     g.fillStyle = 'rgba(0,0,0,.3)'; g.fillRect(s.x - 5, s.y + 5, 11, 2)
     if (p === this.carrier) { g.fillStyle = 'rgba(245,203,99,.6)'; g.fillRect(s.x - 7, s.y + 5, 15, 2) }
+    if (tip) {
+      g.save()
+      g.translate(s.x, s.y + 3)
+      g.rotate(tip * (Math.PI / 2) * ((p.team === 'o') === (this.dir === 1) ? 1 : -1))
+      g.translate(-s.x, -(s.y + 3))
+    }
     // PANTS, HELMET and JERSEY are three separate colours (teams.js). That is what lets
     // Binghamton's blue hat and blue pants carry their red jersey, and it is most of what
     // makes two sides readable against each other at this size.
@@ -692,6 +761,7 @@ export class FieldEngine {
       g.fillStyle = '#F4F6FA'
       g.fillRect(s.x - 3, y - 19, 2, 2); g.fillRect(s.x + 3, y - 21, 2, 2)
     }
+    if (tip) g.restore()
   }
 
   _drawBall(g) {

@@ -316,6 +316,7 @@ body.rb-full .wrap,body.rb-full .wrap.wide{max-width:none;padding:6px 10px 0}
 /* 195 px = scoreboard 55 + the stat-change line 27 + stat strip 33 + controls 64 + margins.
    The stat-change line always holds its row in full screen, so nothing jumps mid-game. */
 body.rb-full .match{max-width:min(100%,calc((100vh - 195px) * 1.7778))}
+@supports (height:100dvh){ body.rb-full .match{max-width:min(100%,calc((100dvh - 195px) * 1.7778))} }
 body.rb-full .stat-flash-slot{min-height:27px}
 /* The standing badge moves to the bottom-right in full screen, clear of Snap and the stat strip.
    It stays on screen: that is the point of it. */
@@ -350,4 +351,45 @@ a.arena-plug-link{display:inline-block;text-decoration:none;margin-top:4px}
 .q-whynot{margin:6px 0 4px;color:var(--white,#F4F6FA);font-size:15px;line-height:1.45}
 /* The dropback tip: the short version on phones (BK 2026-09-28) */
 .tip-short{display:none}
-@media (max-width:600px){.tip-full{display:none}.tip-short{display:inline}}
+/* Phones have no keys: the short tips on narrow screens, and on any touch-only device held
+   sideways (BK 2026-09-29: a phone in landscape is wider than 600px). */
+@media (max-width:600px),(hover:none) and (pointer:coarse){.tip-full{display:none}.tip-short{display:inline}}
+
+/* ---------- Dive and Jump, and full screen on phones (BK 2026-09-29, approved 11:42) ---------- */
+/* Two real buttons at the field's bottom corners, where thumbs sit on a phone held sideways.
+   Words carry them (not colour), 44px+ tall, and they never start a snap or a steer. */
+.run-moves{position:absolute;left:0;right:0;bottom:36px;display:flex;justify-content:space-between;padding:0 8px;pointer-events:none;line-height:1.2}
+.move-btn{pointer-events:auto;min-width:76px;min-height:44px;padding:8px 14px;border-radius:10px;cursor:pointer;
+  background:rgba(7,11,20,.86);color:var(--white);border:2px solid var(--gold);font:700 17px/1 'Barlow Condensed',sans-serif;
+  letter-spacing:.1em;text-transform:uppercase;touch-action:manipulation}
+.move-btn:hover,.move-btn:focus-visible{background:rgba(7,11,20,.95);border-color:var(--gold-lit);outline:none}
+.move-btn:active{transform:translateY(1px)}
+/* The sideways tip: only in full screen, only on a phone held upright. */
+.turn-tip{display:none}
+@media (orientation:portrait) and (max-width:600px){
+  /* A strip under the field, so it never sits on top of a toast or the snap tip. */
+  body.rb-full .turn-tip{display:block;background:#070B14;border-top:1px solid var(--gold);color:var(--white);
+    text-align:center;padding:7px 10px;font:500 14px/1.3 'Outfit',sans-serif}
+}
+/* Page mode (iPhone): the page can't hide Safari's bars, so it fills what's left. */
+body.rb-full{overscroll-behavior:none}
+/* A phone held sideways in full screen: the scoreboard, stat line, stat strip and controls
+   shrink so the field gets the room (about 135px of chrome instead of 195). */
+@media (max-height:500px) and (orientation:landscape){
+  body.rb-full .wrap,body.rb-full .wrap.wide{padding:2px 8px 0}
+  body.rb-full .match{max-width:min(100%,calc((100vh - 135px) * 1.7778))}
+  /* iPhone Safari: 100vh counts space under its toolbar; dvh is what's actually visible. */
+  @supports (height:100dvh){ body.rb-full .match{max-width:min(100%,calc((100dvh - 135px) * 1.7778))} }
+  body.rb-full .scoreboard{padding:3px 10px;border-radius:8px 8px 0 0}
+  body.rb-full .sb-score{font-size:22px} body.rb-full .sb-abbr{font-size:15px}
+  body.rb-full .sb-clock{font-size:14px} body.rb-full .sb-down{font-size:12px}
+  body.rb-full .stat-flash-slot{min-height:18px} body.rb-full .stat-flash{padding:2px 0;font-size:12.5px}
+  body.rb-full .stat-strip{padding:3px 8px;gap:4px;grid-template-columns:repeat(6,1fr)}
+  body.rb-full .stat-name{font-size:10.5px} body.rb-full .stat-cell b{font-size:13px}
+  body.rb-full .controls{margin:4px 0;gap:6px}
+  body.rb-full .controls button{padding:6px 12px;min-height:36px}
+  body.rb-full .move-btn{min-height:40px;min-width:68px;font-size:15px}
+  body.rb-full .run-moves{bottom:30px}
+}
+/* Narrow screens: the play toast drops below the full-screen button instead of running under it. */
+@media (max-width:600px){ .toast{top:44px} }

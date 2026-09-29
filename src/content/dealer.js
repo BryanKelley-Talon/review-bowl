@@ -26,6 +26,7 @@ const GATES = {
   // A flag is a quick look at the officials, not a reading passage: vocabulary and
   // identification shapes only (BK, 2026-09-22: "shorter, vocab matching type or ID type").
   penalty:  { label: 'Flag on the play', size: 'short', only: ['vocab', 'skills', 'reading'] },
+  fumble:   { label: 'Ball security', size: 'short', only: ['vocab', 'skills', 'reading'] },   // BK 2026-09-29 11:42
   // Practice Week film study: three quick ones between games, borrowed from the vocabulary lanes.
   practice: { label: 'Film study', size: 'short', only: ['vocab', 'reading', 'skills'] },
   // The bigger rewards ask the bigger questions: a level, a facility, a signing.

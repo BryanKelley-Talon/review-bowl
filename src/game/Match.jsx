@@ -66,6 +66,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   const setRead = on => { playBoost.current = on ? { read: true } : null; setFieldVersion(n => n + 1) }
   const liveChecks = useRef({ 1: 0, 2: 0 })
   const flags = useRef({ 1: 0, 2: 0 })
+  const hits = useRef({ 1: 0, 2: 0 })      // ball-security moments from a hard hit, per half
   const missedKicks = useRef(0)          // so the two-point card can say why it matters
   const tally = useRef({ right: 0, total: 0 })
   const bigMomentAsked = useRef(-1)
@@ -111,21 +112,52 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   // ── full screen (BK, 2026-09-26: "make the playable space bigger") ───────────────
   // The whole page goes full screen, not just the field, so every question card, the
   // badge and the controls come with it. Esc (or the button) comes back out.
-  const [full, setFull] = useState(false)
+  //
+  // PHONES (BK 2026-09-29 11:38, "full screen option on phones doesnt work"). An iPhone's
+  // Safari has no full-screen API for a page at all (only for video), so the old button
+  // did nothing there. Now: where the browser allows it (Chromebooks, Android, iPad with
+  // the webkit prefix) the page goes truly full screen and an Android phone also turns the
+  // field sideways. Where it doesn't (iPhone), the same button fills the page with the
+  // field instead ("page mode"): same layout, the browser's own bars stay. Nothing stored.
+  const [realFull, setRealFull] = useState(false)
+  const [pageFull, setPageFull] = useState(false)
+  const full = realFull || pageFull
+  const fsElement = () => document.fullscreenElement || document.webkitFullscreenElement || null
   useEffect(() => {
-    const on = () => {
-      const f = !!document.fullscreenElement
-      setFull(f); document.body.classList.toggle('rb-full', f)
-    }
+    const on = () => { const f = !!fsElement(); setRealFull(f); if (f) setPageFull(false) }
     document.addEventListener('fullscreenchange', on)
-    return () => { document.removeEventListener('fullscreenchange', on); document.body.classList.remove('rb-full') }
+    document.addEventListener('webkitfullscreenchange', on)
+    return () => {
+      document.removeEventListener('fullscreenchange', on)
+      document.removeEventListener('webkitfullscreenchange', on)
+    }
   }, [])
+  useEffect(() => {
+    document.body.classList.toggle('rb-full', full)
+    if (pageFull) window.scrollTo(0, 0)
+    return () => document.body.classList.remove('rb-full')
+  }, [full, pageFull])
   const toggleFull = e => {
     e.stopPropagation()
+    if (full) {
+      setPageFull(false)
+      if (fsElement()) {
+        try {
+          const out = (document.exitFullscreen || document.webkitExitFullscreen).call(document)
+          if (out && out.catch) out.catch(() => {})
+        } catch { /* already out */ }
+      }
+      return
+    }
+    const el = document.documentElement
+    const req = el.requestFullscreen || el.webkitRequestFullscreen
+    if (!req) { setPageFull(true); return }
     try {
-      if (document.fullscreenElement) document.exitFullscreen()
-      else document.documentElement.requestFullscreen?.()
-    } catch { /* not allowed here: the game still plays in the window */ }
+      Promise.resolve(req.call(el, { navigationUI: 'hide' }))
+        // Android turns the field sideways; everywhere else this quietly does nothing.
+        .then(() => screen.orientation?.lock?.('landscape')?.catch?.(() => {}))
+        .catch(() => setPageFull(true))
+    } catch { setPageFull(true) }
   }
 
   // ── the field ──────────────────────────────────────────────────────────────
@@ -294,6 +326,28 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
     setToast(describe(res, outcome))
     commit(g2)
 
+    // BALL SECURITY (BK 2026-09-29; words approved 11:42). A hard hit (the old fumble roll,
+    // rarer for tough players, at most rules.security_per_half a half) or ANY hit just after
+    // a jump brings a short question at the dead ball: answer it and you hold on, miss it and
+    // it's a fumble. A dive is never one. A touchdown never gets here. One moment per play,
+    // so a hit that asks this question can't also draw a flag.
+    const hitCap = rules.security_per_half ?? 2
+    if (res.type === 'tackle' && !res.dive && (res.afterJump || (res.shaky && hits.current[gs.ot ? 2 : gs.half] < hitCap))) {
+      if (!res.afterJump) hits.current[gs.ot ? 2 : gs.half] += 1
+      setStage('flag')
+      ask('fumble', 'Big hit! Answer this and you hold on to the ball. Miss it and it’s a fumble.',
+        correct => {
+          if (correct === false) {
+            const { g: gf, outcome: of } = applyPlay(gs, { ...res, type: 'fumble' })
+            commit(gf)
+            return settle(res, gf, of)
+          }
+          setToast('Ball secured. The tackle stands.')
+          settle(res, g2, outcome)
+        })
+      return
+    }
+
     // FLAG ON THE PLAY (BK, 2026-09-22). A big gain draws a quick check: answer it and
     // the play stands, miss it and it comes back with a penalty and the down replayed.
     // Never on a touchdown — those six are banked and stay banked.
@@ -410,10 +464,13 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   const help = {
     dropback: 'Pull back and release to throw · tap a receiver to throw to him · tap the field to run · keys 1–4 throw · Space runs',   // BK approved 2026-09-28 13:53
     air: 'Ball in the air…',
-    run: 'Hold and point to steer · tap or Space to juke · ↑/↓ steer',
+    run: 'Hold and point to steer · tap or Space to juke · D to dive · J to jump',   // BK approved 2026-09-29 11:42
   }[phase]
   // Phones have no keys: a shorter dropback tip on narrow screens (BK 2026-09-28 13:58, "yes").
-  const helpShort = { dropback: 'Pull back to throw · tap a receiver · tap the field to run' }[phase]
+  const helpShort = {
+    dropback: 'Pull back to throw · tap a receiver · tap the field to run',
+    run: 'Steer with your finger · tap to juke · Dive or Jump',   // BK approved 2026-09-29 11:42
+  }[phase]
 
   return (
     <div className="match">
@@ -436,10 +493,16 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
 
       <div className="field-wrap" onClick={() => { if (stage === 'presnap' && !gate) snap() }}>
         <canvas ref={canvasRef} className="field" aria-label="The field. Live play." />
-        {document.fullscreenEnabled !== false && (
-          <button type="button" className="fs-btn" onClick={toggleFull} aria-pressed={full}>
-            {full ? 'Exit full screen' : 'Full screen'}
-          </button>
+        <button type="button" className="fs-btn" onClick={toggleFull} aria-pressed={full}>
+          {full ? 'Exit full screen' : 'Full screen'}
+        </button>
+        {stage === 'live' && phase === 'run' && !gate && (
+          <div className="run-moves">
+            <button type="button" className="move-btn dive" onPointerDown={e => e.stopPropagation()}
+                    onClick={e => { e.stopPropagation(); engine.current?.dive() }}>Dive</button>
+            <button type="button" className="move-btn jump" onPointerDown={e => e.stopPropagation()}
+                    onClick={e => { e.stopPropagation(); engine.current?.jump() }}>Jump</button>
+          </div>
         )}
         {toast && <div className="toast" role="status">{toast}</div>}
         {stage === 'presnap' && !gate && <div className="snap-hint">Tap the field or press Space to snap</div>}
@@ -447,6 +510,8 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
           ? <div className="snap-hint"><span className="tip-full">{help}</span><span className="tip-short">{helpShort}</span></div>
           : <div className="snap-hint">{help}</div>)}
       </div>
+      {/* Under the field, never on it (BK approved the words 2026-09-29 11:42). */}
+      {full && <div className="turn-tip" role="note">Turn your phone sideways for a bigger field.</div>}
 
       <div className="stat-flash-slot">
         {flash && <div key={flash.id} className={`stat-flash ${flash.up ? 'up' : ''}`} role="status">{flash.text}</div>}
