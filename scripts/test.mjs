@@ -17,7 +17,7 @@ import { simDrive } from '../src/game/drive.js'
 import { isBigMoment, threatOf } from '../src/game/threat.js'
 import { CLASH, CVD_CLASH, GRASS_MIN, colorDistance, cvdDistance, kits, player, roster, TEAMS } from '../src/game/teams.js'
 import { SHARED_VB, VB, explainVolley, sportOf } from '../src/game/sport.js'
-import { PLAYS, PLAY_WORDS, ROUTES_OF, guessChance } from '../src/game/plays.js'
+import { PLAYS, PLAY_WORDS, ROUTES_OF, guessChance, readChance } from '../src/game/plays.js'
 import { decodeSaveCode, encodeSaveCode } from '../src/save/saveCode.js'
 const N_TEAMS = TEAMS.length
 
@@ -471,6 +471,11 @@ eq([PLAY_WORDS.head, PLAY_WORDS.readIt, PLAY_WORDS.change], ['Play Call', 'They 
 const lv = n => ({ throwing: n, hands: n, speed: n, blocking: n, toughness: n })
 eq([1, 2, 3, 4].map(n => +guessChance(lv(n)).toFixed(2)), [0.4, 0.32, 0.24, 0.16], 'the better trained, the less they read you')
 for (const p of PLAYS) ok(!!ROUTES_OF[p.id], `${p.id} has its routes`)
+// The repeat rule (BK 18:07): spamming one play gets it read more; mixing it up doesn't.
+eq(+readChance(lv(3), [], 'deep').toFixed(2), 0.24, 'a first call reads at the training rate')
+eq(+readChance(lv(3), ['deep', 'deep', 'deep'], 'deep').toFixed(2), 0.6, 'three Deep Shots in a row: the fourth is read 6 times in 10')
+eq(+readChance(lv(3), ['dive', 'sweep', 'slants'], 'deep').toFixed(2), 0.24, 'a mixed-up call stays at the training rate')
+eq(+readChance(lv(1), ['deep', 'deep', 'deep'], 'deep').toFixed(2), 0.7, 'capped at 0.70')
 
 console.log(`\n${passed} passed, ${failed} failed`)
 process.exit(failed ? 1 : 0)

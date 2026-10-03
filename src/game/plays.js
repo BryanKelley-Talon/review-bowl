@@ -37,6 +37,17 @@ export function guessChance(levels) {
   return Math.max(0.12, Math.min(0.40, 0.40 - 0.08 * (squadLevel(levels) - 1)))
 }
 
+// THE REPEAT RULE (BK 2026-10-03 18:07, "Fix deep shot now"). Call the same play again and again
+// and they start to expect it: every time it was called in the last three snaps adds 0.12 to
+// their chance of reading it, up to 0.70. Mixing up the calls keeps the training rate above.
+// The memory is this game's only, on the page; nothing is stored.
+export const REPEAT_STEP = 0.12
+export const READ_CAP = 0.70
+export function readChance(levels, recent = [], id) {
+  const repeats = recent.slice(-3).filter(r => r === id).length
+  return Math.min(READ_CAP, guessChance(levels) + REPEAT_STEP * repeats)
+}
+
 export const PLAY_WORDS = {
   head: 'Play Call',
   readIt: 'They read it!',

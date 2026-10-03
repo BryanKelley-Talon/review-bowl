@@ -12,7 +12,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Question from '../ui/Question.jsx'
 import LedBoard from '../ui/LedBoard.jsx'
 import PlayCall from '../ui/PlayCall.jsx'
-import { PLAY_WORDS, guessChance, playById } from './plays.js'
+import { PLAY_WORDS, playById, readChance } from './plays.js'
 import { gateLabel } from '../content/dealer.js'
 import { FieldEngine } from './field.js'
 import { driveLine, simDrive, standLine } from './drive.js'
@@ -70,8 +70,10 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   // Both are for this snap only; a new down calls a new play.
   const [call, setCall] = useState(null)
   const guessed = useRef(false)
+  const recentCalls = useRef([])            // this game's last calls, for the repeat rule (plays.js)
   const pickPlay = useCallback(id => {
-    guessed.current = Math.random() < guessChance(career.levels)
+    guessed.current = Math.random() < readChance(career.levels, recentCalls.current, id)
+    recentCalls.current = [...recentCalls.current, id].slice(-3)
     setCall(playById(id))
   }, [career.levels])
   const setRead = on => { playBoost.current = on ? { read: true } : null; setFieldVersion(n => n + 1) }
