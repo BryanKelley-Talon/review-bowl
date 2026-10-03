@@ -71,6 +71,8 @@ export default function VolleyMatch({ career, dealer, manifest, opp, oppStrength
       onMatchEnd: info => h.current.matchEnd(info),
       blocked: () => !!gateRef.current,
     })
+    // Dev only: lets a test script reach the court. Never in a build.
+    if (import.meta.env.DEV) window.__vbCourt = court.current
     return () => court.current.destroy()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

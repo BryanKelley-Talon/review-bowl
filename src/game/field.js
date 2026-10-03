@@ -181,15 +181,15 @@ export class FieldEngine {
     const r = prng((TEAMS.indexOf(home) + 3) * 97 + TEAMS.indexOf(away))
     // concrete bowl and the apron around the turf
     g.fillStyle = '#2a2f3a'; g.fillRect(0, 0, cv.width, cv.height)
-    rect(-8, -4.6, 128, FIELD_W + 4.6, '#2c6a2a')
-    dith(g, 0, by(-4.6), cv.width, by(FIELD_W + 4.6) - by(-4.6), 'rgba(0,0,0,.08)')
+    rect(-8, -1.4, 128, FIELD_W + 1.4, '#2c6a2a')
+    dith(g, 0, by(-1.4), cv.width, by(FIELD_W + 1.4) - by(-1.4), 'rgba(0,0,0,.08)')
     // the padded wall, home colour, a lit top edge; the league's banners hang on the far one
     const pad = lum(home.colors[0]) < 0.12 ? shade(home.colors[1], -0.25) : home.colors[0]
-    for (const [y0, y1] of [[-7.4, -4.6], [FIELD_W + 4.6, FIELD_W + 7.4]]) {
+    for (const [y0, y1] of [[-3.8, -1.4], [FIELD_W + 1.4, FIELD_W + 3.8]]) {
       rect(-12, y0, 132, y1, pad); rect(-12, y0, 132, y0 + 0.25, shade(pad, 0.35)); rect(-12, y1 - 0.25, 132, y1, shade(pad, -0.45))
     }
     for (let i = 0, x = -6; x < 124; i++, x += 10.5) {
-      const t = TEAMS[i % TEAMS.length], a = Math.min(bx(x), bx(x + 6)), y = by(-7.2) + 1
+      const t = TEAMS[i % TEAMS.length], a = Math.min(bx(x), bx(x + 6)), y = by(-3.6) + 1
       g.fillStyle = OUTC; g.fillRect(a - 1, y - 1, 44, 16)
       g.fillStyle = t.colors[0]; g.fillRect(a, y, 42, 14)
       g.fillStyle = 'rgba(255,255,255,.16)'; g.fillRect(a, y, 42, 5)
@@ -215,20 +215,16 @@ export class FieldEngine {
         }
       }
     }
-    crowd(Y0, -7.4); crowd(FIELD_W + 7.4, Y1)
+    crowd(Y0, -3.8); crowd(FIELD_W + 3.8, Y1)
     // behind the end zones: the stands curve round
     for (const [x0, x1] of [[X0, -12], [132, X1]]) {
       const a = Math.min(bx(x0), bx(x1)), w = Math.abs(bx(x1) - bx(x0))
-      for (let yy = by(-7.4); yy < by(FIELD_W + 7.4); yy += 6) {
+      for (let yy = by(-3.8); yy < by(FIELD_W + 3.8); yy += 6) {
         g.fillStyle = (yy / 6) % 2 ? '#3a2b1f' : '#33261b'; g.fillRect(a, yy, w, 6)
         for (let x = a + 2; x < a + w - 3; x += 6) { if (r() < 0.1) continue; g.fillStyle = r() < 0.6 ? home.colors[0] : '#6b7280'; g.fillRect(x, yy + 2, 4, 3); g.fillStyle = SKIN[Math.floor(r() * 6)]; g.fillRect(x + 1, yy - 1, 2, 3) }
       }
       const px = Math.min(bx(x0 < 0 ? -12 : 132), bx(x0 < 0 ? -12.6 : 132.6))
-      g.fillStyle = pad; g.fillRect(px, by(-7.4), Math.round(0.6 * PX) + 1, by(FIELD_W + 7.4) - by(-7.4))
-    }
-    // benches on the near sideline
-    for (const [x0, x1, c] of [[38, 54, home.colors[0]], [66, 82, away.colors[0]]]) {
-      rect(x0, FIELD_W + 2.4, x1, FIELD_W + 3.4, shade(c, -0.2)); rect(x0, FIELD_W + 2.4, x1, FIELD_W + 2.6, shade(c, 0.3))
+      g.fillStyle = pad; g.fillRect(px, by(-3.8), Math.round(0.6 * PX) + 1, by(FIELD_W + 3.8) - by(-3.8))
     }
     return { cv, X0, X1, Y0 }
   }

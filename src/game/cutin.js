@@ -69,7 +69,9 @@ export function drawBand(g, W, H, b, e, reduced) {
   if (b.floor === 'wood') { for (let y = 0; y < H; y += 4) { g.fillStyle = (y / 4) % 2 ? '#bf854a' : '#c58b50'; g.fillRect(0, y, W, 4) } }
   else { for (let x = 0; x < W; x += 40) { g.fillStyle = (x / 40) % 2 ? '#3B8A38' : '#357F33'; g.fillRect(x, 0, 40, H) } g.fillStyle = 'rgba(255,255,255,.75)'; for (let x = 20; x < W; x += 40) g.fillRect(x, 0, 2, H) }
   const s = Math.max(1, Math.round(H / 140))
-  const rows = 4, cols = 7, gapX = 22 * s, gapY = Math.round((H * 0.62) / rows)
+  const band = Math.round(H * 0.16)
+  const rows = 4, cols = 7, gapX = 22 * s
+  const top = band + 29 * s
   const span = cols * gapX
   const prog = reduced ? 0.5 : Math.min(1.15, e / 3.2)
   const x0 = Math.round(-span + prog * (W + span * 0.9))
@@ -78,10 +80,9 @@ export function drawBand(g, W, H, b, e, reduced) {
     const kind = row === 0 ? 'drum' : row === rows - 1 ? 'tuba' : 'horn'
     for (let c = 0; c < cols; c++) {
       const step = reduced ? 0 : (Math.floor(e * 6) + c + row) % 2
-      marcher(g, x0 + c * gapX + (row % 2) * gapX / 2, Math.round(H * 0.33 + row * gapY + r() * 2), s, kind, b.colors, step)
+      marcher(g, x0 + c * gapX + (row % 2) * gapX / 2, Math.round(top + row * Math.floor((H - top - 4) / rows) + r() * 2), s, kind, b.colors, step)
     }
   }
-  const band = Math.round(H * 0.16)
   g.globalAlpha = 0.8; g.fillStyle = '#05070d'; g.fillRect(0, 0, W, band); g.globalAlpha = 1
   g.fillStyle = '#E3B341'; g.fillRect(0, band, W, 2)
   const ks = Math.max(2, Math.floor(band / 11))
