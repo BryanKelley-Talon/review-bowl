@@ -91,7 +91,7 @@ for (const course of Object.keys(manifest.courses)) {
   const packs = { ...packsOf('us11r') }
   for (const p of manifest.culture.packs) packs[p.file] = pub(p.file)
   const withC = buildPool(manifest, 'us11r', packs, crops)
-  eq(withC.culture.length, 17, 'the Locker Room reads both Office themes: 5 + 12 practice items')
+  eq(withC.culture.length, 41, 'the Locker Room reads both Office themes and the Unit 0 Be a Hawk bank: 5 + 12 + 24 practice items')
   ok(withC.culture.every(q => q.hints.length === 2 && q.rationale && q.size === 'short' && q.culture), 'every Locker Room question is short, with two hints and a reason')
   ok(Object.values(withC.lanes).flat().every(q => !q.culture), 'no Locker Room question ever enters a content lane')
   const d = makeDealer(withC, manifest.courses.us11r, manifest.rules)
@@ -405,7 +405,7 @@ eq(kits(TEAMS[bing], TEAMS[heights]).defense.jersey, '#F2F2F2', 'Elmira Heights 
   const packs = {}
   for (const p of man.culture.packs) packs[p.file] = JSON.parse(fs.readFileSync(path.join(ROOT, 'public', p.file), 'utf8'))
   const culture = buildCulture(man, packs)
-  eq(culture.length, 17, 'Locker Room pool: theme 1 (5) + theme 2 (12), none held back')
+  eq(culture.length, 41, 'Locker Room pool: theme 1 (5) + theme 2 (12) + Unit 0 Be a Hawk (24), none held back')
   ok(culture.every(q => q.hints.length === 2 && q.rationale), 'every Locker Room question has two hints and a reason')
 }
 

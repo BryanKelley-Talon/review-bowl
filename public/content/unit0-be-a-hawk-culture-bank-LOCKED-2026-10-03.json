@@ -1,0 +1,830 @@
+{
+ "_README": "Unit 0 · Be a Hawk · the always-on culture bank. LOCKED by BK 2026-10-03 15:47 (\"locked with you and me\"); Leo drafted; Sam/Will review waived. U23 replaced 15:47 (BK 15:45: the threat item \"might be too heavy\"; building focus: being where you say you're going). One bank, two uses: the Arena's Unit 0 room and the Review Bowl's always-on Unit 0 deck (BK 10/3). Shape: Office practice items (theme 1/2). Evergreen: no month, no dates, no names. Port word for word once BK locks. _label fields never render. PURPOSE (BK 2026-10-03 15:28, verbatim): \"at the end of the day help one kid be better, help one class be better, help the building be better. that's my underlying goal.\" INTRO LINE approved by BK 2026-10-03 15:32 (\"yes\"). BEYOND SCHOOL (BK 15:32, verbatim): \"we can also consider the core of helping a kid succeed inside and beyond the classroom, beyond the shcool...basically for life.\"",
+ "theme": {
+  "n": 0,
+  "title": "Be a Hawk",
+  "month": null,
+  "evergreen": true
+ },
+ "practice": {
+  "intro": "One kid better. One class better. The building better. Pick the choice that fits the four words best.",
+  "items": [
+   {
+    "n": 1,
+    "_label": "U1 · Be Responsible",
+    "question": "You're in a group project. One member hasn't done their part, and it's due Friday. What's the best first step?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Do their part yourself and say nothing."
+     },
+     {
+      "key": "B",
+      "text": "Wait until the day it's due, then tell the teacher."
+     },
+     {
+      "key": "C",
+      "text": "Leave their part blank so everyone sees it."
+     },
+     {
+      "key": "D",
+      "text": "Ask them today what they can finish, and set a time to check back."
+     }
+    ],
+    "correct": "D",
+    "hints": [
+     "Which one gives them a real chance to fix it?",
+     "Which one still has time left in it?"
+    ],
+    "reasoning": "Start with the person, and start early. If nothing changes, then bring in the teacher. That's Be Responsible.",
+    "distractors": {
+     "A": "Covering for them in silence wears you out and fixes nothing for next time.",
+     "B": "By then, nobody has time to fix anything.",
+     "C": "A blank part hurts the whole group's grade, yours too."
+    }
+   },
+   {
+    "n": 2,
+    "_label": "U2 · Be Responsible",
+    "question": "You left your finished homework at home. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Tell your teacher at the start of class and ask when you can bring it in."
+     },
+     {
+      "key": "B",
+      "text": "Say nothing and hope it isn't collected."
+     },
+     {
+      "key": "C",
+      "text": "Say you never got the assignment."
+     },
+     {
+      "key": "D",
+      "text": "Redo it in a rush during class while notes are going."
+     }
+    ],
+    "correct": "A",
+    "hints": [
+     "Which one is honest and quick?",
+     "Which one gives your teacher a chance to help?"
+    ],
+    "reasoning": "Owning it early usually costs less than hiding it. That's Be Responsible.",
+    "distractors": {
+     "B": "Hoping isn't a plan, and it usually gets noticed.",
+     "C": "That trades a small problem for a trust problem.",
+     "D": "Now you're missing today's work too."
+    }
+   },
+   {
+    "n": 3,
+    "_label": "U3 · Be Responsible",
+    "question": "Practice runs late tonight, and an assignment is due tomorrow. When do you deal with it?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "After practice, whenever you get home."
+     },
+     {
+      "key": "B",
+      "text": "In the morning, on the bus."
+     },
+     {
+      "key": "C",
+      "text": "Now: look at it and plan when you'll do each part."
+     },
+     {
+      "key": "D",
+      "text": "You don't. Practice is a good enough reason."
+     }
+    ],
+    "correct": "C",
+    "hints": [
+     "When do you have the most choices?",
+     "Which one leaves room for something to go wrong?"
+    ],
+    "reasoning": "A busy night needs a plan made before it starts. That's Be Responsible.",
+    "distractors": {
+     "A": "Late and tired is the hardest time to start something.",
+     "B": "The bus isn't a desk, and there's no time left if it takes longer.",
+     "D": "Being busy is real. The work still counts, so plan around it."
+    }
+   },
+   {
+    "n": 4,
+    "_label": "U4 · Be Responsible",
+    "question": "You borrowed a classmate's calculator for the quiz. The bell rings. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Keep it until tomorrow. They probably won't need it."
+     },
+     {
+      "key": "B",
+      "text": "Give it back before you leave the room."
+     },
+     {
+      "key": "C",
+      "text": "Leave it on your desk for them to find."
+     },
+     {
+      "key": "D",
+      "text": "Hand it to a friend to return."
+     }
+    ],
+    "correct": "B",
+    "hints": [
+     "Whose calculator is it?",
+     "Which one makes sure it ends up back in their hands?"
+    ],
+    "reasoning": "Return what you borrow, the way you got it, when you said you would. That's Be Responsible.",
+    "distractors": {
+     "A": "They might need it next period, and that's their call, not yours.",
+     "C": "Desks get cleared and things get picked up. It might not be there.",
+     "D": "Now two people are responsible for it, so nobody is."
+    }
+   },
+   {
+    "n": 5,
+    "_label": "U5 · Be Responsible",
+    "question": "You got a quiz question wrong, and you're not sure why. What helps most?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Forget it. The quiz is over."
+     },
+     {
+      "key": "B",
+      "text": "Decide the question was unfair."
+     },
+     {
+      "key": "C",
+      "text": "Memorize the right letter."
+     },
+     {
+      "key": "D",
+      "text": "Find the right answer and figure out where your thinking went off."
+     }
+    ],
+    "correct": "D",
+    "hints": [
+     "Which one helps on the next question like it?",
+     "Is the letter the point, or the reason?"
+    ],
+    "reasoning": "A wrong answer you understand is worth more than a right one you guessed. That's Be Responsible.",
+    "distractors": {
+     "A": "The same skill comes back on the next quiz.",
+     "B": "Maybe, but you still won't know it next time.",
+     "C": "The letter changes next time. The reason doesn't."
+    }
+   },
+   {
+    "n": 6,
+    "_label": "U6 · Be Responsible",
+    "question": "You said you'd help at a club event Saturday, and now you can't make it. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Tell the person in charge as soon as you know."
+     },
+     {
+      "key": "B",
+      "text": "Just don't show up. They'll figure it out."
+     },
+     {
+      "key": "C",
+      "text": "Tell them Saturday morning."
+     },
+     {
+      "key": "D",
+      "text": "Send a friend in your place without asking."
+     }
+    ],
+    "correct": "A",
+    "hints": [
+     "When does the group have the most time to adjust?",
+     "Which one treats your word like it matters?"
+    ],
+    "reasoning": "Plans change. Saying so early keeps your word worth something. That's Be Responsible.",
+    "distractors": {
+     "B": "Somebody planned around you, and now they find out too late.",
+     "C": "Same news, less time to fix it.",
+     "D": "They planned for you, and they may need something your friend can't do."
+    }
+   },
+   {
+    "n": 7,
+    "_label": "U7 · Be Respectful",
+    "question": "Your teacher is giving directions, and your friend keeps talking to you. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Talk back quietly. It's only a minute."
+     },
+     {
+      "key": "B",
+      "text": "Say \"after\" and keep listening."
+     },
+     {
+      "key": "C",
+      "text": "Ignore the directions and ask the teacher later."
+     },
+     {
+      "key": "D",
+      "text": "Tell your friend, loudly, to be quiet."
+     }
+    ],
+    "correct": "B",
+    "hints": [
+     "Which one gets you the directions and keeps your friend?",
+     "Which one doesn't pull anyone else in?"
+    ],
+    "reasoning": "Listening while someone talks to the room respects them and the people around you. That's Be Respectful.",
+    "distractors": {
+     "A": "Then you both miss it, and the teacher has to say it again.",
+     "C": "The teacher already said it once, to everyone.",
+     "D": "Now the whole room is listening to you instead."
+    }
+   },
+   {
+    "n": 8,
+    "_label": "U8 · Be Respectful",
+    "question": "You're late for class, and the people in front of you in the hallway are walking slowly. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Push through them."
+     },
+     {
+      "key": "B",
+      "text": "Yell at them to hurry up."
+     },
+     {
+      "key": "C",
+      "text": "Say \"excuse me\" and go around when there's room."
+     },
+     {
+      "key": "D",
+      "text": "Turn around and take the long way."
+     }
+    ],
+    "correct": "C",
+    "hints": [
+     "Which one gets you there without bumping anyone?",
+     "What would you want from the person behind you?"
+    ],
+    "reasoning": "Two words and a little patience get you there without anyone getting hurt. That's Be Respectful.",
+    "distractors": {
+     "A": "Pushing in a crowded hall is how people get knocked down.",
+     "B": "They might not know you're there. Yelling starts something.",
+     "D": "Now you're even later."
+    }
+   },
+   {
+    "n": 9,
+    "_label": "U9 · Be Respectful",
+    "question": "Lunch is over. Your table has trash on it, and not all of it is yours. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Clean up your spot and a little extra."
+     },
+     {
+      "key": "B",
+      "text": "Leave it. It isn't all yours."
+     },
+     {
+      "key": "C",
+      "text": "Leave it for the custodians. That's their job."
+     },
+     {
+      "key": "D",
+      "text": "Slide it down to the next table."
+     }
+    ],
+    "correct": "A",
+    "hints": [
+     "Who sits there next?",
+     "Which one leaves the place better than you found it?"
+    ],
+    "reasoning": "Shared spaces work when everyone leaves them a little better. That's Be Respectful.",
+    "distractors": {
+     "B": "Somebody has to start, and the next group sits in it either way.",
+     "C": "They take care of the whole building. A minute of yours saves a lot of theirs.",
+     "D": "That just hands the mess to someone else."
+    }
+   },
+   {
+    "n": 10,
+    "_label": "U10 · Be Respectful",
+    "question": "A classmate who's still learning English stops in the middle of a sentence to find a word. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Finish the sentence for them."
+     },
+     {
+      "key": "B",
+      "text": "Laugh to lighten the mood."
+     },
+     {
+      "key": "C",
+      "text": "Start talking so they don't feel put on the spot."
+     },
+     {
+      "key": "D",
+      "text": "Wait, and give them the time."
+     }
+    ],
+    "correct": "D",
+    "hints": [
+     "Whose idea is it?",
+     "What does waiting tell them?"
+    ],
+    "reasoning": "Giving someone time says their idea is worth hearing. That's Be Respectful.",
+    "distractors": {
+     "A": "You might guess wrong, and it's their thought to finish.",
+     "B": "A laugh can land as laughing at them.",
+     "C": "Taking over says their turn is done."
+    }
+   },
+   {
+    "n": 11,
+    "_label": "U11 · Be Respectful",
+    "question": "An adult who isn't your teacher stops you in the hallway and asks where you're headed. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Keep walking. They're not your teacher."
+     },
+     {
+      "key": "B",
+      "text": "Give a smart answer."
+     },
+     {
+      "key": "C",
+      "text": "Tell them where you're going and show your pass."
+     },
+     {
+      "key": "D",
+      "text": "Say it's none of their business."
+     }
+    ],
+    "correct": "C",
+    "hints": [
+     "Who are the adults in the building there for?",
+     "Which one gets you on your way fastest?"
+    ],
+    "reasoning": "Every adult in the building looks out for every student in it. A straight answer takes ten seconds. That's Be Respectful.",
+    "distractors": {
+     "A": "They're responsible for you too, and now a quick question becomes a bigger deal.",
+     "B": "A joke at an adult's expense turns ten seconds into ten minutes.",
+     "D": "Asking is part of their job, and a straight answer ends it fastest."
+    }
+   },
+   {
+    "n": 12,
+    "_label": "U12 · Be Respectful",
+    "question": "You think a grade on your paper is wrong. What's the best way to handle it?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Argue about it in front of the class."
+     },
+     {
+      "key": "B",
+      "text": "Ask your teacher, privately, to go over it with you."
+     },
+     {
+      "key": "C",
+      "text": "Complain about it in the group chat."
+     },
+     {
+      "key": "D",
+      "text": "Let it go and stay mad."
+     }
+    ],
+    "correct": "B",
+    "hints": [
+     "Where can a real conversation happen?",
+     "Which one could actually change something?"
+    ],
+    "reasoning": "A calm, private question gets a real answer, and sometimes a fix. That's Be Respectful.",
+    "distractors": {
+     "A": "An audience makes everyone defend a side instead of looking at the paper.",
+     "C": "The group chat can't change your grade.",
+     "D": "If it might be wrong, it's worth one calm question."
+    }
+   },
+   {
+    "n": 13,
+    "_label": "U13 · Be Kind",
+    "question": "A new student is standing in the hallway, staring at their schedule and looking lost. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Keep walking. Someone else will help."
+     },
+     {
+      "key": "B",
+      "text": "Point in a general direction."
+     },
+     {
+      "key": "C",
+      "text": "Ask where they're headed, and show them if it's on your way."
+     },
+     {
+      "key": "D",
+      "text": "Laugh about it with your friends."
+     }
+    ],
+    "correct": "C",
+    "hints": [
+     "What would have helped you on your first day?",
+     "Which one takes thirty seconds?"
+    ],
+    "reasoning": "Being new is hard. A little help on the first day is remembered for a long time. That's Be Kind.",
+    "distractors": {
+     "A": "Everyone thinks that, and that's how people stay lost.",
+     "B": "Better than nothing, but a big building is easy to get lost in.",
+     "D": "They'll remember that too."
+    }
+   },
+   {
+    "n": 14,
+    "_label": "U14 · Be Kind",
+    "question": "Someone drops their books in a crowded hallway, and people laugh. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Laugh too. It was kind of funny."
+     },
+     {
+      "key": "B",
+      "text": "Step around them and keep going."
+     },
+     {
+      "key": "C",
+      "text": "Take a video."
+     },
+     {
+      "key": "D",
+      "text": "Stop and help pick them up."
+     }
+    ],
+    "correct": "D",
+    "hints": [
+     "How would it feel to be the one on the floor?",
+     "Which one changes the moment?"
+    ],
+    "reasoning": "One person helping changes how the whole hallway sees it. That's Be Kind.",
+    "distractors": {
+     "A": "It's funny until it's you.",
+     "B": "Stepping around says you saw it and didn't care.",
+     "C": "A video makes a bad moment last a lot longer."
+    }
+   },
+   {
+    "n": 15,
+    "_label": "U15 · Be Kind",
+    "question": "Your group lost points because of one person's mistake, and they feel terrible. What do you say?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "\"Thanks a lot.\""
+     },
+     {
+      "key": "B",
+      "text": "\"It happens. Let's get the next one.\""
+     },
+     {
+      "key": "C",
+      "text": "Nothing. Let them sit with it."
+     },
+     {
+      "key": "D",
+      "text": "Tell the rest of the group whose fault it was."
+     }
+    ],
+    "correct": "B",
+    "hints": [
+     "They already know. What do they need now?",
+     "Which one helps the group do better next time?"
+    ],
+    "reasoning": "Everybody messes up. How the group responds decides what happens next. That's Be Kind.",
+    "distractors": {
+     "A": "They already feel bad. Piling on doesn't fix the score.",
+     "C": "Silence can feel like blame.",
+     "D": "Everyone already knows, so it only makes things worse."
+    }
+   },
+   {
+    "n": 16,
+    "_label": "U16 · Be Kind",
+    "question": "A friend made the team, and you got cut. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Congratulate them, even if it stings."
+     },
+     {
+      "key": "B",
+      "text": "Avoid them for a while."
+     },
+     {
+      "key": "C",
+      "text": "Say the coach plays favorites."
+     },
+     {
+      "key": "D",
+      "text": "Tell them they only made it on luck."
+     }
+    ],
+    "correct": "A",
+    "hints": [
+     "Can you be disappointed and happy for them at the same time?",
+     "Which one keeps the friendship?"
+    ],
+    "reasoning": "You can feel disappointed and still be glad for a friend. That's Be Kind.",
+    "distractors": {
+     "B": "They didn't do anything to you.",
+     "C": "That takes something from them and doesn't change the roster.",
+     "D": "It takes something from them and gives you nothing back."
+    }
+   },
+   {
+    "n": 17,
+    "_label": "U17 · Be Kind",
+    "question": "A classmate has been out for a couple of weeks. It's their first day back. What could you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Ask where they've been, in front of everyone."
+     },
+     {
+      "key": "B",
+      "text": "Tell them it's good to see them, and offer your notes."
+     },
+     {
+      "key": "C",
+      "text": "Say nothing and act like nothing happened."
+     },
+     {
+      "key": "D",
+      "text": "Tell them how far behind they are."
+     }
+    ],
+    "correct": "B",
+    "hints": [
+     "What would make walking back in easier?",
+     "Which one doesn't make them explain anything?"
+    ],
+    "reasoning": "Making it easy to come back is one of the kindest things you can do. That's Be Kind.",
+    "distractors": {
+     "A": "Why they were out is theirs to share, or not.",
+     "C": "Saying nothing can feel like nobody noticed they were gone.",
+     "D": "They already know, and it makes coming back harder."
+    }
+   },
+   {
+    "n": 18,
+    "_label": "U18 · Be Kind",
+    "question": "In your group, the quiet person said something smart, and nobody heard it. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Use the idea as your own."
+     },
+     {
+      "key": "B",
+      "text": "Let it go. They should speak up."
+     },
+     {
+      "key": "C",
+      "text": "Wait for the teacher to notice."
+     },
+     {
+      "key": "D",
+      "text": "Say \"Wait, say that again\" so the group hears it."
+     }
+    ],
+    "correct": "D",
+    "hints": [
+     "Whose idea was it?",
+     "Which one makes them more likely to talk next time?"
+    ],
+    "reasoning": "Making room for a quiet voice makes the whole group smarter. That's Be Kind.",
+    "distractors": {
+     "A": "That's taking credit for their thinking.",
+     "B": "Some people need a door held open first.",
+     "C": "You're right there. The teacher isn't."
+    }
+   },
+   {
+    "n": 19,
+    "_label": "U19 · Be Safe",
+    "question": "The fire alarm goes off. Your friend wants to stop at their locker first. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Leave with your class, the way you practiced."
+     },
+     {
+      "key": "B",
+      "text": "Go with your friend. It'll be quick."
+     },
+     {
+      "key": "C",
+      "text": "Stay in the room until you know it's real."
+     },
+     {
+      "key": "D",
+      "text": "Leave, but split off from your class to find your friends."
+     }
+    ],
+    "correct": "A",
+    "hints": [
+     "Who needs to know where you are?",
+     "Is there ever time to check whether it's real?"
+    ],
+    "reasoning": "Every alarm is real until an adult says it isn't, and your teacher has to count you. That's Be Safe.",
+    "distractors": {
+     "B": "Lockers can wait. In a real fire, seconds matter.",
+     "C": "You can't tell from inside, and waiting costs time.",
+     "D": "If you're not with your class, people have to go looking for you."
+    }
+   },
+   {
+    "n": 20,
+    "_label": "U20 · Be Safe",
+    "question": "Kids are shoving each other on the stairs as a joke. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Join in. It's just fooling around."
+     },
+     {
+      "key": "B",
+      "text": "Stay out of it and keep to the side."
+     },
+     {
+      "key": "C",
+      "text": "Shove back if one of them bumps you."
+     },
+     {
+      "key": "D",
+      "text": "Stop on the stairs and watch."
+     }
+    ],
+    "correct": "B",
+    "hints": [
+     "What happens if someone loses their footing on stairs?",
+     "Which one keeps you out of the way of a fall?"
+    ],
+    "reasoning": "Stairs turn a joke into an injury fast. That's Be Safe.",
+    "distractors": {
+     "A": "One slip on the stairs and it isn't a joke anymore.",
+     "C": "Now there's more shoving, not less.",
+     "D": "Stopping on the stairs makes a pile-up more likely."
+    }
+   },
+   {
+    "n": 21,
+    "_label": "U21 · Be Safe",
+    "question": "Someone you only know online asks what school you go to. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Tell them. What's the harm?"
+     },
+     {
+      "key": "B",
+      "text": "Send a picture so they know what you look like."
+     },
+     {
+      "key": "C",
+      "text": "Give them the name of a different school."
+     },
+     {
+      "key": "D",
+      "text": "Don't share it, and tell an adult if they keep asking."
+     }
+    ],
+    "correct": "D",
+    "hints": [
+     "What could someone do with where you are every day?",
+     "Which one keeps you in control?"
+    ],
+    "reasoning": "Where you are every day is information to keep to yourself. That's Be Safe.",
+    "distractors": {
+     "A": "Your school tells a stranger where to find you.",
+     "B": "Now they have your face too.",
+     "C": "A made-up answer keeps the conversation going. Ending it is safer."
+    }
+   },
+   {
+    "n": 22,
+    "_label": "U22 · Be Safe",
+    "question": "A friend hits their head in gym. They say they're fine, but they seem dizzy. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Take their word for it. They know how they feel."
+     },
+     {
+      "key": "B",
+      "text": "Tell them to walk it off."
+     },
+     {
+      "key": "C",
+      "text": "Tell the teacher right away."
+     },
+     {
+      "key": "D",
+      "text": "Wait and see if they get worse."
+     }
+    ],
+    "correct": "C",
+    "hints": [
+     "Who should decide whether a head injury is okay?",
+     "What does dizzy tell you?"
+    ],
+    "reasoning": "With a head injury, an adult decides, not the person who got hit. That's Be Safe.",
+    "distractors": {
+     "A": "People who hit their head often can't tell how hurt they are.",
+     "B": "Walking it off is for a stubbed toe, not a head.",
+     "D": "Waiting can make it worse. Telling someone costs nothing."
+    }
+   },
+   {
+    "n": 23,
+    "_label": "U23 · Be Safe",
+    "question": "You signed out to the bathroom. A friend texts you to meet at the vending machines instead. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Go where your pass says, and come straight back."
+     },
+     {
+      "key": "B",
+      "text": "Meet them for a minute. Nobody will notice."
+     },
+     {
+      "key": "C",
+      "text": "Go, then say the bathroom line was long."
+     },
+     {
+      "key": "D",
+      "text": "Stay out until the period's almost over."
+     }
+    ],
+    "correct": "A",
+    "hints": [
+     "If the fire alarm went off right now, where would adults look for you?",
+     "Which choice makes your pass true?"
+    ],
+    "reasoning": "Your pass tells adults where to find you if something happens. Being where you said you'd be keeps you safe. That's Be Safe.",
+    "distractors": {
+     "B": "If something happens, they'll look where your pass says, and you won't be there.",
+     "C": "Now it's a story you have to keep straight, and people stop trusting you.",
+     "D": "Class keeps going without you, and every extra minute is harder to explain."
+    }
+   },
+   {
+    "n": 24,
+    "_label": "U24 · Be Safe",
+    "question": "Your friends dare you to try an online challenge that looks dangerous. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Do it. Everyone else is."
+     },
+     {
+      "key": "B",
+      "text": "Do a safer version for the video."
+     },
+     {
+      "key": "C",
+      "text": "Pass, and suggest something else to do."
+     },
+     {
+      "key": "D",
+      "text": "Film someone else doing it instead."
+     }
+    ],
+    "correct": "C",
+    "hints": [
+     "What does the challenge get you, and what could it cost?",
+     "Is there a way to say no and keep your friends?"
+    ],
+    "reasoning": "A good group of friends can handle a no. That's Be Safe.",
+    "distractors": {
+     "A": "If everyone's doing it, everyone's taking the same risk.",
+     "B": "A \"safer\" version of a dangerous thing is still a gamble.",
+     "D": "Filming it can push someone else into getting hurt."
+    }
+   }
+  ]
+ }
+}
