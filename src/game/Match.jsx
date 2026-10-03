@@ -25,6 +25,9 @@ import { STAT_OF, physics, ratings, values } from './ratings.js'
 import { kits as makeKits, roster, TEAMS } from './teams.js'
 import { RESULT } from './season.js'
 
+// A phone held sideways: short and wide (the same test as the CSS below).
+const SIDEWAYS = '(max-height:500px) and (orientation:landscape)'
+
 const ORD = ['', '1st', '2nd', '3rd', '4th']
 
 function ballOnText(ballOn, opp) {
@@ -150,6 +153,25 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
     if (pageFull) window.scrollTo(0, 0)
     return () => document.body.classList.remove('rb-full')
   }, [full, pageFull])
+  // THE SIDEWAYS FLIP (BK 2026-10-03 19:21, "Football needs full screen flip on phone horizontal
+  // mode"). Turn a phone sideways and the field takes the full height on the left, with the
+  // scoreboard, controls and stats in a column on the right: the full-screen layout, without
+  // a tap. Volleyball's court already does this. A browser won't hide its own bars without a
+  // tap, so the Full screen button still does that part. Nothing stored.
+  const [side, setSide] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.(SIDEWAYS).matches)
+  useEffect(() => {
+    const mq = window.matchMedia?.(SIDEWAYS)
+    if (!mq) return
+    const on = () => setSide(mq.matches)
+    on()
+    mq.addEventListener ? mq.addEventListener('change', on) : mq.addListener(on)
+    return () => { mq.removeEventListener ? mq.removeEventListener('change', on) : mq.removeListener(on) }
+  }, [])
+  useEffect(() => {
+    document.body.classList.toggle('rb-side', side)
+    if (side) window.scrollTo(0, 0)
+    return () => document.body.classList.remove('rb-side')
+  }, [side])
   const toggleFull = e => {
     e.stopPropagation()
     if (full) {

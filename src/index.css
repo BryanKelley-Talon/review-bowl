@@ -373,42 +373,48 @@ a.arena-plug-link{display:inline-block;text-decoration:none;margin-top:4px}
 }
 /* Page mode (iPhone): the page can't hide Safari's bars, so it fills what's left. */
 body.rb-full{overscroll-behavior:none}
-/* A phone held sideways in full screen (BK 2026-09-29 12:29, "field could be bigger").
+/* A phone held sideways, in full screen or not (BK 2026-09-29 12:29, "field could be bigger";
+   2026-10-03 19:21, "full screen flip on phone horizontal mode": rb-side, set by Match.jsx).
    The field takes the full height on the left; the scoreboard, stat line, controls,
    any panel (the try, a big moment, a drive, halftime) and the stat strip stack in a
    column on the right, in the space that used to be empty letterbox. The column
    scrolls if it runs long, and the field stays put (sticky), so nothing is ever cut off
    below the fold. On an 844x390 phone the field goes from 451 to about 610 px wide. */
 @media (max-height:500px) and (orientation:landscape){
-  body.rb-full .wrap,body.rb-full .wrap.wide{padding:4px 8px 0}
-  body.rb-full .match{max-width:none;display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:8px;
+  body:is(.rb-full,.rb-side) .wrap,body:is(.rb-full,.rb-side) .wrap.wide{padding:4px 8px 0}
+  /* The match fills the screen exactly, so the page itself never scrolls sideways-up. */
+  body.rb-side .app{padding-bottom:0;min-height:0}
+  body:is(.rb-full,.rb-side) .match{max-width:none;display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:8px;
     align-items:start;height:calc(100vh - 4px);overflow-y:auto;overscroll-behavior:contain}
-  @supports (height:100dvh){ body.rb-full .match{height:calc(100dvh - 4px)} }
-  body.rb-full .match > .field-wrap{grid-column:1;grid-row:1 / span 20;position:sticky;top:0;align-self:start;
+  @supports (height:100dvh){ body:is(.rb-full,.rb-side) .match{height:calc(100dvh - 4px)} }
+  body:is(.rb-full,.rb-side) .match > .field-wrap{grid-column:1;grid-row:1 / span 20;position:sticky;top:0;align-self:start;
     width:min(72vw,calc((100vh - 8px) * 1.7778));border-top:1px solid var(--edge);border-radius:8px;overflow:hidden}
-  @supports (height:100dvh){ body.rb-full .match > .field-wrap{width:min(72vw,calc((100dvh - 8px) * 1.7778))} }
-  body.rb-full .match > :not(.field-wrap){grid-column:2;min-width:0}
-  body.rb-full .match > .scoreboard{order:1;border-radius:8px;padding:5px 8px;gap:4px}
-  body.rb-full .match > .stat-flash-slot{order:2;min-height:0}
-  body.rb-full .match > .controls{order:3}
-  body.rb-full .match > .panel{order:4}
-  body.rb-full .match > .stat-strip{order:5;border-top:1px solid var(--edge);border-radius:8px;margin-top:6px}
-  body.rb-full .sb-team{gap:5px;padding-left:6px} body.rb-full .sb-team.right{padding:0 6px 0 0}
-  body.rb-full .sb-score{font-size:22px;min-width:24px} body.rb-full .sb-abbr{font-size:15px}
-  body.rb-full .sb-clock{font-size:14px} body.rb-full .sb-down{font-size:11.5px}
-  body.rb-full .stat-flash{padding:3px 0;font-size:12.5px;border:1px solid var(--edge);border-top:none}
-  body.rb-full .stat-strip{grid-template-columns:repeat(2,1fr);padding:5px 8px;gap:4px 8px}
-  body.rb-full .stat-name{font-size:10.5px} body.rb-full .stat-cell b{font-size:13px}
-  body.rb-full .controls{margin:6px 0;gap:6px}
-  body.rb-full .controls button{padding:7px 10px;min-height:40px;font-size:14px}
-  body.rb-full .controls-note{font-size:12.5px}
-  body.rb-full .match > .panel{margin-top:6px;padding:10px 12px}
-  body.rb-full .match > .panel .h2{font-size:20px}
-  body.rb-full .match > .panel .row{flex-wrap:wrap;gap:6px}
-  body.rb-full .move-btn{min-height:42px;min-width:68px;font-size:15px}
-  body.rb-full .run-moves{bottom:30px}
+  @supports (height:100dvh){ body:is(.rb-full,.rb-side) .match > .field-wrap{width:min(72vw,calc((100dvh - 8px) * 1.7778))} }
+  body:is(.rb-full,.rb-side) .match > :not(.field-wrap){grid-column:2;min-width:0}
+  /* The sticky field is its own layer; lift it so a card opened on it (Play Call, a question)
+     covers the column too, instead of the stat strip showing through. */
+  body:is(.rb-full,.rb-side) .match > .field-wrap{z-index:6}
+  body:is(.rb-full,.rb-side) .match > .scoreboard{order:1;border-radius:8px;padding:5px 8px;gap:4px}
+  body:is(.rb-full,.rb-side) .match > .stat-flash-slot{order:2;min-height:0}
+  body:is(.rb-full,.rb-side) .match > .controls{order:3}
+  body:is(.rb-full,.rb-side) .match > .panel{order:4}
+  body:is(.rb-full,.rb-side) .match > .stat-strip{order:5;border-top:1px solid var(--edge);border-radius:8px;margin-top:6px}
+  body:is(.rb-full,.rb-side) .sb-team{gap:5px;padding-left:6px} body:is(.rb-full,.rb-side) .sb-team.right{padding:0 6px 0 0}
+  body:is(.rb-full,.rb-side) .sb-score{font-size:22px;min-width:24px} body:is(.rb-full,.rb-side) .sb-abbr{font-size:15px}
+  body:is(.rb-full,.rb-side) .sb-clock{font-size:14px} body:is(.rb-full,.rb-side) .sb-down{font-size:11.5px}
+  body:is(.rb-full,.rb-side) .stat-flash{padding:3px 0;font-size:12.5px;border:1px solid var(--edge);border-top:none}
+  body:is(.rb-full,.rb-side) .stat-strip{grid-template-columns:repeat(2,1fr);padding:5px 8px;gap:4px 8px}
+  body:is(.rb-full,.rb-side) .stat-name{font-size:10.5px} body:is(.rb-full,.rb-side) .stat-cell b{font-size:13px}
+  body:is(.rb-full,.rb-side) .controls{margin:6px 0;gap:6px}
+  body:is(.rb-full,.rb-side) .controls button{padding:7px 10px;min-height:40px;font-size:14px}
+  body:is(.rb-full,.rb-side) .controls-note{font-size:12.5px}
+  body:is(.rb-full,.rb-side) .match > .panel{margin-top:6px;padding:10px 12px}
+  body:is(.rb-full,.rb-side) .match > .panel .h2{font-size:20px}
+  body:is(.rb-full,.rb-side) .match > .panel .row{flex-wrap:wrap;gap:6px}
+  body:is(.rb-full,.rb-side) .move-btn{min-height:42px;min-width:68px;font-size:15px}
+  body:is(.rb-full,.rb-side) .run-moves{bottom:30px}
   /* The badge sits under the column, not over the field. */
-  body.rb-full .fp-disclaimer-badge{transform:scale(.85);transform-origin:bottom right}
+  body:is(.rb-full,.rb-side) .fp-disclaimer-badge{transform:scale(.85);transform-origin:bottom right}
 }
 }
 /* Narrow screens: the play toast drops below the full-screen button instead of running under it. */
