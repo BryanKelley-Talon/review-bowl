@@ -244,8 +244,9 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
 
   // The defense's moments get a cut-in (BK 2026-10-03 15:46): TAKEAWAY! and STOPPED!.
   const defenseCut = d => {
-    if (d.result === 'TURNOVER') engine.current?.celebrate('TAKEAWAY!', 'DEFENSE', 'long')
-    else if (d.stand) engine.current?.celebrate('STOPPED!', 'DEFENSE', 'long')
+    // STOPPED! only when they leave with nothing (a field goal still counts against you).
+    if (d.result === 'TURNOVER') { setToast(null); engine.current?.celebrate('TAKEAWAY!', 'DEFENSE', 'long') }
+    else if (d.stand && d.points === 0) { setToast(null); engine.current?.celebrate('STOPPED!', 'DEFENSE', 'long') }
   }
 
   const oppDrive = useCallback((gs, start) => {
