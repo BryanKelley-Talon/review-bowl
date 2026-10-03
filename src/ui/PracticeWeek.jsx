@@ -20,6 +20,7 @@ import Newspaper from './Newspaper.jsx'
 import { MAX_LEVEL, PRACTICE_FACILITY_MAX, RESULT, trainPlayer, upgradeFacility } from '../game/season.js'
 import { DEFENSE, LANE_OF, ratings, values } from '../game/ratings.js'
 import { POSITION_OF, TEAMS, roster } from '../game/teams.js'
+import { sportOf, statLabel as sportStatLabel, terms } from '../game/sport.js'
 
 const pips = (n, max = MAX_LEVEL) => '●'.repeat(n) + '○'.repeat(Math.max(0, max - n))
 
@@ -43,9 +44,12 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
 
   const r = ratings(career)
   const v = values(r)
-  const players = useMemo(() => roster(career.seed, career.team, career.season, career.levels),
-    [career.seed, career.team, career.season, career.levels])
-  const statLabel = s => manifest.lanes[LANE_OF[s]]?.stat_label || s
+  // Volleyball (2026-10-03): the same week, in the sport's own words (sport.js, BK 15:31).
+  const sport = sportOf(career)
+  const T = terms(sport)
+  const players = useMemo(() => roster(career.seed, career.team, career.season, career.levels, sport),
+    [career.seed, career.team, career.season, career.levels, sport])
+  const statLabel = s => sportStatLabel(sport, manifest, s, LANE_OF)
   const laneLabel = s => manifest.lanes[LANE_OF[s]]?.label || s
 
   // ── 1 · defensive film study ───────────────────────────────────────────────
@@ -82,7 +86,7 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
         setTrained(t => ({ ...t, [stat]: ok ? 'levelled' : 'missed' }))
         if (ok) {
           setCareer(c => trainPlayer(c, stat))
-          setNote(`${players[stat].name} put in the work — level ${(career.levels[stat] ?? 2) + 1}. ${statLabel(stat)} goes up with him.`)
+          setNote(T.trainedNote(players[stat].name, (career.levels[stat] ?? 2) + 1, statLabel(stat)))
           logEvent({ kind: 'level', name: players[stat].name, position: players[stat].position,
                   level: (career.levels[stat] ?? 2) + 1, statLabel: statLabel(stat), lane: LANE_OF[stat] })
         } else setNote(`${players[stat].name} ran the drill anyway. No level this week — try him again next week.`)
@@ -134,25 +138,20 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
                  lastResult={career.week > 0
                    ? ({ [RESULT.W]: 'W', [RESULT.L]: 'L', [RESULT.T]: 'T' })[career.results[career.week - 1]] || null
                    : null}
-                 events={events} ratings={v} hawkBox={manifest.culture?.hawk_box} />
+                 events={events} ratings={v} hawkBox={manifest.culture?.hawk_box} sport={sport} />
 
       <section className="panel next-game">
-        <p className="sub">Bumps and bruises heal, the film goes on, and somebody gets better. None of this is
-          required — you can walk out to the field right now and nothing you already have is lost. <b>Right answers are
+        <p className="sub">{T.practiceIntro} <b>Right answers are
           the only currency this week</b>; cash is for the off-season.</p>
         {note && <p className="toast-inline" role="status">{note}</p>}
       </section>
 
       <section className="panel">
-        <h3 className="h3">Defensive film study</h3>
-        <p className="sub">
-          Your defense is the one unit that doesn't get better on Friday — it gets better this week.
-          {' '}{want} questions, and what you get right is what the defense is worth in the next game. It matters most
-          the closer the other team gets to your goal line.
-        </p>
+        <h3 className="h3">{T.filmHead}</h3>
+        <p className="sub">{T.filmBody(want)}</p>
         <div className="stat-row" style={{ borderTop: 'none', paddingTop: 0 }}>
           <div className="stat-top">
-            <b className="stat-label">Defense</b>
+            <b className="stat-label">{statLabel(DEFENSE)}</b>
             <span className="stat-bar big"><i style={{ width: `${v.defense * 10}%` }} /></span>
             <b className="stat-num">{v.defense}</b>
           </div>
@@ -171,8 +170,8 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
 
       <section className="panel">
         <h3 className="h3">The roster</h3>
-        <p className="sub">Every player has a level, and his level is what he is worth to the stat he plays for.
-          <b> A right answer from his lane is the whole price.</b> One session per player per week — so a good week
+        <p className="sub">{T.rosterBody}
+          <b>{T.rosterPrice}</b> One session per player per week — so a good week
           can move all five.</p>
         <div className="grid">
           {Object.keys(POSITION_OF).map(stat => {
@@ -227,7 +226,7 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
 
       <div className="row center">
         <button type="button" className="btn-primary" onClick={onDone}>
-          {filmDone || Object.keys(trained).length ? `Take the field vs ${TEAMS[opponent].name}` : 'Skip for now — take the field'}
+          {filmDone || Object.keys(trained).length ? `${T.takeTheField} vs ${TEAMS[opponent].name}` : T.skipTakeField}
         </button>
       </div>
 

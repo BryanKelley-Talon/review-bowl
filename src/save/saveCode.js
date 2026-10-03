@@ -12,7 +12,10 @@
  * Data bits (105, most significant first):
  *   version 3 · course 1 · team 4 · season 4 · phase 3 · week 4 · results 16 (8 games × 2) · playoff round 2 ·
  *   champion 1 · cash 5 · job security 5 · form 6×4 (five lanes + defense) · facilities 6×2 · player levels 5×2 ·
- *   titles 2 · seed 6 · practice-done 1 · spare 2
+ *   titles 2 · seed 6 · practice-done 1 · sport 1 · spare 1
+ *
+ * SPORT (2026-10-03, volleyball): one of the two spare bits. Every code written before volleyball
+ * carries 0 there, which reads as football, so every old code still loads exactly as it was.
  *
  * Nothing in it identifies a student: no name, no school, no answers — only the team's state.
  */
@@ -38,7 +41,7 @@ const FIELDS = [
   ...LANES.map(l => [`form_${l}`, 4]),
   ...FACILITIES.map(s => [`fac_${s}`, 2]),
   ...STATS.map(s => [`lvl_${s}`, 2]),
-  ['titles', 2], ['seed', 6], ['practiceDone', 1], ['spare', 2],
+  ['titles', 2], ['seed', 6], ['practiceDone', 1], ['sport', 1], ['spare', 1],
 ];
 
 const DATA_CHARS = 21;
@@ -80,6 +83,7 @@ export function encodeSaveCode(career) {
     titles: clampInt(career.titles, 0, 3),
     seed: clampInt(career.seed, 0, 63),
     practiceDone: career.practiceDone ? 1 : 0,
+    sport: career.sport === 'volleyball' ? 1 : 0,
     spare: 0,
   };
   for (const l of LANES) values[`form_${l}`] = clampInt(career.form?.[l], 0, 15);
@@ -160,5 +164,6 @@ export function decodeSaveCode(input) {
     titles: values.titles,
     seed: values.seed,
     practiceDone: !!values.practiceDone,
+    sport: values.sport ? 'volleyball' : 'football',
   };
 }

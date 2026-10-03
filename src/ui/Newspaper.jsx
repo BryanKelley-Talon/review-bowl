@@ -22,6 +22,9 @@
 // version of using a real kid's name. One generic suffix means there is no list to collide
 // with anything — including when an eleventh team is added.
 const PAPER_SUFFIX = 'Gazette'
+// Volleyball's lines (BK 2026-10-03 15:31). Football's stay exactly as they were.
+import { SHARED_VB } from '../game/sport.js'
+const VP = SHARED_VB.paper
 
 const LANE_WORD = {
   sources: 'reading sources', context: 'historical context', vocab: 'vocabulary',
@@ -29,7 +32,7 @@ const LANE_WORD = {
 }
 
 // The week's biggest story, in priority order. Each returns a headline and the line under it.
-function leadStory({ events, team, lastResult, opponent, week }) {
+function leadStory({ events, team, lastResult, opponent, week, vb }) {
   const levels = events.filter(e => e.kind === 'level')
   const film = events.find(e => e.kind === 'film')
   const facility = events.find(e => e.kind === 'facility')
@@ -37,7 +40,8 @@ function leadStory({ events, team, lastResult, opponent, week }) {
   if (levels.length >= 2) {
     return {
       head: `${levels.length} MOVE UP IN A BIG WEEK`,
-      story: `${levels.map(l => l.name.split(' ').slice(-1)[0]).join(' and ')} both earned promotions on the practice ` +
+      story: vb ? VP.promotions(levels.map(l => l.name.split(' ').slice(-1)[0]).join(' and '))
+        : `${levels.map(l => l.name.split(' ').slice(-1)[0]).join(' and ')} both earned promotions on the practice ` +
              `field, and the coaching staff credits the work in the room — every session was won on a question first.`,
     }
   }
@@ -45,21 +49,22 @@ function leadStory({ events, team, lastResult, opponent, week }) {
     const l = levels[0]
     return {
       head: `${l.name.split(' ').slice(-1)[0].toUpperCase()} EARNS A PROMOTION`,
-      story: `${l.name} is a level ${l.level} player this morning after answering a ${LANE_WORD[l.lane] || 'content'} ` +
+      story: vb ? VP.promotion(l.name, l.level, LANE_WORD[l.lane] || 'content', team.name, l.statLabel)
+        : `${l.name} is a level ${l.level} player this morning after answering a ${LANE_WORD[l.lane] || 'content'} ` +
              `question to close out the session. ${team.name}'s ${l.statLabel.toLowerCase()} goes up with him.`,
     }
   }
   if (film && film.right === film.of && film.of > 0) {
     return {
       head: 'FILM ROOM SWEEP',
-      story: `A clean ${film.right}-for-${film.of} in the film room. The defense goes into Friday rated ${film.defense} — ` +
+      story: vb ? VP.sweep(film.right, film.of, film.defense) : `A clean ${film.right}-for-${film.of} in the film room. The defense goes into Friday rated ${film.defense} — ` +
              `and it counts for most when the other team gets close to the goal line.`,
     }
   }
   if (film && film.right > 0) {
     return {
-      head: 'DEFENSE PUTS IN THE WORK',
-      story: `A session in the film room. The defense is rated ${film.defense} going into Friday; ` +
+      head: vb ? VP.workHead : 'DEFENSE PUTS IN THE WORK',
+      story: vb ? VP.work(film.defense) : `A session in the film room. The defense is rated ${film.defense} going into Friday; ` +
              `another session next week moves it again.`,
     }
   }
@@ -87,7 +92,7 @@ function leadStory({ events, team, lastResult, opponent, week }) {
   if (lastResult === 'L') {
     return {
       head: 'BACK TO WORK',
-      story: `Last Friday got away from them. The staff has the week to put it right, and the way to put it right ` +
+      story: vb ? VP.loss : `Last Friday got away from them. The staff has the week to put it right, and the way to put it right ` +
              `is the same as always — win the room first.`,
     }
   }
@@ -99,15 +104,16 @@ function leadStory({ events, team, lastResult, opponent, week }) {
 }
 
 // The short notes column: everything else that happened, one line each.
-function briefs({ events, ratings }) {
+function briefs({ events, ratings, vb }) {
   const out = []
   for (const e of events) {
     if (e.kind === 'level') out.push(`${e.position} ${e.name} — now level ${e.level}, ${e.statLabel} up.`)
-    if (e.kind === 'film') out.push(`Film room: a session on ${LANE_WORD[e.lane] || 'content'}. Defense ${e.defense}.`)
+    if (e.kind === 'film') out.push(vb ? VP.filmBrief(LANE_WORD[e.lane] || 'content', e.defense) : `Film room: a session on ${LANE_WORD[e.lane] || 'content'}. Defense ${e.defense}.`)
     if (e.kind === 'facility') out.push(`${e.label} now open, level ${e.level}.`)
   }
   if (!out.length) out.push('No sessions logged yet this week. The room is open.')
-  if (ratings) out.push(`Team card: throwing ${ratings.throwing}, hands ${ratings.hands}, speed ${ratings.speed}, ` +
+  if (ratings && vb) out.push(VP.card(ratings))
+  else if (ratings) out.push(`Team card: throwing ${ratings.throwing}, hands ${ratings.hands}, speed ${ratings.speed}, ` +
                         `blocking ${ratings.blocking}, toughness ${ratings.toughness}, defense ${ratings.defense}.`)
   return out
 }
@@ -121,10 +127,11 @@ function hawkLine(box, lastResult, week) {
   return list.length ? list[Math.abs(week || 0) % list.length] : null
 }
 
-export default function Newspaper({ team, season, week, weekLabel, opponent, lastResult, events = [], ratings, hawkBox }) {
-  const lead = leadStory({ events, team, lastResult, opponent, week })
+export default function Newspaper({ team, season, week, weekLabel, opponent, lastResult, events = [], ratings, hawkBox, sport }) {
+  const vb = sport === 'volleyball'
+  const lead = leadStory({ events, team, lastResult, opponent, week, vb })
   const hawk = hawkLine(hawkBox, lastResult, week)
-  const notes = briefs({ events, ratings })
+  const notes = briefs({ events, ratings, vb })
   const paper = `${team.name} ${PAPER_SUFFIX}`
 
   return (

@@ -15,11 +15,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import DisclaimerBadge from './shared/DisclaimerBadge.jsx'
 import Match from './game/Match.jsx'
+import VolleyMatch from './game/VolleyMatch.jsx'
+import { SHARED_VB, TERMS, explainVolley, sportOf, statLabel as sportStatLabel } from './game/sport.js'
 import Offseason from './ui/Offseason.jsx'
 import PracticeWeek from './ui/PracticeWeek.jsx'
 import { loadDoor } from './content/pool.js'
 import { makeDealer } from './content/dealer.js'
-import { DEFENSE, LANES, STAT_OF, applyAnswerAll, explain, ratings, values } from './game/ratings.js'
+import { DEFENSE, LANES, LANE_OF, STAT_OF, applyAnswerAll, explain, ratings, values } from './game/ratings.js'
 import {
   afterGame, applySeasonReview, bracket, finishPractice, jobOffers, MAX_LEVEL, newCareer, opponentFor,
   opponentStrength, playoffOpponent, record, RESULT, schedule, seasonReview, standings, startNextSeason, takeJob,
@@ -65,11 +67,12 @@ function Title({ manifest, onNew, onContinue, onCode, onAbout }) {
     <div className="wrap title">
       <div className="eyebrow">Flashpoint History · The Arena</div>
       <h1 className="h1">Skills Review Bowl</h1>
-      <p className="tag">You won't win the football unless you win the content.</p>
+      {/* BK 2026-10-03 15:31: "game", since the title now comes before the sport pick. */}
+      <p className="tag">{SHARED_VB.tagline}</p>
       <div className="stack">
         {saved && (
           <button type="button" className="btn-primary" onClick={() => onContinue(saved)}>
-            Continue · {TEAMS[saved.team].name}, season {saved.season}
+            {SHARED_VB.continueLabel(TEAMS[saved.team].name, TERMS[sportOf(saved)].name, saved.season)}
           </button>
         )}
         <button type="button" className={saved ? 'btn-secondary' : 'btn-primary'} onClick={onNew}>New career</button>
@@ -77,6 +80,25 @@ function Title({ manifest, onNew, onContinue, onCode, onAbout }) {
         <button type="button" className="btn-ghost" onClick={onAbout}>How it works</button>
       </div>
       {saved && <p className="sub small">The continue button is a copy on this computer. School computers can erase it — your save code is the real save.</p>}
+    </div>
+  )
+}
+
+// The sport pick (BK 2026-10-03 01:14; words 15:31). A career stays with its sport.
+function SportPick({ onPick, onBack }) {
+  return (
+    <div className="wrap">
+      <button type="button" className="back" onClick={onBack}>← Back</button>
+      <h2 className="h2">{SHARED_VB.sportHead}</h2>
+      <p className="sub">{SHARED_VB.sportSub}</p>
+      <div className="grid doors">
+        {['football', 'volleyball'].map(id => (
+          <button key={id} type="button" className="card door" onClick={() => onPick(id)}>
+            <div className="card-name">{TERMS[id].name}</div>
+            <div className="card-blurb">{SHARED_VB.sportBlurb[id]}</div>
+          </button>
+        ))}
+      </div>
     </div>
   )
 }
@@ -155,7 +177,9 @@ function CodeEntry({ manifest, onLoad, onBack }) {
 // ── the team screen ──────────────────────────────────────────────────────────
 function TeamPanel({ career, manifest, pool }) {
   const r = ratings(career)
-  const players = roster(career.seed, career.team, career.season, career.levels)
+  const sport = sportOf(career)
+  const players = roster(career.seed, career.team, career.season, career.levels, sport)
+  const why = (s, val) => sport === 'volleyball' ? explainVolley(s, val) : explain(s, val)
   return (
     <section className="panel">
       <h3 className="h3">Your team's stats</h3>
@@ -170,7 +194,7 @@ function TeamPanel({ career, manifest, pool }) {
           return (
             <div key={l} className="stat-row">
               <div className="stat-top">
-                <b className="stat-label">{lane.stat_label}</b>
+                <b className="stat-label">{sportStatLabel(sport, manifest, s, LANE_OF)}</b>
                 <span className="stat-bar big"><i style={{ width: `${r[s].value * 10}%` }} /></span>
                 <b className="stat-num">{r[s].value}</b>
               </div>
@@ -181,14 +205,14 @@ function TeamPanel({ career, manifest, pool }) {
               </div>
               <div className="stat-why">
                 {n ? `${lane.label} questions build this (${n} in the pool).` : `No ${lane.label.toLowerCase()} questions on this course yet — every answer builds it until they land.`}
-                {' '}{explain(s, r[s].value)}
+                {' '}{why(s, r[s].value)}
               </div>
             </div>
           )
         })}
         <div className="stat-row">
           <div className="stat-top">
-            <b className="stat-label">Defense</b>
+            <b className="stat-label">{sportStatLabel(sport, manifest, DEFENSE, LANE_OF)}</b>
             <span className="stat-bar big"><i style={{ width: `${r[DEFENSE].value * 10}%` }} /></span>
             <b className="stat-num">{r[DEFENSE].value}</b>
           </div>
@@ -197,7 +221,7 @@ function TeamPanel({ career, manifest, pool }) {
             <span>Squad level <b>{r[DEFENSE].parts.roster}</b>/3</span>
             <span>Film room <b>{r[DEFENSE].parts.facility}</b>/2</span>
           </div>
-          <div className="stat-why">Trained in Practice Week, not during a game. {explain(DEFENSE, r[DEFENSE].value)}</div>
+          <div className="stat-why">Trained in Practice Week, not during a game. {why(DEFENSE, r[DEFENSE].value)}</div>
         </div>
       </div>
     </section>
@@ -369,7 +393,22 @@ function Postgame({ career, last, onDone, coach }) {
   )
 }
 
-function About({ manifest, door, onBack }) {
+function About({ manifest, door, onBack, sport }) {
+  if (sport === 'volleyball') return (
+    <div className="wrap narrow about">
+      <button type="button" className="back" onClick={onBack}>← Back</button>
+      <h2 className="h2">How it works</h2>
+      <h3 className="h3">Playing</h3>
+      <ul>{SHARED_VB.aboutPlaying.map(([a, b]) => <li key={a}><b>{a}</b> {b}</li>)}</ul>
+      <h3 className="h3">Where the questions come in</h3>
+      {/* BK approved this paragraph 2026-10-03 15:31, word for word. */}
+      <p>{SHARED_VB.aboutQuestions}</p>
+      <p>Every answer builds one of your team's five stats. Know the material and your team gets better on the field. Regular season: two hints per question. Playoffs: no hints.</p>
+      <h3 className="h3">Saving</h3>
+      <p>After every game you get a save code. It holds your whole career and nothing about you. This computer also keeps a copy, but school computers can erase it — the code is the real save.</p>
+      <p className="sub small">No accounts, no logins, nothing sent anywhere. Players and numbers are made up.</p>
+    </div>
+  )
   return (
     <div className="wrap narrow about">
       <button type="button" className="back" onClick={onBack}>← Back</button>
@@ -419,6 +458,8 @@ export default function App() {
   const careerRef = useRef(null)
   const [door, setDoor] = useState(null)
   const [pendingCourse, setPendingCourse] = useState(null)
+  const [pendingSport, setPendingSport] = useState('football')
+  const [howtoSeen, setHowtoSeen] = useState(false)    // this page visit only; nothing stored
   const [game, setGame] = useState(null)
   const [last, setLast] = useState(null)
 
@@ -460,7 +501,7 @@ export default function App() {
       : applyAnswerAll(c.form, lane, correct, hintsUsed, manifest.rules, door?.dealer.emptyLanes)
     const next = { ...c, form }
     setCareer(next)
-    return { label: manifest.lanes[target].stat_label, before, after: values(ratings(next))[stat] }
+    return { label: sportStatLabel(sportOf(c), manifest, stat, LANE_OF), before, after: values(ratings(next))[stat] }
   }, [manifest, door, setCareer])
 
   if (error) return <div className="wrap"><p className="error">The game could not load its manifest: {error}</p></div>
@@ -481,18 +522,27 @@ export default function App() {
   let body
   if (screen === 'title') body = (
     <Title manifest={manifest}
-           onNew={() => setScreen('door')}
+           onNew={() => setScreen('sport')}
            onContinue={c => { setCareer(c); setScreen('hub') }}
            onCode={() => setScreen('code')}
            onAbout={() => setScreen('about')} />
   )
-  else if (screen === 'door') body = <DoorPick manifest={manifest} onBack={() => setScreen('title')}
+  else if (screen === 'sport') body = <SportPick onBack={() => setScreen('title')} onPick={sp => { setPendingSport(sp); setScreen('door') }} />
+  else if (screen === 'door') body = <DoorPick manifest={manifest} onBack={() => setScreen('sport')}
                                                onPick={id => { setPendingCourse(id); setScreen('team') }} />
   else if (screen === 'team') body = <TeamPick onBack={() => setScreen('door')}
-                                               onPick={i => { clearAutosave(); setCareer(newCareer(pendingCourse, i)); setScreen('hub') }} />
+                                               onPick={i => { clearAutosave(); setCareer(newCareer(pendingCourse, i, undefined, pendingSport)); setScreen('hub') }} />
   else if (screen === 'code') body = <CodeEntry manifest={manifest} onBack={() => setScreen('title')}
                                                 onLoad={c => { setCareer(c); setRestored(true); setScreen('hub') }} />
-  else if (screen === 'about') body = <About manifest={manifest} door={door} onBack={() => setScreen(career ? 'hub' : 'title')} />
+  else if (screen === 'about') body = <About manifest={manifest} door={door} sport={career ? sportOf(career) : 'football'} onBack={() => setScreen(career ? 'hub' : 'title')} />
+  else if (screen === 'match' && game && door && sportOf(career) === 'volleyball') body = (
+    <div className="wrap wide">
+      <VolleyMatch key={game.key} career={career} dealer={door.dealer} manifest={manifest} opp={game.opp}
+             oppStrength={game.strength} playoff={game.playoff} weekLabel={game.label}
+             howtoSeen={howtoSeen} onHowtoSeen={() => setHowtoSeen(true)}
+             onAnswer={onAnswer} onFinish={finishGame} />
+    </div>
+  )
   else if (screen === 'match' && game && door) body = (
     <div className="wrap wide">
       <Match key={game.key} career={career} dealer={door.dealer} manifest={manifest} opp={game.opp}
@@ -506,7 +556,7 @@ export default function App() {
     <Hub career={career} setCareer={setCareer} manifest={manifest} door={door} onPlay={play} onAnswer={onAnswer} restored={restored}
          onQuit={() => setScreen('title')} />
   )
-  else body = <Title manifest={manifest} onNew={() => setScreen('door')} onContinue={c => { setCareer(c); setScreen('hub') }}
+  else body = <Title manifest={manifest} onNew={() => setScreen('sport')} onContinue={c => { setCareer(c); setScreen('hub') }}
                      onCode={() => setScreen('code')} onAbout={() => setScreen('about')} />
 
   return (

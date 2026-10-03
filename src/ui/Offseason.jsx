@@ -5,7 +5,8 @@ import Question from './Question.jsx'
 import CampRep, { repsOf } from './CampRep.jsx'
 import { FACILITY_COST, MAX_LEVEL, freeAgents } from '../game/season.js'
 import { DEFENSE, LANE_OF, applyAnswer } from '../game/ratings.js'
-import { player, POSITION_OF } from '../game/teams.js'
+import { player, positionsFor } from '../game/teams.js'
+import { SHARED_VB, sportOf, statLabel as sportStatLabel, terms } from '../game/sport.js'
 
 const CAMP_REPS = 2
 const money = units => `$${units * 10}k`
@@ -19,7 +20,9 @@ export default function Offseason({ career, setCareer, camp, dealer, manifest, o
   const [decided, setDecided] = useState({})
   const [note, setNote] = useState(null)
   const agents = useMemo(() => freeAgents(career), [career.seed, career.season, career.team])
-  const statLabel = s => manifest.lanes[LANE_OF[s]]?.stat_label || s
+  const sport = sportOf(career)
+  const POSITION_OF = positionsFor(sport)
+  const statLabel = s => sportStatLabel(sport, manifest, s, LANE_OF)
 
   const drills = camp.map(c => ({ ...c, reps: repsOf(c.pack) })).filter(c => c.reps.length)
 
@@ -28,7 +31,7 @@ export default function Offseason({ career, setCareer, camp, dealer, manifest, o
     setRep(null)
     setCampDone(n => n + 1)
     setCareer(c => ({ ...c, form: applyAnswer(c.form, 'skills', true, 0, {}) }))
-    setNote('Camp rep done: Toughness form +2.')
+    setNote(sport === 'volleyball' ? SHARED_VB.campLine : 'Camp rep done: Toughness form +2.')
   }
 
   const sign = a => {
@@ -60,7 +63,7 @@ export default function Offseason({ career, setCareer, camp, dealer, manifest, o
 
       <section className="panel">
         <h3 className="h3">Training camp</h3>
-        <p className="sub">Reps from the Arena's skill stations. Write your attempt, compare it to a strong answer, check your own. Each finished rep builds Toughness. {CAMP_REPS - campDone > 0 ? `${CAMP_REPS - campDone} left this off-season.` : 'Camp is done for this off-season.'}</p>
+        <p className="sub">Reps from the Arena's skill stations. Write your attempt, compare it to a strong answer, check your own. Each finished rep builds {terms(sport).campBuilds}. {CAMP_REPS - campDone > 0 ? `${CAMP_REPS - campDone} left this off-season.` : 'Camp is done for this off-season.'}</p>
         <div className="grid">
           {drills.map(d => (
             <button key={d.file} type="button" className="card" disabled={campDone >= CAMP_REPS} onClick={() => openDrill(d)}>

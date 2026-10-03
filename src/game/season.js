@@ -130,9 +130,9 @@ export function levelsFor(seed, team, salt = 0) {
 }
 export const MAX_LEVEL = 4
 
-export function newCareer(course, team, seed = Math.floor(Math.random() * 64)) {
+export function newCareer(course, team, seed = Math.floor(Math.random() * 64), sport = 'football') {
   return {
-    course, team, seed,
+    course, team, seed, sport,
     // A season opens in Practice Week, so the first thing a student meets is the
     // defensive film study rather than a cold kickoff.
     season: 1, phase: 'practice', week: 0,

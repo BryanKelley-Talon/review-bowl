@@ -162,17 +162,26 @@ const LAST = ['Hollis', 'Barnes', 'Whitaker', 'Pruitt', 'Okafor', 'Delaney', 'Cr
   'Vance', 'Ruiz', 'Stroud', 'Kessler', 'Abernathy', 'Fontaine', 'Gaines', 'Holloway', 'Iverson', 'Jessup',
   'Kincaid', 'Larkin', 'Maddox', 'Nolan', 'Pickett', 'Quarles', 'Rourke', 'Sutter', 'Thibodeaux', 'Underhill',
   'Voss', 'Wendell', 'Yates', 'Zeller', 'Ashby', 'Burrell', 'Colvin', 'Dunmore', 'Everly', 'Farrow', 'Gentry']
-const NUMBERS = { QB: [1, 19], WR: [80, 89], RB: [20, 39], OL: [60, 79], TE: [40, 49] }
+const NUMBERS = { QB: [1, 19], WR: [80, 89], RB: [20, 39], OL: [60, 79], TE: [40, 49],
+  // Volleyball (2026-10-03): single digits, so the number on a starter's card is the number on her
+  // jersey on the court. Ranges never overlap, so no two starters share one.
+  S: [1, 2], L: [3, 4], OH: [5, 6], MB: [7, 8], DS: [9, 9] }
+// Girls' volleyball: made-up first names, same rule as above. Never typed from a class list.
+const FIRST_G = ['Ava', 'Kenzie', 'Maya', 'Brooke', 'Jada', 'Riley', 'Sofia', 'Tessa', 'Nia', 'Harper', 'Lena',
+  'Paige', 'Camila', 'Reese', 'Talia', 'Morgan', 'Imani', 'Delaney', 'Grace', 'Zoe', 'Aubrey', 'Keira', 'Leah',
+  'Jordyn', 'Mia', 'Sienna', 'Ellie', 'Kayla', 'Rosa', 'Quinn', 'Avery', 'Dani', 'Elise', 'Haley', 'Jenna',
+  'Lucia', 'Nora', 'Piper', 'Sasha', 'Willa']
 
 // A player's NAME and NUMBER are seeded by team, position and season only — never by
 // his level. Training him raises the level; it must not turn him into a different kid.
 // A free agent signed in the off-season is generated at season + 1, which is exactly
 // the name next season's roster will show for that position: you signed him, he's yours.
 export function player(seed, teamIndex, position, season, level) {
-  const r = rng(mix(seed, teamIndex, position.charCodeAt(0), position.charCodeAt(1), season))
+  const r = rng(mix(seed, teamIndex, position.charCodeAt(0), position.charCodeAt(1) || 0, season))
   const [lo, hi] = NUMBERS[position]
+  const first = VB_POS.has(position) ? FIRST_G : FIRST
   return {
-    name: `${FIRST[Math.floor(r() * FIRST.length)]} ${LAST[Math.floor(r() * LAST.length)]}`,
+    name: `${first[Math.floor(r() * first.length)]} ${LAST[Math.floor(r() * LAST.length)]}`,
     number: lo + Math.floor(r() * (hi - lo + 1)),
     position,
     level,
@@ -181,18 +190,24 @@ export function player(seed, teamIndex, position, season, level) {
 
 // The key players, one per stat: QB throws, WR catches, RB runs, OL blocks, TE takes hits.
 export const POSITION_OF = { throwing: 'QB', hands: 'WR', speed: 'RB', blocking: 'OL', toughness: 'TE' }
+// Volleyball's five (sport.js): Setter, Libero, Outside hitter, Middle blocker, Serving specialist.
+export const VB_POSITION_OF = { throwing: 'S', hands: 'L', speed: 'OH', blocking: 'MB', toughness: 'DS' }
+const VB_POS = new Set(Object.values(VB_POSITION_OF))
+export const positionsFor = sport => (sport === 'volleyball' ? VB_POSITION_OF : POSITION_OF)
 
-export function roster(seed, teamIndex, season, levels) {
+export function roster(seed, teamIndex, season, levels, sport = 'football') {
+  const POS = positionsFor(sport)
+  const FIRSTS = sport === 'volleyball' ? FIRST_G : FIRST
   // Five starters on one screen: nudge a repeated first name along the list rather than
   // fielding two players called Trey. Identity still depends only on team/position/season.
   const used = new Set()
-  return Object.fromEntries(Object.entries(POSITION_OF).map(([stat, pos]) => {
+  return Object.fromEntries(Object.entries(POS).map(([stat, pos]) => {
     const p = player(seed, teamIndex, pos, season, levels?.[stat] ?? 2)
     let first = p.name.split(' ')[0]
     if (used.has(first)) {
-      const i = FIRST.indexOf(first)
-      for (let n = 1; n <= FIRST.length; n++) {
-        const alt = FIRST[(i + n * 7) % FIRST.length]
+      const i = FIRSTS.indexOf(first)
+      for (let n = 1; n <= FIRSTS.length; n++) {
+        const alt = FIRSTS[(i + n * 7) % FIRSTS.length]
         if (!used.has(alt)) { first = alt; break }
       }
       p.name = `${first} ${p.name.split(' ').slice(1).join(' ')}`

@@ -22,6 +22,8 @@ const GATES = {
   timeout:  { label: 'Timeout', size: 'short', prefer: HAMMER },
   live:     { label: 'Big moment', size: 'short', prefer: { skills: 2, vocab: 2, context: 2 } },
   halftime: { label: 'Halftime', size: 'short', prefer: HAMMER },
+  // Volleyball's halftime: the break between sets (2026-10-03). Same draw, its own label.
+  setbreak: { label: 'Set break', size: 'short', prefer: HAMMER },
   press:    { label: 'Press conference', size: 'short', prefer: { context: 2, reading: 2 } },
   // A flag is a quick look at the officials, not a reading passage: vocabulary and
   // identification shapes only (BK, 2026-09-22: "shorter, vocab matching type or ID type").
