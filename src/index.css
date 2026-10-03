@@ -481,3 +481,9 @@ body.rb-full{overscroll-behavior:none}
 }
 /* Long toasts ("Elmira Heights won the toss and will serve.") wrap instead of running off a phone. */
 .match.vb .toast{white-space:normal;max-width:calc(100% - 24px);text-align:center;line-height:1.3}
+/* The LED board (the 16-bit reskin, 2026-10-03). */
+.scoreboard.led{display:block;padding:0;background:#07080b;line-height:0;overflow:hidden}
+.led-board{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* Long play toasts wrap on a phone instead of running under the full-screen button (2026-10-03). */
+@media (max-width:900px){ .match .toast{white-space:normal;max-width:calc(100% - 140px);text-align:center;line-height:1.3} }

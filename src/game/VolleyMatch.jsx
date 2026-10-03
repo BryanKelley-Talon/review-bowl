@@ -10,6 +10,7 @@
 // ============================================================
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Question from '../ui/Question.jsx'
+import LedBoard from '../ui/LedBoard.jsx'
 import { gateLabel } from '../content/dealer.js'
 import { createCourt } from './court.js'
 import { LANE_OF, STAT_OF, ratings, values } from './ratings.js'
@@ -141,7 +142,8 @@ export default function VolleyMatch({ career, dealer, manifest, opp, oppStrength
         if (q) results.push({ lane: q.lane, correct }); if (correct && q) plus(q); next(i + 1)
       })
     }
-    next(0)
+    // The pep band crosses the court first, then the questions.
+    court.current.band(you.colors, () => next(0))
   }
   h.current.matchEnd = info => { finalInfo.current = info; setBoard(b => ({ ...b, sets: info.sets })); setStage('final') }
 
@@ -220,18 +222,11 @@ export default function VolleyMatch({ career, dealer, manifest, opp, oppStrength
 
   return (
     <div className="match vb">
-      <div className="scoreboard" aria-live="polite">
-        <div className="sb-team" style={{ borderColor: you.colors[1] === '#FFFFFF' ? you.colors[0] : you.colors[1] }}>
-          <span className="sb-abbr">{you.abbr}</span><span className="sb-score">{board.score[0]}</span>
-        </div>
-        <div className="sb-mid">
-          <div className="sb-clock">Set {board.setNo}</div>
-          <div className="sb-down">{stage === 'intro' ? weekLabel : `Sets ${board.sets[0]}–${board.sets[1]}`}</div>
-        </div>
-        <div className="sb-team right" style={{ borderColor: them.colors[1] === '#FFFFFF' ? them.colors[0] : them.colors[1] }}>
-          <span className="sb-score">{board.score[1]}</span><span className="sb-abbr">{them.abbr}</span>
-        </div>
-      </div>
+      <LedBoard left={{ abbr: you.abbr, score: board.score[0], color: you.colors[1] === '#FFFFFF' ? you.colors[0] : you.colors[1] }}
+                right={{ abbr: them.abbr, score: board.score[1], color: them.colors[1] === '#FFFFFF' ? them.colors[0] : them.colors[1] }}
+                mid1={`Set ${board.setNo}`}
+                mid2={stage === 'intro' ? weekLabel : `Sets ${board.sets[0]}-${board.sets[1]}`}
+                label={`${you.abbr} ${board.score[0]}, ${them.abbr} ${board.score[1]}. Set ${board.setNo}. Sets ${board.sets[0]} to ${board.sets[1]}.`} />
 
       <div className="field-wrap court-wrap">
         <canvas ref={canvasRef} className="field court" width="384" height="216"

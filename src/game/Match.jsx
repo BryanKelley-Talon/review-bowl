@@ -10,6 +10,7 @@
 // ============================================================
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Question from '../ui/Question.jsx'
+import LedBoard from '../ui/LedBoard.jsx'
 import { gateLabel } from '../content/dealer.js'
 import { FieldEngine } from './field.js'
 import { driveLine, simDrive, standLine } from './drive.js'
@@ -170,6 +171,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
       onPhase: p => setPhase(p),
       onEvent: e => { if (e.type === 'broken') setToast('Broke a tackle!') },
     })
+    engine.current.setStadium(you, them)
     return () => engine.current.destroy()
   }, [])
 
@@ -227,6 +229,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
 
   const oppOvertime = useCallback(gs => {
     const d = simDrive({ opp: oppStrength, defense: v.defense, start: 75, ot: true })
+    defenseCut(d)
     setDrive({ d, line: driveLine(them.name, d), stand: standLine(d, v.defense), after: () => {
       const g2 = { ...gs, opp: gs.opp + d.points }
       if (g2.you !== g2.opp || (!playoff && g2.ot >= 2)) return finish(g2)
@@ -239,10 +242,17 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
 
   const endHalfRef = useRef(null)
 
+  // The defense's moments get a cut-in (BK 2026-10-03 15:46): TAKEAWAY! and STOPPED!.
+  const defenseCut = d => {
+    if (d.result === 'TURNOVER') engine.current?.celebrate('TAKEAWAY!', 'DEFENSE', 'long')
+    else if (d.stand) engine.current?.celebrate('STOPPED!', 'DEFENSE', 'long')
+  }
+
   const oppDrive = useCallback((gs, start) => {
     if (gs.ot) return oppOvertime(gs)
     if (halfOver(gs)) return endHalfRef.current(gs)
     const d = simDrive({ opp: oppStrength, defense: v.defense, start, secondsLeft: gs.halfLeft })
+    defenseCut(d)
     setDrive({ d, line: driveLine(them.name, d), stand: standLine(d, v.defense), after: () => {
       const g2 = applyDrive(gs, d)
       if (d.result === 'END' || halfOver(g2)) return endHalfRef.current(g2)
@@ -266,6 +276,9 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
       // The Locker Room (BK, 2026-09-27) takes the FIRST of the halftime questions, once a
       // game, never in the playoffs: no extra taps. Its words are BK's, from the manifest.
       const locker = !playoff && dealer.hasCulture && manifest.culture?.prompt
+      // The halftime show (BK 2026-10-03, "a nod to the marching band"): the band crosses the
+      // field first, then the questions. A tap skips it.
+      const show = then => { setStage('show'); engine.current ? engine.current.band('HALFTIME SHOW', you.colors, then) : then() }
       const next = i => {
         if (i >= n) { setHalftime(results); setStage('halftime'); return }
         if (i === 0 && locker) {
@@ -283,14 +296,14 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
             next(i + 1)
           })
       }
-      next(0)
+      show(() => next(0))
       return
     }
     if (gs.you !== gs.opp) return finish(gs)
     const g3 = startOvertime(gs)
     setToast(`Tied at the end of regulation. Overtime: your ball at the ${them.abbr} 25.`)
     toPresnap(g3)
-  }, [commit, rules, ask, finish, toPresnap, them, playoff, dealer, manifest])
+  }, [commit, rules, ask, finish, toPresnap, them, playoff, dealer, manifest, you])
   endHalfRef.current = endHalf
 
   // After a score of yours: kick off to them (or the next overtime step).
@@ -301,12 +314,14 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   }, [oppOvertime, endHalf, oppDrive])
 
   // What happens once a play (and any flag on it) is settled.
-  const settle = (res, g2, outcome) => {
+  const settle = (res, g2, outcome, before) => {
     commit(g2)
     if (outcome.kind === 'td') {
       // Six are banked already (matchRules). What is left is the try, and the student
       // chooses which bet to take: one question for one point, or two for two.
-      setStage('convert')
+      // The cut-in first (BK 2026-10-03 15:46): TOUCHDOWN!, then the try.
+      setStage('show')
+      engine.current.celebrate('TOUCHDOWN!', `${you.abbr} SCORES`, 'long', () => setStage('convert'))
       return
     }
     if (outcome.kind === 'safety') return oppDrive(g2, 35)
@@ -316,6 +331,12 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
       return g2.ot ? oppOvertime(g2) : oppDrive(g2, outcome.oppStart)
     }
     if (halfOver(g2)) return endHalf(g2)
+    // BIG PLAY! on 20 yards or more; FIRST DOWN! (the short one) when the chains move.
+    const moved = !!outcome.firstDown
+    if (res.gained >= 20) {
+      setStage('show'); engine.current.celebrate('BIG PLAY!', `+${res.gained} YARDS`, 'long', () => toPresnap(g2)); return
+    }
+    if (moved) { setStage('show'); engine.current.celebrate('FIRST DOWN!', null, 'short', () => toPresnap(g2)); return }
     toPresnap(g2)
   }
 
@@ -343,7 +364,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
             return settle(res, gf, of)
           }
           setToast('Ball secured. The tackle stands.')
-          settle(res, g2, outcome)
+          settle(res, g2, outcome, gs)
         })
       return
     }
@@ -367,11 +388,11 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
             return toPresnap(pg)
           }
           setToast('No flag — the play stands.')
-          settle(res, g2, outcome)
+          settle(res, g2, outcome, gs)
         })
       return
     }
-    settle(res, g2, outcome)
+    settle(res, g2, outcome, gs)
   }
 
   // ── the try, after a touchdown (v5, BK) ────────────────────────────────────
@@ -477,22 +498,14 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
 
   return (
     <div className="match">
-      <div className="scoreboard" aria-live="polite">
-        <div className="sb-team" style={{ borderColor: you.colors[1] === '#FFFFFF' ? you.colors[0] : you.colors[1] }}>
-          <span className="sb-abbr">{you.abbr}</span><span className="sb-score">{g.you}</span>
-        </div>
-        <div className="sb-mid">
-          <div className="sb-clock">{clock.label} · {clock.time}</div>
-          <div className="sb-down">
-            {stage === 'presnap' || stage === 'live'
-              ? `${ORD[g.down]} & ${goalToGo(g) ? 'Goal' : g.toGo} · ${ballOnText(g.ballOn, them)}`
-              : weekLabel}
-          </div>
-        </div>
-        <div className="sb-team right" style={{ borderColor: them.colors[1] === '#FFFFFF' ? them.colors[0] : them.colors[1] }}>
-          <span className="sb-score">{g.opp}</span><span className="sb-abbr">{them.abbr}</span>
-        </div>
-      </div>
+      {/* The LED board (the 16-bit reskin, 2026-10-03): same facts as before, drawn in lights. */}
+      <LedBoard left={{ abbr: you.abbr, score: g.you, color: you.colors[1] === '#FFFFFF' ? you.colors[0] : you.colors[1] }}
+                right={{ abbr: them.abbr, score: g.opp, color: them.colors[1] === '#FFFFFF' ? them.colors[0] : them.colors[1] }}
+                mid1={`${clock.label} · ${clock.time}`}
+                mid2={stage === 'presnap' || stage === 'live'
+                  ? `${ORD[g.down]} & ${goalToGo(g) ? 'Goal' : g.toGo} · ${ballOnText(g.ballOn, them)}`
+                  : weekLabel}
+                label={`${you.abbr} ${g.you}, ${them.abbr} ${g.opp}. ${clock.label}, ${clock.time}.`} />
 
       <div className="field-wrap" onClick={() => { if (stage === 'presnap' && !gate) snap() }}>
         <canvas ref={canvasRef} className="field" aria-label="The field. Live play." />
@@ -507,7 +520,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
                     onClick={e => { e.stopPropagation(); engine.current?.jump() }}>Jump</button>
           </div>
         )}
-        {toast && <div className="toast" role="status">{toast}</div>}
+        {toast && stage !== 'show' && <div className="toast" role="status">{toast}</div>}
         {stage === 'presnap' && !gate && <div className="snap-hint">Tap the field or press Space to snap</div>}
         {stage === 'live' && help && (helpShort
           ? <div className="snap-hint"><span className="tip-full">{help}</span><span className="tip-short">{helpShort}</span></div>

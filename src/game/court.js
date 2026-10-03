@@ -15,6 +15,7 @@
 // ============================================================
 import { TEAMS as LEAGUE } from './teams.js'
 import { VB as W8 } from './sport.js'
+import { BAND_SECONDS, drawBand } from './cutin.js'
 
 // The league's kits in the court's shape: jersey + trim. Trim is the helmet colour, or the pants
 // when the helmet matches the jersey, or white (the concept's own table matched this rule).
@@ -311,10 +312,11 @@ function tapAt(sx,sy){
   if(S.phase==='spike'){if(onThem)S.reticle=inside;trySwing();return}
   if(S.phase==='dig'){digTap();return}
 }
-const onDown=e=>{if(S.paused)return;const r=cv.getBoundingClientRect();tapAt((e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H)};
+const endBand=()=>{const b=S.band;S.band=null;b&&b.then&&b.then()};
+const onDown=e=>{if(S.band){endBand();return}if(S.paused)return;const r=cv.getBoundingClientRect();tapAt((e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H)};
 const onMove=e=>{if(e.pointerType!=='mouse')return;if(!['serveAim','spike'].includes(S.phase))return;const r=cv.getBoundingClientRect();const pt=unP((e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H);if(pt.x>0.2&&pt.x<10.5&&pt.y>-1&&pt.y<10)S.reticle={x:pt.x,y:pt.y}};
 cv.addEventListener('pointerdown',onDown);cv.addEventListener('pointermove',onMove);
-const onKey=e=>{if(S.paused||S.phase==='menu'||(opts.blocked&&opts.blocked()))return;const tg=document.activeElement&&document.activeElement.tagName;if(tg==='INPUT'||tg==='TEXTAREA')return;
+const onKey=e=>{if(S.band&&[' ','Enter','Escape'].includes(e.key)){e.preventDefault();endBand();return}if(S.paused||S.phase==='menu'||(opts.blocked&&opts.blocked()))return;const tg=document.activeElement&&document.activeElement.tagName;if(tg==='INPUT'||tg==='TEXTAREA')return;
   const k=e.key;
   if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(k)&&['serveAim','spike'].includes(S.phase)){e.preventDefault();
     const st=0.5;if(k==='ArrowLeft')S.reticle.x-=st;if(k==='ArrowRight')S.reticle.x+=st;if(k==='ArrowUp')S.reticle.y+=st;if(k==='ArrowDown')S.reticle.y-=st;
@@ -503,6 +505,7 @@ function render(){
     const m=meterPos();R(mx+mw*m-2,my-4,5,15,OUTC);R(mx+mw*m-1,my-3,3,13,'#E3B341')}
   S.pops=S.pops.filter(q=>rt-q.t0<0.9);for(const q of S.pops){const[x,y]=P(q.x,q.y,q.z);const up=reduced?0:(rt-q.t0)*10;txt(q.text,clamp(x-tw(q.text)/2,2,W-tw(q.text)-2),Math.max(2,y-14-up-q.lift),'#ffffff',1,'#0b1220')}
   if(S.cele)drawCele();
+  if(S.band){const e=rt-S.band.t0;if(e>=S.band.dur)endBand();else drawBand(G,W,H,S.band,e,reduced)}
 }
 // 16-bit cut-ins: a white flash, a rotating burst in the team's colours, a close-up drawn at 3×
 function txtG(s,x,y,k,cols,out){s=String(s).toUpperCase();
@@ -557,6 +560,8 @@ return {
   setStats: (v, opp) => setStats(v, opp),
   setSteady: on => { S.steady = !!on },
   coachDone,
+  // The pep band at the set break (BK 2026-10-03 15:46: "PEP BAND"). A tap or a key skips it.
+  band: (colors, then) => { S.band = { caption: 'PEP BAND', colors, floor: 'wood', t0: rt, dur: reduced ? 1.6 : BAND_SECONDS, then } },
   call: i => { const f = callFns[i]; if (f && !S.paused) f() },
   state: () => ({ score: [...S.score], sets: [...S.sets], setNo: S.setNo, timeouts: S.timeouts, phase: S.phase, serve: S.serve }),
   ui: () => lastUI,

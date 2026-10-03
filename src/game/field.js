@@ -23,6 +23,11 @@
 // rule, route and result is identical either way. Digits are never mirrored.
 // ============================================================
 
+import { playerSprite, SPRITE } from './sprites.js'
+import { BAND_SECONDS, CELE_SECONDS, drawBand, drawCelebration } from './cutin.js'
+import { OUTC, SKIN, HAIR, dith, lum, rng as prng, shade, tw, txt } from './pixel.js'
+import { TEAMS } from './teams.js'
+
 export const VW = 480
 export const VH = 270
 const PX = 7
@@ -117,6 +122,11 @@ export class FieldEngine {
     this.t = 0
     this.dir = 1
     this.last = performance.now()
+    // The 16-bit reskin (BK 2026-10-03): the stadium is painted once per game, per field
+    // direction; the cut-ins and the halftime band draw over the field and are a tap to skip.
+    this.stadium = { 1: null, '-1': null }
+    this.teams = null
+    this.overlay = null
     this._bind()
     // Dev only: lets a test script step the field when the tab is hidden (rAF pauses). Never in a build.
     if (import.meta.env?.DEV) window.__rbEngine = this
@@ -130,6 +140,128 @@ export class FieldEngine {
   destroy() {
     cancelAnimationFrame(this.raf)
     this._unbind()
+  }
+
+  // ── the stadium, the cut-ins and the band (the 16-bit reskin, 2026-10-03) ───
+  // home: your school (the crowd and the wall wear its colours); away: the other side.
+  setStadium(home, away) {
+    if (this.teams && this.teams.home === home && this.teams.away === away) return
+    this.teams = { home, away }
+    this.stadium = { 1: null, '-1': null }
+  }
+
+  // A Tecmo-style cut-in. kind 'short' is the quick one (first downs). then: after it ends or is skipped.
+  celebrate(word, sub, kind = 'long', then) {
+    const k = this.kits?.offense || { jersey: '#444', helmet: '#ddd', pants: '#ddd' }
+    const dur = this.calm ? 1.0 : CELE_SECONDS[kind] || CELE_SECONDS.long
+    this.overlay = { type: 'cele', word, sub, kit: { j: k.jersey, t: k.helmet }, k, t0: performance.now() / 1000, dur, then }
+  }
+
+  band(caption, colors, then) {
+    this.overlay = { type: 'band', caption, colors, floor: 'grass', t0: performance.now() / 1000, dur: this.calm ? 1.6 : BAND_SECONDS, then }
+  }
+
+  skipOverlay() {
+    const o = this.overlay
+    if (!o) return false
+    this.overlay = null
+    o.then && o.then()
+    return true
+  }
+
+  _buildStadium(dir) {
+    const X0 = -22, X1 = 142, Y0 = -16, Y1 = FIELD_W + 16
+    const cv = document.createElement('canvas')
+    cv.width = Math.round((X1 - X0) * PX); cv.height = Math.round((Y1 - Y0) * PX)
+    const g = cv.getContext('2d')
+    const bx = x => Math.round((dir === 1 ? x - X0 : X1 - x) * PX)
+    const by = y => Math.round((y - Y0) * PX)
+    const rect = (x0, y0, x1, y1, c) => { const a = bx(x0), b = bx(x1); g.fillStyle = c; g.fillRect(Math.min(a, b), by(y0), Math.abs(b - a), by(y1) - by(y0)) }
+    const home = this.teams?.home || TEAMS[0], away = this.teams?.away || TEAMS[1]
+    const r = prng((TEAMS.indexOf(home) + 3) * 97 + TEAMS.indexOf(away))
+    // concrete bowl and the apron around the turf
+    g.fillStyle = '#2a2f3a'; g.fillRect(0, 0, cv.width, cv.height)
+    rect(-8, -4.6, 128, FIELD_W + 4.6, '#2c6a2a')
+    dith(g, 0, by(-4.6), cv.width, by(FIELD_W + 4.6) - by(-4.6), 'rgba(0,0,0,.08)')
+    // the padded wall, home colour, a lit top edge; the league's banners hang on the far one
+    const pad = lum(home.colors[0]) < 0.12 ? shade(home.colors[1], -0.25) : home.colors[0]
+    for (const [y0, y1] of [[-7.4, -4.6], [FIELD_W + 4.6, FIELD_W + 7.4]]) {
+      rect(-12, y0, 132, y1, pad); rect(-12, y0, 132, y0 + 0.25, shade(pad, 0.35)); rect(-12, y1 - 0.25, 132, y1, shade(pad, -0.45))
+    }
+    for (let i = 0, x = -6; x < 124; i++, x += 10.5) {
+      const t = TEAMS[i % TEAMS.length], a = Math.min(bx(x), bx(x + 6)), y = by(-7.2) + 1
+      g.fillStyle = OUTC; g.fillRect(a - 1, y - 1, 44, 16)
+      g.fillStyle = t.colors[0]; g.fillRect(a, y, 42, 14)
+      g.fillStyle = 'rgba(255,255,255,.16)'; g.fillRect(a, y, 42, 5)
+      g.fillStyle = 'rgba(0,0,0,.22)'; g.fillRect(a, y + 10, 42, 4)
+      g.fillStyle = t.colors[1]; g.fillRect(a, y, 42, 1); g.fillRect(a, y + 13, 42, 1)
+      const ink = Math.abs(lum(t.colors[0]) - lum(t.colors[1])) > 0.42 ? t.colors[1] : (lum(t.colors[0]) > 0.5 ? '#111111' : '#ffffff')
+      txt(g, t.abbr, a + 21 - tw(t.abbr) / 2, y + 4, ink)
+    }
+    // the crowd: stepped rows, home colours heavy, a few in the visitors'
+    const crowd = (y0, y1) => {
+      for (let row = 0; by(y0) + row * 6 < by(y1) - 4; row++) {
+        const yy = by(y0) + row * 6
+        g.fillStyle = row % 2 ? '#3a2b1f' : '#33261b'; g.fillRect(0, yy, cv.width, 6)
+        g.fillStyle = '#7b5a3a'; g.fillRect(0, yy + 4, cv.width, 1)
+        for (let x = 2 + (row % 2) * 3; x < cv.width - 3; x += 6) {
+          if (r() < 0.08) continue
+          const pick = r()
+          const shirt = pick < 0.58 ? home.colors[Math.floor(r() * home.colors.length)] : pick < 0.8 ? away.colors[Math.floor(r() * away.colors.length)] : ['#d0d4dc', '#6b7280', '#2f3b55', '#8b2c2c', '#3d6b4a'][Math.floor(r() * 5)]
+          const xx = x + Math.floor(r() * 2)
+          g.fillStyle = shirt; g.fillRect(xx - 1, yy + 2, 4, 3)
+          g.fillStyle = SKIN[Math.floor(r() * SKIN.length)]; g.fillRect(xx, yy - 1, 2, 3)
+          g.fillStyle = HAIR[Math.floor(r() * HAIR.length)]; g.fillRect(xx, yy - 1, 2, 1)
+        }
+      }
+    }
+    crowd(Y0, -7.4); crowd(FIELD_W + 7.4, Y1)
+    // behind the end zones: the stands curve round
+    for (const [x0, x1] of [[X0, -12], [132, X1]]) {
+      const a = Math.min(bx(x0), bx(x1)), w = Math.abs(bx(x1) - bx(x0))
+      for (let yy = by(-7.4); yy < by(FIELD_W + 7.4); yy += 6) {
+        g.fillStyle = (yy / 6) % 2 ? '#3a2b1f' : '#33261b'; g.fillRect(a, yy, w, 6)
+        for (let x = a + 2; x < a + w - 3; x += 6) { if (r() < 0.1) continue; g.fillStyle = r() < 0.6 ? home.colors[0] : '#6b7280'; g.fillRect(x, yy + 2, 4, 3); g.fillStyle = SKIN[Math.floor(r() * 6)]; g.fillRect(x + 1, yy - 1, 2, 3) }
+      }
+      const px = Math.min(bx(x0 < 0 ? -12 : 132), bx(x0 < 0 ? -12.6 : 132.6))
+      g.fillStyle = pad; g.fillRect(px, by(-7.4), Math.round(0.6 * PX) + 1, by(FIELD_W + 7.4) - by(-7.4))
+    }
+    // benches on the near sideline
+    for (const [x0, x1, c] of [[38, 54, home.colors[0]], [66, 82, away.colors[0]]]) {
+      rect(x0, FIELD_W + 2.4, x1, FIELD_W + 3.4, shade(c, -0.2)); rect(x0, FIELD_W + 2.4, x1, FIELD_W + 2.6, shade(c, 0.3))
+    }
+    return { cv, X0, X1, Y0 }
+  }
+
+  _drawStadium(g) {
+    let st = this.stadium[this.dir]
+    if (!st) st = this.stadium[this.dir] = this._buildStadium(this.dir)
+    const sx = Math.round(((this.dir === 1 ? st.X0 : st.X1) - this.cam.x) * PX * this.dir + VW / 2)
+    const sy = Math.round((st.Y0 - this.cam.y) * PX + VH / 2)
+    g.drawImage(st.cv, sx, sy)
+  }
+
+  // Goalposts at the back of each end zone, drawn standing up off the field (Tecmo's way).
+  _drawPosts(g) {
+    for (const x of [0, 120]) {
+      const base = this._toScreen(x, C), top = this._toScreen(x, C - 3.1), bot = this._toScreen(x, C + 3.1)
+      if (base.x < -20 || base.x > VW + 20) continue
+      g.fillStyle = 'rgba(0,0,0,.3)'; g.fillRect(base.x - 1, top.y, 3, bot.y - top.y)
+      g.fillStyle = OUTC; g.fillRect(base.x - 2, base.y - 13, 4, 14); g.fillRect(base.x - 2, top.y - 25, 4, bot.y - top.y - 2 + 4)
+      g.fillStyle = '#f2c230'; g.fillRect(base.x - 1, base.y - 12, 2, 12)
+      g.fillRect(base.x - 1, top.y - 24, 2, bot.y - top.y)                                  // crossbar, seen end-on
+      g.fillStyle = OUTC; g.fillRect(base.x - 2, top.y - 40, 4, 18); g.fillRect(base.x - 2, bot.y - 40, 4, 18)
+      g.fillStyle = '#f5d24a'; g.fillRect(base.x - 1, top.y - 39, 2, 16); g.fillRect(base.x - 1, bot.y - 39, 2, 16)
+    }
+  }
+
+  _drawOverlay(g) {
+    const o = this.overlay
+    if (!o) return
+    const e = performance.now() / 1000 - o.t0
+    if (e >= o.dur) { this.overlay = null; o.then && o.then(); return }
+    if (o.type === 'band') drawBand(g, VW, VH, o, e, this.calm)
+    else drawCelebration(g, VW, VH, o, e, () => playerSprite(o.k, 'hero', 1, 3), this.calm)
   }
 
   // ── set a play up ──────────────────────────────────────────────────────────
@@ -201,6 +333,14 @@ export class FieldEngine {
 
   // ── input ──────────────────────────────────────────────────────────────────
   _bind() {
+    this._skip = e => {
+      if (!this.overlay) return
+      if (e.type === 'keydown' && ![' ', 'Enter', 'Escape'].includes(e.key)) return
+      e.preventDefault(); e.stopImmediatePropagation()
+      this.skipOverlay()
+    }
+    this.canvas.addEventListener('pointerdown', this._skip, true)
+    window.addEventListener('keydown', this._skip, true)
     this._down = e => {
       if (!['dropback', 'run'].includes(this.state)) return
       e.preventDefault()
@@ -262,6 +402,8 @@ export class FieldEngine {
   }
 
   _unbind() {
+    this.canvas.removeEventListener('pointerdown', this._skip, true)
+    window.removeEventListener('keydown', this._skip, true)
     this.canvas.removeEventListener('pointerdown', this._down)
     this.canvas.removeEventListener('pointermove', this._move)
     this.canvas.removeEventListener('pointerup', this._up)
@@ -617,16 +759,18 @@ export class FieldEngine {
     const focus = this.carrier || (this.ball ? this._ballPos() : this.qb) || { x: 40, y: C }
     if (focus) {
       this.cam.x += (this._camX(focus.x) - this.cam.x) * 0.12
-      this.cam.y += (clamp(focus.y, VIEW_H / 2 - 3, FIELD_W - VIEW_H / 2 + 3) - this.cam.y) * 0.12
+      this.cam.y += (clamp(focus.y, VIEW_H / 2 - 6, FIELD_W - VIEW_H / 2 + 6) - this.cam.y) * 0.12
     }
     g.save()
     if (this.fx.shake > 0) {
       g.translate(Math.round((Math.random() - 0.5) * this.fx.shake * 2), Math.round((Math.random() - 0.5) * this.fx.shake * 2))
     }
-    g.fillStyle = '#23471F'
+    g.fillStyle = '#2a2f3a'
     g.fillRect(-12, -12, VW + 24, VH + 24)
+    this._drawStadium(g)
     this._drawField(g)
-    if (!this.players.length) return
+    this._drawPosts(g)
+    if (!this.players.length) { g.restore(); this._drawOverlay(g); return }
     if (['presnap', 'dropback', 'air', 'run'].includes(this.state)) {
       this._vline(g, this.los, '#3B82F6')
       if (this.firstDown < 110) this._vline(g, this.firstDown, '#FACC15')
@@ -643,9 +787,9 @@ export class FieldEngine {
     if (['presnap', 'dropback'].includes(this.state)) {
       for (const r of this.targets) {
         const s = this._toScreen(r.x, r.y)
-        g.fillStyle = 'rgba(11,18,32,.88)'; g.fillRect(s.x - 5, s.y - 26, 11, 13)
-        g.fillStyle = '#F5CB63'; g.fillRect(s.x - 5, s.y - 26, 11, 1)
-        this._digit(g, r.label, s.x - 3, s.y - 23, 2, '#F4F6FA')
+        g.fillStyle = 'rgba(11,18,32,.88)'; g.fillRect(s.x - 5, s.y - 38, 11, 13)
+        g.fillStyle = '#F5CB63'; g.fillRect(s.x - 5, s.y - 38, 11, 1)
+        this._digit(g, r.label, s.x - 3, s.y - 35, 2, '#F4F6FA')
       }
     }
     g.restore()
@@ -655,6 +799,7 @@ export class FieldEngine {
       g.fillRect(0, 0, VW, VH)
       g.globalAlpha = 1
     }
+    this._drawOverlay(g)
   }
 
   _ballPos() {
@@ -716,7 +861,7 @@ export class FieldEngine {
 
   _drawPlayer(g, p, time) {
     const s = this._toScreen(p.x, p.y)
-    if (s.x < -16 || s.x > VW + 16 || s.y < -24 || s.y > VH + 16) return
+    if (s.x < -20 || s.x > VW + 20 || s.y < -8 || s.y > VH + 40) return
     const kit = p.team === 'o' ? this.kits.offense : this.kits.defense
     const moving = Math.abs(p.vx) + Math.abs(p.vy) > 0.5
     const bob = moving ? Math.round(Math.sin(time * 15 + p.y)) : 0
@@ -728,8 +873,8 @@ export class FieldEngine {
     // pixels stay square). The shadow and ring stay on the ground under him.
     const tip = isC && (this.dive > 0 || p.down) ? Math.min(1, p.down ? 1 : (DIVE_T - this.dive) / 0.1) : 0
     // shadow, and a gold ring under whoever has the ball
-    g.fillStyle = 'rgba(0,0,0,.3)'; g.fillRect(s.x - 5, s.y + 5, 11, 2)
-    if (p === this.carrier) { g.fillStyle = 'rgba(245,203,99,.6)'; g.fillRect(s.x - 7, s.y + 5, 15, 2) }
+    g.fillStyle = 'rgba(0,0,0,.3)'; g.fillRect(s.x - 6, s.y + 5, 13, 3)
+    if (p === this.carrier) { g.fillStyle = 'rgba(245,203,99,.75)'; g.fillRect(s.x - 8, s.y + 5, 17, 3) }
     if (tip) {
       g.save()
       g.translate(s.x, s.y + 3)
@@ -738,28 +883,15 @@ export class FieldEngine {
     }
     // PANTS, HELMET and JERSEY are three separate colours (teams.js). That is what lets
     // Binghamton's blue hat and blue pants carry their red jersey, and it is most of what
-    // makes two sides readable against each other at this size.
-    // legs (they scissor as he runs), shoes
-    g.fillStyle = kit.pants
-    g.fillRect(s.x - 3, y + 1, 2, 4 - stride)
-    g.fillRect(s.x + 2, y + 1, 2, 4 + stride)
-    g.fillStyle = '#1A1A1A'
-    g.fillRect(s.x - 4, s.y + 4, 3, 2); g.fillRect(s.x + 2, s.y + 4, 3, 2)
-    // arms
-    g.fillStyle = '#E8C9A0'
-    g.fillRect(s.x - 5, y - 5 + stride, 2, 5); g.fillRect(s.x + 4, y - 5 - stride, 2, 5)
-    // jersey, with the helmet colour across the shoulders
-    g.fillStyle = kit.jersey; g.fillRect(s.x - 4, y - 7, 9, 9)
-    g.fillStyle = kit.helmet; g.fillRect(s.x - 4, y - 7, 9, 2)
-    // helmet with a facemask facing the way he plays
-    g.fillStyle = kit.helmet; g.fillRect(s.x - 4, y - 14, 9, 7)
-    g.fillStyle = 'rgba(0,0,0,.25)'; g.fillRect(s.x - 4, y - 14, 9, 2)
-    g.fillStyle = light(kit.helmet) ? '#1A1A1A' : '#E8E8E8'
+    // makes two sides readable against each other at this size. The 16-bit reskin
+    // (2026-10-03) draws them as cached sprites: three tones each, a dark outline, two
+    // running frames, the facemask facing the way he plays.
     const faceRight = (p.team === 'o') === (this.dir === 1)
-    g.fillRect(faceRight ? s.x + 4 : s.x - 5, y - 11, 2, 3)
+    const pose = moving ? (stride > 0 ? 'run0' : 'run1') : 'stand'
+    g.drawImage(playerSprite(kit, pose, faceRight ? 1 : -1), s.x - SPRITE.AX, y + 6 - SPRITE.AY)
     if (p.stun > 0) {
       g.fillStyle = '#F4F6FA'
-      g.fillRect(s.x - 3, y - 19, 2, 2); g.fillRect(s.x + 3, y - 21, 2, 2)
+      g.fillRect(s.x - 3, y - 31, 2, 2); g.fillRect(s.x + 3, y - 33, 2, 2)
     }
     if (tip) g.restore()
   }
