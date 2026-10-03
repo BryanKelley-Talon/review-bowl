@@ -11,6 +11,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Question from '../ui/Question.jsx'
 import LedBoard from '../ui/LedBoard.jsx'
+import PlayCall from '../ui/PlayCall.jsx'
+import { PLAY_WORDS, guessChance, playById } from './plays.js'
 import { gateLabel } from '../content/dealer.js'
 import { FieldEngine } from './field.js'
 import { driveLine, simDrive, standLine } from './drive.js'
@@ -20,7 +22,7 @@ import {
   halfOver, isPenaltySpot, kickChance, kickDistance, newGame, punt, startOvertime, startSecondHalf, twoPoint,
 } from './matchRules.js'
 import { STAT_OF, physics, ratings, values } from './ratings.js'
-import { kits as makeKits, TEAMS } from './teams.js'
+import { kits as makeKits, roster, TEAMS } from './teams.js'
 import { RESULT } from './season.js'
 
 const ORD = ['', '1st', '2nd', '3rd', '4th']
@@ -64,6 +66,14 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   const [flash, setFlash] = useState(null)         // the stat layer, made visible: what an answer just moved
   const playBoost = useRef(null)                   // one snap: a timeout or big-moment read
   const [fieldVersion, setFieldVersion] = useState(0)
+  // PLAY CALL (BK 2026-10-03 16:06): the play for the next snap, and whether they guessed it.
+  // Both are for this snap only; a new down calls a new play.
+  const [call, setCall] = useState(null)
+  const guessed = useRef(false)
+  const pickPlay = useCallback(id => {
+    guessed.current = Math.random() < guessChance(career.levels)
+    setCall(playById(id))
+  }, [career.levels])
   const setRead = on => { playBoost.current = on ? { read: true } : null; setFieldVersion(n => n + 1) }
   const liveChecks = useRef({ 1: 0, 2: 0 })
   const flags = useRef({ 1: 0, 2: 0 })
@@ -172,6 +182,9 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
       onEvent: e => { if (e.type === 'broken') setToast('Broke a tackle!') },
     })
     engine.current.setStadium(you, them)
+    // Your quarterback, back and tight end wear the numbers on the team page.
+    const ro = roster(career.seed, career.team, career.season, career.levels)
+    engine.current.setNumbers({ QB: ro.throwing.number, RB: ro.speed.number, TE: ro.toughness.number })
     return () => engine.current.destroy()
   }, [])
 
@@ -182,14 +195,17 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
       ballOn: gs.ballOn, toGo: gs.toGo, goal: goalToGo(gs), kits,
       phys: physics(values(ratings({ form: career.form, levels: career.levels, facilities: career.facilities, boost })),
                     oppStrength, !!(pb && pb.read)),
+      play: call, guessed: !!call && guessed.current,
     })
-  }, [kits, career, boost, oppStrength, dirMode])
+  }, [kits, career, boost, oppStrength, dirMode, call])
 
   // Re-set the formation when ratings change between snaps (an answer just landed).
   useEffect(() => { if (stage === 'presnap') setupField(gRef.current) }, [stage, setupField, fieldVersion])
 
   const toPresnap = useCallback(gs => {
     commit(gs)
+    setCall(null)
+    engine.current?.skipOverlay()          // a defense cut-in still running behind the drive card
     // The rare big moment: 3rd-and-long or the red zone, once a half at most.
     const key = gs.half * 1000 + gs.ballOn * 10 + gs.down
     const eligible = !gs.ot && isBigMoment(gs)
@@ -204,11 +220,11 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   }, [commit, rules])
 
   const snap = useCallback(() => {
-    if (stage !== 'presnap') return
-    setToast(null)
+    if (stage !== 'presnap' || !call) return
+    setToast(guessed.current ? PLAY_WORDS.readIt : null)
     setStage('live')
     engine.current.snap()
-  }, [stage])
+  }, [stage, call])
 
   useEffect(() => {
     // SPACE snaps (BK's playtest: easier to hit under pressure than Enter). Enter still
@@ -508,7 +524,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
                   : weekLabel}
                 label={`${you.abbr} ${g.you}, ${them.abbr} ${g.opp}. ${clock.label}, ${clock.time}.`} />
 
-      <div className="field-wrap" onClick={() => { if (stage === 'presnap' && !gate) snap() }}>
+      <div className="field-wrap" onClick={() => { if (stage === 'presnap' && !gate && call) snap() }}>
         <canvas ref={canvasRef} className="field" aria-label="The field. Live play." />
         <button type="button" className="fs-btn" onClick={toggleFull} aria-pressed={full}>
           {full ? 'Exit full screen' : 'Full screen'}
@@ -522,7 +538,8 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
           </div>
         )}
         {toast && stage !== 'show' && <div className="toast" role="status">{toast}</div>}
-        {stage === 'presnap' && !gate && <div className="snap-hint">Tap the field or press Space to snap</div>}
+        {stage === 'presnap' && !gate && call && <div className="snap-hint">Tap the field or press Space to snap</div>}
+        {stage === 'presnap' && !gate && !call && <PlayCall kit={kits.offense} onPick={pickPlay} />}
         {stage === 'live' && help && (helpShort
           ? <div className="snap-hint"><span className="tip-full">{help}</span><span className="tip-short">{helpShort}</span></div>
           : <div className="snap-hint">{help}</div>)}
@@ -546,7 +563,13 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
 
       {stage === 'presnap' && !gate && (
         <div className="controls">
-          <button type="button" className="btn-primary" onClick={snap}>Snap</button>
+          {call
+            ? <>
+                <button type="button" className="btn-primary" onClick={snap}>Snap</button>
+                <span className="controls-note pc-called">{call.name}</span>
+                <button type="button" className="btn-ghost" onClick={() => setCall(null)}>{PLAY_WORDS.change}</button>
+              </>
+            : null}
           {fourth && !g.ot && <button type="button" className="btn-secondary" onClick={doPunt}>Punt</button>}
           {kickable && (
             <button type="button" className="btn-secondary" onClick={doKick}>

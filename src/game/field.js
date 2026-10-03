@@ -23,10 +23,11 @@
 // rule, route and result is identical either way. Digits are never mirrored.
 // ============================================================
 
-import { playerSprite, SPRITE } from './sprites.js'
+import { heroSprite, playerSprite, SPRITE } from './sprites.js'
 import { BAND_SECONDS, CELE_SECONDS, drawBand, drawCelebration } from './cutin.js'
 import { OUTC, SKIN, HAIR, dith, lum, rng as prng, shade, tw, txt } from './pixel.js'
 import { TEAMS } from './teams.js'
+import { ROUTES_OF } from './plays.js'
 
 export const VW = 480
 export const VH = 270
@@ -144,6 +145,10 @@ export class FieldEngine {
 
   // ── the stadium, the cut-ins and the band (the 16-bit reskin, 2026-10-03) ───
   // home: your school (the crowd and the wall wear its colours); away: the other side.
+  // Your five key players' numbers from the roster (teams.js), so the QB on the field is the QB
+  // on the team page. Everyone else gets a made-up number for his position.
+  setNumbers(numbers) { this.numbers = numbers }
+
   setStadium(home, away) {
     if (this.teams && this.teams.home === home && this.teams.away === away) return
     this.teams = { home, away }
@@ -257,12 +262,17 @@ export class FieldEngine {
     const e = performance.now() / 1000 - o.t0
     if (e >= o.dur) { this.overlay = null; o.then && o.then(); return }
     if (o.type === 'band') drawBand(g, VW, VH, o, e, this.calm)
-    else drawCelebration(g, VW, VH, o, e, () => playerSprite(o.k, 'hero', 1, 3), this.calm)
+    else drawCelebration(g, VW, VH, o, e, () => heroSprite(o.k, (this.numbers && this.numbers.QB) || 7, 2, 2), this.calm)
   }
 
   // ── set a play up ──────────────────────────────────────────────────────────
   // ballOn: 0–100 from the offense's own goal. kits: {offense, defense}. phys: ratings.physics().
-  setup({ ballOn, toGo, kits, phys, goal = false }) {
+  // play: a called play from plays.js (or null: the old random routes). guessed: the other side
+  // called the same play (BK 16:06), so one defender beats his block at the snap.
+  setup({ ballOn, toGo, kits, phys, goal = false, play = null, guessed = false }) {
+    this.play = play
+    this.guessed = !!guessed
+    this.runPlan = null
     this.los = 10 + ballOn
     this.firstDown = goal ? 110 : Math.min(110, this.los + toGo)
     this.kits = kits
@@ -290,18 +300,47 @@ export class FieldEngine {
     ]
     for (const w of wr) { w.route = pick(WR_ROUTES); w.wp = 0; w.start = { x: w.x, y: w.y }; w.s = w.y < C ? 1 : -1 }
     rb.wp = 0; rb.start = { x: rb.x, y: rb.y }
+    // A called play fixes the routes (plays.js). A run: the back takes the handoff and the
+    // sweep goes to his side of the formation.
+    const R = play && ROUTES_OF[play.id]
+    if (R) {
+      wr[0].route = R.wr1; wr[1].route = R.wr2; wr[2].route = R.te
+      if (play.kind === 'run') rb.route = 'run'
+      else rb.route = R.rb
+    }
     const dl = [-2.5, 0.5, 2.5].map((d, i) => P('DL', 'd', L + 1, C + d, { blocker: ol[i], blockT: phys.blockTime + rand(-0.35, 0.45) }))
     if (rb.route === 'block') dl[1].blockT += 0.8
+    // They read it (BK 16:06). On a pass, the middle of their line is through at the snap. On a
+    // run, one defender plays the run before it starts: the nose shoots the dive's hole, and the
+    // edge linebacker on the sweep's side races to the corner. Unblocked, either way.
+    this.reader = null
+    if (this.guessed) {
+      dl[1].blockT = 0.15
+      if (play && play.kind === 'run') {
+        const side = play.id === 'sweep' ? (wr[2].y < C ? -1 : 1) : (rb.y > C ? 1 : -1)
+        this.reader = play.id === 'dive' ? dl[1] : null
+        this.readerSpot = play.id === 'dive' ? { x: L - 1.5, y: C + side * 1.0 } : { x: L - 1, y: clamp(C + side * 10, 3, FIELD_W - 3) }
+        this.readerSide = side
+      }
+    }
     const cb1 = P('CB', 'd', L + 6, wr[0].y, { assign: wr[0] })
     const cb2 = P('CB', 'd', L + 6, wr[1].y, { assign: wr[1] })
     const sf = P('S', 'd', L + 11, C - 6, { assign: wr[2] })
-    const lb1 = P('LB', 'd', L + 5, C + 5, { assign: rb.route === 'block' ? null : rb })
+    const lb1 = P('LB', 'd', L + 5, C + 5, { assign: rb.route === 'block' || rb.route === 'run' ? null : rb })
     const lb2 = P('LB', 'd', L + 5, C - 4, { zone: true })
+    if (this.guessed && play && play.id === 'sweep') this.reader = this.readerSide > 0 ? lb1 : lb2
     this.qb = qb
     this.targets = [...wr, rb]
     this.offense = [qb, rb, ...ol, ...wr]
     this.defense = [...dl, cb1, cb2, sf, lb1, lb2]
     this.players = [...this.offense, ...this.defense]
+    // 16-bit look: every player has his own skin tone and a jersey number (made up, never a roster).
+    const nums = { QB: [1, 19], RB: [20, 39], OL: [60, 79], WR: [80, 89], TE: [40, 49], DL: [90, 99], LB: [50, 59], CB: [20, 39], S: [20, 49] }
+    for (const pl of this.players) {
+      const [lo, hi] = nums[pl.role] || [10, 99]
+      pl.skin = Math.floor(Math.random() * 6)
+      pl.num = (this.numbers && pl.team === 'o' && this.numbers[pl.role]) || lo + Math.floor(Math.random() * (hi - lo + 1))
+    }
     this.state = 'presnap'
     this.cam.x = this._camX(qb.x)
     this.cam.y = C
@@ -313,8 +352,10 @@ export class FieldEngine {
     // engine would read the same press as "take off running", so Space stays locked
     // out until it is released.
     this.spaceLocked = !!this.keys[' ']
-    this.state = 'dropback'
     this.t = 0
+    // A called run: a short handoff, then the back has it.
+    if (this.play && this.play.kind === 'run') { this.state = 'handoff'; this._phase('handoff'); return }
+    this.state = 'dropback'
     this._phase('dropback')
   }
 
@@ -524,7 +565,7 @@ export class FieldEngine {
     // same game at a lower frame rate rather than in slow motion.
     let elapsed = Math.min(0.5, (now - this.last) / 1000)
     this.last = now
-    while (elapsed > 0 && ['dropback', 'air', 'run', 'dead'].includes(this.state)) {
+    while (elapsed > 0 && ['handoff', 'dropback', 'air', 'run', 'dead'].includes(this.state)) {
       const dt = Math.min(1 / 60, elapsed)
       this._step(dt)
       elapsed -= dt
@@ -549,6 +590,45 @@ export class FieldEngine {
       return
     }
 
+    // The handoff (a called run): the quarterback turns, the back takes it at the mesh.
+    if (this.state === 'handoff') {
+      const qb = this.qb, rb = this.targets.find(t => t.role === 'RB')
+      qb.x -= 2.2 * dt
+      moveToward(rb, qb.x - 0.4, qb.y + 0.9, ph.runSpeed, dt)
+      if (this.t >= 0.38) {
+        this.carrier = rb
+        rb.speed = ph.runSpeed
+        // The dive hits the hole on the back's side; the sweep goes to the tight end's side,
+        // so he's there to seal the edge.
+        const side = this.play.id === 'sweep' ? this._sweepSide() : (rb.y > C ? 1 : -1)
+        this.runPlan = this.play.id === 'sweep'
+          ? { y: clamp(C + side * 13, 3, FIELD_W - 3), until: this.t + 1.2, lateral: true, side }
+          : { y: C + side * 1.0, until: this.t + 0.6, lateral: false, side }
+        // The blocking scheme. Dive: the guards hold their men, the nose is shoved out of the hole
+        // (unless they read it), the center climbs to the near linebacker, the tight end takes
+        // the other. Sweep: the line pulls and leads (below), the tight end seals the edge.
+        const ol = this.offense.filter(q => q.role === 'OL'), te = this.targets.find(t => t.role === 'TE')
+        const dl = this.defense.filter(q => q.role === 'DL'), lbs = this.defense.filter(q => q.role === 'LB')
+        const hole = { x: this.los + 1, y: this.runPlan.y }
+        lbs.sort((a, b) => dist(a, hole) - dist(b, hole))
+        if (this.play.id === 'dive') {
+          ol[1].blockTarget = lbs[0]
+          if (te) te.blockTarget = lbs[1]
+        } else if (te) {
+          te.blockTarget = lbs.filter(l => l !== this.reader).sort((a, b) => Math.abs(a.y - this.runPlan.y) - Math.abs(b.y - this.runPlan.y))[0] || null
+        }
+        if (this.reader && this.play.id === 'dive') { ol[1].blockTarget = lbs[0]; if (te) te.blockTarget = lbs[1] }
+        // On the sweep the receiver on that side stalks the corner in front of him.
+        if (this.play.id === 'sweep') {
+          const wr = this.targets.filter(t => t.role === 'WR').find(w => Math.sign(w.y - C) === this.runPlan.side)
+          const cb = this.defense.filter(d => d.role === 'CB').sort((a, b) => dist(a, wr) - dist(b, wr))[0]
+          if (wr && cb && cb !== this.reader) wr.blockTarget = cb
+        }
+        this.state = 'run'
+        this._phase('run')
+      }
+    }
+
     // Quarterback: drop, then hold; arrows slide him in the pocket.
     if (this.state === 'dropback') {
       const qb = this.qb
@@ -566,18 +646,54 @@ export class FieldEngine {
     // Routes. The ball in the air pulls nearby receivers to it.
     for (const r of this.targets) {
       if (r === this.carrier) continue
+      if (r.blockTarget && this.state === 'run') continue
       if (this.state === 'air' && dist(r, this.ball.to) < 6) { moveToward(r, this.ball.to.x, this.ball.to.y, ph.runSpeed, dt); continue }
       if (this.state === 'run') { r.x += ph.runSpeed * 0.35 * dt; continue }
       this._runRoute(r, dt)
     }
 
     // Line: blockers hold their spot; the ball carrier's line keeps pushing a little.
-    for (const o of this.offense) if (o.role === 'OL') { o.x += (Math.random() - 0.5) * 0.6 * dt }
+    // On a called run they block for real: the sweep's linemen pull and lead to the outside,
+    // the dive's push straight ahead. A defender a lead blocker reaches is held a while,
+    // longer the better the team's Blocking (phys.blockTime).
+    const calledRun = this.play && this.play.kind === 'run' && this.state === 'run'
+    // Drive to a man; on contact, hold him for a while (longer with better Blocking). One block
+    // per blocker per play: once he's shed, the blocker is out of the play.
+    const block = (b, t) => {
+      if (t === this.reader) return false
+      if (b.holding === t) { if (t.held > 0) { b.x = t.x - 0.7; b.y = t.y } return true }
+      if (b.spent) return false
+      if (dist(b, t) < 1.25) { t.held = ph.blockTime * 0.4; b.holding = t; b.spent = true; return true }
+      moveToward(b, t.x - 0.5, t.y, ph.runSpeed * 0.9, dt)
+      return false
+    }
+    for (const o of this.offense) {
+      if (o.role !== 'OL' && !(calledRun && o.blockTarget)) continue
+      if (calledRun && this.runPlan) {
+        const c = this.carrier, i = this.offense.filter(q => q.role === 'OL').indexOf(o)
+        if (o.blockTarget && !o.spent) { block(o, o.blockTarget); continue }
+        if (o.holding) { block(o, o.holding); if (o.holding.held > 0) continue }
+        if (o.spent) { o.x += 0.6 * dt; continue }
+        if (this.play.id === 'sweep') moveToward(o, c.x + 2.5 + i * 1.4, c.y + this.runPlan.side * (1 + i * 1.1), ph.runSpeed, dt)
+        else o.x += 1.1 * dt
+        const near = this.defense.find(d => !(d.held > 0) && d.stun <= 0 && d.role !== 'DL' && d !== this.reader && dist(d, o) < 1.3)
+        if (near) block(o, near)
+      } else if (o.role === 'OL') o.x += (Math.random() - 0.5) * 0.6 * dt
+    }
 
     // Defense.
     const readBonus = ph.reaction
     for (const d of this.defense) {
       if (d.stun > 0) continue
+      if (d.held > 0) { d.held -= dt; continue }
+      if (d === this.reader && (this.state === 'handoff' || this.state === 'run')) {
+        const sp = this.readerSpot, c = this.carrier
+        if (c && (c.x > sp.x + 1 || dist(d, sp) < 0.6)) moveToward(d, c.x + c.vx * 0.2, c.y + c.vy * 0.2, ph.pursuitSpeed * 1.05, dt)
+        else moveToward(d, sp.x, sp.y, ph.pursuitSpeed * 1.15, dt)
+        continue
+      }
+      // A called run: the line is still engaged until its block gives (the same clock a pass uses).
+      if (calledRun && d.role === 'DL' && this.t < d.blockT) continue
       if (this.state === 'run') {
         const c = this.carrier
         moveToward(d, c.x + c.vx * 0.35, c.y + c.vy * 0.35, ph.pursuitSpeed * (d.role === 'DL' ? 0.85 : 1), dt)
@@ -683,15 +799,18 @@ export class FieldEngine {
       if (this.dive <= 0) { c.down = true; return this._end('tackle', c, { dive: true }) }
       return
     }
-    let vy = 0
+    let vy = 0, plan = false
     if (this.keys.ArrowUp) vy = -4.6
     else if (this.keys.ArrowDown) vy = 4.6
     else if (this.pointer && this.pointer.held) {
       const w = this._toWorld(this.pointer)
       vy = clamp((w.y - c.y) * 2.2, -4.6, 4.6)
+    } else if (this.runPlan && this.t < this.runPlan.until) {
+      // The called run's path, until the student steers: the sweep bends to the sideline first.
+      vy = clamp((this.runPlan.y - c.y) * 2.4, -6.2, 6.2); plan = this.runPlan.lateral
     }
     if (this.juke > 0) { this.juke -= dt; vy += this.jukeDir * 6 }
-    c.vx = c.speed * (this.keys.ArrowLeft ? 0.55 : 1)
+    c.vx = c.speed * (this.keys.ArrowLeft ? 0.55 : plan ? 0.55 : 1)
     c.vy = vy
     c.x += c.vx * dt
     c.y += c.vy * dt
@@ -704,7 +823,8 @@ export class FieldEngine {
       return
     }
     for (const d of this.defense) {
-      if (d.stun > 0 || dist(d, c) > 0.8) continue
+      // A man who's being blocked can't make the tackle (a called run's blocks; see _step).
+      if (d.stun > 0 || d.held > 0 || dist(d, c) > 0.8) continue
       if (Math.random() < ph.breakTackle) {
         d.stun = 0.9
         this._boom({ shake: 1.6 })
@@ -778,9 +898,10 @@ export class FieldEngine {
       const s = this._toScreen(this.qb.x, this.qb.y)
       g.fillStyle = '#8B4A1C'; g.fillRect(this.dir === 1 ? s.x + 4 : s.x - 7, s.y - 6, 4, 3)
     }
-    if (['presnap', 'dropback'].includes(this.state)) this._drawRoutes(g)
+    if (['presnap', 'dropback'].includes(this.state) && !(this.play && this.play.kind === 'run')) this._drawRoutes(g)
+    if (this.state === 'presnap' && this.play && this.play.kind === 'run') this._drawRunPath(g)
     if (this.aim && this.state === 'dropback') this._drawAim(g)
-    if (['presnap', 'dropback'].includes(this.state)) {
+    if (['presnap', 'dropback'].includes(this.state) && !(this.play && this.play.kind === 'run')) {
       for (const r of this.targets) {
         const s = this._toScreen(r.x, r.y)
         g.fillStyle = 'rgba(11,18,32,.88)'; g.fillRect(s.x - 5, s.y - 38, 11, 13)
@@ -884,7 +1005,7 @@ export class FieldEngine {
     // running frames, the facemask facing the way he plays.
     const faceRight = (p.team === 'o') === (this.dir === 1)
     const pose = moving ? (stride > 0 ? 'run0' : 'run1') : 'stand'
-    g.drawImage(playerSprite(kit, pose, faceRight ? 1 : -1), s.x - SPRITE.AX, y + 6 - SPRITE.AY)
+    g.drawImage(playerSprite(kit, pose, faceRight ? 1 : -1, 1, p.skin || 0, p.num), s.x - SPRITE.AX, y + 6 - SPRITE.AY)
     if (p.stun > 0) {
       g.fillStyle = '#F4F6FA'
       g.fillRect(s.x - 3, y - 31, 2, 2); g.fillRect(s.x + 3, y - 33, 2, 2)
@@ -931,6 +1052,26 @@ export class FieldEngine {
       pts.push({ x: b.x + (b.x - a.x) / d * 8, y: cy(b.y + (b.y - a.y) / d * 8) })
     }
     return pts
+  }
+
+  // A called run's path before the snap: the back's line, dotted, an arrowhead at the end.
+  _sweepSide() { const te = this.targets.find(t => t.role === 'TE'); return te && te.y < C ? -1 : 1 }
+
+  _drawRunPath(g) {
+    const rb = this.targets.find(t => t.role === 'RB')
+    if (!rb) return
+    const side = this.play.id === 'sweep' ? this._sweepSide() : (rb.y > C ? 1 : -1)
+    const pts = this.play.id === 'sweep'
+      ? [{ x: rb.x, y: rb.y }, { x: this.los - 1, y: clamp(C + side * 12, 3, FIELD_W - 3) }, { x: this.los + 9, y: clamp(C + side * 13, 3, FIELD_W - 3) }]
+      : [{ x: rb.x, y: rb.y }, { x: this.los, y: C + side * 1.0 }, { x: this.los + 8, y: C + side * 1.0 }]
+    g.fillStyle = '#F5CB63'
+    for (let i = 1; i < pts.length; i++) {
+      const a = this._toScreen(pts[i - 1].x, pts[i - 1].y), b = this._toScreen(pts[i].x, pts[i].y)
+      const len = Math.hypot(b.x - a.x, b.y - a.y)
+      for (let t = 0; t < len; t += 5) g.fillRect(Math.round(a.x + (b.x - a.x) * t / len), Math.round(a.y + (b.y - a.y) * t / len), 2, 2)
+    }
+    const e = this._toScreen(pts[2].x, pts[2].y), d = this.dir
+    for (let i = 0; i < 4; i++) g.fillRect(e.x - d * i, e.y - i, 2, 2 * i + 1)
   }
 
   _drawRoutes(g) {

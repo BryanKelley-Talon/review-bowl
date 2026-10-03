@@ -17,6 +17,7 @@ import { simDrive } from '../src/game/drive.js'
 import { isBigMoment, threatOf } from '../src/game/threat.js'
 import { CLASH, CVD_CLASH, GRASS_MIN, colorDistance, cvdDistance, kits, player, roster, TEAMS } from '../src/game/teams.js'
 import { SHARED_VB, VB, explainVolley, sportOf } from '../src/game/sport.js'
+import { PLAYS, PLAY_WORDS, ROUTES_OF, guessChance } from '../src/game/plays.js'
 import { decodeSaveCode, encodeSaveCode } from '../src/save/saveCode.js'
 const N_TEAMS = TEAMS.length
 
@@ -458,6 +459,18 @@ eq(VB.theirServe, 'Their serve. Your passer has it.', 'the receive prompt BK app
 eq(Object.keys(VB.coach), ['serve', 'pass', 'set', 'attack', 'block', 'dig', 'wrap'], 'seven coach cards')
 eq(SHARED_VB.tagline, "You won't win the game unless you win the content.", 'the tagline BK approved 15:31')
 for (const s of ['throwing', 'hands', 'speed', 'blocking', 'toughness', 'defense']) ok(explainVolley(s, 5).length > 10, `a volleyball line for ${s}`)
+
+// ── Play Call (BK 2026-10-03 16:06) ─────────────────────────────────────────
+eq(PLAYS.map(p => [p.name, p.line]), [
+  ['Sweep', 'Run outside. Your blockers lead the way to the sideline.'],
+  ['Dive', 'Run up the middle. Short, tough yards.'],
+  ['Slants', 'Quick passes. Receivers 1 and 2 cut inside fast.'],
+  ['Deep Shot', 'Go long. Your receivers run deep, so the line has to hold.'],
+], 'the four plays, in the words BK approved')
+eq([PLAY_WORDS.head, PLAY_WORDS.readIt, PLAY_WORDS.change], ['Play Call', 'They read it!', 'Change play'], 'Play Call words (BK 16:06, 16:13)')
+const lv = n => ({ throwing: n, hands: n, speed: n, blocking: n, toughness: n })
+eq([1, 2, 3, 4].map(n => +guessChance(lv(n)).toFixed(2)), [0.4, 0.32, 0.24, 0.16], 'the better trained, the less they read you')
+for (const p of PLAYS) ok(!!ROUTES_OF[p.id], `${p.id} has its routes`)
 
 console.log(`\n${passed} passed, ${failed} failed`)
 process.exit(failed ? 1 : 0)

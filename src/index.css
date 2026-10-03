@@ -487,3 +487,31 @@ body.rb-full{overscroll-behavior:none}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 /* Long play toasts wrap on a phone instead of running under the full-screen button (2026-10-03). */
 @media (max-width:900px){ .match .toast{white-space:normal;max-width:calc(100% - 140px);text-align:center;line-height:1.3} }
+
+/* ---------- Play Call (BK 2026-10-03 16:06) ---------- */
+.pc-over{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;padding:10px;
+  background:rgba(6,10,20,.72);line-height:1.3;overflow:auto}
+.pc-panel{width:100%;max-width:900px;background:#0B1220;border:2px solid var(--gold);border-radius:10px;padding:10px 12px;
+  display:flex;flex-direction:column;gap:8px;max-height:100%;overflow:auto;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+.pc-head{display:flex;align-items:center;gap:12px}
+.pc-coach{width:88px;height:88px;image-rendering:pixelated;image-rendering:crisp-edges;background:#131C2E;border:1px solid var(--edge);border-radius:8px;flex:none}
+.pc-title{margin:0;font:800 clamp(24px,3.4vw,34px)/1 'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.pc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pc-card{position:relative;display:flex;flex-direction:column;align-items:stretch;gap:5px;text-align:left;padding:8px;min-height:44px;
+  background:#1B2A47;border:2px solid #6882AD;border-radius:9px;color:var(--white);cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,.35)}
+.pc-card:hover,.pc-card:focus-visible{border-color:var(--gold);outline:none;transform:translateY(-1px)}
+.pc-card:active{transform:translateY(1px)}
+.pc-num{position:absolute;top:6px;right:8px;font:800 15px/1 'Barlow Condensed',sans-serif;color:var(--navy,#0B1220);background:var(--gold);
+  border-radius:4px;padding:2px 6px}
+.pc-name{font:800 20px/1 'Barlow Condensed',sans-serif;letter-spacing:.05em;text-transform:uppercase;padding-right:28px}
+.pc-diagram{width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges;border-radius:4px;border:1px solid #0a0f1a}
+.pc-line{font:500 13.5px/1.35 'Outfit',sans-serif;color:#D6DEEA}
+.pc-called{font:800 17px/1 'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--gold)}
+@media (prefers-reduced-motion:reduce){.pc-card:hover,.pc-card:active{transform:none}}
+@media (max-width:820px){.pc-grid{grid-template-columns:repeat(2,1fr)}.pc-line{font-size:12.5px}}
+/* Phones, either way up: the play call covers the screen, so every card is a full-size tap. */
+@media (max-width:640px),(max-height:500px){
+  .pc-over{position:fixed;z-index:30;align-items:flex-start}
+  .pc-coach{width:52px;height:52px}
+}
+@media (max-height:500px) and (orientation:landscape){ .pc-grid{grid-template-columns:repeat(4,1fr)} .pc-line{font-size:12px} .pc-panel{padding:8px} }
