@@ -16,6 +16,7 @@ import {
 import { simDrive } from '../src/game/drive.js'
 import { isBigMoment, threatOf } from '../src/game/threat.js'
 import { CLASH, CVD_CLASH, GRASS_MIN, colorDistance, cvdDistance, kits, player, roster, TEAMS } from '../src/game/teams.js'
+import { SHARED_VB, VB, explainVolley, sportOf } from '../src/game/sport.js'
 import { decodeSaveCode, encodeSaveCode } from '../src/save/saveCode.js'
 const N_TEAMS = TEAMS.length
 
@@ -428,6 +429,35 @@ eq(kits(TEAMS[bing], TEAMS[heights]).defense.jersey, '#F2F2F2', 'Elmira Heights 
   ok(culture.every(q => q.whyNot && q.options.filter(o => o.key !== q.correct).every(o => typeof q.whyNot[o.key] === 'string' && q.whyNot[o.key].length)),
      'every culture question carries a why-not line for each wrong choice')
 }
+
+// ── volleyball: the sport pick (2026-10-03) ──────────────────────────────────
+// A code written by the build that shipped 2026-09-29 (66cffef's encoder, generated from it, not by hand).
+// It must still load, exactly, as a football career: the sport bit was a spare, and spares were 0.
+const OLD = 'AC88-SR01-JJBV-DP29-2V8T-CD1'
+const old = decodeSaveCode(OLD)
+eq([old.sport, old.team, old.season, old.week, old.cash, old.security, old.seed, old.titles, old.form.skills, old.levels.speed],
+   ['football', 3, 2, 4, 12, 20, 41, 1, 13, 4], 'a pre-volleyball code loads as the same football career')
+eq(encodeSaveCode(old), OLD, 'and re-encodes to the very same code')
+for (let i = 0; i < 64; i++) {
+  const x = newCareer(i % 2 ? 'us11r' : 'global10r', i % N_TEAMS, i, 'volleyball')
+  const y = decodeSaveCode(encodeSaveCode(x))
+  ok(y.sport === 'volleyball' && sportOf(y) === 'volleyball', `volleyball career #${i} comes back as volleyball`)
+}
+ok(encodeSaveCode(newCareer('us11r', 0, 5, 'volleyball')) !== encodeSaveCode(newCareer('us11r', 0, 5, 'football')), 'the two sports write different codes')
+eq(newCareer('us11r', 0, 5).sport, 'football', 'a career with no sport named is football')
+for (let seed = 0; seed < 64; seed++) for (let t = 0; t < N_TEAMS; t++) {
+  const ro = roster(seed, t, 1 + (seed % 5), {}, 'volleyball')
+  const nums = Object.values(ro).map(p => p.number)
+  if (new Set(nums).size !== 5 || nums.some(n => n < 1 || n > 9)) throw new Error(`volleyball numbers ${nums} (seed ${seed}, team ${t})`)
+  if (new Set(Object.values(ro).map(p => p.name.split(' ')[0])).size !== 5) throw new Error('two starters share a first name')
+}
+eq(Object.values(roster(5, 0, 1, {}, 'volleyball')).map(p => p.position), ['S', 'L', 'OH', 'MB', 'DS'], 'volleyball positions: S, L, OH, MB, DS (BK 15:34)')
+// Football's roster is untouched by the sport pick: same names, same numbers.
+eq(roster(5, 0, 1, {}), roster(5, 0, 1, {}, 'football'), 'football roster unchanged')
+eq(VB.theirServe, 'Their serve. Your passer has it.', 'the receive prompt BK approved 15:24')
+eq(Object.keys(VB.coach), ['serve', 'pass', 'set', 'attack', 'block', 'dig', 'wrap'], 'seven coach cards')
+eq(SHARED_VB.tagline, "You won't win the game unless you win the content.", 'the tagline BK approved 15:31')
+for (const s of ['throwing', 'hands', 'speed', 'blocking', 'toughness', 'defense']) ok(explainVolley(s, 5).length > 10, `a volleyball line for ${s}`)
 
 console.log(`\n${passed} passed, ${failed} failed`)
 process.exit(failed ? 1 : 0)

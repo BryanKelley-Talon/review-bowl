@@ -455,8 +455,12 @@ body.rb-full{overscroll-behavior:none}
   /* Not full screen, phone sideways: the court and the call bar side by side, as in the concept. */
 }
 @media (max-height:500px) and (orientation:landscape){
-  .match.vb{max-width:none;display:grid;grid-template-columns:auto minmax(150px,1fr);column-gap:8px;align-items:start}
-  .match.vb > .field-wrap{grid-column:1;grid-row:1 / span 20;width:min(calc(100vw - 190px),calc((100dvh - 12px) * 1.7778));border-top:1px solid var(--edge)}
+  .match.vb{max-width:none;display:grid;grid-template-columns:auto minmax(200px,1fr);column-gap:8px;align-items:start}
+  .match.vb > .field-wrap{grid-column:1;grid-row:1 / span 20;width:min(calc(100vw - 236px),calc((100dvh - 12px) * 1.7778));border-top:1px solid var(--edge)}
+  .match.vb .panel .h2{font-size:20px}
+  .match.vb .sb-mid .sb-clock{font-size:14px} .match.vb .sb-down{font-size:11.5px}
+  .match.vb .sb-team{gap:5px;padding-left:6px} .match.vb .sb-team.right{padding:0 6px 0 0}
+  .match.vb .vb-tools{flex-wrap:wrap} .match.vb .vb-tools button{flex:1 1 auto;font-size:14px;padding:4px 8px}
   .match.vb > :not(.field-wrap){grid-column:2;min-width:0}
   .match.vb > .scoreboard{order:1;border-radius:8px;padding:5px 8px;gap:4px}
   .match.vb > .vb-bar{order:2;flex-direction:column;align-items:stretch;border-radius:8px;border-top:1px solid var(--edge);margin-top:6px}
@@ -469,3 +473,11 @@ body.rb-full{overscroll-behavior:none}
   .match.vb > .stat-strip{order:5;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--edge);border-radius:8px;margin-top:6px;padding:5px 8px;gap:4px 8px}
   .match.vb .sb-score{font-size:22px} .match.vb .sb-abbr{font-size:15px}
 }
+/* Phones, either way up: the how-to and coach cards cover the screen, not just the court,
+   so nothing in them is ever clipped or scrolled out of reach. */
+@media (max-width:640px),(max-height:500px){
+  .vb-over{position:fixed;z-index:30}
+  .vb-over.coach{align-items:center}
+}
+/* Long toasts ("Elmira Heights won the toss and will serve.") wrap instead of running off a phone. */
+.match.vb .toast{white-space:normal;max-width:calc(100% - 24px);text-align:center;line-height:1.3}

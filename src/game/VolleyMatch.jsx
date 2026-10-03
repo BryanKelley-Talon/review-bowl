@@ -59,7 +59,8 @@ export default function VolleyMatch({ career, dealer, manifest, opp, oppStrength
   useEffect(() => {
     court.current = createCourt(canvasRef.current, {
       you: career.team, opp, stats: v, oppStrength, numbers, target: 15,
-      auto: typeof location !== 'undefined' && location.hash === '#auto',
+      // Auto-play is a test harness for the dev build only (#auto); a student's build never has it.
+      auto: import.meta.env.DEV && typeof location !== 'undefined' && location.hash === '#auto',
       onUI: x => setUi(x),
       onCoach: k => setCoach(k),
       onTimeout: () => h.current.timeout(),

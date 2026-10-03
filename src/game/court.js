@@ -529,7 +529,7 @@ function frame(now){if(dead)return;let dt=Math.min(0.05,(now-last)/1000);last=no
   if(S.cele){if(rt-S.cele.t0>=S.cele.dur){const t=S.cele.then;S.cele=null;t&&t()}}
   else if(!S.paused&&S.phase!=='menu'&&S.phase!=='between'&&S.phase!=='over'){
     // the guided first rally runs slowed (BK 15:24)
-    const g=dt*S.ts*(S.tutorial&&!AUTO?0.7:1);gt+=g;
+    const g=dt*S.ts*(S.tutorial&&!AUTO?0.7:1)*(AUTO?3:1);gt+=g;
     const due=timers.filter(t=>t.at<=gt);timers=timers.filter(t=>t.at>gt);due.forEach(t=>t.fn());
     for(const p of S.players){const dx=p.tx-p.x,dy=p.ty-p.y,d=Math.hypot(dx,dy),sp=4.8*g;if(d>0.01){const m=Math.min(1,sp/d);p.x+=dx*m;p.y+=dy*m}
       if(p.jump){const u=(gt-p.jump.t0)/p.jump.dur;if(u>=1){p.jump=null;p.z=0}else p.z=4*p.jump.h*u*(1-u)}
