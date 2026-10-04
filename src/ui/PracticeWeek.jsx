@@ -176,7 +176,7 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
                   <button key={t.level} type="button" aria-pressed={rehabRun?.level === t.level}
                           className={`rh-level${rehabRun?.level === t.level ? ' on' : ''}${levelDone(t.level) ? ' done' : ''}`}
                           disabled={levelDone(t.level) || (!now && !levelDone(t.level))}
-                          onClick={() => setRehabRun({ level: t.level, task: t })}>
+                          onClick={() => { setRehabRun({ level: t.level, task: t }); setRehabNote(null) }}>
                     {t.level}{levelDone(t.level) ? ' ✓' : ''}
                   </button>
                 ))}
