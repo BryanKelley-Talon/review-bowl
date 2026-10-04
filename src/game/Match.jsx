@@ -67,6 +67,13 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   const [boost, setBoost] = useState({})           // halftime adjustments, second half only
   const [halftime, setHalftime] = useState(null)
   const [flash, setFlash] = useState(null)         // the stat layer, made visible: what an answer just moved
+  // THE RESULT HOLDS (BK 2026-10-03 23:43: "result of play should exist longer before play calls
+  // come up"). After every play the result stays on the field for RESULT_HOLD_MS before the Play
+  // Call screen opens. A tap on the field, Space or Enter skips the wait.
+  const RESULT_HOLD_MS = 2000
+  const [hold, setHold] = useState(false)
+  const holdT = useRef(null)
+  useEffect(() => () => clearTimeout(holdT.current), [])
   const playBoost = useRef(null)                   // one snap: a timeout or big-moment read
   const [fieldVersion, setFieldVersion] = useState(0)
   // PLAY CALL (BK 2026-10-03 16:06): the play for the next snap, and whether they guessed it.
@@ -240,6 +247,9 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
       setStage('bigmoment')
       return
     }
+    setHold(true)
+    clearTimeout(holdT.current)
+    holdT.current = setTimeout(() => setHold(false), RESULT_HOLD_MS)
     setStage('presnap')
   }, [commit, rules])
 
@@ -255,11 +265,15 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
     // works as a quiet fallback. `repeat` is ignored so holding the key cannot snap and
     // then immediately hand the ball to a scrambling quarterback.
     const onKey = e => {
-      if ((e.key === ' ' || e.key === 'Enter') && !e.repeat && stage === 'presnap' && !gate) { e.preventDefault(); snap() }
+      if ((e.key === ' ' || e.key === 'Enter') && !e.repeat && stage === 'presnap' && !gate) {
+        e.preventDefault()
+        if (hold && !call) { clearTimeout(holdT.current); setHold(false); return }
+        snap()
+      }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [stage, gate, snap])
+  }, [stage, gate, snap, hold, call])
 
   // ── flow ───────────────────────────────────────────────────────────────────
   const finish = useCallback(gs => {
@@ -548,7 +562,11 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
                   : weekLabel}
                 label={`${you.abbr} ${g.you}, ${them.abbr} ${g.opp}. ${clock.label}, ${clock.time}.`} />
 
-      <div className="field-wrap" onClick={() => { if (stage === 'presnap' && !gate && call) snap() }}>
+      <div className="field-wrap" onClick={() => {
+        if (stage !== 'presnap' || gate) return
+        if (call) snap()
+        else if (hold) { clearTimeout(holdT.current); setHold(false) }
+      }}>
         <canvas ref={canvasRef} className="field" aria-label="The field. Live play." />
         <button type="button" className="fs-btn" onClick={toggleFull} aria-pressed={full}>
           {full ? 'Exit full screen' : 'Full screen'}
@@ -563,7 +581,12 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
         )}
         {toast && stage !== 'show' && <div className="toast" role="status">{toast}</div>}
         {stage === 'presnap' && !gate && call && <div className="snap-hint">Tap the field or press Space to snap</div>}
-        {stage === 'presnap' && !gate && !call && <PlayCall kit={kits.offense} onPick={pickPlay} />}
+        {stage === 'presnap' && !gate && !call && !hold && (
+          // Down and distance ride on the Play Call screen too (BK 23:43): held sideways in full
+          // screen the screen covers the LED board. Same words as the board.
+          <PlayCall kit={kits.offense} onPick={pickPlay}
+                    situation={`${ORD[g.down]} & ${goalToGo(g) ? 'Goal' : g.toGo} · ${ballOnText(g.ballOn, them)}`} />
+        )}
         {stage === 'live' && help && (helpShort
           ? <div className="snap-hint"><span className="tip-full">{help}</span><span className="tip-short">{helpShort}</span></div>
           : <div className="snap-hint">{help}</div>)}

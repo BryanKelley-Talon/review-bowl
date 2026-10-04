@@ -502,6 +502,9 @@ body.rb-full{overscroll-behavior:none}
 .pc-head{display:flex;align-items:center;gap:12px}
 .pc-coach{width:88px;height:88px;image-rendering:pixelated;image-rendering:crisp-edges;background:#131C2E;border:1px solid var(--edge);border-radius:8px;flex:none}
 .pc-title{margin:0;font:800 clamp(24px,3.4vw,34px)/1 'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.pc-sit{margin:0 0 0 auto;padding:6px 12px;background:#07080b;border:1px solid var(--edge);border-radius:6px;white-space:nowrap;
+  font:800 clamp(18px,2.6vw,26px)/1 'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#FFD34A}
+@media (max-width:480px){ .pc-sit{font-size:16px;padding:5px 8px} }
 .pc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .pc-card{position:relative;display:flex;flex-direction:column;align-items:stretch;gap:5px;text-align:left;padding:8px;min-height:44px;
   background:#1B2A47;border:2px solid #6882AD;border-radius:9px;color:var(--white);cursor:pointer;box-shadow:0 2px 0 rgba(0,0,0,.35)}

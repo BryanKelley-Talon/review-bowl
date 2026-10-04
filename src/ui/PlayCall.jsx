@@ -86,7 +86,7 @@ function Card({ play, i, kit, onPick }) {
   )
 }
 
-export default function PlayCall({ kit, onPick }) {
+export default function PlayCall({ kit, onPick, situation }) {
   const coach = useRef(null)
   useEffect(() => { drawCoach(coach.current, kit) }, [kit.jersey, kit.helmet])
   useEffect(() => {
@@ -100,6 +100,7 @@ export default function PlayCall({ kit, onPick }) {
         <div className="pc-head">
           <canvas ref={coach} className="pc-coach" aria-hidden="true" />
           <h2 className="pc-title" id="pc-title">{PLAY_WORDS.head}</h2>
+          {situation && <p className="pc-sit">{situation}</p>}
         </div>
         <div className="pc-grid">
           {PLAYS.map((p, i) => <Card key={p.id} play={p} i={i} kit={kit} onPick={onPick} />)}

@@ -90,4 +90,7 @@ export function drawBand(g, W, H, b, e, reduced) {
 }
 
 export const BAND_SECONDS = 3.4
-export const CELE_SECONDS = { long: 1.5, short: 0.9 }
+// Football's cut-ins hold one second longer (BK 2026-10-03 23:43: "cut scenes need another second on
+// the screen"). Volleyball's PEP BAND keeps BAND_SECONDS; football's band adds FOOTBALL_EXTRA.
+export const CELE_SECONDS = { long: 2.5, short: 1.9 }
+export const FOOTBALL_EXTRA = 1

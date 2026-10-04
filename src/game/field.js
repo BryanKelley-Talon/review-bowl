@@ -24,7 +24,7 @@
 // ============================================================
 
 import { heroSprite, playerSprite, SPRITE } from './sprites.js'
-import { BAND_SECONDS, CELE_SECONDS, drawBand, drawCelebration } from './cutin.js'
+import { BAND_SECONDS, CELE_SECONDS, FOOTBALL_EXTRA, drawBand, drawCelebration } from './cutin.js'
 import { OUTC, SKIN, HAIR, dith, lum, rng as prng, shade, tw, txt } from './pixel.js'
 import { TEAMS } from './teams.js'
 import { ROUTES_OF } from './plays.js'
@@ -158,12 +158,12 @@ export class FieldEngine {
   // A Tecmo-style cut-in. kind 'short' is the quick one (first downs). then: after it ends or is skipped.
   celebrate(word, sub, kind = 'long', then) {
     const k = this.kits?.offense || { jersey: '#444', helmet: '#ddd', pants: '#ddd' }
-    const dur = this.calm ? 1.0 : CELE_SECONDS[kind] || CELE_SECONDS.long
+    const dur = this.calm ? 1.0 + FOOTBALL_EXTRA : CELE_SECONDS[kind] || CELE_SECONDS.long
     this.overlay = { type: 'cele', word, sub, kit: { j: k.jersey, t: k.helmet }, k, t0: performance.now() / 1000, dur, then }
   }
 
   band(caption, colors, then) {
-    this.overlay = { type: 'band', caption, colors, floor: 'grass', t0: performance.now() / 1000, dur: this.calm ? 1.6 : BAND_SECONDS, then }
+    this.overlay = { type: 'band', caption, colors, floor: 'grass', t0: performance.now() / 1000, dur: (this.calm ? 1.6 : BAND_SECONDS) + FOOTBALL_EXTRA, then }
   }
 
   skipOverlay() {
