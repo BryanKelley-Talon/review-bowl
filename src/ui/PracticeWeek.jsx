@@ -186,7 +186,16 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
                   </button>
                 )}
               </div>
-              {civicOpen && rehabPack?.civic_principles_card && (
+              {civicOpen && rehabPack?.button?.opens === 'enduring_issues_card' && rehabPack.enduring_issues_card && (
+                <div className="rh-civic-card">
+                  <h4 className="rh-civic-group">{rehabPack.enduring_issues_card.title}</h4>
+                  {rehabPack.enduring_issues_card.intro && <p className="rh-card-intro">{rehabPack.enduring_issues_card.intro}</p>}
+                  <ul>{(rehabPack.enduring_issues_card.umbrellas || []).map(u => (
+                    <li key={u.n}><b>{u.n} · {u.name}:</b> {u.line}<br /><span className="rh-issues">{u.issues_to_name}</span></li>
+                  ))}</ul>
+                </div>
+              )}
+              {civicOpen && (rehabPack?.button?.opens || 'civic_principles_card') === 'civic_principles_card' && rehabPack?.civic_principles_card && (
                 <div className="rh-civic-card">
                   {rehabPack.civic_principles_card.map(g => (
                     <div key={g.group}>
@@ -200,9 +209,11 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
                 <div className="rh-docs">
                   {rehabSet.documents.map(d => (
                     <figure key={d.label} className="rh-doc">
-                      <figcaption><b>{d.label}</b> · {d.source}</figcaption>
+                      <figcaption><b>{d.label}</b>{d.title ? <> · <i>{d.title}</i></> : null} · {d.source}</figcaption>
                       {d.image && <img src={`/content/stimulus/${d.image.split('/').pop()}`} alt={d.alt || ''} loading="lazy" />}
                       {d.text && <p className="rh-doc-text">{d.text}</p>}
+                      {d.source_2 && <p className="rh-doc-src2">{d.source_2}</p>}
+                      {d.text_2 && <p className="rh-doc-text">{d.text_2}</p>}
                     </figure>
                   ))}
                 </div>

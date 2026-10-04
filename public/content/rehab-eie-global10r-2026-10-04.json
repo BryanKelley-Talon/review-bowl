@@ -1,23 +1,94 @@
 {
  "_meta": {
-  "what": "Review Bowl football · injury rehab tasks · GLOBAL (Enduring Issues Essay)",
+  "what": "Review Bowl football · injury rehab tasks · GLOBAL (Enduring Issues Essay) · v3",
   "from": "Will, global10r-curriculum, 2026-10-04",
-  "ruled": "BK 2026-10-04 07:43 (leo-ruling-2026-10-04-rehab-tasks.md): return rule yes; drag-and-drop organizers (identify the piece, put it in the right spot); levels CRAWL, WALK, JOG; built on Casefile C now, a set per unit as the Writing Lab grows",
+  "ruled": "BK 07:43 (shape; leo-ruling-2026-10-04-rehab-tasks.md) · BK 07:52 'previously worked docs… cross units… an enduring issues angle across prior units in global' · BK 07:56 + 08:00 'Yes' (the list button and the documents on screen) · BK 09:02 'Yes. Match Sam, yes, yes' (sets A and B; JOG matches Sam's three spots) · wording: BK 09:07 'All approved' (GS10R_ReviewBowl-Rehab-EIE_v3_WORDING_for-yes_2026-10-04.pdf)",
+  "replaces": "reviewbowl_rehab_eie_global_v2.json (Casefile C sets)",
   "returnRule": "Finish any one level: the starter returns a game early. Finish two levels: he's back for the next game.",
   "rules": [
    "Every drag also works by tapping (tap the piece, tap the spot)",
    "Choose and arrange only: nothing typed, nothing stored or sent; the save code carries the injury state",
    "Levels name the paragraph, never the kid; nothing reads as a score",
-   "Fields match the Office/Locker Room items: hints (2), reasoning, distractors (shown after a wrong drop)",
-   "Sentences are desk-written model writing, never presented as sources; quotations are Casefile C v5 as printed",
-   "Sam's CLE set uses the same shape with Civic Principle in place of the issue"
+   "Fields match Sam's US v2 and the Office/Locker Room items: hints (2), reasoning, distractors; 'right' lines on CRAWL; JOG's swap line at distractors.swap",
+   "THE DOCUMENTS: every task shows its set's documents on screen (kids won't have their casefiles, BK 07:56). Quotations are the 10.1 Student Packet v13 and 10.2 Casefiles A v11 and B v21 as printed",
+   "An ENDURING ISSUES button sits on every rehab screen and opens the card below, word for word (the Six Umbrellas, umbrellas.py)",
+   "Sentences are desk-written model writing, never presented as sources",
+   "Built on previously worked documents, one enduring issue per set across units (BK 07:52); later units add documents to each issue"
+  ]
+ },
+ "button": {
+  "label": "ENDURING ISSUES",
+  "opens": "enduring_issues_card",
+  "on": "every rehab screen"
+ },
+ "enduring_issues_card": {
+  "title": "THE SIX UMBRELLAS",
+  "intro": "Every enduring issue fits under one of these six. Spot the umbrella fast. Then name the exact issue underneath it, and explain it.",
+  "umbrellas": [
+   {
+    "n": "1",
+    "name": "POWER & ITS ABUSE",
+    "line": "Who holds authority, and what happens to the people who did not choose them.",
+    "issues_to_name": "Abuse of Power · Imperialism · Human Rights Violations · Inequality"
+   },
+   {
+    "n": "2",
+    "name": "CONFLICT",
+    "line": "Why people fight, and what is still unsettled when the fighting stops.",
+    "issues_to_name": "Conflict"
+   },
+   {
+    "n": "3",
+    "name": "IDENTITY & NATIONALISM",
+    "line": "Who a people say they are, and who that leaves out.",
+    "issues_to_name": "Nationalism · Cultural Exchange and Diffusion"
+   },
+   {
+    "n": "4",
+    "name": "WEALTH & RESOURCES",
+    "line": "Who owns what a place produces, and who does the producing.",
+    "issues_to_name": "Economic Development · Scarcity"
+   },
+   {
+    "n": "5",
+    "name": "TECHNOLOGY & ENVIRONMENT",
+    "line": "What new tools let people do, and what they cost the world around them.",
+    "issues_to_name": "Scientific and Technological Change · Environmental Crisis"
+   },
+   {
+    "n": "6",
+    "name": "A CONNECTED WORLD",
+    "line": "What happens when distant places start depending on each other.",
+    "issues_to_name": "Cooperation · Population and Migration"
+   }
+  ],
+  "close": [
+   "On the essay, write the exact issue, not the umbrella: “Human Rights Violations,” not “Power & Its Abuse.”",
+   "Then EXPLAIN IT: define the problem in one sentence, and show where a document shows it."
   ]
  },
  "sets": [
   {
    "set": "A",
-   "title": "Italy and Germany",
-   "docs": "Casefile C (10.2), Documents 5 and 6: Cavour, 1846; Bismarck, 1862",
+   "title": "Abuse of power",
+   "issue": "Abuse of Power",
+   "umbrella": "POWER & ITS ABUSE",
+   "issue_across_units": "10.1 and 10.2 now; adds 10.3 when the class finishes it",
+   "docs": "Unit 10.1, Document 4 (Japan, 1635); Unit 10.2 Casefile B, Document 6 (France, 1793)",
+   "documents": [
+    {
+     "label": "Unit 10.1 · Document 4",
+     "title": "Edict of 1635 Ordering the Closing of Japan",
+     "source": "Source: David John Lu, Sources of Japanese History, McGraw-Hill, from the NYS Global History and Geography Regents Exam, January 2005",
+     "text": "• Japanese ships are strictly forbidden to leave for foreign countries.\n• No Japanese is permitted to go abroad. If there is anyone who attempts to do so secretly, he must be executed. The ship so involved must be impounded and its owner arrested, and the matter must be reported to the higher authority.\n• If any Japanese returns from overseas after residing there, he must be put to death. . . .\n• Any informer revealing the whereabouts of the followers of padres (Christians) must be rewarded accordingly. If anyone reveals the whereabouts of a high ranking padre, he must be given one hundred pieces of silver. For those of lower ranks, depending on the deed, the reward must be set accordingly. . . ."
+    },
+    {
+     "label": "Unit 10.2 · Casefile B · Document 6",
+     "title": "About the Law of Suspects: a historians' summary",
+     "source": "Source: Liberty, Equality, Fraternity: Exploring the French Revolution (Roy Rosenzweig Center for History and New Media / American Social History Project) (adapted), from the New Visions Global History II Exam Question Bank, Part 1, citing the NYS Global History and Geography Regents Exam, January 2015",
+     "text": "“This law, passed on 17 September 1793 [by Robespierre and the National Convention], authorized the creation of revolutionary tribunals to try those suspected of treason against the Republic and to punish those convicted with death. This legislation in effect made the penal justice system into the enforcement arm of the revolutionary government, which would now set as its primary responsibility not only the maintenance of public order but also the much more difficult and controversial task of identifying internal enemies of the Republic -- such as “profiteers” who violated the Maximum [decree to fix prices] -- and then removing them from the citizenry, where they might subvert [sabotage] the general will....”"
+    }
+   ],
    "tasks": [
     {
      "id": "A-crawl",
@@ -26,42 +97,40 @@
      "prompt": "Name the parts. Drag each sentence to its job (or tap the sentence, then tap the job).",
      "slots": [
       "CONTEXT",
-      "ISSUE",
       "EVIDENCE",
-      "OUTSIDE EVIDENCE"
+      "EXPLANATION"
      ],
      "pieces": [
       {
        "id": "p1",
-       "text": "In the 1800s, Italy and Germany were split into many small states, and leaders worked to unite each one into a single nation.",
+       "text": "In 1635, Japan's Tokugawa government was shutting the country off from the world, and in 1793, France's revolutionary government was at war and hunting for enemies at home.",
        "goes": "CONTEXT"
       },
       {
        "id": "p2",
-       "text": "An enduring issue these documents raise is nationalism. Nationalism is when a people's loyalty to their own nation becomes a push for that nation to rule itself.",
-       "goes": "ISSUE"
-      },
-      {
-       "id": "p3",
-       "text": "Document 6 shows this when Bismarck says the goal will be achieved “by blood and iron.”",
+       "text": "Document 4 shows this when the Tokugawa government orders that any Japanese who returns from overseas “must be put to death.”",
        "goes": "EVIDENCE"
       },
       {
-       "id": "p4",
-       "text": "Outside the documents, I know that in 1871 Prussia's king was proclaimed kaiser of a new German Empire.",
-       "goes": "OUTSIDE EVIDENCE"
+       "id": "p3",
+       "text": "This matters because both governments turned their power on their own people, and it happened again 158 years later on another continent.",
+       "goes": "EXPLANATION"
       }
      ],
      "hints": [
       "Which sentence sets the scene before anything else?",
-      "Which one is true but isn't in either document?"
+      "Which one says why the evidence matters? Look for “This matters because…”"
      ],
-     "reasoning": "Context sets the scene, the issue is named and explained, evidence comes from a document, and outside evidence comes from what you know.",
+     "reasoning": "Context sets the scene, evidence names a document and pulls a detail, and the explanation says why it matters.",
+     "right": {
+      "CONTEXT": "That sets the scene: context first, every time.",
+      "EVIDENCE": "That's evidence: the document, named and put to work.",
+      "EXPLANATION": "That's the so what: why the evidence matters."
+     },
      "distractors": {
-      "CONTEXT": "That sentence does more than set the scene. Look for the one that tells when and what was happening.",
-      "ISSUE": "Look for the sentence that names the issue and says what it means.",
+      "CONTEXT": "Look for the sentence that tells when and what was happening.",
       "EVIDENCE": "Evidence names a document and pulls a detail from it.",
-      "OUTSIDE EVIDENCE": "Outside evidence is true and isn't in the documents. Is that one in a document?"
+      "EXPLANATION": "The explanation says why the evidence matters."
      }
     },
     {
@@ -70,44 +139,44 @@
      "kind": "order",
      "prompt": "Build the paragraph. Drag the five sentences into order (or tap a sentence, then tap its spot).",
      "slots": [
-      "1",
-      "2",
-      "3",
-      "4",
-      "5"
+      "1 · CONTEXT",
+      "2 · ENDURING ISSUE",
+      "3 · EVIDENCE",
+      "4 · EVIDENCE",
+      "5 · EXPLANATION"
      ],
      "pieces": [
       {
        "id": "s1",
-       "text": "In the 1800s, Italy and Germany were split into many small states, and leaders worked to unite each one into a single nation.",
-       "goes": "1"
+       "text": "In 1635, Japan's Tokugawa government was shutting the country off from the world, and in 1793, France's revolutionary government was at war and hunting for enemies at home.",
+       "goes": "1 · CONTEXT"
       },
       {
        "id": "s2",
-       "text": "An enduring issue these documents raise is nationalism. Nationalism is when a people's loyalty to their own nation becomes a push for that nation to rule itself.",
-       "goes": "2"
+       "text": "An enduring issue these documents raise is abuse of power. Abuse of power is when someone with authority uses it to harm people or to serve themselves.",
+       "goes": "2 · ENDURING ISSUE"
       },
       {
        "id": "s3",
-       "text": "Document 5 shows this when Cavour says “all the petty questions that divide us must be silenced” so Italy can unite.",
-       "goes": "3"
+       "text": "Document 4 shows this when the Tokugawa government orders that any Japanese who returns from overseas “must be put to death.”",
+       "goes": "3 · EVIDENCE"
       },
       {
        "id": "s4",
-       "text": "Document 6 shows it too, when Bismarck says the goal will be achieved “by blood and iron.”",
-       "goes": "4"
+       "text": "Document 6 shows it again when France's Law of Suspects sets up tribunals “to try those suspected of treason against the Republic.”",
+       "goes": "4 · EVIDENCE"
       },
       {
        "id": "s5",
-       "text": "This issue matters because the same force that built Italy and Germany out of small states could also break apart empires that ruled many peoples.",
-       "goes": "5"
+       "text": "This matters because both governments turned their power on their own people, and it happened again 158 years later on another continent.",
+       "goes": "5 · EXPLANATION"
       }
      ],
      "hints": [
       "Start with the scene. What has to come before you can name the issue?",
-      "The documents come after the issue is named, and why it matters comes last."
+      "Name the issue right after the scene. The documents come next, and why it matters comes last."
      ],
-     "reasoning": "Context, the issue, two documents, why it matters. That's the order the essay wants.",
+     "reasoning": "Context, the issue named and explained, two documents, why it matters. That's the order the essay wants.",
      "distractors": {
       "early": "That one needs something before it. What does a reader need to know first?",
       "late": "That one can come sooner. Does it set up the sentences after it?"
@@ -117,58 +186,89 @@
      "id": "A-jog",
      "level": "JOG",
      "kind": "find-and-place",
-     "prompt": "Two pieces are missing. Find the explanation and the outside evidence, and drag each one into its spot. Two pieces don't belong.",
+     "prompt": "Three pieces are missing. Find the enduring issue, the evidence and the outside evidence, and drag each one into its spot. Three pieces don't belong. The ENDURING ISSUES button opens the card.",
      "paragraph": [
-      "In the 1800s, Italy and Germany were split into many small states, and leaders worked to unite each one into a single nation.",
-      "An enduring issue these documents raise is nationalism. Nationalism is when a people's loyalty to their own nation becomes a push for that nation to rule itself.",
-      "Document 6 shows this when Bismarck says the goal will be achieved “by blood and iron.”",
+      "In 1635, Japan's Tokugawa government was shutting the country off from the world, and in 1793, France's revolutionary government was at war and hunting for enemies at home.",
       "[ SPOT 1 ]",
       "[ SPOT 2 ]",
-      "This issue matters because the same force that built Italy and Germany out of small states could also break apart empires that ruled many peoples."
+      "Document 6 shows it again when France's Law of Suspects sets up tribunals “to try those suspected of treason against the Republic.”",
+      "[ SPOT 3 ]",
+      "This matters because both governments turned their power on their own people, and it happened again 158 years later on another continent."
      ],
      "slots": [
-      "SPOT 1 · EXPLANATION",
-      "SPOT 2 · OUTSIDE EVIDENCE"
+      "SPOT 1 · ENDURING ISSUE",
+      "SPOT 2 · EVIDENCE",
+      "SPOT 3 · OUTSIDE EVIDENCE"
      ],
      "pieces": [
       {
        "id": "j1",
-       "text": "This shows that for Bismarck, a united Germany would come from war, not from votes or speeches.",
-       "goes": "SPOT 1 · EXPLANATION"
+       "text": "An enduring issue these documents raise is abuse of power. Abuse of power is when someone with authority uses it to harm people or to serve themselves.",
+       "goes": "SPOT 1 · ENDURING ISSUE"
       },
       {
        "id": "j2",
-       "text": "Outside the documents, I know that in 1871 Prussia's king was proclaimed kaiser of a new German Empire.",
-       "goes": "SPOT 2 · OUTSIDE EVIDENCE"
+       "text": "Document 4 shows this when the Tokugawa government orders that any Japanese who returns from overseas “must be put to death.”",
+       "goes": "SPOT 2 · EVIDENCE"
       },
       {
        "id": "j3",
-       "text": "Cavour wanted Italy to be glorious and powerful.",
-       "goes": null
+       "text": "Outside the documents, I know that Robespierre, who led the Terror, was sent to the guillotine himself in 1794.",
+       "goes": "SPOT 3 · OUTSIDE EVIDENCE"
       },
       {
        "id": "j4",
-       "text": "The Industrial Revolution began in Britain.",
+       "text": "Document 4 is an order from Japan's Tokugawa government.",
+       "goes": null
+      },
+      {
+       "id": "j5",
+       "text": "The Law of Suspects was passed on 17 September 1793.",
+       "goes": null
+      },
+      {
+       "id": "j6",
+       "text": "An enduring issue these documents raise is power and its abuse.",
        "goes": null
       }
      ],
      "hints": [
-      "The explanation says what the evidence right before it shows. Look for “This shows…”",
-      "Outside evidence is true, isn't in Documents 5 or 6, and connects to the issue."
+      "The issue is named from the card and explained. Tap ENDURING ISSUES if you need the list.",
+      "Evidence names a document and puts its own words to work. Outside evidence is true and isn't in Documents 4 or 6."
      ],
-     "reasoning": "The explanation says what Bismarck's words mean; the outside fact shows where his way led. That's evidence put to work.",
+     "reasoning": "The issue is named and explained, Japan's own order proves it, and Robespierre's end shows where the Terror led.",
      "distractors": {
-      "j3": "That's in Document 5, so it's document evidence, not outside evidence, and it doesn't explain Bismarck's words.",
-      "j4": "True, but it doesn't connect to nationalism in these documents. Outside evidence has to fit.",
-      "swap": "Both pieces belong, just in each other's spot. Which one explains, and which one brings in something new?"
+      "j4": "That's the source line: who issued it. Evidence comes from inside the document.",
+      "j5": "That date is in Document 6, so it isn't outside evidence, and it doesn't show the issue at work.",
+      "j6": "That's the umbrella. On the essay, write the exact issue underneath it: Abuse of Power.",
+      "swap": "Both belong in this paragraph, just in each other's spot. Which one comes from a document, and which one did you bring in?"
      }
     }
    ]
   },
   {
    "set": "B",
-   "title": "Empires coming apart",
-   "docs": "Casefile C (10.2), Documents 7 and 8: the peoples of Austria-Hungary, 1911; “The Boiling Point,” Punch, 1912",
+   "title": "Human rights violations",
+   "issue": "Human Rights Violations",
+   "umbrella": "POWER & ITS ABUSE",
+   "issue_across_units": "10.1 and 10.2 now; adds 10.3 when the class finishes it",
+   "docs": "Unit 10.1, Document 2 (Mughal India, late 1600s); Unit 10.2 Casefile A, Document 8 (the Atlantic slave trade, 1789)",
+   "documents": [
+    {
+     "label": "Unit 10.1 · Document 2",
+     "title": "Aurangzeb and religious toleration",
+     "source": "Source: Donald J. Johnson et al., Through Indian Eyes, Apex Press, 1999 (adapted), from the NYS Global History and Geography II Regents Exam, June 2026",
+     "text": "Unfortunately, the last great Moghul [Mughal] ruler, Aurangzeb, opposed religious toleration. A devout Muslim and a Puritan in his habits, Aurangzeb dismissed the court musicians, artists, and historians. He discouraged poets, who “dealt in falsehood”; banned history, which “gave rise to feelings of undue pride”; and suppressed drinking and gambling. His military campaigns drained his resources. He also dismissed the Hindu clerks in his service and reimposed a poll tax on all “unbelievers.” These oppressive measures against the Hindus were perhaps the most destructive acts of his reign, for memories of Aurangzeb’s oppressive rule lingered in the minds of Hindu Indians for generations. By his death in 1707, the Moghul Empire was on the edge of ruin. The British came to fill the power vacuum."
+    },
+    {
+     "label": "Unit 10.2 · Casefile A · Document 8",
+     "title": "Two voices from 1789: the slave trade",
+     "source": "Source: William Wilberforce, speech to the House of Commons, May 1789, in Cobbett, Parliamentary History of England, vol. 28 (adapted)",
+     "text": "“I confess to you sir, so enormous so dreadful, so irremediable [impossible to fix] did its wickedness appear that my own mind was completely made up for the abolition. A trade founded in iniquity [wrongdoing] . . . must be abolished . . . let the consequences be what they would, I from this time determined that I would never rest till I had effected [achieved] its abolition.”",
+     "source_2": "Source: Olaudah Equiano, The Interesting Narrative of the Life of Olaudah Equiano, London, 1794 edition (adapted), via OER Project",
+     "text_2": "“I now saw myself deprived [robbed] of all chance of returning to my native country . . . . I was soon put down under the decks, and there I received such a salutation [greeting] in my nostrils as I had never experienced in my life . . . . I became so sick and low that I was not able to eat . . . . I inquired [asked] of them what was to be done with us? They gave me to understand we were to be carried to these white people's country to work for them.”"
+    }
+   ],
    "tasks": [
     {
      "id": "B-crawl",
@@ -177,42 +277,40 @@
      "prompt": "Name the parts. Drag each sentence to its job (or tap the sentence, then tap the job).",
      "slots": [
       "CONTEXT",
-      "ISSUE",
       "EVIDENCE",
-      "OUTSIDE EVIDENCE"
+      "EXPLANATION"
      ],
      "pieces": [
       {
        "id": "p1",
-       "text": "By 1911, Austria-Hungary ruled more than ten peoples with different languages, and the Ottoman Empire was losing the Balkans one people at a time.",
+       "text": "In the late 1600s, the Mughal emperor Aurangzeb ruled most of India, and in the 1700s, European ships carried millions of captured Africans across the Atlantic.",
        "goes": "CONTEXT"
       },
       {
        "id": "p2",
-       "text": "An enduring issue these documents raise is conflict. Conflict is when groups, nations or ideas struggle against each other, from argument to war.",
-       "goes": "ISSUE"
-      },
-      {
-       "id": "p3",
-       "text": "Document 8 shows this when the great powers of Europe sit on the lid of a pot labeled “Balkan Troubles.”",
+       "text": "Document 2 shows this when Aurangzeb dismisses the Hindu clerks in his service and reimposes a poll tax on all “unbelievers.”",
        "goes": "EVIDENCE"
       },
       {
-       "id": "p4",
-       "text": "Outside the documents, I know that in 1914 a Bosnian Serb nationalist shot the heir to Austria-Hungary's throne, and Europe went to war.",
-       "goes": "OUTSIDE EVIDENCE"
+       "id": "p3",
+       "text": "This matters because in both cases, people were punished for who they were, and the same denial of rights kept showing up in new places.",
+       "goes": "EXPLANATION"
       }
      ],
      "hints": [
       "Which sentence sets the scene before anything else?",
-      "Which one is true but isn't in either document?"
+      "Which one says why the evidence matters? Look for “This matters because…”"
      ],
-     "reasoning": "Context sets the scene, the issue is named and explained, evidence comes from a document, and outside evidence comes from what you know.",
+     "reasoning": "Context sets the scene, evidence names a document and pulls a detail, and the explanation says why it matters.",
+     "right": {
+      "CONTEXT": "That sets the scene: context first, every time.",
+      "EVIDENCE": "That's evidence: the document, named and put to work.",
+      "EXPLANATION": "That's the so what: why the evidence matters."
+     },
      "distractors": {
-      "CONTEXT": "That sentence does more than set the scene. Look for the one that tells when and what was happening.",
-      "ISSUE": "Look for the sentence that names the issue and says what it means.",
+      "CONTEXT": "Look for the sentence that tells when and what was happening.",
       "EVIDENCE": "Evidence names a document and pulls a detail from it.",
-      "OUTSIDE EVIDENCE": "Outside evidence is true and isn't in the documents. Is that one in a document?"
+      "EXPLANATION": "The explanation says why the evidence matters."
      }
     },
     {
@@ -221,44 +319,44 @@
      "kind": "order",
      "prompt": "Build the paragraph. Drag the five sentences into order (or tap a sentence, then tap its spot).",
      "slots": [
-      "1",
-      "2",
-      "3",
-      "4",
-      "5"
+      "1 · CONTEXT",
+      "2 · ENDURING ISSUE",
+      "3 · EVIDENCE",
+      "4 · EVIDENCE",
+      "5 · EXPLANATION"
      ],
      "pieces": [
       {
        "id": "s1",
-       "text": "By 1911, Austria-Hungary ruled more than ten peoples with different languages, and the Ottoman Empire was losing the Balkans one people at a time.",
-       "goes": "1"
+       "text": "In the late 1600s, the Mughal emperor Aurangzeb ruled most of India, and in the 1700s, European ships carried millions of captured Africans across the Atlantic.",
+       "goes": "1 · CONTEXT"
       },
       {
        "id": "s2",
-       "text": "An enduring issue these documents raise is conflict. Conflict is when groups, nations or ideas struggle against each other, from argument to war.",
-       "goes": "2"
+       "text": "An enduring issue these documents raise is human rights violations. Human rights violations happen when people are denied the basic rights every person should have, like life, freedom and safety.",
+       "goes": "2 · ENDURING ISSUE"
       },
       {
        "id": "s3",
-       "text": "Document 7 shows this in the map of Austria-Hungary, where many different peoples live inside one empire's borders.",
-       "goes": "3"
+       "text": "Document 2 shows this when Aurangzeb dismisses the Hindu clerks in his service and reimposes a poll tax on all “unbelievers.”",
+       "goes": "3 · EVIDENCE"
       },
       {
        "id": "s4",
-       "text": "Document 8 shows it too, when the great powers of Europe sit on the lid of a pot labeled “Balkan Troubles.”",
-       "goes": "4"
+       "text": "Document 8 shows it again when Olaudah Equiano, taken from Africa, writes that he was “deprived [robbed] of all chance of returning to my native country.”",
+       "goes": "4 · EVIDENCE"
       },
       {
        "id": "s5",
-       "text": "This issue matters because the struggle in the Balkans didn't stay there: two years later it helped pull all of Europe into war.",
-       "goes": "5"
+       "text": "This matters because in both cases, people were punished for who they were, and the same denial of rights kept showing up in new places.",
+       "goes": "5 · EXPLANATION"
       }
      ],
      "hints": [
       "Start with the scene. What has to come before you can name the issue?",
-      "The documents come after the issue is named, and why it matters comes last."
+      "Name the issue right after the scene. The documents come next, and why it matters comes last."
      ],
-     "reasoning": "Context, the issue, two documents, why it matters. That's the order the essay wants.",
+     "reasoning": "Context, the issue named and explained, two documents, why it matters. That's the order the essay wants.",
      "distractors": {
       "early": "That one needs something before it. What does a reader need to know first?",
       "late": "That one can come sooner. Does it set up the sentences after it?"
@@ -268,50 +366,62 @@
      "id": "B-jog",
      "level": "JOG",
      "kind": "find-and-place",
-     "prompt": "Two pieces are missing. Find the explanation and the outside evidence, and drag each one into its spot. Two pieces don't belong.",
+     "prompt": "Three pieces are missing. Find the enduring issue, the evidence and the outside evidence, and drag each one into its spot. Three pieces don't belong. The ENDURING ISSUES button opens the card.",
      "paragraph": [
-      "By 1911, Austria-Hungary ruled more than ten peoples with different languages, and the Ottoman Empire was losing the Balkans one people at a time.",
-      "An enduring issue these documents raise is conflict. Conflict is when groups, nations or ideas struggle against each other, from argument to war.",
-      "Document 8 shows this when the great powers of Europe sit on the lid of a pot labeled “Balkan Troubles.”",
+      "In the late 1600s, the Mughal emperor Aurangzeb ruled most of India, and in the 1700s, European ships carried millions of captured Africans across the Atlantic.",
       "[ SPOT 1 ]",
       "[ SPOT 2 ]",
-      "This issue matters because the struggle in the Balkans didn't stay there: two years later it helped pull all of Europe into war."
+      "Document 8 shows it again when Olaudah Equiano, taken from Africa, writes that he was “deprived [robbed] of all chance of returning to my native country.”",
+      "[ SPOT 3 ]",
+      "This matters because in both cases, people were punished for who they were, and the same denial of rights kept showing up in new places."
      ],
      "slots": [
-      "SPOT 1 · EXPLANATION",
-      "SPOT 2 · OUTSIDE EVIDENCE"
+      "SPOT 1 · ENDURING ISSUE",
+      "SPOT 2 · EVIDENCE",
+      "SPOT 3 · OUTSIDE EVIDENCE"
      ],
      "pieces": [
       {
        "id": "j1",
-       "text": "This shows that Europe's great powers were trying to hold the Balkans down, and the pot could boil over at any time.",
-       "goes": "SPOT 1 · EXPLANATION"
+       "text": "An enduring issue these documents raise is human rights violations. Human rights violations happen when people are denied the basic rights every person should have, like life, freedom and safety.",
+       "goes": "SPOT 1 · ENDURING ISSUE"
       },
       {
        "id": "j2",
-       "text": "Outside the documents, I know that in 1914 a Bosnian Serb nationalist shot the heir to Austria-Hungary's throne, and Europe went to war.",
-       "goes": "SPOT 2 · OUTSIDE EVIDENCE"
+       "text": "Document 2 shows this when Aurangzeb dismisses the Hindu clerks in his service and reimposes a poll tax on all “unbelievers.”",
+       "goes": "SPOT 2 · EVIDENCE"
       },
       {
        "id": "j3",
-       "text": "Austria-Hungary ruled many peoples.",
-       "goes": null
+       "text": "Outside the documents, I know that Britain banned the slave trade in 1807, but Parliament did not vote to end slavery in its colonies until 1833.",
+       "goes": "SPOT 3 · OUTSIDE EVIDENCE"
       },
       {
        "id": "j4",
-       "text": "Cartoons can be funny.",
+       "text": "Document 2 comes from a book called Through Indian Eyes.",
+       "goes": null
+      },
+      {
+       "id": "j5",
+       "text": "Aurangzeb dismissed the court musicians, artists, and historians.",
+       "goes": null
+      },
+      {
+       "id": "j6",
+       "text": "An enduring issue these documents raise is that life was hard.",
        "goes": null
       }
      ],
      "hints": [
-      "The explanation says what the cartoon right before it shows. Look for “This shows…”",
-      "Outside evidence is true, isn't in Documents 7 or 8, and shows where the conflict led."
+      "The issue is named from the card and explained. Tap ENDURING ISSUES if you need the list.",
+      "Evidence names a document and puts its own words to work. Outside evidence is true and isn't in Documents 2 or 8."
      ],
-     "reasoning": "The explanation says what the boiling pot means; the outside fact shows the pot did boil over. That's evidence put to work.",
+     "reasoning": "The issue is named and explained, Aurangzeb's tax proves it, and the 1807 and 1833 votes show how long the fight to end the slave trade and slavery took.",
      "distractors": {
-      "j3": "That's in Document 7, so it's document evidence, and it doesn't explain the cartoon.",
-      "j4": "True, but it doesn't connect to the issue. Outside evidence has to fit.",
-      "swap": "Both pieces belong, just in each other's spot. Which one explains, and which one brings in something new?"
+      "j4": "That's the source line: where it was printed. Evidence comes from inside the document.",
+      "j5": "That's in Document 2, so it isn't outside evidence. And it doesn't show the issue: who lost a right?",
+      "j6": "That's a feeling, not an issue from the card. Tap ENDURING ISSUES and name the exact one.",
+      "swap": "Both belong in this paragraph, just in each other's spot. Which one comes from a document, and which one did you bring in?"
      }
     }
    ]

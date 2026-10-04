@@ -602,3 +602,6 @@ body.rb-full{overscroll-behavior:none}
 .rehab > .btn-ghost{align-self:flex-start}
 .rh-slot:disabled{opacity:1;color:var(--white,#F4F6FA)}
 .rh-doc{position:relative;z-index:65}   /* a document reads over the badge when they meet at the screen's bottom edge (Sam 09:01: it covered JOIN,) */
+.rh-card-intro{margin:2px 0 8px;font-size:14.5px;line-height:1.45;color:#D6DEEA}
+.rh-issues{color:#C9D4E5;font-size:13.5px}
+.rh-doc-src2{margin:10px 0 4px;font:13px/1.35 'Outfit',sans-serif;color:#3A3528}
