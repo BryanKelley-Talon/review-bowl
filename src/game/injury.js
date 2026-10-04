@@ -98,11 +98,11 @@ export function injuryFromBits(v) {
   return { stat: INJURY_STATS[n >> 1], out: (n & 1) + 1 }
 }
 
-// ── the words: WORKING LABELS until BK says yes (proposed in chat 2026-10-04) ────────
-// npm run release-check fails while _approved is false or a placeholder rehab pack is on.
+// ── the words: proposed 2026-10-04 00:2x (injury proof, page 1); APPROVED by BK 00:33 ─────
+// ("I give my yes on all three things"). release-check still fails while a placeholder rehab pack is on.
 const games = n => `${n} more ${n === 1 ? 'game' : 'games'}`
 export const INJ_WORDS = {
-  _approved: false,
+  _approved: true,
   hurt: (name, pos, n) => `${name} (${pos}) is hurt: out the rest of this game and ${games(n)}. A backup steps in.`,
   backupTag: 'Backup',
   rehabHead: 'Rehab',

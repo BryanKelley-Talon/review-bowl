@@ -1,8 +1,7 @@
 // The save-code words (BK 2026-10-04 00:22 / 00:26: one code, a Copy button, a Google Doc, a
-// reminder after every game). WORKING LABELS until BK says yes (proposed in chat 00:3x).
-// npm run release-check fails while _approved is false.
+// reminder after every game). Proposed in chat 00:27; APPROVED by BK 00:33 ("I give my yes on all three things").
 export const SAVE_WORDS = {
-  _approved: false,
+  _approved: true,
   tipButton: 'Saving your seasons',
   tipHead: 'Your save code is your seasons',
   tipLines: [
