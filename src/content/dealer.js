@@ -19,7 +19,10 @@ const HAMMER = { vocab: 2, skills: 2, reading: 2 }
 const GATES = {
   coin:     { label: 'Coin toss', size: 'short', prefer: HAMMER },
   xp:       { label: 'Extra point', size: 'short', prefer: { skills: 3, vocab: 2, reading: 2 }, scoring: true },
-  timeout:  { label: 'Timeout', size: 'short', prefer: HAMMER },
+  timeout:  { label: 'Timeout', size: 'short', prefer: HAMMER },          // volleyball's timeout
+  // Football's timeout (BK 2026-10-03 23:43, approved 23:57): a comeback question, adversity or
+  // perseverance, from the comeback set. An empty set falls back to the content draw above.
+  comeback: { label: 'Timeout', size: 'short', prefer: HAMMER, comeback: true },
   live:     { label: 'Big moment', size: 'short', prefer: { skills: 2, vocab: 2, context: 2 } },
   halftime: { label: 'Halftime', size: 'short', prefer: HAMMER },
   // Volleyball's halftime: the break between sets (2026-10-03). Same draw, its own label.
@@ -111,6 +114,16 @@ export function makeDealer(pool, course, rules = {}, random = Math.random) {
           const id = deck.pop(); decks[key] = deck
           return set.find(q => q.id === id)
         }
+      }
+      if (g.comeback && (pool.comeback || []).length) {
+        const all = pool.comeback
+        let deck = decks._comeback || []
+        if (!deck.length) {
+          deck = all.map(q => q.id)
+          for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]] }
+        }
+        const id = deck.pop(); decks._comeback = deck
+        return all.find(q => q.id === id)
       }
       if (g.culture) {
         const all = pool.culture || []

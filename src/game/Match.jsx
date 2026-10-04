@@ -81,8 +81,9 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   const [call, setCall] = useState(null)
   const guessed = useRef(false)
   const recentCalls = useRef([])            // this game's last calls, for the repeat rule (plays.js)
+  const forceRead = useRef(false)          // a missed timeout question: the defense reads the next play
   const pickPlay = useCallback(id => {
-    guessed.current = Math.random() < readChance(career.levels, recentCalls.current, id)
+    guessed.current = forceRead.current || Math.random() < readChance(career.levels, recentCalls.current, id)
     recentCalls.current = [...recentCalls.current, id].slice(-3)
     setCall(playById(id))
   }, [career.levels])
@@ -256,6 +257,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   const snap = useCallback(() => {
     if (stage !== 'presnap' || !call) return
     setToast(guessed.current ? PLAY_WORDS.readIt : null)
+    forceRead.current = false
     setStage('live')
     engine.current.snap()
   }, [stage, call])
@@ -493,11 +495,15 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
     oppDrive(g2, good ? 25 : oppStart)
   }
   const doTimeout = () => {
-    ask('timeout', 'Timeout. The clock stops either way. Get it right and your coaches spot something: your receivers get a step on the next snap.',
+    // BK 2026-10-03 23:43, words approved 23:57: a comeback question. Right: the receivers get a
+    // step. Wrong: the defense reads your next play (the same read the Tecmo rule already shows).
+    ask('comeback', 'Timeout. Settle your team down. Get it right and your coaches spot something: your receivers get a step on the next snap. Miss it and the defense reads your next play.',
       correct => {
         const g2 = callTimeout(gRef.current)
         if (correct) setRead(true)
-        setToast(correct ? 'Adjustment made — watch your receivers get open.' : 'Clock stopped. No adjustment this time.')
+        if (correct === false) { forceRead.current = true; if (call) { guessed.current = true; setFieldVersion(n => n + 1) } }
+        setToast(correct === true ? 'Adjustment made — watch your receivers get open.'
+          : correct === false ? 'Rattled. The defense reads your next play.' : 'Clock stopped. No adjustment this time.')
         commit(g2)
         setStage('presnap')
       })

@@ -123,6 +123,23 @@ for (const course of Object.keys(manifest.courses)) {
   for (let i = 0; i < 50; i++) ok(!pool.podium.includes(d.draw('locker')), 'the Locker Room never draws a podium question')
 }
 
+// ── football's timeout: the comeback set (BK 2026-10-03 23:43, approved 23:57) ───────────
+for (const course of ['us11r', 'global10r']) {
+  const packs = { ...packsOf(course) }
+  for (const p of manifest.culture.packs) packs[p.file] = pub(p.file)
+  const pool = buildPool(manifest, course, packs, crops)
+  eq(pool.comeback.length, manifest.culture.comeback.ids.length, `${course}: every comeback id resolves to an approved culture item`)
+  ok(pool.comeback.every(q => q.culture && q.hints.length >= 2 && q.rationale), `${course}: comeback questions are culture questions with two hints and a reason`)
+  const d = makeDealer(pool, manifest.courses[course], manifest.rules)
+  const seen = new Set()
+  for (let i = 0; i < pool.comeback.length; i++) { const q = d.draw('comeback'); ok(pool.comeback.includes(q), `${course}: the football timeout draws only comeback questions`); seen.add(q.id) }
+  eq(seen.size, pool.comeback.length, `${course}: every comeback question comes up before a repeat`)
+  const dv = makeDealer(pool, manifest.courses[course], manifest.rules)
+  for (let i = 0; i < 40; i++) ok(!dv.draw('timeout').culture, `${course}: volleyball's timeout is unchanged (content questions)`)
+  const empty = makeDealer({ ...pool, comeback: [] }, manifest.courses[course], manifest.rules)
+  for (let i = 0; i < 20; i++) { const q = empty.draw('comeback'); ok(q && !q.culture && q.size === 'short', `${course}: no comeback set falls back to a short content question`) }
+}
+
 const dealer = makeDealer(us, manifest.courses.us11r, manifest.rules)
 // BK, 2026-09-27: in-game questions stay short; documents go where the game already stops.
 ok(us.lanes.sources.every(q => q.size === 'long'), 'US: every Part I item (a document) is sized long')

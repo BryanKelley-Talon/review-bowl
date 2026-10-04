@@ -288,7 +288,9 @@ export function buildPool(manifest, courseId, packsByFile, crops) {
       ;(lanes[q.lane] || (lanes[q.lane] = [])).push(q)
     }
   }
-  return { course: courseId, lanes, held, culture: buildCulture(manifest, packsByFile), podium: buildPodium(manifest, packsByFile) }
+  const culture = buildCulture(manifest, packsByFile)
+  return { course: courseId, lanes, held, culture, podium: buildPodium(manifest, packsByFile),
+           comeback: buildComeback(manifest, culture, packsByFile) }
 }
 
 // The Locker Room's questions (BK, 2026-09-27): the current Office theme's practice items,
@@ -332,13 +334,37 @@ export function buildPodium(manifest, packsByFile) {
   return out
 }
 
+// The football timeout's comeback set (BK 2026-10-03 23:43 "a culture question about adversity
+// or perseverance"; words and mechanic approved 23:57). Two sources, both already approved:
+// `ids` picks culture items already in the pool (Office and Unit 0, by file#n), and `packs` adds
+// Leo's comeback files when they land (same item shape as an Office theme's practice items).
+// Empty: the timeout falls back to the content draw it had before.
+export function buildComeback(manifest, culture, packsByFile) {
+  const c = manifest.culture?.comeback
+  if (!c) return []
+  const byId = Object.fromEntries(culture.map(q => [q.id, q]))
+  const out = (c.ids || []).map(id => byId[id]).filter(Boolean)
+  for (const meta of c.packs || []) {
+    if (meta.enabled === false) continue
+    const items = packsByFile[meta.file]?.[meta.section || 'practice']?.items
+    if (!Array.isArray(items)) continue
+    const { questions } = readPack({ items }, { lane: manifest.culture.stat_lane || 'skills', file: meta.file, unit: null }, {})
+    for (const q of questions) {
+      if ((manifest.rules || {}).require_hints_and_reason && (q.hints.length < 2 || !q.rationale)) continue
+      out.push({ ...q, culture: true, size: 'short' })
+    }
+  }
+  return out
+}
+
 // Everything the manifest points at for one door, fetched. Browser only.
 export async function loadDoor(manifest, courseId) {
   const course = manifest.courses[courseId]
   const files = [...(course.packs || []).filter(p => p.enabled !== false).map(p => p.file),
                  ...(course.camp || []).map(c => c.file),
                  ...((manifest.culture?.packs) || []).filter(p => p.enabled !== false).map(p => p.file),
-                 ...(manifest.culture?.podium?.file ? [manifest.culture.podium.file] : [])]
+                 ...(manifest.culture?.podium?.file ? [manifest.culture.podium.file] : []),
+                 ...((manifest.culture?.comeback?.packs) || []).filter(p => p.enabled !== false).map(p => p.file)]
   const packsByFile = {}
   await Promise.all(files.map(f => fetch(`/${f}`).then(r => r.ok ? r.json() : null)
     .then(d => { if (d) packsByFile[f] = d }).catch(() => {})))
