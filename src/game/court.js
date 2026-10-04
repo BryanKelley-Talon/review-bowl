@@ -15,7 +15,10 @@
 // ============================================================
 import { TEAMS as LEAGUE } from './teams.js'
 import { VB as W8 } from './sport.js'
-import { BAND_SECONDS, drawBand } from './cutin.js'
+import { BAND_SECONDS, RUNTHROUGH_SECONDS, drawBand, drawRunThrough } from './cutin.js'
+import { LITE, Particles } from './pixel.js'
+import { cheerColor, gymScene, gymFlyoverCam } from './campus.js'
+import { createMode7 } from './mode7.js'
 
 // The league's kits in the court's shape: jersey + trim. Trim is the helmet colour, or the pants
 // when the helmet matches the jersey, or white (the concept's own table matched this rule).
@@ -33,14 +36,17 @@ const apart=(a,b)=>cdist(a,b)>115&&Math.min(...Object.keys(CVD).map(m=>cdist(see
 const lum=h=>{const[r,g,b]=rgb(h);return (0.299*r+0.587*g+0.114*b)/255};
 
 // ───────────────────────── canvas + projection ─────────────────────────
-const W=384,H=216;
+// THE PIXEL STANDARD (BK 2026-10-04 17:24, "Approved. Signed."): the gym is drawn at 480x270 like every
+// sport, 1.25x the concept's 384x216, so the same court on the same screen has finer pixels. Z is that
+// step; the players are posed skeletons, so they are painted at it too (SPR), not blown up.
+const W=480,H=270,Z=1.25,SPR=1.25;
 const cv=canvas;
 const screenCtx=cv.getContext('2d');
 let G=screenCtx;                       // current drawing context (swapped for the celebration sprite)
-const KX=18,SH=4.4,KY=9,KZ=15,Y0=206;
+const KX=18*Z,SH=4.4*Z,KY=9*Z,KZ=15*Z,Y0=206*Z;
 const sc=y=>1-0.018*y;
-function P(x,y,z=0){const s=sc(y);return [Math.round(192+x*KX*s+(y-4.5)*SH),Math.round(Y0-y*KY-z*KZ*s)]}
-function unP(sx,sy){const y=(Y0-sy)/KY;const s=sc(y);return {x:(sx-192-(y-4.5)*SH)/(KX*s),y}}
+function P(x,y,z=0){const s=sc(y);return [Math.round(W/2+x*KX*s+(y-4.5)*SH),Math.round(Y0-y*KY-z*KZ*s)]}
+function unP(sx,sy){const y=(Y0-sy)/KY;const s=sc(y);return {x:(sx-W/2-(y-4.5)*SH)/(KX*s),y}}
 const R=(x,y,w,h,c)=>{G.fillStyle=c;G.fillRect(Math.round(x),Math.round(y),w,h)};
 function L(x0,y0,x1,y1,c){x0=Math.round(x0);y0=Math.round(y0);x1=Math.round(x1);y1=Math.round(y1);
   const dx=Math.abs(x1-x0),dy=-Math.abs(y1-y0),sx=x0<x1?1:-1,sy=y0<y1?1:-1;let e=dx+dy;G.fillStyle=c;
@@ -170,7 +176,7 @@ function doServe(s,t,q,err){
 }
 // a pass or dig sends the ball to the setter; quality decides which sets are open
 function pass(s,by,pq,_){
-  pose(by,pq>=2?'bump':'dig',0.5);
+  pose(by,pq>=2?'bump':'dig',0.5);if(pq<2)dust(by.x,by.y,8);
   const st=ST(s),setter=role(s,'S');setter.tx=st.x;setter.ty=st.y;
   const off=pq===3?0:pq===2?0.6:1.6;const to={x:st.x+s*rand(0,off),y:st.y+rand(-off,off),z:2.5};
   setter.tx=to.x;setter.ty=to.y;
@@ -200,7 +206,7 @@ function doSet(s,ro,pq){
   const h=role(s,ro);const C={x:s*0.55,y:h.hy,z:ro==='MB'?2.7:2.9};
   const dur=ro==='MB'?0.45:ro==='OH'?1.05:0.8,apex=ro==='MB'?0.2:ro==='OH'?1.9:1.2;
   const sq=(s<0?S.stats.Setting:S.ostats.Setting);C.y+=rand(-1,1)*(10-sq)*0.05;S.setQ=sq;
-  h.tx=s*0.9;h.ty=C.y;after(Math.max(0,dur-0.32),()=>{jump(h,0.8,0.64);pose(h,'spike',0.7)});
+  h.tx=s*0.9;h.ty=C.y;after(Math.max(0,dur-0.56),()=>pose(h,'approach',0.24));after(Math.max(0,dur-0.32),()=>{jump(h,0.8,0.64);pose(h,'spike',0.7)});
   // the defending side's block
   const d=-s;let committed;
   if(d>0){const guess=Math.random()<0.33+0.035*S.ostats.Blocking?ro:['OH','MB','RS'][Math.floor(Math.random()*3)];committed=guess===ro?(ro==='MB'&&Math.random()<0.5?'late':'yes'):'no';S.oppBlockOn=guess}
@@ -283,7 +289,7 @@ function point(w,kind){
   if(S.phase==='over')return;S.phase='point';S.ts=1;S.ball.f=null;S.readAt=Infinity;
   S.score[w<0?0:1]++;const youWon=w<0;
   const words={kill:'KILL!',ace:'ACE!',stuff:'STUFF!'};
-  if(youWon){S.cheerUntil=rt+0.9}
+  if(youWon){S.cheerUntil=rt+(words[kind]?1.8:0.9)}
   const [a,b]=S.score,lead=Math.abs(a-b),setDone=(a>=S.target||b>=S.target)&&lead>=2;
   ui(W8.point(youWon?TEAMS[S.you].abbr:TEAMS[S.opp].abbr,a,b),[]);
   opts.onScore&&opts.onScore({score:[a,b],sets:[...S.sets],setNo:S.setNo,serve:w});
@@ -313,10 +319,21 @@ function tapAt(sx,sy){
   if(S.phase==='dig'){digTap();return}
 }
 const endBand=()=>{const b=S.band;S.band=null;b&&b.then&&b.then()};
-const onDown=e=>{if(S.band){endBand();return}if(S.paused)return;const r=cv.getBoundingClientRect();tapAt((e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H)};
+// Films: the gym flyover (Mode 7) and the run-through, before the coin toss (the Pixel Standard). A tap
+// or a key skips each one.
+let filmQ=[],m7=null;
+function showFilm(f){f.t0=rt;if(S.film)filmQ.push(f);else S.film=f}
+function endFilm(){const f=S.film;S.film=null;const n=filmQ.shift();if(n){n.t0=rt;S.film=n}f&&f.then&&f.then()}
+function drawFilm(){const f=S.film,e=rt-f.t0;if(e>=f.dur){endFilm();if(S.film)drawFilm();return!!S.film}
+  const home=LEAGUE[S.you],away=LEAGUE[S.opp];
+  if(f.type==='flyover'){m7=m7||createMode7(W,H);m7.render(G,gymScene(home,away,W),gymFlyoverCam(reduced?1:e/f.dur),{lite:LITE.on})}
+  else{const hp=role(-1,'OH')||S.players[0],mp=role(-1,'MB')||S.players[1];
+    drawRunThrough(G,W,H,{team:home,indoor:true,heroLift:0.55,mateDrop:44,heroFn:()=>sprite(hp,'hero',1,true,2.6),mateFn:()=>sprite(mp,'run0',1,false,1.6)},e,reduced)}
+  return true}
+const onDown=e=>{if(S.film){endFilm();return}if(S.band){endBand();return}if(S.paused)return;const r=cv.getBoundingClientRect();tapAt((e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H)};
 const onMove=e=>{if(e.pointerType!=='mouse')return;if(!['serveAim','spike'].includes(S.phase))return;const r=cv.getBoundingClientRect();const pt=unP((e.clientX-r.left)/r.width*W,(e.clientY-r.top)/r.height*H);if(pt.x>0.2&&pt.x<10.5&&pt.y>-1&&pt.y<10)S.reticle={x:pt.x,y:pt.y}};
 cv.addEventListener('pointerdown',onDown);cv.addEventListener('pointermove',onMove);
-const onKey=e=>{if(S.band&&[' ','Enter','Escape'].includes(e.key)){e.preventDefault();endBand();return}if(S.paused||S.phase==='menu'||(opts.blocked&&opts.blocked()))return;const tg=document.activeElement&&document.activeElement.tagName;if(tg==='INPUT'||tg==='TEXTAREA')return;
+const onKey=e=>{if(S.film&&[' ','Enter','Escape'].includes(e.key)){e.preventDefault();endFilm();return}if(S.band&&[' ','Enter','Escape'].includes(e.key)){e.preventDefault();endBand();return}if(S.paused||S.phase==='menu'||(opts.blocked&&opts.blocked()))return;const tg=document.activeElement&&document.activeElement.tagName;if(tg==='INPUT'||tg==='TEXTAREA')return;
   const k=e.key;
   if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(k)&&['serveAim','spike'].includes(S.phase)){e.preventDefault();
     const st=0.5;if(k==='ArrowLeft')S.reticle.x-=st;if(k==='ArrowRight')S.reticle.x+=st;if(k==='ArrowUp')S.reticle.y+=st;if(k==='ArrowDown')S.reticle.y-=st;
@@ -336,16 +353,21 @@ addEventListener('keydown',onKey);
 // tones and outlined, then cached per pose so a Chromebook never redraws one from scratch.
 const OUTC='#170f1c';
 let crowd=[];
-function buildCrowd(){const r=rng(S.you*13+5);crowd=[];const yc=TEAMS[S.you].c,oc=TEAMS[S.opp].c;
-  for(let row=0;row<8;row++)for(let x=3+(row%2)*3;x<W-4;x+=6){if(r()<0.1)continue;const pick=r();
+function buildCrowd(){const r=rng(S.you*13+5);crowd=[];const yc=TEAMS[S.you].c,oc=TEAMS[S.opp].c,cheer=cheerColor(LEAGUE[S.you]);
+  for(let row=0;row<ROWS;row++)for(let x=3+(row%2)*3;x<W-4;x+=6){if(r()<0.1)continue;const pick=r();
     crowd.push({x:x+Math.floor(r()*2),row,skin:SKIN[Math.floor(r()*SKIN.length)],hair:HAIR[Math.floor(r()*HAIR.length)],
       shirt:pick<0.55?yc[Math.floor(r()*yc.length)]:pick<0.8?oc[Math.floor(r()*oc.length)]:['#d0d4dc','#6b7280','#2f3b55','#8b2c2c','#3d6b4a'][Math.floor(r()*5)],
-      ph:r()*6.28,home:pick<0.55})}}
+      ph:r()*6.28,home:pick<0.55});
+    // the student section in the school's colour at center court, the pep band at the far end
+    const f=crowd[crowd.length-1];
+    if(x>W*0.38&&x<W*0.62){f.shirt=r()<0.8?cheer:yc[0];f.home=true;f.student=true}
+    else if(x>W*0.87){f.shirt=yc[0];f.home=true;f.band=row%2===0}}}
 function rowFill(y0,y1,xl,xr,c){for(let sy=Math.ceil(P(0,y1)[1]);sy<=Math.floor(P(0,y0)[1]);sy++){const y=(Y0-sy)/KY;const a=P(xl,y)[0],b=P(xr,y)[0];R(a,sy,b-a+1,1,c)}}
 function dith(x,y,w,h,c){G.fillStyle=c;for(let yy=y;yy<y+h;yy++)for(let xx=x+(yy&1);xx<x+w;xx+=2)G.fillRect(xx,yy,1,1)}
 const bgCv=document.createElement('canvas');bgCv.width=W;bgCv.height=H;
-const FT=()=>P(0,11.2)[1], BT=()=>FT()-50;
-const LAMPS=[34,110,192,274,350];
+const ROWS=10,ROWH=6.25;
+const FT=()=>P(0,11.2)[1], BT=()=>FT()-ROWS*ROWH;
+const LAMPS=[34,110,192,274,350].map(x=>Math.round(x*Z));
 function buildBg(){
   const save=G;G=bgCv.getContext('2d');G.clearRect(0,0,W,H);
   const home=TEAMS[S.you],ft=FT(),bt=BT();
@@ -353,17 +375,21 @@ function buildBg(){
   const wall=['#151b30','#1b2340','#222c4d','#29355a'];const bh=Math.ceil(bt/4);
   wall.forEach((c,i)=>{R(0,i*bh,W,bh,c);if(i<3)dith(0,(i+1)*bh-2,W,2,wall[i+1])});
   for(let y=6;y<bt;y+=7){R(0,y,W,1,'rgba(0,0,0,.18)');for(let x=((y/7)%2)*9;x<W;x+=18)R(x,y-6,1,6,'rgba(0,0,0,.12)')}
+  // a painted stripe in the school's colour along the block wall, the way a high school gym has it
+  {const st=lum(home.c[0])<0.12?shade(home.c[1],-0.2):home.c[0];R(0,bt-34,W,4,st);R(0,bt-34,W,1,shade(st,0.3))}
   // lamps and their glow
   for(const lx of LAMPS){R(lx-8,0,16,3,'#6b7385');R(lx-7,3,14,1,'#fff3cf');G.globalAlpha=0.10;for(let i=0;i<5;i++)R(lx-10-i*3,4+i*4,20+i*6,4,'#fff3cf');G.globalAlpha=1}
   // home pennants either side of the scoreboard
-  const pc=home.c;[[70,0],[88,1],[298,0],[316,1]].forEach(([x,i])=>{G.fillStyle=pc[i%pc.length];for(let r=0;r<16;r++)G.fillRect(x+Math.floor(r/2),6+r,Math.max(0,12-r),1);R(x,5,13,1,'#8a8f9c')});
+  const pc=home.c;[[70,0],[88,1],[298,0],[316,1]].map(([x,i])=>[Math.round(x*Z),i]).forEach(([x,i])=>{G.fillStyle=pc[i%pc.length];for(let r=0;r<16;r++)G.fillRect(x+Math.floor(r/2),6+r,Math.max(0,12-r),1);R(x,5,13,1,'#8a8f9c')});
   // league banners with strings and shading
-  TEAMS.forEach((t,i)=>{const bx=8+i*31,by=bt-15;R(bx+3,by-5,1,5,'#5b6273');R(bx+22,by-5,1,5,'#5b6273');
+  TEAMS.forEach((t,i)=>{const bx=Math.round((8+i*31)*Z+3),by=bt-15;R(bx+3,by-5,1,5,'#5b6273');R(bx+22,by-5,1,5,'#5b6273');
     R(bx,by,26,14,t.c[0]);G.globalAlpha=0.16;R(bx,by,26,6,'#ffffff');G.globalAlpha=0.22;R(bx,by+10,26,4,'#000000');G.globalAlpha=1;
     R(bx,by,26,1,t.c[1]);R(bx,by+13,26,1,t.c[1]);R(bx-1,by,1,14,OUTC);R(bx+26,by,1,14,OUTC);
     const ink=Math.abs(lum(t.c[0])-lum(t.c[1]))>0.42?t.c[1]:(lum(t.c[0])>0.5?'#111111':'#ffffff');txt(t.abbr,bx+13-tw(t.abbr)/2,by+4,ink)});
   // bleachers: riser, plank, bright nosing
-  for(let row=0;row<8;row++){const y=Math.round(bt+row*6.25);R(0,y,W,7,'#3a2b1f');R(0,y+3,W,3,'#7b5a3a');R(0,y+3,W,1,'#b08458');R(0,y+6,W,1,'#241a12')}
+  // pull-out wooden bleachers, the high school gym's: honey planks, a dark riser, a bright nosing
+  for(let row=0;row<ROWS;row++){const y=Math.round(bt+row*ROWH);R(0,y,W,7,'#4a3423');R(0,y+3,W,3,'#a87a48');R(0,y+3,W,1,'#d6a86c');R(0,y+6,W,1,'#2a1d12');
+    for(let x=(row%2)*20;x<W;x+=40)R(x,y+3,1,3,'#7b5634')}
   // padded wall at court level, home colour
   const pad=lum(home.c[0])<0.12?shade(home.c[1],-0.25):home.c[0];R(0,ft-6,W,6,pad);R(0,ft-6,W,1,shade(pad,0.3));R(0,ft-1,W,1,shade(pad,-0.4));
   // floor: staggered planks, lamp gloss
@@ -380,7 +406,7 @@ function buildBg(){
   G=save;
 }
 function drawScoreboard(){
-  const sx=118,sy=4;R(sx-1,sy-1,150,36,OUTC);R(sx,sy,148,34,'#6b7385');R(sx,sy,148,1,'#a7aec0');R(sx+2,sy+2,144,30,'#07080b');
+  const sx=Math.round(W/2-74),sy=4;R(sx-1,sy-1,150,36,OUTC);R(sx,sy,148,34,'#6b7385');R(sx,sy,148,1,'#a7aec0');R(sx+2,sy+2,144,30,'#07080b');
   txt(TEAMS[S.you].abbr,sx+8,sy+5,'#ffb02e');txt(TEAMS[S.opp].abbr,sx+140-tw(TEAMS[S.opp].abbr),sy+5,'#ffb02e');
   const a=String(S.score[0]).padStart(2,'0'),b=String(S.score[1]).padStart(2,'0');
   G.globalAlpha=0.12;txt('88',sx+8,sy+15,'#ff5a3c',2);txt('88',sx+140-tw('88',2),sy+15,'#ff5a3c',2);G.globalAlpha=1;
@@ -389,9 +415,12 @@ function drawScoreboard(){
   for(let i=0;i<2;i++){R(sx+60+i*6,sy+16,4,4,i<S.sets[0]?'#ffb02e':'#24272f');R(sx+80+i*6,sy+16,4,4,i<S.sets[1]?'#ffb02e':'#24272f')}
   const srv=S.serve<0?sx+46:sx+98;R(srv,sy+24,3,3,'#f5f5f0');
 }
-function drawCrowd(){const bt=BT();const cheer=rt<S.cheerUntil&&!reduced;
-  for(const f of crowd){const y=Math.round(bt+f.row*6.25)+1;const up=cheer&&f.home&&Math.sin(rt*18+f.ph)>0;const dy=up?-2:0;
-    R(f.x-1,y+1+dy,4,3,f.shirt);R(f.x,y-2+dy,2,3,f.skin);R(f.x,y-2+dy,2,1,f.hair);if(up){R(f.x-2,y-3+dy,1,3,f.skin);R(f.x+3,y-3+dy,1,3,f.skin)}}}
+function drawCrowd(){const bt=BT();const cheer=rt<S.cheerUntil&&!reduced&&!LITE.on;
+  for(const f of crowd){const y=Math.round(bt+f.row*ROWH)+1;const up=cheer&&f.home&&(f.student||Math.sin(rt*18+f.ph)>0);const dy=up?-2:0;
+    R(f.x-1,y+1+dy,4,3,f.shirt);R(f.x,y-2+dy,2,3,f.band?'#f0c14b':f.skin);R(f.x,y-2+dy,2,1,f.band?'#121218':f.hair);if(up){R(f.x-2,y-3+dy,1,3,f.skin);R(f.x+3,y-3+dy,1,3,f.skin)}}}
+// rosin and floor dust, pooled (pixel.js): kicked up on a dig and on every landing
+const parts=new Particles(150);
+function dust(x,y,n){if(reduced)return;parts.burst({x,y,z:0.05,n,colors:['#efe2c4','#d9c69c','#fff6e0'],speed:1.6,up:1.4,life:0.45,size:1,grav:6})}
 function drawNetSlice(y0,y1){
   const top=2.24,bot=1.24,home=TEAMS[S.you];
   for(const py of[-0.8,9.8])if(y0<=py&&y1>py){const[a,b]=P(0,py,0),[,d]=P(0,py,2.5);R(a-2,d,4,b-d,OUTC);R(a-1,d,2,b-d,'#9aa2b3');R(a-1,d,1,b-d,'#d3d8e2');
@@ -407,6 +436,12 @@ function shade(h,a){const c=rgb(h);return toHex(c.map(v=>a<0?v*(1+a):v+(255-v)*a
 // joints, facing +x, feet on y=0, in sprite pixels
 const POSES={
   ready:{hip:[-1,-16],sh:[1,-27],head:[3,-32],kB:[-3,-8],fB:[-5,0],kF:[3,-8],fF:[2,0],eB:[3,-21],hB:[6,-18],eF:[4,-21],hF:[7,-17]},
+  // the Pixel Standard (2026-10-04): a breathing idle, the passing frames of a four-frame run, the approach and the landing
+  ready2:{hip:[-1,-15.5],sh:[1,-26.4],head:[3,-31.4],kB:[-3,-7.8],fB:[-5,0],kF:[3,-7.8],fF:[2,0],eB:[3,-20.5],hB:[6,-17.4],eF:[4,-20.5],hF:[7,-16.4]},
+  runA:{hip:[0,-19],sh:[2,-30],head:[3,-35],kB:[-1,-9],fB:[-2,0],kF:[3,-12],fF:[1,-6],eB:[1,-24],hB:[2,-20],eF:[2,-24],hF:[3,-21]},
+  runB:{hip:[0,-19],sh:[2,-30],head:[3,-35],kB:[3,-12],fB:[1,-6],kF:[-1,-9],fF:[-2,0],eB:[2,-24],hB:[3,-21],eF:[1,-24],hF:[2,-20]},
+  approach:{hip:[-1,-13],sh:[2,-24],head:[4,-29],kB:[-4,-7],fB:[-6,0],kF:[3,-7],fF:[4,0],eB:[-5,-18],hB:[-8,-14],eF:[-4,-19],hF:[-7,-15]},
+  land:{hip:[0,-14],sh:[1,-25],head:[2,-30],kB:[-3,-7],fB:[-4,0],kF:[3,-7],fF:[3,0],eB:[3,-19],hB:[5,-15],eF:[4,-19],hF:[6,-15]},
   run0:{hip:[0,-18],sh:[2,-29],head:[3,-34],kB:[-3,-9],fB:[-6,-3],kF:[3,-10],fF:[3,0],eB:[-2,-24],hB:[-1,-19],eF:[4,-24],hF:[6,-28]},
   run1:{hip:[0,-18],sh:[2,-29],head:[3,-34],kB:[2,-10],fB:[1,0],kF:[-2,-9],fF:[-5,-3],eB:[4,-24],hB:[6,-28],eF:[-2,-24],hF:[-1,-19]},
   bump:{hip:[-1,-16],sh:[1,-27],head:[3,-32],kB:[-3,-8],fB:[-5,0],kF:[3,-8],fF:[2,0],eB:[4,-22],hB:[9,-19],eF:[4,-22],hF:[9,-18]},
@@ -420,8 +455,8 @@ const POSES={
 };
 function paintSprite(ctx,p,poseName,f,air,s,ox,oy){
   const k=S.kits[p.side];const J=k.j,T=k.t;
-  const dark=lum(J)<0.2;const Jd=shade(J,dark?0.16:-0.3),Jl=shade(J,dark?0.42:0.28);
-  const sk=p.skin,skd=shade(sk,-0.24),skl=shade(sk,0.18),hair=p.hair,hairl=shade(hair,0.3);
+  const dark=lum(J)<0.2;const Jd=shade(J,dark?0.16:-0.3),Jl=shade(J,dark?0.42:0.28),Jdd=shade(J,dark?-0.5:-0.5);
+  const sk=p.skin,skd=shade(sk,-0.24),skl=shade(sk,0.18),skdd=shade(sk,-0.45),hair=p.hair,hairl=shade(hair,0.3);
   const SHO='#1a1a22',PAD='#2a2a34',PADl='#4a4a58';
   const j=JSON.parse(JSON.stringify(POSES[poseName]||POSES.ready));
   if(!air&&(poseName==='swing')){j.fB[1]=0;j.fF[1]=0}
@@ -436,13 +471,14 @@ function paintSprite(ctx,p,poseName,f,air,s,ox,oy){
     seg(lp(j.hip,kn,0.82),lp(kn,ft,0.22),4.6,PAD);seg(lp(j.hip,kn,0.86),lp(kn,ft,0.05),1.2,PADl);
     const fx=X(ft[0]),fy=Y(ft[1]);const sw=5.4*s,sh=2.6*s;const x0=f>0?fx-1.6*s:fx-sw+1.6*s;
     fr(x0,fy-sh+0.6*s,sw,sh,back?'#d0d0d8':'#f6f6f8');fr(x0,fy+0.4*s,sw,1*s,back?shade(T,-0.3):T)};
-  const arm=(e,h,back)=>{const c=back?skd:sk;seg(j.sh,e,3.1,c);seg(e,h,2.7,c);if(!back)seg(lp(j.sh,e,0.4),lp(e,h,0.6),1,skl);
+  const arm=(e,h,back)=>{const c=back?skd:sk;seg(j.sh,e,3.1,c);seg(e,h,2.7,c);if(!back)seg(lp(j.sh,e,0.4),lp(e,h,0.6),1,skl);else seg(lp(j.sh,e,0.5),lp(e,h,0.7),1,skdd);
     seg(j.sh,lp(j.sh,e,0.38),3.9,back?Jd:J);seg(lp(j.sh,e,0.34),lp(j.sh,e,0.4),3.9,back?shade(T,-0.25):T);disc(h,1.5,back?skd:skl)};
   arm(j.eB,j.hB,true);leg(j.kB,j.fB,true);leg(j.kF,j.fF,false);
   // shorts, then the jersey in three tones
   seg(lp(j.hip,j.sh,-0.02),lp(j.hip,j.kF,0.28),8.8,SHO);seg(j.hip,lp(j.hip,j.kB,0.28),8,SHO);
   seg([j.hip[0]+3.7,j.hip[1]+1],[j.hip[0]+3.7,j.hip[1]+3],1,T);
   seg(j.hip,j.sh,9.2,Jd);seg([j.hip[0]+0.9,j.hip[1]],[j.sh[0]+0.9,j.sh[1]],7,J);seg([j.hip[0]+3.7,j.hip[1]-1],[j.sh[0]+3.7,j.sh[1]+1.5],1,Jl);
+  seg([j.hip[0]-4.1,j.hip[1]-0.5],[j.sh[0]-4.1,j.sh[1]+1],1,Jdd);
   seg([j.hip[0]-4,j.hip[1]-1.5],[j.hip[0]+4,j.hip[1]-1.5],1.1,Jd);
   // neck, head, hair
   const hd=j.head;seg([j.sh[0]+1.2,j.sh[1]+0.5],[hd[0]+0.2,hd[1]+3.2],2.6,skd);seg([j.sh[0]-1,j.sh[1]],[j.sh[0]+3,j.sh[1]],1.2,T);
@@ -464,25 +500,27 @@ function outline(cv,col,th){const c=cv.getContext('2d');const d=c.getImageData(0
     if(hit){a[i*4]=r;a[i*4+1]=g;a[i*4+2]=b;a[i*4+3]=255}}
   c.putImageData(d,0,0)}
 const spriteCache=new Map();
-function sprite(p,pose,f,air,s=1){const key=`${p.side}${p.role}|${pose}|${f}|${air?1:0}|${s}`;let cv=spriteCache.get(key);
-  if(!cv){cv=document.createElement('canvas');cv.width=56*s;cv.height=66*s;paintSprite(cv.getContext('2d'),p,pose,f,air,s,28*s,60*s);outline(cv,OUTC,s>1?2:1);spriteCache.set(key,cv)}
+function sprite(p,pose,f,air,s=SPR){const key=`${p.side}${p.role}|${pose}|${f}|${air?1:0}|${s}`;let cv=spriteCache.get(key);
+  if(!cv){cv=document.createElement('canvas');cv.width=Math.round(56*s);cv.height=Math.round(66*s);paintSprite(cv.getContext('2d'),p,pose,f,air,s,Math.round(28*s),Math.round(60*s));outline(cv,OUTC,s>2?2:1);spriteCache.set(key,cv)}
   return cv}
 function drawPlayer(p,ox,oy){const air=p.z>0.05;let pose=p.pose;
-  if(pose==='ready'&&!air&&Math.hypot(p.tx-p.x,p.ty-p.y)>0.06)pose=Math.floor(gt*9)%2?'run1':'run0';
+  if(pose==='ready'&&!air&&Math.hypot(p.tx-p.x,p.ty-p.y)>0.06)pose=['run0','runA','run1','runB'][Math.floor(gt*12+p.num)&3];
+  else if(pose==='ready'&&!air)pose=Math.floor(rt*1.4+p.num*0.37)%2?'ready2':'ready';
   if(air&&pose==='ready')pose='block';
-  G.drawImage(sprite(p,pose,p.face,air),ox-28,oy-60)}
+  G.drawImage(sprite(p,pose,p.face,air),ox-Math.round(28*SPR),oy-Math.round(60*SPR))}
 function drawBall(b){const[x,y]=P(b.x,b.y,b.z);const cx=x,cy=y-4;
   if(!reduced&&b.trail)b.trail.forEach((t,i)=>{G.globalAlpha=0.12+i*0.08;R(t[0]-2,t[1]-2,4,4,'#f6f4ec')});G.globalAlpha=1;
   const disc=(r,c)=>{G.fillStyle=c;for(let yy=-r;yy<=r;yy++){const w=Math.round(Math.sqrt(r*r-yy*yy));G.fillRect(cx-w,cy+yy,w*2+1,1)}};
-  disc(4,OUTC);disc(3,'#f2eee2');R(cx-3,cy-1,2,3,'#f2c230');R(cx+1,cy-3,2,2,'#2f63c9');R(cx-1,cy+2,3,1,'#2f63c9');R(cx+2,cy,1,2,'#d4cfbf');R(cx+1,cy+2,2,1,'#c9c3b1');R(cx-1,cy-2,1,1,'#ffffff')}
+  disc(5,OUTC);disc(4,'#f2eee2');R(cx-3,cy-1,2,3,'#f2c230');R(cx+1,cy-3,2,2,'#2f63c9');R(cx-1,cy+2,3,1,'#2f63c9');R(cx+2,cy,1,2,'#d4cfbf');R(cx+1,cy+2,2,1,'#c9c3b1');R(cx-1,cy-2,1,1,'#ffffff')}
 function render(){
   G=screenCtx;G.imageSmoothingEnabled=false;G.clearRect(0,0,W,H);
+  if(S.film&&drawFilm())return;
   G.drawImage(bgCv,0,0);drawCrowd();drawScoreboard();
   const list=[];for(let y=-1;y<10.2;y+=0.4)list.push({y:y+0.2,k:'net',y0:y,y1:y+0.4});
   for(const p of S.players)list.push({y:p.y,k:'p',p});
   const b=S.ball;list.push({y:b.y,k:'ball'});
   list.sort((a,c)=>c.y-a.y);
-  for(const p of S.players){const[x,y]=P(p.x,p.y);G.globalAlpha=0.3;R(x-6,y-1,13,3,'#3a2210');R(x-4,y-2,9,1,'#3a2210');G.globalAlpha=1}
+  for(const p of S.players){const[x,y]=P(p.x,p.y);G.globalAlpha=0.3;R(x-8,y-1,16,3,'#3a2210');R(x-5,y-2,11,1,'#3a2210');G.globalAlpha=1}
   {const[x,y]=P(b.x,b.y);G.globalAlpha=0.45;R(x-3,y-1,7,2,'#3a2210');G.globalAlpha=1}
   if(S.phase==='dig'&&S.digInfo&&!S.digInfo.done){const I=S.digInfo;const[x,y]=P(I.t.x,I.t.y);const rem=Math.max(0,S.digAt-gt);
     ell(x,y,6,2.4,'#ffffff');const rr=6+rem*42;ell(x,y,rr,rr*0.4,'#E3B341');ell(x,y,rr+1,rr*0.4+0.6,OUTC)}
@@ -499,10 +537,11 @@ function render(){
     R(ax-1,ay,3,6,'#E3B341');if(dir!==0){for(let i=0;i<4;i++)R(ax+dir*(2+i),ay+1+i/2|0,1,4-i,'#E3B341')}else{R(ax-3,ay+6,7,1,'#E3B341');R(ax-2,ay+7,5,1,'#E3B341');R(ax-1,ay+8,3,1,'#E3B341')}
     txt(lab,ax-tw(lab)/2,ay-9,'#ffffff',1,'#000000')}
   if(S.phase==='spike'&&!S.swing){const rem=S.contactAt-gt;if(rem<0.9){const[x,y]=P(b.x,b.y,b.z);ell(x,y-4,5,5,'#ffffff');const rr=5+Math.max(0,rem)*26;ell(x,y-4,rr,rr,'#E3B341');ell(x,y-4,rr+1,rr+1,OUTC)}}
-  if(S.phase==='serveMeter'&&S.meter){const mx=142,my=200,mw=100;R(mx-2,my-2,mw+4,11,OUTC);R(mx,my,mw,7,'#7a2a2a');
+  if(S.phase==='serveMeter'&&S.meter){const mw=125,mx=Math.round(W/2-mw/2),my=Math.round(200*Z);R(mx-2,my-2,mw+4,11,OUTC);R(mx,my,mw,7,'#7a2a2a');
     const g=S.meter.green,yz=g+0.13;R(mx+mw*(0.5-yz),my,mw*yz*2,7,'#8a7a2a');R(mx+mw*(0.5-g),my,mw*g*2,7,'#2f7a3a');R(mx,my,mw,2,'rgba(255,255,255,.18)');
     R(mx+mw/2,my-2,1,11,'#ffffff');txt('NET',mx-24,my,'#ffffff',1,OUTC);txt('LONG',mx+mw+5,my,'#ffffff',1,OUTC);
     const m=meterPos();R(mx+mw*m-2,my-4,5,15,OUTC);R(mx+mw*m-1,my-3,3,13,'#E3B341')}
+  parts.draw(G,(x,y)=>{const[a,b]=P(x,y);return{x:a,y:b}},KZ);
   S.pops=S.pops.filter(q=>rt-q.t0<0.9);for(const q of S.pops){const[x,y]=P(q.x,q.y,q.z);const up=reduced?0:(rt-q.t0)*10;txt(q.text,clamp(x-tw(q.text)/2,2,W-tw(q.text)-2),Math.max(2,y-14-up-q.lift),'#ffffff',1,'#0b1220')}
   if(S.cele)drawCele();
   if(S.band){const e=rt-S.band.t0;if(e>=S.band.dur)endBand();else drawBand(G,W,H,S.band,e,reduced)}
@@ -515,27 +554,27 @@ function drawCele(){
   const c=S.cele,e=rt-c.t0,k=reduced?1:clamp(e/0.2,0,1),ease=1-(1-k)*(1-k),home=TEAMS[S.you],kit=S.kits[-1];
   if(!reduced&&e<0.05){R(0,0,W,H,'#ffffff');return}
   R(0,0,W,H,'#05070d');
-  const cx=110,cy=118,n=20,rot=reduced?0:e*0.5;const c1=kit.j,c2=lum(kit.j)<0.15?shade(kit.t,-0.35):shade(kit.j,-0.35);
-  for(let i=0;i<n;i++){const a0=rot+i/n*Math.PI*2,a1=a0+Math.PI/n;G.fillStyle=i%2?c1:c2;G.beginPath();G.moveTo(cx,cy);G.lineTo(cx+Math.cos(a0)*420,cy+Math.sin(a0)*420);G.lineTo(cx+Math.cos(a1)*420,cy+Math.sin(a1)*420);G.closePath();G.fill()}
-  G.globalAlpha=0.55;R(0,0,W,28,'#05070d');R(0,H-30,W,30,'#05070d');G.globalAlpha=1;R(0,28,W,2,'#E3B341');R(0,H-32,W,2,'#E3B341');
+  const cx=Math.round(110*Z),cy=Math.round(118*Z),n=20,rot=reduced?0:e*0.5;const c1=kit.j,c2=lum(kit.j)<0.15?shade(kit.t,-0.35):shade(kit.j,-0.35);
+  for(let i=0;i<n;i++){const a0=rot+i/n*Math.PI*2,a1=a0+Math.PI/n;G.fillStyle=i%2?c1:c2;G.beginPath();G.moveTo(cx,cy);G.lineTo(cx+Math.cos(a0)*W*1.1,cy+Math.sin(a0)*W*1.1);G.lineTo(cx+Math.cos(a1)*W*1.1,cy+Math.sin(a1)*W*1.1);G.closePath();G.fill()}
+  const bd=Math.round(28*Z);G.globalAlpha=0.55;R(0,0,W,bd,'#05070d');R(0,H-bd-2,W,bd+2,'#05070d');G.globalAlpha=1;R(0,bd,W,2,'#E3B341');R(0,H-bd-4,W,2,'#E3B341');
   const h=S.hitter||role(-1,'OH');const pose=c.word==='STUFF!'?'block':c.word==='ACE!'?'serve':'hero';
-  const spr=sprite(h,pose,1,true,3);const hx=Math.round(-90+ease*150);G.drawImage(spr,hx,H-32-spr.height+18);
-  const word=c.word,ks=5,ww=tw(word,ks),wx=Math.round(W-18-ww+(1-ease)*220);
+  const spr=sprite(h,pose,1,true,3*SPR);const hx=Math.round((-90+ease*150)*Z);G.drawImage(spr,hx,H-bd-4-spr.height+Math.round(18*Z));
+  const word=c.word,ks=6,ww=tw(word,ks),wx=Math.round(W-18-ww+(1-ease)*W*0.57);
   const grad=['#fff6c8','#ffe27a','#f7c948','#f0b232','#e8962a','#df7a22','#c85a18'];
-  R(wx-10,62,ww+20,52,'rgba(5,7,13,.72)');txtG(word,wx,70,ks,grad,OUTC);
-  const sub=home.abbr+' SCORES';txt(sub,W-18-tw(sub,2),126,'#ffffff',2,OUTC);
+  R(wx-10,Math.round(62*Z),ww+20,Math.round(56*Z),'rgba(5,7,13,.72)');txtG(word,wx,Math.round(70*Z),ks,grad,OUTC);
+  const sub=home.abbr+' SCORES';txt(sub,W-18-tw(sub,2),Math.round(126*Z)+4,'#ffffff',2,OUTC);
 }
 
 // ───────────────────────── loop ─────────────────────────
 let last=performance.now(),raf=0,dead=false;
-function frame(now){if(dead)return;let dt=Math.min(0.05,(now-last)/1000);last=now;rt+=dt;
+function frame(now){if(dead)return;LITE.tick(now-last);let dt=Math.min(0.05,(now-last)/1000);last=now;rt+=dt;parts.step(dt);
   if(S.cele){if(rt-S.cele.t0>=S.cele.dur){const t=S.cele.then;S.cele=null;t&&t()}}
   else if(!S.paused&&S.phase!=='menu'&&S.phase!=='between'&&S.phase!=='over'){
     // the guided first rally runs slowed (BK 15:24)
     const g=dt*S.ts*(S.tutorial&&!AUTO?0.7:1)*(AUTO?3:1);gt+=g;
     const due=timers.filter(t=>t.at<=gt);timers=timers.filter(t=>t.at>gt);due.forEach(t=>t.fn());
     for(const p of S.players){const dx=p.tx-p.x,dy=p.ty-p.y,d=Math.hypot(dx,dy),sp=4.8*g;if(d>0.01){const m=Math.min(1,sp/d);p.x+=dx*m;p.y+=dy*m}
-      if(p.jump){const u=(gt-p.jump.t0)/p.jump.dur;if(u>=1){p.jump=null;p.z=0}else p.z=4*p.jump.h*u*(1-u)}
+      if(p.jump){const u=(gt-p.jump.t0)/p.jump.dur;if(u>=1){p.jump=null;p.z=0;pose(p,'land',0.22);dust(p.x,p.y,6)}else p.z=4*p.jump.h*u*(1-u)}
       if(p.poseUntil&&gt>p.poseUntil){p.pose='ready';p.poseUntil=0}}
     ballStep();
     {const b=S.ball;b.trail=b.trail||[];if(b.f&&b.f.dur<0.75){const[x,y]=P(b.x,b.y,b.z);b.trail.push([x,y-4]);if(b.trail.length>3)b.trail.shift()}else b.trail.length=0}
@@ -561,6 +600,8 @@ return {
   setSteady: on => { S.steady = !!on },
   coachDone,
   // The pep band at the set break (BK 2026-10-03 15:46: "PEP BAND"). A tap or a key skips it.
+  // Friday night's indoor cousin: the gym flyover, then the run-through (the Pixel Standard, BK 2026-10-04).
+  intro: then => { showFilm({ type: 'flyover', dur: reduced ? 1.2 : 2.6 }); showFilm({ type: 'run', dur: reduced ? 1.2 : RUNTHROUGH_SECONDS, then }) },
   band: (colors, then) => { S.band = { caption: 'PEP BAND', colors, floor: 'wood', t0: rt, dur: reduced ? 1.6 : BAND_SECONDS, then } },
   call: i => { const f = callFns[i]; if (f && !S.paused) f() },
   state: () => ({ score: [...S.score], sets: [...S.sets], setNo: S.setNo, timeouts: S.timeouts, phase: S.phase, serve: S.serve }),

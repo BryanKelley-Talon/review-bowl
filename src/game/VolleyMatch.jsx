@@ -71,6 +71,8 @@ export default function VolleyMatch({ career, dealer, manifest, opp, oppStrength
       onMatchEnd: info => h.current.matchEnd(info),
       blocked: () => !!gateRef.current,
     })
+    // The gym flyover and the run-through open the match (the Pixel Standard, BK 2026-10-04 17:24).
+    court.current.intro()
     // Dev only: lets a test script reach the court. Never in a build.
     if (import.meta.env.DEV) window.__vbCourt = court.current
     return () => court.current.destroy()
@@ -231,7 +233,7 @@ export default function VolleyMatch({ career, dealer, manifest, opp, oppStrength
                 label={`${you.abbr} ${board.score[0]}, ${them.abbr} ${board.score[1]}. Set ${board.setNo}. Sets ${board.sets[0]} to ${board.sets[1]}.`} />
 
       <div className="field-wrap court-wrap">
-        <canvas ref={canvasRef} className="field court" width="384" height="216"
+        <canvas ref={canvasRef} className="field court" width="480" height="270"
                 aria-label="Volleyball court. Use the call bar or the keyboard to play." />
         <button type="button" className="fs-btn" onClick={toggleFull} aria-pressed={full}>
           {full ? 'Exit full screen' : 'Full screen'}

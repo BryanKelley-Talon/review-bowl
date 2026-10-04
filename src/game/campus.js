@@ -14,6 +14,7 @@
 // ============================================================
 import { lum, rng, shade, SKIN } from './pixel.js'
 import { texture } from './mode7.js'
+import { TEAMS } from './teams.js'
 
 export const PY = 6, OX = 90, OY = 40
 const FW = 53.33
@@ -224,3 +225,111 @@ export function flyoverCam(k) {
 }
 
 export { rgbOf }
+
+
+// ============================================================
+// THE GYM — the high school gym for Mode 7, volleyball's flyover (the Pixel Standard, 2026-10-04).
+// Units are meters, the court's own: x -9–9 end line to end line (the net at 0), y 0–9 across.
+// Wooden pull-out bleachers down both sides (the student section and the pep band on the home
+// side), the league's banners on the end walls, lamps overhead. Generic gym: no real school's marks.
+// The scoreboard carries only what the court's own scoreboard shows: the two schools' codes, the
+// score and the set.
+// ============================================================
+export const GPY = 10, GOX = 22, GOY = 12
+function gymFloor(home) {
+  const TW = 44 * GPY, TH = 34 * GPY
+  const [tex, t] = mk(TW, TH)
+  const X = x => Math.round((x + GOX) * GPY), Y = y => Math.round((y + GOY) * GPY)
+  const R = (x0, y0, x1, y1, c) => { t.fillStyle = c; t.fillRect(X(x0), Y(y0), X(x1) - X(x0), Y(y1) - Y(y0)) }
+  for (let y = 0; y < TH; y += 3) { t.fillStyle = (y / 3) % 2 ? '#c58b50' : '#bf854a'; t.fillRect(0, y, TW, 3); const off = (y / 3) % 3 * 13; for (let x = off; x < TW; x += 40) { t.fillStyle = '#a8733f'; t.fillRect(x, y, 1, 3) } }
+  let zone = lum(home.colors[0]) < 0.25 ? home.colors[0] : home.colors[1]; if (lum(zone) < 0.1) zone = '#23242c'
+  R(-11.2, -1.6, 11.2, 10.6, zone)
+  R(-9, 0, 9, 9, '#d7a467'); R(-3, 0, 3, 9, '#cf995c')
+  const L = '#f6f1e4'
+  R(-9, -0.05, 9, 0.05, L); R(-9, 8.95, 9, 9.05, L); R(-9.05, 0, -8.95, 9, L); R(8.95, 0, 9.05, 9, L)
+  R(-0.05, 0, 0.05, 9, L); R(-3.05, 0, -2.95, 9, L); R(2.95, 0, 3.05, 9, L)
+  return tex
+}
+function gymWall(lenM, hM, home, r, banners) {
+  const [c, x] = mk(lenM * GPY, hM * GPY), w = c.width, h = c.height
+  ;['#151b30', '#1b2340', '#222c4d', '#29355a'].forEach((col, i) => { x.fillStyle = col; x.fillRect(0, Math.round(i * h / 4), w, Math.ceil(h / 4)) })
+  for (let y = 6; y < h; y += 7) { x.fillStyle = 'rgba(0,0,0,.18)'; x.fillRect(0, y, w, 1) }
+  const st = lum(home.colors[0]) < 0.12 ? shade(home.colors[1], -0.2) : home.colors[0]
+  x.fillStyle = st; x.fillRect(0, Math.round(h * 0.62), w, 5)
+  if (banners) banners.forEach((t, i) => {
+    const bx = Math.round(8 + i * (w - 16) / banners.length), by = Math.round(h * 0.18), bw = Math.round((w - 16) / banners.length) - 6
+    x.fillStyle = t.colors[0]; x.fillRect(bx, by, bw, 18); x.fillStyle = t.colors[1]; x.fillRect(bx, by, bw, 2); x.fillRect(bx, by + 16, bw, 2)
+    const ink = Math.abs(lum(t.colors[0]) - lum(t.colors[1])) > 0.42 ? t.colors[1] : (lum(t.colors[0]) > 0.5 ? '#111111' : '#ffffff')
+    if (t.abbr) txtAny(x, t.abbr, bx + Math.round(bw / 2 - (t.abbr.length * 6 - 1) / 2), by + 6, ink)
+  })
+  return c
+}
+// codes like CPP, ELM, THS: the letters the court's banners already print
+const F5B = { A: ' ### |#   #|#   #|#####|#   #|#   #|#   #', B: '#### |#   #|#   #|#### |#   #|#   #|#### ', C: ' ####|#    |#    |#    |#    |#    | ####', D: '#### |#   #|#   #|#   #|#   #|#   #|#### ', E: '#####|#    |#    |#### |#    |#    |#####', F: '#####|#    |#    |#### |#    |#    |#    ', G: ' ####|#    |#    |#  ##|#   #|#   #| ####', H: '#   #|#   #|#   #|#####|#   #|#   #|#   #', I: '#####|  #  |  #  |  #  |  #  |  #  |#####', K: '#   #|#  # |# #  |##   |# #  |#  # |#   #', L: '#    |#    |#    |#    |#    |#    |#####', M: '#   #|## ##|# # #|# # #|#   #|#   #|#   #', N: '#   #|##  #|# # #|#  ##|#   #|#   #|#   #', O: ' ### |#   #|#   #|#   #|#   #|#   #| ### ', P: '#### |#   #|#   #|#### |#    |#    |#    ', R: '#### |#   #|#   #|#### |# #  |#  # |#   #', S: ' ####|#    |#    | ### |    #|    #|#### ', T: '#####|  #  |  #  |  #  |  #  |  #  |  #  ', U: '#   #|#   #|#   #|#   #|#   #|#   #| ### ', W: '#   #|#   #|#   #|# # #|# # #|## ##|#   #', Y: '#   #|#   #| # # |  #  |  #  |  #  |  #  ' }
+function txtAny(c, s, x, y, col, k = 1) {
+  c.fillStyle = col
+  ;[...String(s)].forEach((ch, i) => ((F5B[ch] || F5[ch] || F5[' '])).split('|').forEach((row, r) => [...row].forEach((b, q) => { if (b === '#') c.fillRect(x + (i * 6 + q) * k, y + r * k, k, k) })))
+}
+function gymBleachers(lenM, hM, home, away, r, homeSide) {
+  const [c, x] = mk(lenM * GPY, hM * GPY), w = c.width, h = c.height
+  const cheer = cheerColor(home), team = homeSide ? home : away
+  x.fillStyle = '#4a3423'; x.fillRect(0, 0, w, h)
+  const rowH = 5
+  for (let y = 0; y < h - 4; y += rowH) {
+    x.fillStyle = '#a87a48'; x.fillRect(0, y + 3, w, 2); x.fillStyle = '#d6a86c'; x.fillRect(0, y + 3, w, 1)
+    for (let i = 1; i < w - 1; i += 2) {
+      const f = i / w
+      if (r() < (homeSide && f > 0.35 && f < 0.65 ? 0.05 : 0.35)) continue
+      let shirt = r() < 0.7 ? team.colors[Math.floor(r() * team.colors.length)] : ['#d0d4dc', '#6b7280', '#2f3b55'][Math.floor(r() * 3)]
+      if (homeSide && f > 0.35 && f < 0.65) shirt = r() < 0.8 ? cheer : home.colors[0]
+      if (homeSide && f > 0.86) shirt = home.colors[0]
+      x.fillStyle = shirt; x.fillRect(i, y + 1, 2, 2)
+      x.fillStyle = homeSide && f > 0.86 && (y / rowH) % 2 === 0 ? '#f0c14b' : SKIN[Math.floor(r() * SKIN.length)]; x.fillRect(i, y, 2, 1)
+    }
+  }
+  x.fillStyle = '#2a1d12'; x.fillRect(0, h - 3, w, 3)
+  return c
+}
+function gymBoard(home, away) {
+  const [c, x] = mk(6 * GPY, 2.6 * GPY), w = c.width, h = c.height
+  x.fillStyle = '#6b7385'; x.fillRect(0, 0, w, h); x.fillStyle = '#07080b'; x.fillRect(2, 2, w - 4, h - 4)
+  txtAny(x, home.abbr, 5, 4, '#ffb02e'); txtAny(x, away.abbr, w - 5 - (away.abbr.length * 6 - 1), 4, '#ffb02e')
+  txtAny(x, '00', 5, 13, '#ff5a3c'); txtAny(x, '00', w - 16, 13, '#ff5a3c')
+  txtAny(x, 'SET', Math.round(w / 2 - 10), 4, '#9fd1ff'); txtAny(x, '1', Math.round(w / 2 - 2), 13, '#9fd1ff')
+  return c
+}
+function gymCeiling(W, r) {
+  const [sky, s] = mk(W * 4, 90)
+  s.fillStyle = '#0d1120'; s.fillRect(0, 0, sky.width, 90)
+  for (let y = 10; y < 90; y += 16) { s.fillStyle = '#1a2033'; s.fillRect(0, y, sky.width, 2) }
+  for (let x = 0; x < sky.width; x += 30) { s.fillStyle = '#1a2033'; s.fillRect(x, 0, 2, 90); s.fillStyle = '#232b42'; for (let y = 0; y < 90; y += 8) s.fillRect(x + ((y / 8) % 2 ? 2 : 14), y, 12, 1) }
+  for (let x = 20; x < sky.width; x += 90) { s.fillStyle = '#6b7385'; s.fillRect(x, 60, 14, 3); s.fillStyle = '#fff3cf'; s.fillRect(x + 1, 63, 12, 1) }
+  return sky
+}
+const gcache = new Map()
+export function gymScene(home, away, W = 480) {
+  const key = `${home.id}|${away.id}|${W}`
+  if (gcache.has(key)) return gcache.get(key)
+  const r = rng(home.name.length * 71 + away.name.length * 29 + 3)
+  const walls = []
+  const wall = (x0, y0, x1, y1, z0, z1, cv) => walls.push({ x0, y0, x1, y1, z0, z1, tex: texture(cv) })
+  // the end walls carry the league's banners; the long walls rise behind the bleachers
+  wall(18, 21, 18, -11, 0, 9, gymWall(32, 9, home, r, TEAMS))
+  wall(-18, 21, -18, -11, 0, 9, gymWall(32, 9, home, r, null))
+  wall(-14, -10, 14, -10, 0, 9, gymWall(28, 9, home, r, null))
+  wall(14, 19, -14, 19, 0, 9, gymWall(28, 9, home, r, null))
+  wall(-13, -5, 13, -5, 0, 4.5, gymBleachers(26, 4.5, home, away, r, true))
+  wall(13, 14, -13, 14, 0, 4.5, gymBleachers(26, 4.5, home, away, r, false))
+  wall(17.9, 7.5, 17.9, 1.5, 5.2, 7.8, gymBoard(home, away))
+  const glows = []
+  for (const gx of [-12, -4, 4, 12]) for (const gy of [0, 9]) glows.push({ x: gx, y: gy, z: 8.5, r: 0.3 })
+  const scene = { PY: GPY, OX: GOX, OY: GOY, band: 260, out: [26, 20, 14], floor: texture(gymFloor(home)), sky: texture(gymCeiling(W, r)), walls, glows }
+  gcache.set(key, scene)
+  if (gcache.size > 4) gcache.delete(gcache.keys().next().value)
+  return scene
+}
+// The gym flyover: high over your end of the gym, swinging down behind your end line.
+export function gymFlyoverCam(k) {
+  const e = ease(Math.max(0, Math.min(1, k)))
+  return { x: -16 + e * 4.5, y: 4.5 + (1 - e) * 7, a: -0.42 * (1 - e), h: 7.5 - e * 5.6, hz: 70, f: 230 }
+}

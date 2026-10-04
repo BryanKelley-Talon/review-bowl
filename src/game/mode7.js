@@ -128,6 +128,7 @@ export function createMode7(W, H) {
       if (!p) continue
       const r = Math.max(3, (L.r || 4.5) * scene.PY * cam.f / p.d)
       if (p.x < -r * 3 || p.x > W + r * 3) continue
+      if (r > 28) continue                              // a lamp right over the lens: no glow
       if (L.toward) {
         const q = project(scene, cam, W, L.toward[0], L.toward[1], 0)
         if (q) {

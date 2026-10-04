@@ -421,7 +421,7 @@ body.rb-full{overscroll-behavior:none}
 @media (max-width:600px){ .toast{top:44px} }
 
 /* ---------- volleyball (2026-10-03) ---------- */
-/* The court is the concept's 384x216 gym, scaled up crisp. The call bar sits right under it;
+/* The court is a 480x270 gym (the Pixel Standard, 2026-10-04), scaled up crisp. The call bar sits right under it;
    held sideways in full screen it joins the column beside the court, like football's controls. */
 .match.vb .field-wrap{background:#0B1220}
 .vb-over{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;padding:12px;

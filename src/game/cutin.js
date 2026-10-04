@@ -121,12 +121,13 @@ function night(g, W, H, seed, lightsAt = [0.125, 0.875]) {
 }
 // Packed home bleachers: the student section in the school's colour, the band at one end.
 // jump: 0–1, how many are on their feet with their arms up.
-function stands(g, W, y0, rows, team, seed, jump = 0, t = 0, big = 1) {
+function stands(g, W, y0, rows, team, seed, jump = 0, t = 0, big = 1, wood = false) {
   const r = rng(seed), [c0] = team.colors, cheer = cheerColor(team)
   const rowH = 6 * big
   for (let row = 0; row < rows; row++) {
     const y = y0 + row * rowH
-    g.fillStyle = '#20232a'; g.fillRect(0, y, W, rowH); g.fillStyle = '#8e97a2'; g.fillRect(0, y + rowH - 1, W, 1)
+    if (wood) { g.fillStyle = '#4a3423'; g.fillRect(0, y, W, rowH); g.fillStyle = '#a87a48'; g.fillRect(0, y + rowH - 3 * big, W, 2 * big); g.fillStyle = '#d6a86c'; g.fillRect(0, y + rowH - 3 * big, W, big) }
+    else { g.fillStyle = '#20232a'; g.fillRect(0, y, W, rowH); g.fillStyle = '#8e97a2'; g.fillRect(0, y + rowH - 1, W, 1) }
     for (let x = (row % 2) * 2 * big; x < W; x += 4 * big) {
       if (r() < 0.06) continue
       const band = x > W * 0.84
@@ -152,13 +153,29 @@ export function drawRunThrough(g, W, H, o, e, reduced) {
   const k0 = reduced ? 1 : Math.min(1, e / RUNTHROUGH_SECONDS)
   const burst = reduced ? 1 : Math.max(0, Math.min(1, (e - 0.7) / 0.5))
   const rr = rng(23)
-  night(g, W, H, 5)
-  stands(g, W, Math.round(H * 0.24), 8, o.team, 9, burst, e)
+  if (o.indoor) {
+    // the high school gym: painted block wall, the lamps, wooden pull-out bleachers, the floor
+    g.fillStyle = '#151b30'; g.fillRect(0, 0, W, H)
+    ;['#151b30', '#1b2340', '#222c4d'].forEach((c, i) => { g.fillStyle = c; g.fillRect(0, Math.round(i * H * 0.08), W, Math.ceil(H * 0.08)) })
+    for (let y = 6; y < H * 0.24; y += 7) { g.fillStyle = 'rgba(0,0,0,.18)'; g.fillRect(0, y, W, 1) }
+    for (const lx of [0.12, 0.37, 0.63, 0.88]) {
+      const x = Math.round(W * lx)
+      g.fillStyle = '#6b7385'; g.fillRect(x - 10, 0, 20, 3); g.fillStyle = '#fff3cf'; g.fillRect(x - 9, 3, 18, 1)
+      if (!LITE.on) { g.globalAlpha = 0.1; for (let i = 0; i < 5; i++) { g.fillStyle = '#fff3cf'; g.fillRect(x - 12 - i * 3, 4 + i * 4, 24 + i * 6, 4) } g.globalAlpha = 1 }
+    }
+    const st = lum(o.team.colors[0]) < 0.12 ? shade(o.team.colors[1], -0.2) : o.team.colors[0]
+    g.fillStyle = st; g.fillRect(0, Math.round(H * 0.2), W, 4)
+  } else night(g, W, H, 5)
+  stands(g, W, Math.round(H * 0.24), 8, o.team, 9, burst, e, 1, !!o.indoor)
   g.fillStyle = '#5b636e'; g.fillRect(0, Math.round(H * 0.415), W, 4)
   const ty = Math.round(H * 0.43)
-  g.fillStyle = '#8f3a2b'; g.fillRect(0, ty, W, 14)
-  for (let y = ty + 2; y < ty + 14; y += 3) { g.fillStyle = 'rgba(255,255,255,.4)'; g.fillRect(0, y, W, 1) }
-  for (let y = ty + 14; y < H; y += 8) { g.fillStyle = ((y - ty) / 8) % 2 ? '#357F33' : '#3B8A38'; g.fillRect(0, y, W, 8) }
+  if (o.indoor) {
+    for (let y = ty; y < H; y += 2) { g.fillStyle = ((y - ty) / 2) % 2 ? '#c58b50' : '#bf854a'; g.fillRect(0, y, W, 2); const off = ((y - ty) / 2) % 3 * 9; for (let x = off; x < W; x += 27) { g.fillStyle = '#a8733f'; g.fillRect(x, y, 1, 2) } }
+  } else {
+    g.fillStyle = '#8f3a2b'; g.fillRect(0, ty, W, 14)
+    for (let y = ty + 2; y < ty + 14; y += 3) { g.fillStyle = 'rgba(255,255,255,.4)'; g.fillRect(0, y, W, 1) }
+    for (let y = ty + 14; y < H; y += 8) { g.fillStyle = ((y - ty) / 8) % 2 ? '#357F33' : '#3B8A38'; g.fillRect(0, y, W, 8) }
+  }
   // the banner and its poles
   const bx0 = Math.round(W * 0.083), bx1 = Math.round(W * 0.917), by0 = Math.round(H * 0.363), by1 = Math.round(H * 0.874)
   g.fillStyle = '#7b828c'; g.fillRect(bx0 - 4, by0 - 10, 4, by1 - by0 + 40); g.fillRect(bx1, by0 - 10, 4, by1 - by0 + 40)
@@ -184,11 +201,11 @@ export function drawRunThrough(g, W, H, o, e, reduced) {
       g.moveTo(x0 - Math.sin(a) * 7, y0 + Math.cos(a) * 7); g.lineTo(x0 + Math.sin(a) * 7, y0 - Math.cos(a) * 7); g.lineTo(x0 + Math.cos(a) * 14 * burst, y0 + Math.sin(a) * 14 * burst); g.fill()
     }
     const mate = o.mateFn && o.mateFn()
-    if (mate) g.drawImage(mate, cx - 78, cy - mate.height + 30)
+    if (mate) g.drawImage(mate, cx - 78, cy - mate.height + (o.mateDrop ?? 30))
     const hero = o.heroFn && o.heroFn()
     if (hero) {
       const push = reduced ? 0 : Math.round((1 - burst) * 30)
-      g.drawImage(hero, Math.round(cx - hero.width / 2 + 12), Math.round(cy - hero.height * 0.3 + push))
+      g.drawImage(hero, Math.round(cx - hero.width / 2 + 12), Math.round(cy - hero.height * (o.heroLift ?? 0.3) + push))
     }
     // paper shreds and confetti in the school's colours
     const n = LITE.on ? 24 : 70
