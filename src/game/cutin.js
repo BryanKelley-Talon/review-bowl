@@ -258,7 +258,8 @@ export const STUDENTS_SECONDS = 1.8
 export function drawStudents(g, W, H, o, e, reduced) {
   g.fillStyle = '#05070d'; g.fillRect(0, 0, W, H)
   night(g, W, Math.round(H * 0.5), 17, [0.3, 0.7])
-  stands(g, W, Math.round(H * 0.16), 7, o.team, 19, reduced ? 1 : 0.85, reduced ? 0.3 : e, 2)
+  const y0 = Math.round(H * 0.2)
+  stands(g, W, y0, Math.ceil((H * 0.9 - y0) / 12), o.team, 19, reduced ? 1 : 0.85, reduced ? 0.3 : e, 2)
   const r = rng(31), edge = cheerColor(o.team)
   const n = LITE.on ? 30 : 110
   for (let i = 0; i < n; i++) {
