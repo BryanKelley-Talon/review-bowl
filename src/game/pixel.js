@@ -109,3 +109,72 @@ export function outline(cv, col = OUTC, th = 1) {
 export const SKIN = ['#f1c7a3', '#e3b089', '#c98e62', '#a8714a', '#7a4b2c', '#5c3a22']
 export const HAIR = ['#2a1a10', '#5a3a1e', '#8b5a2b', '#c99a55', '#1a1a1a', '#6b2f1a']
 export const reducedMotion = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
+
+// ============================================================
+// THE PIXEL STANDARD (BK 2026-10-04 17:24, "Approved. Signed."; CONVENTIONS §6).
+// The shared kit every sport draws with: four tones per colour, pooled particles, a capped
+// shake, and the lite switch that drops the extras on a slow Chromebook. Nothing here is
+// stored or sent.
+// ============================================================
+
+// Four tones per colour: highlight, base, shade, deep shade. A near-black colour lifts its
+// base a touch so the shade still has somewhere darker to go.
+export function ramp4(h) {
+  if (lum(h) < 0.2) return { hi: shade(h, 0.45), base: shade(h, 0.16), sh: h, deep: shade(h, -0.55) }
+  return { hi: shade(h, 0.32), base: h, sh: shade(h, -0.26), deep: shade(h, -0.5) }
+}
+
+// Shake: at most 4 px, for at most 0.3 s (decay 14 px a second from 4 ends at 0.29 s).
+export const SHAKE_MAX = 4
+export const SHAKE_DECAY = 14
+export const capShake = v => Math.min(SHAKE_MAX, Math.max(0, v))
+
+// LITE. If frames run over 25 ms for 2 seconds (time spent over the line, minus the time spent
+// back under it), the extras switch off for the rest of the visit: particles, parallax, crowd
+// motion, light glows. Gameplay never changes. One switch for every sport on the page.
+export const LITE = { on: false, over: 0, limit: 25, hold: 2,
+  tick(ms) {
+    if (this.on || !(ms > 0) || ms > 500) return this.on          // a hidden tab is not a slow Chromebook
+    if (ms > this.limit) this.over += ms / 1000
+    else this.over = Math.max(0, this.over - ms / 1000)
+    if (this.over >= this.hold) this.on = true
+    return this.on
+  },
+}
+
+// PARTICLES: pooled, never more than `max` alive (150 by the standard). World units are the
+// caller's; draw() takes a projection to screen pixels. z is height above the ground.
+export class Particles {
+  constructor(max = 150) { this.max = max; this.list = [] }
+  get count() { return this.list.length }
+  clear() { this.list.length = 0 }
+  // opts: x, y, z, n, colors, speed (spread), up (vz), life (s), size (px), grav, drift (x bias)
+  burst({ x, y, z = 0, n = 12, colors = ['#ffffff'], speed = 4, up = 4, life = 0.8, size = 1, grav = 18, drift = 0, rand = Math.random }) {
+    if (LITE.on) return 0
+    let made = 0
+    for (let i = 0; i < n && this.list.length < this.max; i++, made++) {
+      const a = rand() * Math.PI * 2, sp = speed * (0.35 + rand() * 0.65)
+      this.list.push({ x, y, z, vx: Math.cos(a) * sp + drift, vy: Math.sin(a) * sp * 0.6, vz: up * (0.5 + rand() * 0.8),
+        life: life * (0.6 + rand() * 0.6), t: 0, c: colors[Math.floor(rand() * colors.length)], s: size, grav })
+    }
+    return made
+  }
+  step(dt) {
+    const L = this.list
+    for (let i = L.length - 1; i >= 0; i--) {
+      const p = L[i]
+      p.t += dt
+      if (p.t >= p.life) { L[i] = L[L.length - 1]; L.pop(); continue }
+      p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt; p.vz -= p.grav * dt
+      if (p.z < 0) { p.z = 0; p.vz *= -0.25; p.vx *= 0.6; p.vy *= 0.6 }
+    }
+  }
+  // proj(x, y) → { x, y } in screen px; zk: screen px per unit of height
+  draw(g, proj, zk = 1) {
+    for (const p of this.list) {
+      const s = proj(p.x, p.y)
+      g.fillStyle = p.c
+      g.fillRect(Math.round(s.x), Math.round(s.y - p.z * zk), p.s, p.s)
+    }
+  }
+}

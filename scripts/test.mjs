@@ -592,5 +592,61 @@ eq(+readChance(lv(3), ['deep', 'deep', 'deep'], 'deep').toFixed(2), 0.6, 'three 
 eq(+readChance(lv(3), ['dive', 'sweep', 'slants'], 'deep').toFixed(2), 0.24, 'a mixed-up call stays at the training rate')
 eq(+readChance(lv(1), ['deep', 'deep', 'deep'], 'deep').toFixed(2), 0.7, 'capped at 0.70')
 
+// ── the Pixel Standard (BK 2026-10-04 17:24, "Approved. Signed."; CONVENTIONS §6) ─────────────
+{
+  const PX = await import('../src/game/pixel.js')
+  const M7 = await import('../src/game/mode7.js')
+  const CP = await import('../src/game/campus.js')
+  // four tones per colour, all different, and the deep shade is the darkest
+  for (const h of ['#151515', '#C5B358', '#D9261C', '#F2F2F2', '#1B3A6B']) {
+    const r4 = PX.ramp4(h), tones = [r4.hi, r4.base, r4.sh, r4.deep]
+    ok(new Set(tones).size === 4, `ramp4(${h}) gives four different tones`)
+    ok(PX.lum(r4.deep) <= Math.min(...tones.map(PX.lum)) + 1e-9, `ramp4(${h}): the deep shade is the darkest`)
+  }
+  // shake: at most 4 px, for at most 0.3 s
+  eq(PX.capShake(9), PX.SHAKE_MAX, 'shake is capped at 4 px')
+  ok(PX.SHAKE_MAX / PX.SHAKE_DECAY <= 0.3, 'a full shake is over in 0.3 s or less')
+  // particles: never more than 150 alive, and they die
+  const parts = new PX.Particles(150)
+  for (let i = 0; i < 10; i++) parts.burst({ x: 0, y: 0, n: 40, rand: PX.rng(i + 1) })
+  eq(parts.count, 150, 'particles stop at 150')
+  for (let i = 0; i < 300; i++) parts.step(1 / 60)
+  eq(parts.count, 0, 'every particle dies within five seconds')
+  // lite: 2 s of slow frames switches it on; a short stall does not; a hidden tab does not
+  const L = PX.LITE
+  L.on = false; L.over = 0
+  for (let i = 0; i < 40; i++) L.tick(30)
+  ok(!L.on, 'lite: 1.2 s of 30 ms frames is not enough')
+  for (let i = 0; i < 2000 / 30; i++) L.tick(30)
+  ok(L.on, 'lite: past 2 s of frames over 25 ms switches the extras off')
+  L.on = false; L.over = 0
+  L.tick(5000)
+  ok(!L.on && L.over === 0, 'lite: a hidden tab coming back is not a slow Chromebook')
+  for (let i = 0; i < 400; i++) { L.tick(i % 4 ? 12 : 30) }
+  ok(!L.on, 'lite: frames mostly under the line never switch it on')
+  L.on = false; L.over = 0
+  // Mode 7: a point straight ahead lands on the centre column, below the horizon; behind is null
+  const scene = { PY: CP.PY, OX: CP.OX, OY: CP.OY }
+  const cam = { x: 0, y: 26.66, a: 0, h: 5, hz: 72, f: 230 }
+  const ahead = M7.project(scene, cam, 480, 30, 26.66, 0)
+  ok(ahead && Math.abs(ahead.x - 240) < 0.01 && ahead.y > 72, 'Mode 7: straight ahead is the centre column, below the horizon')
+  const far = M7.project(scene, cam, 480, 90, 26.66, 0)
+  ok(far.y < ahead.y && far.y > 72, 'Mode 7: farther away sits nearer the horizon')
+  ok(M7.project(scene, cam, 480, -20, 26.66, 0) === null, 'Mode 7: a point behind the camera is not drawn')
+  const left = M7.project(scene, cam, 480, 30, 36, 0)
+  ok(left.x < 240, 'Mode 7: looking down +x, more y is to the left (the far sideline)')
+  // the flyover starts over the parking lot, high, and ends on the field at your end, low
+  const c0 = CP.flyoverCam(0), c1 = CP.flyoverCam(1)
+  ok(c0.x < -42 && c0.h > 20, 'flyover: starts high over the parking lot')
+  ok(c1.x > 0 && c1.x < 25 && c1.h < 7, 'flyover: ends on the field, behind your 25, low')
+  // the scoreboard words are BK's (17:13), and the student section never wears plain white
+  ok(CP.cheerColor({ colors: ['#8C1D2C', '#FFFFFF'] }) === '#8C1D2C', 'a white second colour gives the student section the first')
+  ok(CP.cheerColor({ colors: ['#111111', '#C5B358'] }) === '#C5B358', 'Corning\'s student section wears Vegas gold')
+  const src = fs.readFileSync(path.join(ROOT, 'src/game/campus.js'), 'utf8')
+  for (const w of ['HOME', 'GUEST', 'QTR', 'DOWN', 'TO GO']) ok(src.includes(`'${w}'`), `scoreboard word ${w} (BK 17:13)`)
+  const cut = fs.readFileSync(path.join(ROOT, 'src/game/cutin.js'), 'utf8')
+  ok(!/txtG\(g, '[A-Z]/.test(cut.slice(cut.indexOf('FRIDAY NIGHT CUT SCENES'))), 'the new cut scenes print no new words (the banner shows the school name only)')
+}
+
 console.log(`\n${passed} passed, ${failed} failed`)
 process.exit(failed ? 1 : 0)
