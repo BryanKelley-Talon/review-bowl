@@ -1,0 +1,556 @@
+{
+ "_README": "Comeback set · timeout questions for Review Bowl football (and any culture pool). DRAFT by Leo 2026-10-04, NOT LOCKED. Requested by Josh 2026-10-03 23:59 (BK 23:57). Theme: adversity and perseverance (NEXT PLAY). Office practice-item shape. Port word for word once BK locks. _label never renders.",
+ "theme": {
+  "title": "Comeback",
+  "month": null
+ },
+ "practice": {
+  "intro": "Some days are harder than others. What you do next is yours.",
+  "items": [
+   {
+    "n": 1,
+    "_label": "C1 · Be Responsible",
+    "question": "You studied for a test and still failed it. What's the best next step?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Decide studying doesn't work for you."
+     },
+     {
+      "key": "B",
+      "text": "Hide the test and hope nobody asks."
+     },
+     {
+      "key": "C",
+      "text": "Promise yourself you'll study twice as long next time."
+     },
+     {
+      "key": "D",
+      "text": "Look at which questions you missed and figure out why."
+     }
+    ],
+    "correct": "D",
+    "hints": [
+     "Which one tells you what actually went wrong?",
+     "Is more time the fix if you don't know the problem?"
+    ],
+    "reasoning": "A bad grade is information. Use it before you judge yourself. That's Be Responsible.",
+    "distractors": {
+     "A": "One test doesn't prove that. It tells you something to fix.",
+     "B": "Hiding it doesn't change it, and it skips the part that helps.",
+     "C": "More of the same studying might give you more of the same result."
+    }
+   },
+   {
+    "n": 2,
+    "_label": "C2 · Be Responsible",
+    "question": "You were out sick for a week, and the work has piled up. What do you do first?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Make a list and ask your teacher what matters most."
+     },
+     {
+      "key": "B",
+      "text": "Try to do all of it tonight."
+     },
+     {
+      "key": "C",
+      "text": "Skip the old stuff and just keep up with the new."
+     },
+     {
+      "key": "D",
+      "text": "Wait until you feel caught up to go back to class."
+     }
+    ],
+    "correct": "A",
+    "hints": [
+     "Who knows which pieces matter most?",
+     "Which one turns a mountain into steps?"
+    ],
+    "reasoning": "A pile gets smaller one piece at a time, starting with the right piece. That's Be Responsible.",
+    "distractors": {
+     "B": "One night can't hold a week, and you'll be wiped out tomorrow.",
+     "C": "The old stuff is often what the new stuff is built on.",
+     "D": "Staying away makes the pile bigger, not smaller."
+    }
+   },
+   {
+    "n": 3,
+    "_label": "C3 · Be Responsible",
+    "question": "You told yourself you'd start studying earlier this time. You didn't, again. What now?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Give up on it. You're just not that kind of student."
+     },
+     {
+      "key": "B",
+      "text": "Wait until next unit to try again."
+     },
+     {
+      "key": "C",
+      "text": "Start now, even if it's only twenty minutes."
+     },
+     {
+      "key": "D",
+      "text": "Pull an all-nighter the day before."
+     }
+    ],
+    "correct": "C",
+    "hints": [
+     "When is the next chance to start?",
+     "Which choice doesn't need a perfect plan?"
+    ],
+    "reasoning": "Missing the plan once doesn't cancel the plan. Start where you are. That's Be Responsible.",
+    "distractors": {
+     "A": "\"That kind of student\" is a habit, and habits can change.",
+     "B": "Waiting turns one miss into two.",
+     "D": "That's the same plan that didn't work last time."
+    }
+   },
+   {
+    "n": 4,
+    "_label": "C4 · Be Responsible",
+    "question": "You lost your starting spot on the team. What's the best response?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Quit. They'll be sorry."
+     },
+     {
+      "key": "B",
+      "text": "Ask the coach what to work on, and work on it."
+     },
+     {
+      "key": "C",
+      "text": "Complain to your friends about the coach."
+     },
+     {
+      "key": "D",
+      "text": "Stop trying hard in practice."
+     }
+    ],
+    "correct": "B",
+    "hints": [
+     "Who decides who starts?",
+     "Which one gives you a way back?"
+    ],
+    "reasoning": "Asking what to fix, then fixing it, is how spots get earned back. That's Be Responsible.",
+    "distractors": {
+     "A": "Quitting makes sure you never get the spot back.",
+     "C": "Complaining changes nothing about the depth chart.",
+     "D": "Practice is the only place you can show you're ready."
+    }
+   },
+   {
+    "n": 5,
+    "_label": "C5 · Be Respectful",
+    "question": "Your teacher's comments on your essay sting. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Throw the paper away."
+     },
+     {
+      "key": "B",
+      "text": "Decide the teacher doesn't like you."
+     },
+     {
+      "key": "C",
+      "text": "Read it again later, then ask which one change would help most."
+     },
+     {
+      "key": "D",
+      "text": "Argue about every comment right then."
+     }
+    ],
+    "correct": "C",
+    "hints": [
+     "What's the comment for?",
+     "When can you read it without the sting?"
+    ],
+    "reasoning": "Feedback is someone taking your work seriously. Hear it out, then use it. That's Be Respectful.",
+    "distractors": {
+     "A": "Then the help in it is gone too.",
+     "B": "Comments are about the essay, not about you.",
+     "D": "Arguing while you're upset usually means you haven't heard it yet."
+    }
+   },
+   {
+    "n": 6,
+    "_label": "C6 · Be Respectful",
+    "question": "Your group's project got a lower grade than you hoped, and everyone is blaming each other. What helps?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Look at the rubric together and figure out what to fix next time."
+     },
+     {
+      "key": "B",
+      "text": "Decide whose fault it was."
+     },
+     {
+      "key": "C",
+      "text": "Say nothing and never work with them again."
+     },
+     {
+      "key": "D",
+      "text": "Tell the teacher the grade is unfair."
+     }
+    ],
+    "correct": "A",
+    "hints": [
+     "What would make the next project better?",
+     "Which one keeps the group a group?"
+    ],
+    "reasoning": "Blame looks backward. Fixing it together looks forward. That's Be Respectful.",
+    "distractors": {
+     "B": "Even if you're right, it won't raise the next grade.",
+     "C": "You'll probably work with them again. Leave the door open.",
+     "D": "Start with the rubric. It usually shows where the points went."
+    }
+   },
+   {
+    "n": 7,
+    "_label": "C7 · Be Respectful",
+    "question": "A coach corrects you in front of the whole team. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Roll your eyes so everyone knows you disagree."
+     },
+     {
+      "key": "B",
+      "text": "Argue back right there."
+     },
+     {
+      "key": "C",
+      "text": "Walk away."
+     },
+     {
+      "key": "D",
+      "text": "Listen, say \"okay,\" and talk to the coach privately later if you need to."
+     }
+    ],
+    "correct": "D",
+    "hints": [
+     "Where is the best place to disagree?",
+     "What does listening cost you?"
+    ],
+    "reasoning": "Taking a correction calmly in front of others shows more strength than fighting it. That's Be Respectful.",
+    "distractors": {
+     "A": "Everyone sees it, and it makes the next practice harder.",
+     "B": "An argument in front of the team rarely goes your way.",
+     "C": "Walking off turns a correction into a bigger problem."
+    }
+   },
+   {
+    "n": 8,
+    "_label": "C8 · Be Respectful",
+    "question": "Someone beat you in a competition, fair and square. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Say they got lucky."
+     },
+     {
+      "key": "B",
+      "text": "Shake hands and ask what they did to prepare."
+     },
+     {
+      "key": "C",
+      "text": "Leave before the results are read."
+     },
+     {
+      "key": "D",
+      "text": "Say you weren't really trying."
+     }
+    ],
+    "correct": "B",
+    "hints": [
+     "What could you learn from the person who won?",
+     "Which one would you want if you had won?"
+    ],
+    "reasoning": "Respecting a fair win, and learning from it, makes you tougher to beat next time. That's Be Respectful.",
+    "distractors": {
+     "A": "If it was fair, it wasn't luck, and saying so costs you.",
+     "C": "Leaving says more about the loss than staying would.",
+     "D": "Nobody believes it, and it takes away from them."
+    }
+   },
+   {
+    "n": 9,
+    "_label": "C9 · Be Kind",
+    "question": "You keep making the same mistake, and you're getting down on yourself. What helps most?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Call yourself names until you stop doing it."
+     },
+     {
+      "key": "B",
+      "text": "Talk to yourself the way you'd talk to a friend: \"Not yet.\""
+     },
+     {
+      "key": "C",
+      "text": "Stop trying that thing."
+     },
+     {
+      "key": "D",
+      "text": "Pretend it doesn't bother you."
+     }
+    ],
+    "correct": "B",
+    "hints": [
+     "What would you tell a friend in your spot?",
+     "Which one keeps you trying?"
+    ],
+    "reasoning": "Being kind to yourself isn't going easy. It's what keeps you in the game. That's Be Kind.",
+    "distractors": {
+     "A": "Harsh words usually make people quit, not improve.",
+     "C": "Then the mistake wins.",
+     "D": "It still bothers you, and now you're handling it alone."
+    }
+   },
+   {
+    "n": 10,
+    "_label": "C10 · Be Kind",
+    "question": "A friend failed a test and says they're giving up on the class. What do you say?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "\"Yeah, that class is impossible.\""
+     },
+     {
+      "key": "B",
+      "text": "Nothing. It's their business."
+     },
+     {
+      "key": "C",
+      "text": "\"Just copy my homework.\""
+     },
+     {
+      "key": "D",
+      "text": "\"One test isn't the whole class. Want to study together?\""
+     }
+    ],
+    "correct": "D",
+    "hints": [
+     "What would help them try again?",
+     "Which one is help that actually helps?"
+    ],
+    "reasoning": "Sometimes kindness is reminding someone the season isn't over. That's Be Kind.",
+    "distractors": {
+     "A": "Agreeing makes giving up easier.",
+     "B": "A word from a friend can matter more than you think.",
+     "C": "That helps for a night and hurts on the next test."
+    }
+   },
+   {
+    "n": 11,
+    "_label": "C11 · Be Kind",
+    "question": "You trip in front of everyone in the hallway, and people laugh. What's the best way to handle it?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Get angry at whoever laughed loudest."
+     },
+     {
+      "key": "B",
+      "text": "Skip that hallway for the rest of the year."
+     },
+     {
+      "key": "C",
+      "text": "Shake it off, maybe laugh too, and keep going."
+     },
+     {
+      "key": "D",
+      "text": "Replay it in your head all day."
+     }
+    ],
+    "correct": "C",
+    "hints": [
+     "Will anyone remember this next week?",
+     "Which one gets you past it fastest?"
+    ],
+    "reasoning": "Everybody stumbles. Going easy on yourself is the next play. That's Be Kind.",
+    "distractors": {
+     "A": "That makes the moment bigger and longer.",
+     "B": "One bad moment shouldn't run your whole year.",
+     "D": "You'll remember it far longer than anyone else does."
+    }
+   },
+   {
+    "n": 12,
+    "_label": "C12 · Be Kind",
+    "question": "Your friend didn't make the cast of the school play and has been avoiding everyone. What could you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Check in, and invite them to something low-key."
+     },
+     {
+      "key": "B",
+      "text": "Give them space forever."
+     },
+     {
+      "key": "C",
+      "text": "Tell them it's not a big deal."
+     },
+     {
+      "key": "D",
+      "text": "Post about how unfair the cast list is."
+     }
+    ],
+    "correct": "A",
+    "hints": [
+     "What tells someone they still belong?",
+     "Which one doesn't tell them how to feel?"
+    ],
+    "reasoning": "Showing up for a friend after a setback helps them get back up. That's Be Kind.",
+    "distractors": {
+     "B": "Some space helps. Forever turns into lonely.",
+     "C": "It is a big deal to them. Telling them otherwise rarely helps.",
+     "D": "That keeps the hurt going, and the cast list is still the cast list."
+    }
+   },
+   {
+    "n": 13,
+    "_label": "C13 · Be Safe",
+    "question": "Everything is due this week, and you're too stressed to sleep. What's the best step?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Stay up all night to get it all done."
+     },
+     {
+      "key": "B",
+      "text": "Ignore it and hope it goes away."
+     },
+     {
+      "key": "C",
+      "text": "Write it all down, pick the first thing, and get some sleep."
+     },
+     {
+      "key": "D",
+      "text": "Drink energy drinks and push through."
+     }
+    ],
+    "correct": "C",
+    "hints": [
+     "What does a tired brain do on a test?",
+     "Which one makes the week feel smaller?"
+    ],
+    "reasoning": "A list and a night's sleep do more than panic does. If it keeps up, talk to an adult. That's Be Safe.",
+    "distractors": {
+     "A": "One all-nighter makes the rest of the week harder.",
+     "B": "It doesn't go away. It just gets closer.",
+     "D": "That trades one problem for a crash later."
+    }
+   },
+   {
+    "n": 14,
+    "_label": "C14 · Be Safe",
+    "question": "After a tough loss, a teammate wants to go start something with the other team. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Go along so you look loyal."
+     },
+     {
+      "key": "B",
+      "text": "Film it in case something happens."
+     },
+     {
+      "key": "C",
+      "text": "Cheer them on from the side."
+     },
+     {
+      "key": "D",
+      "text": "Walk away, and help your teammate walk away too."
+     }
+    ],
+    "correct": "D",
+    "hints": [
+     "What happens to the team if it turns into a fight?",
+     "Which choice protects everyone?"
+    ],
+    "reasoning": "Losing hurts. A fight makes it worse for everybody. That's Be Safe.",
+    "distractors": {
+     "A": "Loyal means keeping them out of trouble, not following them into it.",
+     "B": "Filming keeps it going and can hurt someone further.",
+     "C": "Cheering it on makes you part of it."
+    }
+   },
+   {
+    "n": 15,
+    "_label": "C15 · Be Safe",
+    "question": "After a bad week, you're tempted to game all night to forget about it. What's the better call?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Put it down at a normal time. Tomorrow's a fresh start."
+     },
+     {
+      "key": "B",
+      "text": "Play until you feel better, however long that takes."
+     },
+     {
+      "key": "C",
+      "text": "Skip school tomorrow to catch up on sleep."
+     },
+     {
+      "key": "D",
+      "text": "Keep it secret so nobody worries."
+     }
+    ],
+    "correct": "A",
+    "hints": [
+     "How will tomorrow go on two hours of sleep?",
+     "Which choice gives you a better tomorrow?"
+    ],
+    "reasoning": "A reset needs rest. Tomorrow is the comeback. That's Be Safe.",
+    "distractors": {
+     "B": "Late nights usually make a bad week longer.",
+     "C": "Missing a day adds to the pile you're trying to escape.",
+     "D": "If the week was that bad, someone who cares should know."
+    }
+   },
+   {
+    "n": 16,
+    "_label": "C16 · Be Safe",
+    "question": "You get hurt at practice, but you want to hide it so you don't lose your spot. What do you do?",
+    "choices": [
+     {
+      "key": "A",
+      "text": "Play through it. Nobody needs to know."
+     },
+     {
+      "key": "B",
+      "text": "Tell the trainer or coach right away."
+     },
+     {
+      "key": "C",
+      "text": "Tape it up yourself and keep going."
+     },
+     {
+      "key": "D",
+      "text": "Wait and see if it gets worse."
+     }
+    ],
+    "correct": "B",
+    "hints": [
+     "What happens to a hidden injury?",
+     "Who can actually help it heal?"
+    ],
+    "reasoning": "Getting hurt is part of playing. Hiding it is how a small injury becomes a season. That's Be Safe.",
+    "distractors": {
+     "A": "Playing hurt often turns a short break into a long one.",
+     "C": "You might not know how bad it is.",
+     "D": "Waiting is how injuries get worse."
+    }
+   }
+  ]
+ }
+}

@@ -317,7 +317,7 @@
       "_source": "Leo's ruling 2026-09-29 12:35 (BK \"lock.\"), In/ruling-2026-09-29-press-conference-set-LOCKED.md; copied from In/press-conference-set-2026-09-29-LOCKED.json byte for byte. 16 items: 8 after a win, 8 after a loss; a tie draws from the loss set. Choices keep the written order. The podium no longer draws from the Office themes (the Locker Room still does); the playoffs keep their history question."
     },
     "comeback": {
-      "_README": "Football's timeout question (BK 2026-10-03 23:43: \"If time out taken, a culture question about adversity or perseverance should pop up. Get it right, get the boost in the timeout. Get it wrong and adverse.\" Words and mechanic approved 23:57: \"I agree with your wording\"). ids: approved culture items already in the pool that are about pushing through (Office October H1, H2, H3, H9; Unit 0 U3, U5, U16). packs: Leo's comeback files when they land (requested 2026-10-04; same shape as an Office theme's practice items). Volleyball's timeout is unchanged.",
+      "_README": "Football's timeout question (BK 2026-10-03 23:43: \"If time out taken, a culture question about adversity or perseverance should pop up. Get it right, get the boost in the timeout. Get it wrong and adverse.\" Words and mechanic approved 23:57: \"I agree with your wording\"). ids: approved culture items already in the pool that are about pushing through (Office October H1, H2, H3, H9; Unit 0 U3, U5, U16). packs: Leo's comeback set C1-C16, approved by BK 2026-10-04 00:22. Together: 23 questions. Volleyball's timeout is unchanged.",
       "ids": [
         "content/office-2026-10-halftime-adjustments.json#1",
         "content/office-2026-10-halftime-adjustments.json#2",
@@ -327,7 +327,14 @@
         "content/unit0-be-a-hawk-culture-bank-LOCKED-2026-10-03.json#5",
         "content/unit0-be-a-hawk-culture-bank-LOCKED-2026-10-03.json#16"
       ],
-      "packs": []
+      "packs": [
+        {
+          "file": "content/comeback-set-2026-10-04.json",
+          "section": "practice",
+          "enabled": true,
+          "from": "Leo's comeback set (16 items, C1-C16), drafted 2026-10-04 (Leo/_BRIEFCASE/comeback-set-DRAFT-2026-10-04.json); APPROVED by BK in chat 2026-10-04 00:22 (\"I approve of Leo's drafted set\"). Ported byte for byte (md5 c5833a11ab200d13181702b216144c47)."
+        }
+      ]
     }
   },
   "coaching": {

@@ -127,8 +127,10 @@ for (const course of Object.keys(manifest.courses)) {
 for (const course of ['us11r', 'global10r']) {
   const packs = { ...packsOf(course) }
   for (const p of manifest.culture.packs) packs[p.file] = pub(p.file)
+  for (const p of manifest.culture.comeback.packs || []) packs[p.file] = pub(p.file)
   const pool = buildPool(manifest, course, packs, crops)
-  eq(pool.comeback.length, manifest.culture.comeback.ids.length, `${course}: every comeback id resolves to an approved culture item`)
+  const packItems = (manifest.culture.comeback.packs || []).reduce((n, p) => n + pub(p.file)[p.section || 'practice'].items.length, 0)
+  eq(pool.comeback.length, manifest.culture.comeback.ids.length + packItems, `${course}: every comeback id and every item in Leo's set loads (${pool.comeback.length})`)
   ok(pool.comeback.every(q => q.culture && q.hints.length >= 2 && q.rationale), `${course}: comeback questions are culture questions with two hints and a reason`)
   const d = makeDealer(pool, manifest.courses[course], manifest.rules)
   const seen = new Set()
