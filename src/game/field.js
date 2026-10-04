@@ -23,11 +23,26 @@
 // rule, route and result is identical either way. Digits are never mirrored.
 // ============================================================
 
-import { heroSprite, playerSprite, SPRITE } from './sprites.js'
-import { BAND_SECONDS, CELE_SECONDS, FOOTBALL_EXTRA, drawBand, drawCelebration } from './cutin.js'
-import { OUTC, SKIN, HAIR, dith, lum, rng as prng, shade, tw, txt } from './pixel.js'
+import { heroSprite, playerSprite, runFrame, SPRITE } from './sprites.js'
+import {
+  BAND_SECONDS, CAPTAINS_SECONDS, CELE_SECONDS, FOOTBALL_EXTRA, RUNTHROUGH_SECONDS, STUDENTS_SECONDS,
+  drawBand, drawCaptains, drawCelebration, drawRunThrough, drawStudents,
+} from './cutin.js'
+import { OUTC, SKIN, HAIR, LITE, Particles, SHAKE_DECAY, capShake, dith, lum, rng as prng, shade, tw, txt } from './pixel.js'
+import { createMode7, project as m7project } from './mode7.js'
+import { campusScene, cheerColor, flyoverCam } from './campus.js'
 import { TEAMS } from './teams.js'
 import { ROUTES_OF } from './plays.js'
+
+// THE PIXEL STANDARD (BK 2026-10-04 17:24, "Approved. Signed."; CONVENTIONS §6): Friday night
+// at a high school field. The stands are aluminum bleachers with the student section and the band,
+// the press box above them, the track and a chain-link fence; the chain crew works the far sideline
+// and the cheer squad the near one. The Mode 7 flyover opens the game, the run-through follows,
+// captains meet at midfield for the coin toss, the student section goes up on a touchdown, and a
+// completed Deep Shot gets the ball's-eye view. All of it is a tap to skip, and lite (pixel.js)
+// drops the extras on a slow Chromebook. Gameplay is untouched.
+export const FLYOVER_SECONDS = 2.8
+export const BALLCAM_SECONDS = 1.6
 
 export const VW = 480
 export const VH = 270
@@ -128,9 +143,16 @@ export class FieldEngine {
     this.stadium = { 1: null, '-1': null }
     this.teams = null
     this.overlay = null
+    this.queue = []              // cut scenes waiting their turn (a ball-cam, then BIG PLAY!)
+    this.parts = new Particles(150)
+    this.m7 = null               // the Mode 7 renderer, made on first use
+    this.excite = 0              // the crowd: 0 sitting, up to 1 on their feet
+    this.frameAt = performance.now()
+    this.vig = null
     this._bind()
     // Dev only: lets a test script step the field when the tab is hidden (rAF pauses). Never in a build.
     if (import.meta.env?.DEV) window.__rbEngine = this
+    if (import.meta.env?.DEV) window.__rbLite = LITE
     this._loop = this._loop.bind(this)
     this.raf = requestAnimationFrame(this._loop)
   }
@@ -155,91 +177,220 @@ export class FieldEngine {
     this.stadium = { 1: null, '-1': null }
   }
 
+  // Cut scenes play one at a time, in order: a new one waits for the one on screen.
+  _show(o) {
+    o.t0 = performance.now() / 1000
+    if (this.overlay) this.queue.push(o)
+    else this.overlay = o
+  }
+  _finishOverlay() {
+    const o = this.overlay
+    this.overlay = null
+    const n = this.queue.shift()
+    if (n) { n.t0 = performance.now() / 1000; this.overlay = n }
+    if (o && o.then) o.then()
+  }
+
   // A Tecmo-style cut-in. kind 'short' is the quick one (first downs). then: after it ends or is skipped.
   celebrate(word, sub, kind = 'long', then) {
     const k = this.kits?.offense || { jersey: '#444', helmet: '#ddd', pants: '#ddd' }
     const dur = this.calm ? 1.0 + FOOTBALL_EXTRA : CELE_SECONDS[kind] || CELE_SECONDS.long
-    this.overlay = { type: 'cele', word, sub, kit: { j: k.jersey, t: k.helmet }, k, t0: performance.now() / 1000, dur, then }
+    if (!this.calm) this.excite = Math.max(this.excite, kind === 'short' ? 0.5 : 1)
+    this._show({ type: 'cele', word, sub, kit: { j: k.jersey, t: k.helmet }, k, dur, then })
   }
 
   band(caption, colors, then) {
-    this.overlay = { type: 'band', caption, colors, floor: 'grass', t0: performance.now() / 1000, dur: (this.calm ? 1.6 : BAND_SECONDS) + FOOTBALL_EXTRA, then }
+    this._show({ type: 'band', caption, colors, floor: 'grass', dur: (this.calm ? 1.6 : BAND_SECONDS) + FOOTBALL_EXTRA, then })
+  }
+
+  // Friday night: the flyover over the campus, then your team through the paper banner.
+  intro(then) {
+    this._show({ type: 'flyover', dur: this.calm ? 1.2 : FLYOVER_SECONDS })
+    this._show({ type: 'run', dur: this.calm ? 1.2 : RUNTHROUGH_SECONDS, then })
+  }
+  // Captains at midfield, the referee's flip. The coin toss question follows (Match).
+  captains(then) { this._show({ type: 'captains', dur: this.calm ? 1.2 : CAPTAINS_SECONDS, then }) }
+  // The student section on its feet after a touchdown.
+  students(then) {
+    if (!this.calm) this.excite = 1
+    this._show({ type: 'students', dur: this.calm ? 1.0 : STUDENTS_SECONDS, then })
   }
 
   skipOverlay() {
-    const o = this.overlay
-    if (!o) return false
-    this.overlay = null
-    o.then && o.then()
+    if (!this.overlay) return false
+    this._finishOverlay()
     return true
   }
 
+  // The campus around the field, top down, Tecmo's way (the Pixel Standard, BK 2026-10-04):
+  // the far side has the sideline, the track, the chain-link fence and the home bleachers with the
+  // student section, the band and the press box; the near side mirrors it with the visitors'
+  // bleachers seen from behind. Painted once per game, per field direction. The crowd is painted in
+  // three frames (sitting, standing, arms up) as strips, and the frame follows the moment.
   _buildStadium(dir) {
-    const X0 = -22, X1 = 142, Y0 = -16, Y1 = FIELD_W + 16
+    const X0 = -22, X1 = 142, Y0 = -19, Y1 = FIELD_W + 15
     const cv = document.createElement('canvas')
     cv.width = Math.round((X1 - X0) * PX); cv.height = Math.round((Y1 - Y0) * PX)
     const g = cv.getContext('2d')
     const bx = x => Math.round((dir === 1 ? x - X0 : X1 - x) * PX)
     const by = y => Math.round((y - Y0) * PX)
-    const rect = (x0, y0, x1, y1, c) => { const a = bx(x0), b = bx(x1); g.fillStyle = c; g.fillRect(Math.min(a, b), by(y0), Math.abs(b - a), by(y1) - by(y0)) }
+    const rect = (x0, y0, x1, y1, c, gg = g, oy = 0) => { const a = bx(x0), b = bx(x1); gg.fillStyle = c; gg.fillRect(Math.min(a, b), by(y0) - oy, Math.abs(b - a), by(y1) - by(y0)) }
     const home = this.teams?.home || TEAMS[0], away = this.teams?.away || TEAMS[1]
     const r = prng((TEAMS.indexOf(home) + 3) * 97 + TEAMS.indexOf(away))
-    // concrete bowl and the apron around the turf
-    g.fillStyle = '#2a2f3a'; g.fillRect(0, 0, cv.width, cv.height)
+    const cheer = cheerColor(home)
+    // the night outside the lights, then the apron, the sideline, the track, the walk
+    g.fillStyle = '#16231a'; g.fillRect(0, 0, cv.width, cv.height)
+    dith(g, 0, 0, cv.width, cv.height, 'rgba(255,255,255,.025)')
+    rect(-12, -4.2, 132, FIELD_W + 4.2, '#24532a')
     rect(-8, -1.4, 128, FIELD_W + 1.4, '#2c6a2a')
     dith(g, 0, by(-1.4), cv.width, by(FIELD_W + 1.4) - by(-1.4), 'rgba(0,0,0,.08)')
-    // the padded wall, home colour, a lit top edge; the league's banners hang on the far one
-    const pad = lum(home.colors[0]) < 0.12 ? shade(home.colors[1], -0.25) : home.colors[0]
-    for (const [y0, y1] of [[-3.8, -1.4], [FIELD_W + 1.4, FIELD_W + 3.8]]) {
-      rect(-12, y0, 132, y1, pad); rect(-12, y0, 132, y0 + 0.25, shade(pad, 0.35)); rect(-12, y1 - 0.25, 132, y1, shade(pad, -0.45))
+    rect(-8, -1.7, 128, -1.55, 'rgba(255,255,255,.6)'); rect(-8, FIELD_W + 1.55, 128, FIELD_W + 1.7, 'rgba(255,255,255,.6)')   // the team-box line
+    for (const [t0, t1] of [[-6.4, -4.2], [FIELD_W + 4.2, FIELD_W + 6.4]]) {
+      rect(-22, t0, 142, t1, '#6e2c22')
+      rect(-22, t0 + 1.1, 142, t0 + 1.22, 'rgba(255,255,255,.35)')
     }
-    for (let i = 0, x = -6; x < 124; i++, x += 10.5) {
-      const t = TEAMS[i % TEAMS.length], a = Math.min(bx(x), bx(x + 6)), y = by(-3.6) + 1
-      g.fillStyle = OUTC; g.fillRect(a - 1, y - 1, 44, 16)
-      g.fillStyle = t.colors[0]; g.fillRect(a, y, 42, 14)
-      g.fillStyle = 'rgba(255,255,255,.16)'; g.fillRect(a, y, 42, 5)
-      g.fillStyle = 'rgba(0,0,0,.22)'; g.fillRect(a, y + 10, 42, 4)
-      g.fillStyle = t.colors[1]; g.fillRect(a, y, 42, 1); g.fillRect(a, y + 13, 42, 1)
-      const ink = Math.abs(lum(t.colors[0]) - lum(t.colors[1])) > 0.42 ? t.colors[1] : (lum(t.colors[0]) > 0.5 ? '#111111' : '#ffffff')
-      txt(g, t.abbr, a + 21 - tw(t.abbr) / 2, y + 4, ink)
+    for (const [x0, x1] of [[-22, -12], [132, 142]]) rect(x0, -6.4, x1, FIELD_W + 6.4, '#6e2c22')
+    // the chain-link fence: a rail and a mesh of dots
+    for (const fy of [-6.8, FIELD_W + 6.4]) {
+      rect(-22, fy, 142, fy + 0.4, '#3a3f48')
+      g.fillStyle = 'rgba(200,208,218,.7)'
+      for (let x = 0; x < cv.width; x += 2) g.fillRect(x, by(fy) + ((x / 2) % 2), 1, 1)
+      rect(-22, fy, 142, fy + 0.08, '#c9d1d9')
     }
-    // the crowd: stepped rows, home colours heavy, a few in the visitors'
-    const crowd = (y0, y1) => {
-      for (let row = 0; by(y0) + row * 6 < by(y1) - 4; row++) {
-        const yy = by(y0) + row * 6
-        g.fillStyle = row % 2 ? '#3a2b1f' : '#33261b'; g.fillRect(0, yy, cv.width, 6)
-        g.fillStyle = '#7b5a3a'; g.fillRect(0, yy + 4, cv.width, 1)
-        for (let x = 2 + (row % 2) * 3; x < cv.width - 3; x += 6) {
-          if (r() < 0.08) continue
-          const pick = r()
-          const shirt = pick < 0.58 ? home.colors[Math.floor(r() * home.colors.length)] : pick < 0.8 ? away.colors[Math.floor(r() * away.colors.length)] : ['#d0d4dc', '#6b7280', '#2f3b55', '#8b2c2c', '#3d6b4a'][Math.floor(r() * 5)]
-          const xx = x + Math.floor(r() * 2)
-          g.fillStyle = shirt; g.fillRect(xx - 1, yy + 2, 4, 3)
-          g.fillStyle = SKIN[Math.floor(r() * SKIN.length)]; g.fillRect(xx, yy - 1, 2, 3)
-          g.fillStyle = HAIR[Math.floor(r() * HAIR.length)]; g.fillRect(xx, yy - 1, 2, 1)
+    rect(-22, -7.4, 142, -6.8, '#3f4248'); rect(-22, FIELD_W + 6.8, 142, FIELD_W + 7.4, '#3f4248')
+    // the bleachers' aluminum: rows of planks; the crowd strips are painted over these
+    const rowsTop = 9, rowsBot = 6, rowH = 6
+    const topY = by(-7.4) - rowsTop * rowH, botY = by(FIELD_W + 7.4)
+    for (let i = 0; i < rowsTop; i++) { g.fillStyle = i % 2 ? '#23262d' : '#20232a'; g.fillRect(0, topY + i * rowH, cv.width, rowH); g.fillStyle = '#8e97a2'; g.fillRect(0, topY + i * rowH + rowH - 1, cv.width, 1) }
+    for (let i = 0; i < rowsBot; i++) { g.fillStyle = i % 2 ? '#23262d' : '#20232a'; g.fillRect(0, botY + i * rowH, cv.width, rowH); g.fillStyle = '#6b737e'; g.fillRect(0, botY + i * rowH, cv.width, 1) }
+    // the press box on top of the home bleachers, centered on midfield, windows lit
+    const pa = Math.min(bx(50), bx(70)), pw = Math.abs(bx(70) - bx(50))
+    g.fillStyle = '#3c414c'; g.fillRect(pa, topY - 22, pw, 22)
+    g.fillStyle = '#2a2e36'; g.fillRect(pa, topY - 22, pw, 3)
+    g.fillStyle = '#f2e6a6'; g.fillRect(pa + 4, topY - 15, pw - 8, 8)
+    for (let i = pa + 6; i < pa + pw - 8; i += 9) { g.fillStyle = '#1a1c22'; g.fillRect(i, topY - 13, 3, 6) }
+    // the crowd in three frames: sitting, standing, arms up. Home side faces you; the visitors
+    // across sit with their backs to you.
+    const people = []
+    for (let i = 0; i < rowsTop; i++) for (let x = 2 + (i % 2) * 3; x < cv.width - 3; x += 5) {
+      if (r() < 0.12) continue
+      const wx = dir === 1 ? x / PX + X0 : X1 - x / PX
+      const student = wx > 45 && wx < 75, bandSec = wx > 96 && wx < 110
+      const pick = r()
+      const shirt = bandSec ? home.colors[0] : student ? (r() < 0.78 ? cheer : home.colors[0])
+        : pick < 0.62 ? home.colors[Math.floor(r() * home.colors.length)] : ['#d0d4dc', '#6b7280', '#2f3b55', '#8b2c2c', '#3d6b4a'][Math.floor(r() * 5)]
+      people.push({ x: x + Math.floor(r() * 2), y: topY + i * rowH + 1, shirt, skin: SKIN[Math.floor(r() * SKIN.length)], hair: HAIR[Math.floor(r() * HAIR.length)],
+        band: bandSec, plume: bandSec && i % 2 === 0, keen: student ? 0.95 : 0.55 + r() * 0.3, ph: r() })
+    }
+    const back = []
+    for (let i = 0; i < rowsBot; i++) for (let x = 2 + (i % 2) * 3; x < cv.width - 3; x += 5) {
+      if (r() < 0.2) continue
+      const pick = r()
+      back.push({ x: x + Math.floor(r() * 2), y: botY + i * rowH + 1, shirt: pick < 0.65 ? away.colors[Math.floor(r() * away.colors.length)] : ['#d0d4dc', '#6b7280', '#2f3b55'][Math.floor(r() * 3)], hair: HAIR[Math.floor(r() * HAIR.length)], keen: 0.4 + r() * 0.4, ph: r() })
+    }
+    const strip = (rows, y0, list, frame, facing) => {
+      const c = document.createElement('canvas'); c.width = cv.width; c.height = rows * rowH + 8
+      const x = c.getContext('2d')
+      for (const f of list) {
+        const up = frame > 0 && f.ph < f.keen
+        const dy = up ? -1 : 0
+        const yy = f.y - y0 + 4 + dy
+        if (facing) {
+          x.fillStyle = f.shirt; x.fillRect(f.x - 1, yy + 2, 4, 3)
+          x.fillStyle = f.band && f.plume ? '#f0c14b' : f.skin; x.fillRect(f.x, yy - 1, 2, 3)
+          x.fillStyle = f.band ? '#121218' : f.hair; x.fillRect(f.x, yy - 1, 2, 1)
+          if (f.band && f.plume) { x.fillStyle = '#f7f3d0'; x.fillRect(f.x, yy - 2, 1, 1) }
+          if (up && frame === 2) { x.fillStyle = f.skin; x.fillRect(f.x - 2, yy - 3, 1, 3); x.fillRect(f.x + 3, yy - 3, 1, 3) }
+        } else {
+          x.fillStyle = f.shirt; x.fillRect(f.x - 1, yy + 2, 4, 3)
+          x.fillStyle = f.hair; x.fillRect(f.x, yy - 1, 2, 3)
+          if (up && frame === 2) { x.fillStyle = SKIN[1]; x.fillRect(f.x - 2, yy - 3, 1, 3); x.fillRect(f.x + 3, yy - 3, 1, 3) }
         }
       }
+      return c
     }
-    crowd(Y0, -3.8); crowd(FIELD_W + 3.8, Y1)
-    // behind the end zones: the stands curve round
-    for (const [x0, x1] of [[X0, -12], [132, X1]]) {
-      const a = Math.min(bx(x0), bx(x1)), w = Math.abs(bx(x1) - bx(x0))
-      for (let yy = by(-3.8); yy < by(FIELD_W + 3.8); yy += 6) {
-        g.fillStyle = (yy / 6) % 2 ? '#3a2b1f' : '#33261b'; g.fillRect(a, yy, w, 6)
-        for (let x = a + 2; x < a + w - 3; x += 6) { if (r() < 0.1) continue; g.fillStyle = r() < 0.6 ? home.colors[0] : '#6b7280'; g.fillRect(x, yy + 2, 4, 3); g.fillStyle = SKIN[Math.floor(r() * 6)]; g.fillRect(x + 1, yy - 1, 2, 3) }
-      }
-      const px = Math.min(bx(x0 < 0 ? -12 : 132), bx(x0 < 0 ? -12.6 : 132.6))
-      g.fillStyle = pad; g.fillRect(px, by(-3.8), Math.round(0.6 * PX) + 1, by(FIELD_W + 3.8) - by(-3.8))
-    }
-    return { cv, X0, X1, Y0 }
+    const crowd = [0, 1, 2].map(fr => ({ top: strip(rowsTop, topY, people, fr, true), bot: strip(rowsBot, botY, back, fr, false) }))
+    return { cv, X0, X1, Y0, crowd, topY: topY - 4, botY: botY - 4 }
   }
 
-  _drawStadium(g) {
+  _drawStadium(g, time) {
     let st = this.stadium[this.dir]
     if (!st) st = this.stadium[this.dir] = this._buildStadium(this.dir)
     const sx = Math.round(((this.dir === 1 ? st.X0 : st.X1) - this.cam.x) * PX * this.dir + VW / 2)
     const sy = Math.round((st.Y0 - this.cam.y) * PX + VH / 2)
     g.drawImage(st.cv, sx, sy)
+    // the crowd follows the moment: sitting; on their feet; arms up and bouncing
+    const ex = this.calm || LITE.on ? 0 : this.excite
+    const fr = ex > 0.5 ? 1 + (Math.floor(time * 6) % 2) : ex > 0.15 ? 1 : 0
+    g.drawImage(st.crowd[fr].top, sx, sy + st.topY)
+    g.drawImage(st.crowd[fr].bot, sx, sy + st.botY)
+  }
+
+  // The far sideline's chain crew (the line to gain and the down box, in orange) and the near
+  // sideline's cheer squad in your colours. Light poles stand behind the home bleachers' ends.
+  _drawSidelines(g, time) {
+    const home = this.teams?.home || TEAMS[0]
+    const cheer = cheerColor(home)
+    const ex = this.calm || LITE.on ? 0 : this.excite
+    // chain crew
+    if (['presnap', 'dropback', 'air', 'run', 'handoff'].includes(this.state) && this.los) {
+      const y = -2.4
+      const a = this._toScreen(this.los, y), b = this._toScreen(Math.min(110, this.firstDown || this.los + 10), y)
+      if (a.y > -20 && a.y < VH + 20) {
+        g.fillStyle = 'rgba(30,30,30,.7)'
+        for (let x = Math.min(a.x, b.x); x < Math.max(a.x, b.x); x += 3) g.fillRect(x, a.y + 1, 2, 1)
+        for (const [p, box] of [[a, true], [b, false]]) {
+          g.fillStyle = OUTC; g.fillRect(p.x - 2, p.y - 15, 4, 16)
+          g.fillStyle = '#ff7a1a'; g.fillRect(p.x - 1, p.y - 14, 2, 14)
+          if (box) { g.fillStyle = OUTC; g.fillRect(p.x - 4, p.y - 22, 9, 9); g.fillStyle = '#ff7a1a'; g.fillRect(p.x - 3, p.y - 21, 7, 7); g.fillStyle = OUTC; this._digit(g, this.downNow || 1, p.x - 1, p.y - 20, 1, '#141414') }
+          else { g.fillStyle = OUTC; g.fillRect(p.x - 3, p.y - 19, 7, 5); g.fillStyle = '#ff7a1a'; g.fillRect(p.x - 2, p.y - 18, 5, 3) }
+          // the man holding it: orange vest, black pants
+          g.fillStyle = '#16161a'; g.fillRect(p.x + 3, p.y - 4, 2, 4); g.fillRect(p.x + 6, p.y - 4, 2, 4)
+          g.fillStyle = '#ff7a1a'; g.fillRect(p.x + 3, p.y - 10, 5, 6)
+          g.fillStyle = SKIN[2]; g.fillRect(p.x + 4, p.y - 13, 3, 3)
+        }
+      }
+    }
+    // cheer squad, near sideline, midfield
+    const cy = FIELD_W + 2.8
+    for (let i = 0; i < 8; i++) {
+      const wx = 46 + i * 4
+      const s = this._toScreen(wx, cy)
+      if (s.x < -10 || s.x > VW + 10 || s.y < -30 || s.y > VH + 30) continue
+      const hop = ex > 0.5 ? Math.max(0, Math.round(Math.sin(time * 10 + i) * 3)) : 0
+      const y = s.y - hop
+      g.fillStyle = OUTC; g.fillRect(s.x - 3, y - 17, 7, 18)
+      g.fillStyle = SKIN[(i * 2) % SKIN.length]; g.fillRect(s.x - 1, y - 4, 1, 4); g.fillRect(s.x + 1, y - 4, 1, 4)
+      g.fillStyle = home.colors[0]; g.fillRect(s.x - 2, y - 7, 5, 3)
+      g.fillStyle = cheer; g.fillRect(s.x - 2, y - 12, 5, 5)
+      g.fillStyle = SKIN[(i * 2) % SKIN.length]; g.fillRect(s.x - 1, y - 16, 3, 4)
+      g.fillStyle = HAIR[i % HAIR.length]; g.fillRect(s.x - 1, y - 16, 3, 1); g.fillRect(s.x - 2, y - 15, 1, 3)
+      const armsUp = ex > 0.15 ? (Math.floor(time * 6 + i) % 2) : 0
+      g.fillStyle = cheer
+      if (armsUp) { g.fillRect(s.x - 4, y - 19, 3, 3); g.fillRect(s.x + 3, y - 19, 3, 3) }
+      else { g.fillRect(s.x - 4, y - 10, 3, 3); g.fillRect(s.x + 3, y - 10, 3, 3) }
+    }
+    // light poles behind the home bleachers' ends
+    for (const wx of [18, 102]) {
+      const base = this._toScreen(wx, -7.6)
+      if (base.x < -30 || base.x > VW + 30 || base.y < -80 || base.y > VH + 40) continue
+      g.fillStyle = OUTC; g.fillRect(base.x - 2, base.y - 70, 4, 70)
+      g.fillStyle = '#7b828c'; g.fillRect(base.x - 1, base.y - 69, 2, 69)
+      g.fillStyle = OUTC; g.fillRect(base.x - 12, base.y - 84, 24, 14)
+      for (let rr = 0; rr < 2; rr++) for (let i = 0; i < 5; i++) { g.fillStyle = '#fffbe0'; g.fillRect(base.x - 11 + i * 4.5, base.y - 83 + rr * 6, 3, 4) }
+      if (!LITE.on) for (const [m, al] of [[30, 0.05], [20, 0.09], [11, 0.16]]) { g.fillStyle = `rgba(255,246,200,${al})`; g.beginPath(); g.arc(base.x, base.y - 77, m, 0, 7); g.fill() }
+    }
+  }
+
+  // Night under the lights: the corners fall off a little. Painted once.
+  _vignette() {
+    if (this.vig) return this.vig
+    const c = document.createElement('canvas'); c.width = VW; c.height = VH
+    const x = c.getContext('2d')
+    const grd = x.createRadialGradient(VW / 2, VH / 2, VH * 0.45, VW / 2, VH / 2, VW * 0.62)
+    grd.addColorStop(0, 'rgba(4,8,18,0)'); grd.addColorStop(1, 'rgba(4,8,18,.32)')
+    x.fillStyle = grd; x.fillRect(0, 0, VW, VH)
+    return (this.vig = c)
   }
 
   // Goalposts at the back of each end zone, drawn standing up off the field (Tecmo's way).
@@ -260,17 +411,62 @@ export class FieldEngine {
     const o = this.overlay
     if (!o) return
     const e = performance.now() / 1000 - o.t0
-    if (e >= o.dur) { this.overlay = null; o.then && o.then(); return }
+    if (e >= o.dur) { this._finishOverlay(); return this._drawOverlay(g) }
+    const home = this.teams?.home || TEAMS[0], away = this.teams?.away || TEAMS[1]
+    const qbNum = (this.numbers && this.numbers.QB) || 7
     if (o.type === 'band') drawBand(g, VW, VH, o, e, this.calm)
-    else drawCelebration(g, VW, VH, o, e, () => heroSprite(o.k, (this.numbers && this.numbers.QB) || 7, 2, 2), this.calm)
+    else if (o.type === 'flyover') {
+      this.m7 = this.m7 || createMode7(VW, VH)
+      const scene = campusScene(home, away, { near: home.kit.zone || home.kit.jersey, far: away.kit.zone || away.kit.jersey }, VW)
+      this.m7.render(g, scene, flyoverCam(this.calm ? 1 : e / o.dur), { lite: LITE.on })
+    } else if (o.type === 'run') {
+      drawRunThrough(g, VW, VH, { team: home, heroFn: () => heroSprite(home.kit, qbNum, 2, 2), mateFn: () => playerSprite(home.kit, 'run0', 1, 2, 4, 22) }, e, this.calm)
+    } else if (o.type === 'captains') {
+      drawCaptains(g, VW, VH, { home, you: { kit: home.kit, num: qbNum }, them: { kit: away.kit, num: 55 },
+        capFn: (kit, face, num) => playerSprite(kit, 'stand0', face, 3, face > 0 ? 2 : 4, num) }, e, this.calm)
+    } else if (o.type === 'students') drawStudents(g, VW, VH, { team: home }, e, this.calm)
+    else if (o.type === 'ballcam') this._drawBallCam(g, o, this.calm ? 1 : Math.min(1, e / o.dur))
+    else drawCelebration(g, VW, VH, o, e, () => heroSprite(o.k, qbNum, 2, 2), this.calm)
+  }
+
+  // THE DEEP SHOT BALL-CAM (Mode 7 "B", BK 2026-10-04 17:24): a completed Deep Shot, replayed from
+  // behind the ball, down the field to the catch. The receiver and the nearest defenders stand
+  // where they were when it landed.
+  _drawBallCam(g, o, k) {
+    this.m7 = this.m7 || createMode7(VW, VH)
+    const home = this.teams?.home || TEAMS[0], away = this.teams?.away || TEAMS[1]
+    const scene = campusScene(home, away, { near: o.ezNear, far: o.ezFar }, VW)
+    const { from, to, arc } = o
+    const kk = 1 - Math.pow(1 - k, 2)
+    const bx = from.x + (to.x - from.x) * kk, by = from.y + (to.y - from.y) * kk, bz = 4 * arc * kk * (1 - kk) + 1
+    const a = Math.atan2(to.y - from.y, to.x - from.x)
+    const back = 4.5
+    const cam = { x: bx - 10 - Math.cos(a) * back, y: by - Math.sin(a) * back, a, h: bz + 1.4, hz: 92, f: 240 }
+    const sprites = o.people.map(p => ({ x: p.x - 10, y: p.y, cv: playerSprite(p.kit, k > 0.82 && p.rec ? 'catch' : runFrame(k * 1.2, p.y), p.face, 1, p.skin, p.num), ax: SPRITE.AX, ay: SPRITE.AY, px: 0.055 }))
+    this.m7.render(g, scene, cam, { lite: LITE.on, sprites })
+    // the ball, just ahead of the lens
+    const bp = m7project(scene, cam, VW, bx - 10 + Math.cos(a) * 0.4, by + Math.sin(a) * 0.4, bz)
+    if (bp && k < 0.97) {
+      const sz = Math.max(3, Math.min(14, Math.round(18 / Math.max(1, bp.d / 20))))
+      g.fillStyle = OUTC; g.fillRect(Math.round(bp.x - sz / 2) - 1, Math.round(bp.y - sz / 3) - 1, sz + 2, Math.round(sz * 0.66) + 2)
+      g.fillStyle = '#7a3f16'; g.fillRect(Math.round(bp.x - sz / 2), Math.round(bp.y - sz / 3), sz, Math.round(sz * 0.66))
+      g.fillStyle = '#a0581f'; g.fillRect(Math.round(bp.x - sz / 2) + 1, Math.round(bp.y - sz / 3), sz - 2, Math.max(1, Math.round(sz * 0.2)))
+      g.fillStyle = '#f4f6fa'; g.fillRect(Math.round(bp.x - sz / 4), Math.round(bp.y - 1), Math.max(1, Math.round(sz / 2)), 1)
+    }
+    // the cut-in bands, as every replay has them
+    const band = Math.round(VH * 0.08)
+    g.globalAlpha = 0.6; g.fillStyle = '#05070d'; g.fillRect(0, 0, VW, band); g.fillRect(0, VH - band, VW, band); g.globalAlpha = 1
+    g.fillStyle = '#E3B341'; g.fillRect(0, band, VW, 2); g.fillRect(0, VH - band - 2, VW, 2)
   }
 
   // ── set a play up ──────────────────────────────────────────────────────────
   // ballOn: 0–100 from the offense's own goal. kits: {offense, defense}. phys: ratings.physics().
   // play: a called play from plays.js (or null: the old random routes). guessed: the other side
   // called the same play (BK 16:06), so one defender beats his block at the snap.
-  setup({ ballOn, toGo, kits, phys, goal = false, play = null, guessed = false }) {
+  setup({ ballOn, toGo, kits, phys, goal = false, play = null, guessed = false, down = 1 }) {
     this.play = play
+    this.downNow = down
+    this.deepCam = null
     this.guessed = !!guessed
     this.runPlan = null
     this.los = 10 + ballOn
@@ -362,10 +558,12 @@ export class FieldEngine {
   _phase(p) { if (this.cb.onPhase) this.cb.onPhase(p) }
 
   // One call for every "that mattered" moment on the field.
+  // The Pixel Standard: shake at most 4 px for at most 0.3 s; reduced motion gets no shake and
+  // no flash (pixel.js).
   _boom({ flash = 0, color = '#F5CB63', shake = 0 }) {
-    this.fx.flash = Math.max(this.fx.flash, this.calm ? flash * 0.5 : flash)
+    this.fx.flash = this.calm ? 0 : Math.max(this.fx.flash, flash)
     this.fx.color = color
-    this.fx.shake = this.calm ? 0 : Math.max(this.fx.shake, shake)
+    this.fx.shake = this.calm ? 0 : capShake(Math.max(this.fx.shake, shake))
   }
 
   // ── input ──────────────────────────────────────────────────────────────────
@@ -497,7 +695,7 @@ export class FieldEngine {
     for (const r of this.targets) {
       if (r.role === 'RB' && r.route === 'block') continue
       const s = this._toScreen(r.x, r.y)
-      const dd = Math.min(Math.hypot(ptr.x0 - s.x, ptr.y0 - s.y), Math.hypot(ptr.x0 - s.x, ptr.y0 - (s.y - 20)))
+      const dd = Math.min(Math.hypot(ptr.x0 - s.x, ptr.y0 - s.y), Math.hypot(ptr.x0 - s.x, ptr.y0 - (s.y - 22)), Math.hypot(ptr.x0 - s.x, ptr.y0 - (s.y - 36)))
       if (dd <= TAP_HIT && (!best || dd < best.dd)) best = { r, dd }
     }
     return best ? best.r : null
@@ -561,10 +759,16 @@ export class FieldEngine {
 
   // ── the simulation ─────────────────────────────────────────────────────────
   _loop(now) {
+    // Lite: frames over 25 ms for 2 s switch the extras off (pixel.js). Gameplay never changes.
+    LITE.tick(now - this.frameAt)
+    this.frameAt = now
     // Fixed substeps, so a slow Chromebook (or a throttled background tab) plays the
     // same game at a lower frame rate rather than in slow motion.
     let elapsed = Math.min(0.5, (now - this.last) / 1000)
     this.last = now
+    const fxdt = Math.min(0.1, elapsed)
+    this.parts.step(fxdt)
+    if (this.excite > 0) this.excite = Math.max(0, this.excite - fxdt * 0.35)
     while (elapsed > 0 && ['handoff', 'dropback', 'air', 'run', 'dead'].includes(this.state)) {
       const dt = Math.min(1 / 60, elapsed)
       this._step(dt)
@@ -577,7 +781,7 @@ export class FieldEngine {
   _step(dt) {
     this.t += dt
     if (this.fx.flash > 0) this.fx.flash = Math.max(0, this.fx.flash - dt * 2.4)
-    if (this.fx.shake > 0) this.fx.shake = Math.max(0, this.fx.shake - dt * 14)
+    if (this.fx.shake > 0) this.fx.shake = Math.max(0, this.fx.shake - dt * SHAKE_DECAY)
     const ph = this.phys
     for (const p of this.players) {
       p.hist.push({ x: p.x, y: p.y, t: this.t })
@@ -770,6 +974,8 @@ export class FieldEngine {
         this.carrier = rec.r
         this.carrier.speed = ph.runSpeed
         this.carrier.x = spot.x; this.carrier.y = spot.y
+        // A completed Deep Shot earns the ball-cam when the play is over (Mode 7 "B").
+        if (this.play && this.play.id === 'deep') this.deepCam = this._ballCamShot(b, rec.r, spot)
         this.ball = null
         this.state = 'run'
         this._phase('run')
@@ -779,6 +985,18 @@ export class FieldEngine {
       return this._end('incomplete', this.qb, { why: contested ? 'contested — dropped' : 'dropped' })
     }
     return this._end('incomplete', this.qb, { why: 'nobody there' })
+  }
+
+  // What the ball-cam needs, taken at the catch: the throw, the receiver, the nearest defenders.
+  _ballCamShot(b, rec, spot) {
+    const off = this.kits.offense, def = this.kits.defense
+    const near = this.defense.slice().sort((p, q) => dist(p, spot) - dist(q, spot)).slice(0, 3)
+    return {
+      from: { ...b.from }, to: { ...spot }, arc: b.arc,
+      ezNear: off.zone || off.jersey, ezFar: def.zone || def.jersey,
+      people: [{ x: spot.x, y: spot.y, kit: off, num: rec.num, skin: rec.skin || 0, face: 1, rec: true },
+        ...near.map(d => ({ x: d.x, y: d.y, kit: def, num: d.num, skin: d.skin || 0, face: -1 }))],
+    }
   }
 
   _runCarrier(dt) {
@@ -828,6 +1046,7 @@ export class FieldEngine {
       if (Math.random() < ph.breakTackle) {
         d.stun = 0.9
         this._boom({ shake: 1.6 })
+        this._turf(c, 6)
         if (this.cb.onEvent) this.cb.onEvent({ type: 'broken' })
         continue
       }
@@ -854,7 +1073,19 @@ export class FieldEngine {
     }
     if (kind === 'incomplete' || kind === 'int') this.result.yardLine = kind === 'int'
       ? clamp(Math.round((extra.spot?.x ?? x) - 10), 0, 100) : this.los - 10
-    // What the moment was worth, in light and motion.
+    // What the moment was worth, in light and motion: the crowd, the turf, the confetti.
+    if (kind === 'td' || kind === 'int' || this.result.gained >= 20) this.excite = this.calm ? 0 : 1
+    else if (this.result.gained > 0 && kind !== 'incomplete') this.excite = Math.max(this.excite, this.calm ? 0 : 0.3)
+    if (kind === 'tackle' || kind === 'sack' || kind === 'safety' || kind === 'oob') this._turf(at, kind === 'sack' ? 12 : 9)
+    if (kind === 'td') {
+      const home = this.teams?.home || TEAMS[0]
+      this.parts.burst({ x: at.x, y: at.y, z: 0.5, n: 60, colors: [cheerColor(home), home.colors[0], '#f4f6fa'], speed: 7, up: 9, life: 1.6, size: 2, grav: 6 })
+    }
+    if (this.deepCam) {
+      const shot = this.deepCam
+      this.deepCam = null
+      if (kind !== 'int' && kind !== 'incomplete') this._show({ type: 'ballcam', ...shot, dur: this.calm ? 1.0 : BALLCAM_SECONDS })
+    }
     if (kind === 'td') this._boom({ flash: 0.85, color: '#F5CB63', shake: 4 })
     else if (kind === 'int' || kind === 'fumble') this._boom({ flash: 0.7, color: '#E08C82', shake: 5 })
     else if (kind === 'safety') this._boom({ flash: 0.6, color: '#E08C82', shake: 4 })
@@ -869,24 +1100,34 @@ export class FieldEngine {
     this._phase('dead')
   }
 
+  // Turf kicked up where a man goes down.
+  _turf(at, n) {
+    this.parts.burst({ x: at.x, y: at.y, z: 0.2, n, colors: ['#2f6b2d', '#4a8a3c', '#6b4a2a', '#3b2a1a'], speed: 3, up: 3.5, life: 0.6, size: 1, grav: 14 })
+  }
+
   // ── drawing ────────────────────────────────────────────────────────────────
   _draw(time) {
     const g = this.ctx
     const focus = this.carrier || (this.ball ? this._ballPos() : this.qb) || { x: 40, y: C }
     if (focus) {
       this.cam.x += (this._camX(focus.x) - this.cam.x) * 0.12
-      this.cam.y += (clamp(focus.y, VIEW_H / 2 - 6, FIELD_W - VIEW_H / 2 + 6) - this.cam.y) * 0.12
+      // The camera may drift a little wider at the sidelines now, so the bleachers and the chain
+      // crew show when the ball is near them (it was 6 yards; now 11).
+      this.cam.y += (clamp(focus.y, VIEW_H / 2 - 11, FIELD_W - VIEW_H / 2 + 11) - this.cam.y) * 0.12
     }
+    // A cut scene covers the whole field: draw only it (the play keeps running underneath).
+    if (this.overlay) { this._drawOverlay(g); return }
     g.save()
     if (this.fx.shake > 0) {
       g.translate(Math.round((Math.random() - 0.5) * this.fx.shake * 2), Math.round((Math.random() - 0.5) * this.fx.shake * 2))
     }
     g.fillStyle = '#2a2f3a'
     g.fillRect(-12, -12, VW + 24, VH + 24)
-    this._drawStadium(g)
+    this._drawStadium(g, time)
     this._drawField(g)
     this._drawPosts(g)
-    if (!this.players.length) { g.restore(); this._drawOverlay(g); return }
+    this._drawSidelines(g, time)
+    if (!this.players.length) { g.drawImage(this._vignette(), 0, 0); g.restore(); this._drawOverlay(g); return }
     if (['presnap', 'dropback', 'air', 'run'].includes(this.state)) {
       this._vline(g, this.los, '#3B82F6')
       if (this.firstDown < 110) this._vline(g, this.firstDown, '#FACC15')
@@ -894,19 +1135,21 @@ export class FieldEngine {
     const byY = this.players.slice().sort((a, b) => a.y - b.y)
     for (const p of byY) this._drawPlayer(g, p, time)
     if (this.ball) this._drawBall(g)
-    else if (!this.carrier && this.qb && this.state !== 'idle') {
+    else if (!this.carrier && this.qb && this.state !== 'idle' && this.state !== 'dropback') {
       const s = this._toScreen(this.qb.x, this.qb.y)
-      g.fillStyle = '#8B4A1C'; g.fillRect(this.dir === 1 ? s.x + 4 : s.x - 7, s.y - 6, 4, 3)
+      g.fillStyle = '#8B4A1C'; g.fillRect(this.dir === 1 ? s.x + 5 : s.x - 8, s.y - 7, 4, 3)
     }
+    this.parts.draw(g, (x, y) => this._toScreen(x, y), PX)
+    g.drawImage(this._vignette(), 0, 0)
     if (['presnap', 'dropback'].includes(this.state) && !(this.play && this.play.kind === 'run')) this._drawRoutes(g)
     if (this.state === 'presnap' && this.play && this.play.kind === 'run') this._drawRunPath(g)
     if (this.aim && this.state === 'dropback') this._drawAim(g)
     if (['presnap', 'dropback'].includes(this.state) && !(this.play && this.play.kind === 'run')) {
       for (const r of this.targets) {
         const s = this._toScreen(r.x, r.y)
-        g.fillStyle = 'rgba(11,18,32,.88)'; g.fillRect(s.x - 5, s.y - 38, 11, 13)
-        g.fillStyle = '#F5CB63'; g.fillRect(s.x - 5, s.y - 38, 11, 1)
-        this._digit(g, r.label, s.x - 3, s.y - 35, 2, '#F4F6FA')
+        g.fillStyle = 'rgba(11,18,32,.88)'; g.fillRect(s.x - 5, s.y - 43, 11, 13)
+        g.fillStyle = '#F5CB63'; g.fillRect(s.x - 5, s.y - 43, 11, 1)
+        this._digit(g, r.label, s.x - 3, s.y - 40, 2, '#F4F6FA')
       }
     }
     g.restore()
@@ -978,20 +1221,18 @@ export class FieldEngine {
 
   _drawPlayer(g, p, time) {
     const s = this._toScreen(p.x, p.y)
-    if (s.x < -20 || s.x > VW + 20 || s.y < -8 || s.y > VH + 40) return
+    if (s.x < -22 || s.x > VW + 22 || s.y < -8 || s.y > VH + 44) return
     const kit = p.team === 'o' ? this.kits.offense : this.kits.defense
     const moving = Math.abs(p.vx) + Math.abs(p.vy) > 0.5
-    const bob = moving ? Math.round(Math.sin(time * 15 + p.y)) : 0
-    const stride = moving ? Math.round(Math.sin(time * 15 + p.y)) : 0
     const isC = p === this.carrier
     const lift = isC && this.jump > 0 ? Math.round(Math.sin((1 - this.jump / JUMP_T) * Math.PI) * 7) : 0
-    const y = s.y + bob - lift
+    const y = s.y - lift
     // A diving carrier tips forward and lies flat where he lands (a quarter turn, so the
     // pixels stay square). The shadow and ring stay on the ground under him.
     const tip = isC && (this.dive > 0 || p.down) ? Math.min(1, p.down ? 1 : (DIVE_T - this.dive) / 0.1) : 0
     // shadow, and a gold ring under whoever has the ball
-    g.fillStyle = 'rgba(0,0,0,.3)'; g.fillRect(s.x - 6, s.y + 5, 13, 3)
-    if (p === this.carrier) { g.fillStyle = 'rgba(245,203,99,.75)'; g.fillRect(s.x - 8, s.y + 5, 17, 3) }
+    g.fillStyle = 'rgba(0,0,0,.3)'; g.fillRect(s.x - 7, s.y + 5, 15, 3)
+    if (isC) { g.fillStyle = 'rgba(245,203,99,.75)'; g.fillRect(s.x - 9, s.y + 5, 19, 3) }
     if (tip) {
       g.save()
       g.translate(s.x, s.y + 3)
@@ -1000,15 +1241,24 @@ export class FieldEngine {
     }
     // PANTS, HELMET and JERSEY are three separate colours (teams.js). That is what lets
     // Binghamton's blue hat and blue pants carry their red jersey, and it is most of what
-    // makes two sides readable against each other at this size. The 16-bit reskin
-    // (2026-10-03) draws them as cached sprites: three tones each, a dark outline, two
-    // running frames, the facemask facing the way he plays.
+    // makes two sides readable against each other at this size. The Pixel Standard (2026-10-04)
+    // draws them as cached sprites in four tones with a dark outline, in the pose of the moment:
+    // a four-frame run, the throw, the catch, the tackle, the celebration, a breathing idle.
     const faceRight = (p.team === 'o') === (this.dir === 1)
-    const pose = moving ? (stride > 0 ? 'run0' : 'run1') : 'stand'
+    const b = this.ball
+    let pose
+    if (tip) pose = 'tackle'
+    else if (this.state === 'dead' && this.result && this.result.type === 'td' && isC) pose = Math.floor(time * 4) % 2 ? 'hero1' : 'hero0'
+    else if (p === this.qb && this.state === 'dropback' && (this.aim || (this.pointer && this.pointer.moved > 10))) pose = 'throw0'
+    else if (p === this.qb && this.state === 'air' && b && b.t < 0.3) pose = 'throw1'
+    else if (this.state === 'air' && b && p.team === 'o' && p !== this.qb && b.t > b.T - 0.35 && dist(p, b.to) < 2.5) pose = 'catch'
+    else if (p.team === 'd' && this.state === 'run' && this.carrier && !p.stun && dist(p, this.carrier) < 1.6) pose = 'tackle'
+    else if (moving) pose = runFrame(time, (p.num || 0) * 0.37)
+    else pose = Math.floor(time * 1.4 + (p.num || 0) * 0.31) % 2 ? 'stand1' : 'stand0'
     g.drawImage(playerSprite(kit, pose, faceRight ? 1 : -1, 1, p.skin || 0, p.num), s.x - SPRITE.AX, y + 6 - SPRITE.AY)
     if (p.stun > 0) {
       g.fillStyle = '#F4F6FA'
-      g.fillRect(s.x - 3, y - 31, 2, 2); g.fillRect(s.x + 3, y - 33, 2, 2)
+      g.fillRect(s.x - 3, y - 35, 2, 2); g.fillRect(s.x + 3, y - 37, 2, 2)
     }
     if (tip) g.restore()
   }

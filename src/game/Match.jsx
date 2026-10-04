@@ -223,6 +223,8 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
     // Your quarterback, back and tight end wear the numbers on the team page.
     const ro = roster(career.seed, career.team, career.season, career.levels)
     engine.current.setNumbers({ QB: ro.throwing.number, RB: ro.speed.number, TE: ro.toughness.number })
+    // Friday night (the Pixel Standard, BK 2026-10-04 17:24): the flyover, then the run-through.
+    engine.current.intro()
     return () => engine.current.destroy()
   }, [])
 
@@ -230,7 +232,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
     const pb = playBoost.current
     engine.current.setDirection(dirFor(gs))
     engine.current.setup({
-      ballOn: gs.ballOn, toGo: gs.toGo, goal: goalToGo(gs), kits,
+      ballOn: gs.ballOn, toGo: gs.toGo, goal: goalToGo(gs), kits, down: gs.down,
       phys: physics(values(ratings({ form: career.form, levels: lv, facilities: career.facilities, boost })),
                     oppStrength, !!(pb && pb.read)),
       play: call, guessed: !!call && guessed.current,
@@ -384,7 +386,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
       // chooses which bet to take: one question for one point, or two for two.
       // The cut-in first (BK 2026-10-03 15:46): TOUCHDOWN!, then the try.
       setStage('show')
-      engine.current.celebrate('TOUCHDOWN!', `${you.abbr} SCORES`, 'long', () => setStage('convert'))
+      engine.current.celebrate('TOUCHDOWN!', `${you.abbr} SCORES`, 'long', () => engine.current.students(() => setStage('convert')))
       return
     }
     if (outcome.kind === 'safety') return oppDrive(g2, 35)
@@ -538,14 +540,16 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   }
 
   const start = () => {
-    ask('coin', 'Coin toss. Get it right and you win the toss and receive. Miss it and they get the ball first.', correct => {
+    // Captains at midfield first, then the question (the Pixel Standard, BK 2026-10-04).
+    setStage('show')
+    engine.current.captains(() => ask('coin', 'Coin toss. Get it right and you win the toss and receive. Miss it and they get the ball first.', correct => {
       const recv = correct === false ? 'opp' : 'you'
       const g2 = { ...gRef.current, firstRecv: recv }
       commit(g2)
       setToast(recv === 'you' ? 'You won the toss. Your ball at the 25.' : `${them.name} won the toss and will receive.`)
       if (recv === 'you') toPresnap(firstDown(g2, 25))
       else oppDrive(g2, 25)
-    })
+    }))
   }
 
   const final = () => {
