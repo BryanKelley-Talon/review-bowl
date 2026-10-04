@@ -22,6 +22,7 @@ import {
   halfOver, isPenaltySpot, kickChance, kickDistance, newGame, punt, startOvertime, startSecondHalf, twoPoint,
 } from './matchRules.js'
 import { STAT_OF, physics, ratings, values } from './ratings.js'
+import { INJ_WORDS as IW, playingLevels, rollInjury } from './injury.js'
 import { kits as makeKits, roster, TEAMS } from './teams.js'
 import { RESULT } from './season.js'
 
@@ -81,12 +82,17 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   const [call, setCall] = useState(null)
   const guessed = useRef(false)
   const recentCalls = useRef([])            // this game's last calls, for the repeat rule (plays.js)
+  // INJURIES (2026-10-04, injury.js). `hurt` is who's out right now: carried in from the career,
+  // or new this game (`fresh`, reported at the end). The team plays with playingLevels().
+  const [hurt, setHurt] = useState(career.injury || null)
+  const fresh = useRef(null)
+  const lv = playingLevels(career.levels, hurt, rules)
   const forceRead = useRef(false)          // a missed timeout question: the defense reads the next play
   const pickPlay = useCallback(id => {
-    guessed.current = forceRead.current || Math.random() < readChance(career.levels, recentCalls.current, id)
+    guessed.current = forceRead.current || Math.random() < readChance(lv, recentCalls.current, id)
     recentCalls.current = [...recentCalls.current, id].slice(-3)
     setCall(playById(id))
-  }, [career.levels])
+  }, [lv])
   const setRead = on => { playBoost.current = on ? { read: true } : null; setFieldVersion(n => n + 1) }
   const liveChecks = useRef({ 1: 0, 2: 0 })
   const flags = useRef({ 1: 0, 2: 0 })
@@ -95,7 +101,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   const tally = useRef({ right: 0, total: 0 })
   const bigMomentAsked = useRef(-1)
 
-  const r = ratings({ form: career.form, levels: career.levels, facilities: career.facilities, boost })
+  const r = ratings({ form: career.form, levels: lv, facilities: career.facilities, boost })
   const v = values(r)
 
   // ── gates ──────────────────────────────────────────────────────────────────
@@ -225,11 +231,11 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
     engine.current.setDirection(dirFor(gs))
     engine.current.setup({
       ballOn: gs.ballOn, toGo: gs.toGo, goal: goalToGo(gs), kits,
-      phys: physics(values(ratings({ form: career.form, levels: career.levels, facilities: career.facilities, boost })),
+      phys: physics(values(ratings({ form: career.form, levels: lv, facilities: career.facilities, boost })),
                     oppStrength, !!(pb && pb.read)),
       play: call, guessed: !!call && guessed.current,
     })
-  }, [kits, career, boost, oppStrength, dirMode, call])
+  }, [kits, career, boost, oppStrength, dirMode, call, hurt])
 
   // Re-set the formation when ratings change between snaps (an answer just landed).
   useEffect(() => { if (stage === 'presnap') setupField(gRef.current) }, [stage, setupField, fieldVersion])
@@ -397,6 +403,21 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
     toPresnap(g2)
   }
 
+  // A hard hit can hurt the ball carrier (rare; one a game, one out at a time). The game never
+  // stops for it: the backup is in for the next snap, and the strip says so.
+  const maybeHurt = res => {
+    const inj = rollInjury({ carrier: res.carrier, already: !!(hurt || fresh.current), rules })
+    if (!inj) return
+    fresh.current = inj
+    const before = values(ratings({ form: career.form, levels: lv, facilities: career.facilities, boost }))[inj.stat]
+    const after = values(ratings({ form: career.form, levels: playingLevels(career.levels, inj, rules), facilities: career.facilities, boost }))[inj.stat]
+    setHurt(inj)
+    const p = roster(career.seed, career.team, career.season, career.levels)[inj.stat]
+    setToast(IW.hurt(p.name, p.position, inj.out))
+    const cell = statCells.find(([k]) => k === inj.stat)
+    setFlash({ stat: inj.stat, up: false, id: Date.now(), text: `${IW.backupTag}: ${cell ? cell[1] : inj.stat} ${before} → ${after}` })
+  }
+
   handlers.current.playEnd = res => {
     const gs = gRef.current
     playBoost.current = null
@@ -418,10 +439,12 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
           if (correct === false) {
             const { g: gf, outcome: of } = applyPlay(gs, { ...res, type: 'fumble' })
             commit(gf)
-            return settle(res, gf, of)
+            settle(res, gf, of)
+            return maybeHurt(res)
           }
           setToast('Ball secured. The tackle stands.')
           settle(res, g2, outcome, gs)
+          maybeHurt(res)
         })
       return
     }
@@ -537,6 +560,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
         result: gs.you > gs.opp ? RESULT.W : gs.you < gs.opp ? RESULT.L : RESULT.T,
         press: correct === true,
         right: tally.current.right, total: tally.current.total,
+        injury: fresh.current,
       })
     }, { after })
   }
@@ -544,7 +568,8 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
   // ── render ─────────────────────────────────────────────────────────────────
   const clock = clockOf(g)
   const fourth = g.down === 4
-  const kickable = canKick(g) && (fourth || g.halfLeft <= 40 || g.ot)
+  // Boolean: g.ot is 0 in regulation, and a bare 0 would print a stray "0" beside the buttons.
+  const kickable = !!(canKick(g) && (fourth || g.halfLeft <= 40 || g.ot))
   const statCells = [['throwing', 'Throw'], ['hands', 'Hands'], ['speed', 'Speed'], ['blocking', 'Block'], ['toughness', 'Tough'], ['defense', 'Def']]
   const help = {
     dropback: 'Pull back and release to throw · tap a receiver to throw to him · tap the field to run · keys 1–4 throw · Space runs',   // BK approved 2026-09-28 13:53
@@ -610,6 +635,7 @@ export default function Match({ career, dealer, manifest, opp, oppStrength, play
             <span className="stat-bar"><i style={{ width: `${r[k].value * 10}%` }} /></span>
             <b>{r[k].value}</b>
             {boost[k] ? <em className="stat-boost">+{boost[k]}</em> : null}
+            {hurt && hurt.stat === k ? <em className="stat-hurt">{IW.backupTag}</em> : null}
           </div>
         ))}
       </div>

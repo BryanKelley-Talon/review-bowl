@@ -362,7 +362,7 @@ for (let i = 0; i < 300; i++) {
   x.levels = { throwing: 1 + i % 4, hands: 1 + (i + 1) % 4, speed: 1 + (i + 2) % 4, blocking: 1 + (i + 3) % 4, toughness: 1 + i % 4 }
   x.practiceDone = i % 3 === 0
   const code = encodeSaveCode(x)
-  ok(/^([0-9A-Z]{4}-){5}[0-9A-Z]{3}$/.test(code), `code shape ${code}`)
+  ok(/^([0-9A-Z]{4}-){6}[0-9A-Z]$/.test(code), `code shape ${code}`)   // version 3: 25 characters (2026-10-04)
   eq(decodeSaveCode(code.toLowerCase().replace(/1/g, 'l')), x, `round trip #${i}`)
 }
 const good = encodeSaveCode(newCareer('us11r', 2, 5))
@@ -455,13 +455,67 @@ const OLD = 'AC88-SR01-JJBV-DP29-2V8T-CD1'
 const old = decodeSaveCode(OLD)
 eq([old.sport, old.team, old.season, old.week, old.cash, old.security, old.seed, old.titles, old.form.skills, old.levels.speed],
    ['football', 3, 2, 4, 12, 20, 41, 1, 13, 4], 'a pre-volleyball code loads as the same football career')
-eq(encodeSaveCode(old), OLD, 'and re-encodes to the very same code')
+eq(old.injury, null, 'a version-2 code loads with nobody hurt')
+const reold = encodeSaveCode(old)
+ok(reold.replace(/-/g, '').length === 25, 'its next code is a version-3 code (25 characters)')
+eq(decodeSaveCode(reold), old, 'and that code loads the very same career')
 for (let i = 0; i < 64; i++) {
   const x = newCareer(i % 2 ? 'us11r' : 'global10r', i % N_TEAMS, i, 'volleyball')
   const y = decodeSaveCode(encodeSaveCode(x))
   ok(y.sport === 'volleyball' && sportOf(y) === 'volleyball', `volleyball career #${i} comes back as volleyball`)
 }
 ok(encodeSaveCode(newCareer('us11r', 0, 5, 'volleyball')) !== encodeSaveCode(newCareer('us11r', 0, 5, 'football')), 'the two sports write different codes')
+
+// ── injuries and rehab (2026-10-04; BK 23:10/23:16, build ordered 23:57) ─────────
+{
+  const I = await import('../src/game/injury.js')
+  // the save code carries every injury state exactly
+  for (const stat of I.INJURY_STATS) for (const out of [1, 2]) {
+    const x = { ...newCareer('us11r', 3, 9), injury: { stat, out } }
+    eq(decodeSaveCode(encodeSaveCode(x)).injury, { stat, out }, `the code carries ${stat} out ${out}`)
+  }
+  eq(decodeSaveCode(encodeSaveCode(newCareer('global10r', 1, 2))).injury, null, 'a healthy team stays healthy in the code')
+  // rare, carrier-only, one at a time
+  let seq = [0.01, 0.99], k = 0; const rnd = () => seq[k++ % seq.length]
+  eq(I.rollInjury({ carrier: 'RB', rules: {}, random: rnd }), { stat: 'speed', out: 2 }, 'a hard hit on the back can hurt him (Speed)')
+  eq(I.rollInjury({ carrier: 'OL', rules: {}, random: () => 0 }), null, 'the line never gets hurt here')
+  eq(I.rollInjury({ carrier: 'WR', already: true, rules: {}, random: () => 0 }), null, 'one player out at a time')
+  eq(I.rollInjury({ carrier: 'QB', rules: {}, random: () => 0.5 }), null, 'most hard hits hurt nobody')
+  let hurt = 0; for (let i = 0; i < 20000; i++) if (I.rollInjury({ carrier: 'TE', rules: {} })) hurt++
+  ok(hurt > 2400 && hurt < 3600, `about 15% of hard hits hurt the carrier (${hurt / 200}%)`)
+  // the backup plays low, never better than the starter
+  eq(I.playingLevels({ speed: 4, hands: 3 }, { stat: 'speed', out: 1 }, {}).speed, 1, 'the backup steps in at level 1')
+  eq(I.playingLevels({ speed: 4, hands: 3 }, { stat: 'speed', out: 1 }, {}).hands, 3, 'everyone else plays as before')
+  eq(I.playingLevels({ speed: 4 }, null, {}).speed, 4, 'no injury, no change')
+  // the calendar: the injury game doesn't count; each game with the backup takes one off
+  eq(I.injuryAfterGame(null, { stat: 'hands', out: 2 }), { stat: 'hands', out: 2 }, 'a new injury starts counting next week')
+  eq(I.injuryAfterGame({ stat: 'hands', out: 2 }, null), { stat: 'hands', out: 1 }, 'a game with the backup takes one off')
+  eq(I.injuryAfterGame({ stat: 'hands', out: 1 }, null), null, 'then he is back')
+  // rehab: level 1 one game sooner, level 2 back now, a miss changes nothing
+  eq(I.afterRehab({ stat: 'speed', out: 2 }, 1, true), { stat: 'speed', out: 1 }, 'Level 1 right: back one game sooner')
+  eq(I.afterRehab({ stat: 'speed', out: 1 }, 1, true), null, 'Level 1 right with one game left: back for the next game')
+  eq(I.afterRehab({ stat: 'speed', out: 2 }, 2, true), null, 'Level 2 right: back for the next game')
+  eq(I.afterRehab({ stat: 'speed', out: 2 }, 2, false), { stat: 'speed', out: 2 }, 'a miss changes nothing: he heals on schedule')
+  // the career carries it through afterGame
+  const c0 = { ...newCareer('us11r', 2, 7), phase: 'regular', week: 1 }
+  const a1 = afterGame(c0, { result: RESULT.W, press: false, injury: { stat: 'throwing', out: 1 } }).career
+  eq(a1.injury, { stat: 'throwing', out: 1 }, 'a game that hurts the quarterback ends with him out next week')
+  const a2 = afterGame({ ...a1, phase: 'regular' }, { result: RESULT.L, press: false }).career
+  eq(a2.injury, null, 'one game with the backup and he is back')
+  // the sort
+  const task = { task: 't', cards: [{ text: 'a', role: 'context' }, { text: 'b', role: 'claim' }, { text: 'c', role: 'evidence' }], hints: ['h', 'h'], reasoning: 'r' }
+  ok(I.sortIsRight(task, { 0: 'context', 1: 'claim', 2: 'evidence' }), 'every card in its own bin is right')
+  ok(!I.sortIsRight(task, { 0: 'claim', 1: 'context', 2: 'evidence' }), 'one swap is not')
+  ok(!I.sortIsRight(task, { 0: 'context', 1: 'claim' }), 'an unsorted card is not')
+  eq(I.rehabTasks([{ tasks: [{ ...task, course: 'us11r', level: 1 }, { ...task, course: 'global10r', level: 1 }, { ...task, course: 'us11r', level: 2 }] }], 'us11r', 1).length, 1, 'rehab tasks are picked by course and level')
+  eq(I.rehabTasks([{ tasks: [{ ...task, course: 'us11r', level: 1, hints: ['one'] }] }], 'us11r', 1).length, 0, 'a task without two hints is held back')
+  // every rehab pack the manifest names loads, and each course has both levels
+  for (const meta of manifest.injuries?.rehab?.packs || []) {
+    const pack = pub(meta.file)
+    for (const course of ['us11r', 'global10r']) for (const lv of [1, 2])
+      ok(I.rehabTasks([pack], course, lv).length >= 1, `${meta.file}: ${course} has a Level ${lv} rehab task`)
+  }
+}
 eq(newCareer('us11r', 0, 5).sport, 'football', 'a career with no sport named is football')
 for (let seed = 0; seed < 64; seed++) for (let t = 0; t < N_TEAMS; t++) {
   const ro = roster(seed, t, 1 + (seed % 5), {}, 'volleyball')

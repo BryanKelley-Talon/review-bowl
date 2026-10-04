@@ -28,7 +28,13 @@
     "short_cue_words": 45,
     "short_max_words": 90,
     "_require_note": "The Arena's rule (CONVENTIONS §7): two hints and a reason line on every question. true = a question short of that is held back and listed in the content report; it comes back the day its author's words land (BK chose this, 2026-09-27, 'A'). false = everything plays.",
-    "require_hints_and_reason": true
+    "require_hints_and_reason": true,
+    "injury_chance": 0.15,
+    "injury_games": [
+      1,
+      2
+    ],
+    "backup_level": 1
   },
   "lanes": {
     "_note": "Each content lane builds ONE team stat. That is the stat layer (FULL-SPEC §2.2): a team that knows the material throws tighter and breaks more tackles. Labels are what a student reads.",
@@ -334,5 +340,17 @@
       "Code worked. Your season's back. Nothing lost.",
       "You saved your code and it paid off. That's planning ahead."
     ]
+  },
+  "injuries": {
+    "_README": "Football injuries and rehab (BK 2026-10-03 23:10, 23:16; Leo's memo In/leo-memo-2026-10-03-review-bowl-injuries-next-update.md; build ordered 23:57). Rare, tied to the hard hits; a low-skill backup steps in; out the rest of the game and one or two more; rehab in Practice Week (Level 1 → back a game sooner, Level 2 → back for the next game). Rehab packs: Sam (CLE) and Will (EIE) write them. A pack marked placeholder blocks release (npm run release-check).",
+    "rehab": {
+      "packs": [
+        {
+          "file": "content/rehab-PLACEHOLDER.json",
+          "placeholder": true,
+          "from": "Josh's stand-in so the engine can be checked; replaced by Sam's and Will's files"
+        }
+      ]
+    }
   }
 }

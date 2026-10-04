@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Skills Review Bowl (Flashpoint History) — arcade football where content mastery builds the team. Local build; beta target is its own Netlify site after BK reviews.",
+  "description": "Skills Review Bowl (Flashpoint History) \u2014 arcade football where content mastery builds the team. Local build; beta target is its own Netlify site after BK reviews.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -13,7 +13,8 @@
     "balance": "node scripts/balance.mjs",
     "offense": "node scripts/offense.mjs",
     "sim": "node scripts/season-sim.mjs",
-    "code": "node scripts/make-code.mjs"
+    "code": "node scripts/make-code.mjs",
+    "release-check": "node scripts/release-check.mjs"
   },
   "dependencies": {
     "react": "^18.2.0",

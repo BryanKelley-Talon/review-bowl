@@ -17,6 +17,8 @@
 import { useMemo, useRef, useState } from 'react'
 import Question from './Question.jsx'
 import Newspaper from './Newspaper.jsx'
+import RehabTask from './RehabTask.jsx'
+import { INJ_WORDS as IW, afterRehab, rehabTasks } from '../game/injury.js'
 import { MAX_LEVEL, PRACTICE_FACILITY_MAX, RESULT, trainPlayer, upgradeFacility } from '../game/season.js'
 import { DEFENSE, LANE_OF, ratings, values } from '../game/ratings.js'
 import { POSITION_OF, TEAMS, roster } from '../game/teams.js'
@@ -24,7 +26,7 @@ import { sportOf, statLabel as sportStatLabel, terms } from '../game/sport.js'
 
 const pips = (n, max = MAX_LEVEL) => '●'.repeat(n) + '○'.repeat(Math.max(0, max - n))
 
-export default function PracticeWeek({ career, setCareer, dealer, manifest, opponent, weekLabel, onAnswer, onDone }) {
+export default function PracticeWeek({ career, setCareer, dealer, manifest, opponent, weekLabel, onAnswer, onDone, rehab = [] }) {
   const rules = manifest.rules || {}
   const want = rules.practice_defense_questions ?? 3
   const [filmRun, setFilmRun] = useState(null)      // { i, right } while the film study is running
@@ -41,6 +43,10 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
   // from what onAnswer reports back instead.
   const defenseNow = useRef(null)
   const [filmDone, setFilmDone] = useState(!!career.practiceDone)
+  // Rehab (football injuries, 2026-10-04): one session a week, held in memory like training.
+  const [rehabRun, setRehabRun] = useState(null)    // { level, task, result }
+  const hurt = career.injury || null
+  const hurtAtStart = useRef(hurt)
 
   const r = ratings(career)
   const v = values(r)
@@ -145,6 +151,45 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
           the only currency this week</b>; cash is for the off-season.</p>
         {note && <p className="toast-inline" role="status">{note}</p>}
       </section>
+
+      {sport === 'football' && hurtAtStart.current && (() => {
+        const p = players[hurtAtStart.current.stat]
+        const pick = lv => {
+          const list = rehabTasks(rehab, career.course, lv)
+          if (!list.length) return
+          setRehabRun({ level: lv, task: list[Math.floor(Math.random() * list.length)], result: null })
+        }
+        const any = rehabTasks(rehab, career.course, 1).length + rehabTasks(rehab, career.course, 2).length
+        return (
+          <section className="panel rehab-panel">
+            <h3 className="h3">{IW.rehabHead}</h3>
+            <p className="sub">{IW.rehabBody(p.name, p.position, hurtAtStart.current.out)}</p>
+            {!rehabRun && (any
+              ? <div className="rehab-levels">
+                  {[1, 2].map(lv => (
+                    <button key={lv} type="button" className="btn-secondary" disabled={!rehabTasks(rehab, career.course, lv).length}
+                            onClick={() => pick(lv)}>{IW.level[lv]}</button>
+                  ))}
+                </div>
+              : <p className="q-note">{IW.noTasks}</p>)}
+            {rehabRun && (
+              <RehabTask task={rehabRun.task} onDone={ok => {
+                const nextInj = afterRehab(hurtAtStart.current, rehabRun.level, ok)
+                setRehabRun(r => ({ ...r, result: ok, after: nextInj }))
+                if (ok) setCareer(c => ({ ...c, injury: afterRehab(c.injury, rehabRun.level, true) }))
+              }} />
+            )}
+            {rehabRun && rehabRun.result !== null && (
+              <p className="toast-inline" role="status">
+                {rehabRun.result
+                  ? (rehabRun.after ? IW.right1(p.name) : IW.rightBack(p.name))
+                  : IW.wrong(p.name, hurtAtStart.current.out)}
+                {' '}{IW.oneSession}
+              </p>
+            )}
+          </section>
+        )
+      })()}
 
       <section className="panel">
         <h3 className="h3">{T.filmHead}</h3>

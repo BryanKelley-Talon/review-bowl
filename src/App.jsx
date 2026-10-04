@@ -165,7 +165,7 @@ function CodeEntry({ manifest, onLoad, onBack }) {
       <div className="code-row">
         <input className="code-input" value={code} onChange={e => setCode(e.target.value)} autoFocus
                onKeyDown={e => { if (e.key === 'Enter' && code.trim()) go() }}
-               placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XX" aria-label="Your save code" autoComplete="off" spellCheck={false} />
+               placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-X" aria-label="Your save code" autoComplete="off" spellCheck={false} />
         <button type="button" className="btn-primary" disabled={!code.trim()} onClick={go}>Load</button>
       </div>
       <p className="sub small">Dashes and capitals don't matter. An O can be a zero and an I or L can be a one.</p>
@@ -337,7 +337,7 @@ function Hub({ career, setCareer, manifest, door, onPlay, onAnswer, onQuit, rest
       </div>
 
       {career.phase === 'practice' && door && next && (
-        <PracticeWeek career={career} setCareer={setCareer} dealer={door.dealer} manifest={manifest}
+        <PracticeWeek career={career} setCareer={setCareer} dealer={door.dealer} manifest={manifest} rehab={door.rehab || []}
                       opponent={next.opp} weekLabel={next.label} onAnswer={onAnswer}
                       onDone={() => { const c = finishPractice(career); setCareer(c); onPlay({ ...next, career: c }) }} />
       )}

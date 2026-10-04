@@ -6,7 +6,7 @@
  * code cannot hold a city, so it is a checkpoint beside a city file. A football career is small enough that the code
  * IS the save — every field is stored exactly, and entering the code restores the career as it was.
  *
- * Layout: 21 data characters + 2 check characters, Crockford base32, shown as XXXX-XXXX-XXXX-XXXX-XXXX-XXX.
+ * Layout (version 2): 21 data characters + 2 check characters, Crockford base32, shown as XXXX-XXXX-XXXX-XXXX-XXXX-XXX.
  * Crockford's alphabet has no I, L, O or U, and decoding reads I/L as 1 and O as 0, so misread letters still work.
  *
  * Data bits (105, most significant first):
@@ -17,17 +17,26 @@
  * SPORT (2026-10-03, volleyball): one of the two spare bits. Every code written before volleyball
  * carries 0 there, which reads as football, so every old code still loads exactly as it was.
  *
+ * VERSION 3 (2026-10-04, injuries; BK 23:57 "let's start building the injury mechanic"): two more
+ * data characters, 23 + 2 = 25, shown XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-X. The new 10 bits:
+ *   injury 4 (0 = nobody hurt; else which starter and 1 or 2 games left, injury.js) ·
+ *   reserved 6 (held at 0 for Leo's class/unit picker, the next Review Bowl update: No class 1 +
+ *   units up to N 4 + 1 spare), so the code changes length once, not twice.
+ * A version-2 code (23 characters) still loads exactly as it was, with nobody hurt; the next code
+ * the game writes for that career is a version-3 code.
+ *
  * Nothing in it identifies a student: no name, no school, no answers — only the team's state.
  */
 
 import { TEAMS } from '../game/teams.js';
+import { injuryFromBits, injuryToBits } from '../game/injury.js';
 
 const ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
 // VERSION 2 (v3 iteration): Defense became a real trainable stat with its own form and
 // facility, Practice Week added a phase and a per-week flag, and "stars" became player
 // LEVELS. Those are new fields, so v1 codes cannot be read — a code written during the
 // first playtest will be refused with the version message rather than silently misread.
-const VERSION = 2;
+const VERSION = 3;
 
 export const COURSES = ['global10r', 'us11r'];
 export const PHASES = ['regular', 'practice', 'playoffs', 'seasonEnd', 'jobs', 'offseason'];
@@ -43,8 +52,11 @@ const FIELDS = [
   ...STATS.map(s => [`lvl_${s}`, 2]),
   ['titles', 2], ['seed', 6], ['practiceDone', 1], ['sport', 1], ['spare', 1],
 ];
+const FIELDS_V2 = FIELDS.slice();
+FIELDS.push(['injury', 4], ['reserved', 6]);
 
-const DATA_CHARS = 21;
+const DATA_CHARS = 23;
+const DATA_CHARS_V2 = 21;
 const CHECK_CHARS = 2;
 
 
@@ -85,6 +97,8 @@ export function encodeSaveCode(career) {
     practiceDone: career.practiceDone ? 1 : 0,
     sport: career.sport === 'volleyball' ? 1 : 0,
     spare: 0,
+    injury: injuryToBits(career.injury),
+    reserved: 0,
   };
   for (const l of LANES) values[`form_${l}`] = clampInt(career.form?.[l], 0, 15);
   for (const s of FACILITIES) values[`fac_${s}`] = clampInt(career.facilities?.[s], 0, 2);
@@ -120,25 +134,29 @@ export function decodeSaveCode(input) {
   // than telling a student their own handwriting is wrong.
   if (code.length === 22)
     throw new Error('That code is from an earlier version of Review Bowl, before practice weeks. Start a new career.');
-  if (code.length !== DATA_CHARS + CHECK_CHARS || [...code].some(c => !ALPHABET.includes(c)))
-    throw new Error('That doesn’t look like a Review Bowl code. Codes have 23 letters and numbers.');
+  // 25 characters: version 3 (injuries). 23: version 2, which still loads, with nobody hurt.
+  const v2 = code.length === DATA_CHARS_V2 + CHECK_CHARS;
+  const nData = v2 ? DATA_CHARS_V2 : DATA_CHARS;
+  if ((!v2 && code.length !== DATA_CHARS + CHECK_CHARS) || [...code].some(c => !ALPHABET.includes(c)))
+    throw new Error('That doesn’t look like a Review Bowl code. Codes have 25 letters and numbers.');
 
-  const data = code.slice(0, DATA_CHARS);
-  if (checksum(data) !== code.slice(DATA_CHARS))
+  const data = code.slice(0, nData);
+  if (checksum(data) !== code.slice(nData))
     throw new Error('That code has a typo somewhere. Check each character against your worksheet.');
 
   let bits = 0n;
   for (const c of data)
     bits = (bits << 5n) | BigInt(ALPHABET.indexOf(c));
 
+  const layout = v2 ? FIELDS_V2 : FIELDS;
   const values = {};
-  for (let i = FIELDS.length - 1; i >= 0; i--) {
-    const [name, width] = FIELDS[i];
+  for (let i = layout.length - 1; i >= 0; i--) {
+    const [name, width] = layout[i];
     values[name] = Number(bits & ((1n << BigInt(width)) - 1n));
     bits >>= BigInt(width);
   }
 
-  if (values.version !== VERSION)
+  if (values.version !== (v2 ? 2 : VERSION))
     throw new Error('That code is from a different version of Review Bowl.');
   if (values.team >= TEAMS.length || values.phase >= PHASES.length)   // 12 teams since 2026-09-28; the field holds 16
     throw new Error('That code doesn’t match any team in this league. Check it against your worksheet.');
@@ -165,5 +183,6 @@ export function decodeSaveCode(input) {
     seed: values.seed,
     practiceDone: !!values.practiceDone,
     sport: values.sport ? 'volleyball' : 'football',
+    injury: v2 ? null : injuryFromBits(values.injury),
   };
 }

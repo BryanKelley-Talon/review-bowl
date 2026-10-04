@@ -8,6 +8,7 @@
 // ============================================================
 import { ALL_LANES, DEFENSE, FORM_START, STATS } from './ratings.js'
 import { TEAMS, mix, rng, teamStrength } from './teams.js'
+import { injuryAfterGame } from './injury.js'
 
 export const RESULT = { NONE: 0, W: 1, L: 2, T: 3 }
 export const REGULAR_GAMES = 8
@@ -145,6 +146,7 @@ export function newCareer(course, team, seed = Math.floor(Math.random() * 64), s
     levels: levelsFor(seed, team),
     titles: 0,
     practiceDone: false,
+    injury: null,                              // football: { stat, out } while a starter is hurt (injury.js)
   }
 }
 
@@ -158,6 +160,9 @@ export function afterGame(career, outcome) {
   const security = (won ? 2 : lost ? -2 : 0) + (outcome.press ? 1 : 0)
   c.cash = clamp(c.cash + earned, 0, 31)
   c.security = clamp(c.security + security, 0, 31)
+  // Injuries (2026-10-04): a game played with the backup takes one game off; a new injury
+  // from this game starts counting next week (injury.js).
+  c.injury = injuryAfterGame(career.injury || null, outcome.injury || null)
 
   if (c.phase === 'regular') {
     c.results[c.week] = outcome.result
@@ -210,7 +215,7 @@ export function jobOffers(career) {
 
 export function takeJob(career, team) {
   return {
-    ...career, team, security: 16, phase: 'offseason',
+    ...career, team, security: 16, phase: 'offseason', injury: null,
     facilities: Object.fromEntries([...STATS, DEFENSE].map(s => [s, 0])),
     levels: levelsFor(career.seed, team, career.season),
   }
@@ -220,6 +225,7 @@ export function startNextSeason(career) {
   return {
     ...career, season: clamp(career.season + 1, 1, 16), phase: 'practice', week: 0,
     results: [0, 0, 0, 0, 0, 0, 0, 0], playoffRound: 0, champ: false, practiceDone: false,
+    injury: null,                              // the off-season heals everyone
   }
 }
 

@@ -524,3 +524,30 @@ body.rb-full{overscroll-behavior:none}
   .pc-coach{width:52px;height:52px}
 }
 @media (max-height:500px) and (orientation:landscape){ .pc-grid{grid-template-columns:repeat(4,1fr)} .pc-line{font-size:12px} .pc-panel{padding:8px} }
+
+/* ---------- injuries and rehab (2026-10-04) ---------- */
+.stat-hurt{font:700 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#0B1220;background:#FFB86B;
+  border-radius:3px;padding:2px 4px;margin-left:4px;font-style:normal}
+.rehab-panel{border-color:#FFB86B}
+.rehab-levels{display:flex;flex-wrap:wrap;gap:8px}
+.rehab{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.rehab-task{margin:0;font-size:16px;line-height:1.45}
+.rehab-cards{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.rehab-card{width:100%;display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;text-align:left;min-height:48px;
+  background:var(--card,#131C2E);color:var(--white,#F4F6FA);border:2px solid var(--edge,#22304A);border-radius:8px;padding:8px 10px;
+  font:500 15px/1.4 'Outfit',sans-serif;cursor:pointer}
+.rehab-card.picked{border-color:var(--gold,#E3B341);box-shadow:0 0 0 2px rgba(227,179,65,.35)}
+.rehab-card:focus-visible{outline:3px solid var(--gold,#E3B341);outline-offset:2px}
+.rehab-card.right{border-color:#4FC0B0}
+.rehab-card.wrong{border-color:#FFB86B;border-style:dashed}
+.rehab-n{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--gold,#E3B341);
+  color:#0B1220;font:800 15px/1 'Barlow Condensed',sans-serif}
+.rehab-where{font:700 13px/1.2 'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#C9D4E5;white-space:nowrap}
+.rehab-bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.rehab-bin{display:flex;flex-direction:column;align-items:center;gap:3px;min-height:56px}
+.rehab-count{font:600 13px/1 'Outfit',sans-serif;opacity:.85;min-height:13px}
+.rehab-actions{display:flex;gap:8px;flex-wrap:wrap}
+.rehab-hints{margin:0;padding-left:18px;color:#D6DEEA}
+@media (max-width:480px){ .rehab-card{grid-template-columns:26px 1fr;} .rehab-where{grid-column:2} }
+/* Long toasts (an injury line) wrap at every width instead of running under the full-screen button (2026-10-04). */
+.match .toast{white-space:normal;max-width:calc(100% - 170px);text-align:center;line-height:1.3}
