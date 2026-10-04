@@ -20,7 +20,7 @@
   "left": [
     {
       "key": "a",
-      "label": "The 1640 ruling on three runaway servants (Document 13)",
+      "label": "The 1640 ruling on three runaway servants",
       "hints": [
         "Three servants ran away together. Did they get the same punishment?",
         "Look for the answer about the same offense and sentences that don't match."
@@ -44,7 +44,7 @@
     },
     {
       "key": "d",
-      "label": "The trade map listing enslaved people beside sugar and pepper (Document 6)",
+      "label": "The trade map that lists enslaved people beside sugar and pepper",
       "hints": [
         "On the map, what else travels on the same arrow as enslaved people?",
         "Look for the answer about being treated as property."
@@ -52,7 +52,7 @@
     },
     {
       "key": "e",
-      "label": "The probate inventory (Document 14)",
+      "label": "A 1749 probate inventory from a New York estate",
       "hints": [
         "A probate inventory lists everything a dead person owned.",
         "Look for livestock and household goods."
@@ -89,11 +89,11 @@
     "e": "5"
   },
   "rationale": {
-    "a": "Document 13's own timeline: three separate rulings on the same kind of offense, but the sentences already stop lining up before 1676 — the pattern is bending, not yet split cleanly by race.",
+    "a": "The colonial law timeline: three separate rulings on the same kind of offense, but the sentences already stop lining up before 1676 — the pattern is bending, not yet split cleanly by race.",
     "b": "Bacon's Rebellion is the event the unit plan itself names as the hinge — it shows Virginia's elite the danger of poor whites and enslaved people making common cause.",
     "c": "That fear is what drives colonial assemblies, after 1676, to write law that divides servitude sharply along racial lines.",
-    "d": "Document 6's trade map prints human beings in the same list as sugar and pepper — commerce treats people as goods, the same logic the law comes to treat them under.",
-    "e": "Document 14's probate inventory lists enslaved people under the same heading as livestock and household goods — property in law, not just in commerce."
+    "d": "The trade map prints human beings in the same list as sugar and pepper — commerce treats people as goods, the same logic the law comes to treat them under.",
+    "e": "The 1749 probate inventory lists enslaved people under the same heading as livestock and household goods — property in law, not just in commerce."
   },
   "_filled": [
     "2026-09-27: two hints per pair from Sam's reviewbowl-us11r-fills-2026-09-27.json (BK's yes pending at port)"

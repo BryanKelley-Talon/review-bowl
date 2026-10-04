@@ -372,8 +372,8 @@ export async function loadDoor(manifest, courseId) {
     .then(d => d.crops || {}).catch(() => ({}))
   const pool = buildPool(manifest, courseId, packsByFile, crops)
   const camp = (course.camp || []).map(c => ({ ...c, pack: packsByFile[c.file] || null }))
-  // Rehab tasks for football injuries (2026-10-04): the whole pack; injury.js picks by course and level.
-  const rehabFiles = ((manifest.injuries?.rehab?.packs) || []).filter(p => p.enabled !== false).map(p => p.file)
+  // Rehab packs for football injuries (2026-10-04): this course's pack (Sam's CLE for US, Will's EIE for Global).
+  const rehabFiles = ((manifest.injuries?.rehab?.packs) || []).filter(p => p.enabled !== false && (!p.course || p.course === courseId)).map(p => p.file)
   const rehab = (await Promise.all(rehabFiles.map(f => fetch(`/${f}`).then(r => r.ok ? r.json() : null).catch(() => null))))
     .filter(Boolean)
   return { pool, camp, rehab }

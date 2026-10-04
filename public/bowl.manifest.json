@@ -349,13 +349,18 @@
     ]
   },
   "injuries": {
-    "_README": "Football injuries and rehab (BK 2026-10-03 23:10, 23:16; Leo's memo In/leo-memo-2026-10-03-review-bowl-injuries-next-update.md; build ordered 23:57). Rare, tied to the hard hits; a low-skill backup steps in; out the rest of the game and one or two more; rehab in Practice Week (Level 1 → back a game sooner, Level 2 → back for the next game). Rehab packs: Sam (CLE) and Will (EIE) write them. A pack marked placeholder blocks release (npm run release-check).",
+    "_README": "Football injuries and rehab (BK 2026-10-03 23:10, 23:16; Leo's memo In/leo-memo-2026-10-03-review-bowl-injuries-next-update.md; build ordered 23:57). Rare, tied to the hard hits; a low-skill backup steps in; out the rest of the game and one or two more; rehab in Practice Week: the desks' CRAWL / WALK / JOG organizers (BK 07:43); each level finished takes a game off, so two finished levels bring him back for the next game. Packs: Sam (CLE, US) and Will (EIE, Global), one per course.",
     "rehab": {
       "packs": [
         {
-          "file": "content/rehab-PLACEHOLDER.json",
-          "placeholder": true,
-          "from": "Josh's stand-in so the engine can be checked; replaced by Sam's and Will's files"
+          "file": "content/rehab-cle-us11r-2026-10-04.json",
+          "course": "us11r",
+          "from": "Sam, sam-2026-10-04-reviewbowl-rehab-cle-us_v2.json (In/ 08:02): BK 07:43 shape, 07:52 previously worked documents, 08:00 'Yes' (CIVIC PRINCIPLES button, documents on screen). Ported byte for byte (md5 7f8af717…)."
+        },
+        {
+          "file": "content/rehab-eie-global10r-2026-10-04.json",
+          "course": "global10r",
+          "from": "Will, will-2026-10-04-reviewbowl-rehab-eie-global_v2.json (In/ 07:58): BK 07:43 ruling. Ported byte for byte (md5 8bd6bc76…)."
         }
       ]
     }

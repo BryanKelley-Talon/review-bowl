@@ -1,0 +1,320 @@
+{
+ "_meta": {
+  "what": "Review Bowl football · injury rehab tasks · GLOBAL (Enduring Issues Essay)",
+  "from": "Will, global10r-curriculum, 2026-10-04",
+  "ruled": "BK 2026-10-04 07:43 (leo-ruling-2026-10-04-rehab-tasks.md): return rule yes; drag-and-drop organizers (identify the piece, put it in the right spot); levels CRAWL, WALK, JOG; built on Casefile C now, a set per unit as the Writing Lab grows",
+  "returnRule": "Finish any one level: the starter returns a game early. Finish two levels: he's back for the next game.",
+  "rules": [
+   "Every drag also works by tapping (tap the piece, tap the spot)",
+   "Choose and arrange only: nothing typed, nothing stored or sent; the save code carries the injury state",
+   "Levels name the paragraph, never the kid; nothing reads as a score",
+   "Fields match the Office/Locker Room items: hints (2), reasoning, distractors (shown after a wrong drop)",
+   "Sentences are desk-written model writing, never presented as sources; quotations are Casefile C v5 as printed",
+   "Sam's CLE set uses the same shape with Civic Principle in place of the issue"
+  ]
+ },
+ "sets": [
+  {
+   "set": "A",
+   "title": "Italy and Germany",
+   "docs": "Casefile C (10.2), Documents 5 and 6: Cavour, 1846; Bismarck, 1862",
+   "tasks": [
+    {
+     "id": "A-crawl",
+     "level": "CRAWL",
+     "kind": "sort",
+     "prompt": "Name the parts. Drag each sentence to its job (or tap the sentence, then tap the job).",
+     "slots": [
+      "CONTEXT",
+      "ISSUE",
+      "EVIDENCE",
+      "OUTSIDE EVIDENCE"
+     ],
+     "pieces": [
+      {
+       "id": "p1",
+       "text": "In the 1800s, Italy and Germany were split into many small states, and leaders worked to unite each one into a single nation.",
+       "goes": "CONTEXT"
+      },
+      {
+       "id": "p2",
+       "text": "An enduring issue these documents raise is nationalism. Nationalism is when a people's loyalty to their own nation becomes a push for that nation to rule itself.",
+       "goes": "ISSUE"
+      },
+      {
+       "id": "p3",
+       "text": "Document 6 shows this when Bismarck says the goal will be achieved “by blood and iron.”",
+       "goes": "EVIDENCE"
+      },
+      {
+       "id": "p4",
+       "text": "Outside the documents, I know that in 1871 Prussia's king was proclaimed kaiser of a new German Empire.",
+       "goes": "OUTSIDE EVIDENCE"
+      }
+     ],
+     "hints": [
+      "Which sentence sets the scene before anything else?",
+      "Which one is true but isn't in either document?"
+     ],
+     "reasoning": "Context sets the scene, the issue is named and explained, evidence comes from a document, and outside evidence comes from what you know.",
+     "distractors": {
+      "CONTEXT": "That sentence does more than set the scene. Look for the one that tells when and what was happening.",
+      "ISSUE": "Look for the sentence that names the issue and says what it means.",
+      "EVIDENCE": "Evidence names a document and pulls a detail from it.",
+      "OUTSIDE EVIDENCE": "Outside evidence is true and isn't in the documents. Is that one in a document?"
+     }
+    },
+    {
+     "id": "A-walk",
+     "level": "WALK",
+     "kind": "order",
+     "prompt": "Build the paragraph. Drag the five sentences into order (or tap a sentence, then tap its spot).",
+     "slots": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ],
+     "pieces": [
+      {
+       "id": "s1",
+       "text": "In the 1800s, Italy and Germany were split into many small states, and leaders worked to unite each one into a single nation.",
+       "goes": "1"
+      },
+      {
+       "id": "s2",
+       "text": "An enduring issue these documents raise is nationalism. Nationalism is when a people's loyalty to their own nation becomes a push for that nation to rule itself.",
+       "goes": "2"
+      },
+      {
+       "id": "s3",
+       "text": "Document 5 shows this when Cavour says “all the petty questions that divide us must be silenced” so Italy can unite.",
+       "goes": "3"
+      },
+      {
+       "id": "s4",
+       "text": "Document 6 shows it too, when Bismarck says the goal will be achieved “by blood and iron.”",
+       "goes": "4"
+      },
+      {
+       "id": "s5",
+       "text": "This issue matters because the same force that built Italy and Germany out of small states could also break apart empires that ruled many peoples.",
+       "goes": "5"
+      }
+     ],
+     "hints": [
+      "Start with the scene. What has to come before you can name the issue?",
+      "The documents come after the issue is named, and why it matters comes last."
+     ],
+     "reasoning": "Context, the issue, two documents, why it matters. That's the order the essay wants.",
+     "distractors": {
+      "early": "That one needs something before it. What does a reader need to know first?",
+      "late": "That one can come sooner. Does it set up the sentences after it?"
+     }
+    },
+    {
+     "id": "A-jog",
+     "level": "JOG",
+     "kind": "find-and-place",
+     "prompt": "Two pieces are missing. Find the explanation and the outside evidence, and drag each one into its spot. Two pieces don't belong.",
+     "paragraph": [
+      "In the 1800s, Italy and Germany were split into many small states, and leaders worked to unite each one into a single nation.",
+      "An enduring issue these documents raise is nationalism. Nationalism is when a people's loyalty to their own nation becomes a push for that nation to rule itself.",
+      "Document 6 shows this when Bismarck says the goal will be achieved “by blood and iron.”",
+      "[ SPOT 1 ]",
+      "[ SPOT 2 ]",
+      "This issue matters because the same force that built Italy and Germany out of small states could also break apart empires that ruled many peoples."
+     ],
+     "slots": [
+      "SPOT 1 · EXPLANATION",
+      "SPOT 2 · OUTSIDE EVIDENCE"
+     ],
+     "pieces": [
+      {
+       "id": "j1",
+       "text": "This shows that for Bismarck, a united Germany would come from war, not from votes or speeches.",
+       "goes": "SPOT 1 · EXPLANATION"
+      },
+      {
+       "id": "j2",
+       "text": "Outside the documents, I know that in 1871 Prussia's king was proclaimed kaiser of a new German Empire.",
+       "goes": "SPOT 2 · OUTSIDE EVIDENCE"
+      },
+      {
+       "id": "j3",
+       "text": "Cavour wanted Italy to be glorious and powerful.",
+       "goes": null
+      },
+      {
+       "id": "j4",
+       "text": "The Industrial Revolution began in Britain.",
+       "goes": null
+      }
+     ],
+     "hints": [
+      "The explanation says what the evidence right before it shows. Look for “This shows…”",
+      "Outside evidence is true, isn't in Documents 5 or 6, and connects to the issue."
+     ],
+     "reasoning": "The explanation says what Bismarck's words mean; the outside fact shows where his way led. That's evidence put to work.",
+     "distractors": {
+      "j3": "That's in Document 5, so it's document evidence, not outside evidence, and it doesn't explain Bismarck's words.",
+      "j4": "True, but it doesn't connect to nationalism in these documents. Outside evidence has to fit.",
+      "swap": "Both pieces belong, just in each other's spot. Which one explains, and which one brings in something new?"
+     }
+    }
+   ]
+  },
+  {
+   "set": "B",
+   "title": "Empires coming apart",
+   "docs": "Casefile C (10.2), Documents 7 and 8: the peoples of Austria-Hungary, 1911; “The Boiling Point,” Punch, 1912",
+   "tasks": [
+    {
+     "id": "B-crawl",
+     "level": "CRAWL",
+     "kind": "sort",
+     "prompt": "Name the parts. Drag each sentence to its job (or tap the sentence, then tap the job).",
+     "slots": [
+      "CONTEXT",
+      "ISSUE",
+      "EVIDENCE",
+      "OUTSIDE EVIDENCE"
+     ],
+     "pieces": [
+      {
+       "id": "p1",
+       "text": "By 1911, Austria-Hungary ruled more than ten peoples with different languages, and the Ottoman Empire was losing the Balkans one people at a time.",
+       "goes": "CONTEXT"
+      },
+      {
+       "id": "p2",
+       "text": "An enduring issue these documents raise is conflict. Conflict is when groups, nations or ideas struggle against each other, from argument to war.",
+       "goes": "ISSUE"
+      },
+      {
+       "id": "p3",
+       "text": "Document 8 shows this when the great powers of Europe sit on the lid of a pot labeled “Balkan Troubles.”",
+       "goes": "EVIDENCE"
+      },
+      {
+       "id": "p4",
+       "text": "Outside the documents, I know that in 1914 a Bosnian Serb nationalist shot the heir to Austria-Hungary's throne, and Europe went to war.",
+       "goes": "OUTSIDE EVIDENCE"
+      }
+     ],
+     "hints": [
+      "Which sentence sets the scene before anything else?",
+      "Which one is true but isn't in either document?"
+     ],
+     "reasoning": "Context sets the scene, the issue is named and explained, evidence comes from a document, and outside evidence comes from what you know.",
+     "distractors": {
+      "CONTEXT": "That sentence does more than set the scene. Look for the one that tells when and what was happening.",
+      "ISSUE": "Look for the sentence that names the issue and says what it means.",
+      "EVIDENCE": "Evidence names a document and pulls a detail from it.",
+      "OUTSIDE EVIDENCE": "Outside evidence is true and isn't in the documents. Is that one in a document?"
+     }
+    },
+    {
+     "id": "B-walk",
+     "level": "WALK",
+     "kind": "order",
+     "prompt": "Build the paragraph. Drag the five sentences into order (or tap a sentence, then tap its spot).",
+     "slots": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+     ],
+     "pieces": [
+      {
+       "id": "s1",
+       "text": "By 1911, Austria-Hungary ruled more than ten peoples with different languages, and the Ottoman Empire was losing the Balkans one people at a time.",
+       "goes": "1"
+      },
+      {
+       "id": "s2",
+       "text": "An enduring issue these documents raise is conflict. Conflict is when groups, nations or ideas struggle against each other, from argument to war.",
+       "goes": "2"
+      },
+      {
+       "id": "s3",
+       "text": "Document 7 shows this in the map of Austria-Hungary, where many different peoples live inside one empire's borders.",
+       "goes": "3"
+      },
+      {
+       "id": "s4",
+       "text": "Document 8 shows it too, when the great powers of Europe sit on the lid of a pot labeled “Balkan Troubles.”",
+       "goes": "4"
+      },
+      {
+       "id": "s5",
+       "text": "This issue matters because the struggle in the Balkans didn't stay there: two years later it helped pull all of Europe into war.",
+       "goes": "5"
+      }
+     ],
+     "hints": [
+      "Start with the scene. What has to come before you can name the issue?",
+      "The documents come after the issue is named, and why it matters comes last."
+     ],
+     "reasoning": "Context, the issue, two documents, why it matters. That's the order the essay wants.",
+     "distractors": {
+      "early": "That one needs something before it. What does a reader need to know first?",
+      "late": "That one can come sooner. Does it set up the sentences after it?"
+     }
+    },
+    {
+     "id": "B-jog",
+     "level": "JOG",
+     "kind": "find-and-place",
+     "prompt": "Two pieces are missing. Find the explanation and the outside evidence, and drag each one into its spot. Two pieces don't belong.",
+     "paragraph": [
+      "By 1911, Austria-Hungary ruled more than ten peoples with different languages, and the Ottoman Empire was losing the Balkans one people at a time.",
+      "An enduring issue these documents raise is conflict. Conflict is when groups, nations or ideas struggle against each other, from argument to war.",
+      "Document 8 shows this when the great powers of Europe sit on the lid of a pot labeled “Balkan Troubles.”",
+      "[ SPOT 1 ]",
+      "[ SPOT 2 ]",
+      "This issue matters because the struggle in the Balkans didn't stay there: two years later it helped pull all of Europe into war."
+     ],
+     "slots": [
+      "SPOT 1 · EXPLANATION",
+      "SPOT 2 · OUTSIDE EVIDENCE"
+     ],
+     "pieces": [
+      {
+       "id": "j1",
+       "text": "This shows that Europe's great powers were trying to hold the Balkans down, and the pot could boil over at any time.",
+       "goes": "SPOT 1 · EXPLANATION"
+      },
+      {
+       "id": "j2",
+       "text": "Outside the documents, I know that in 1914 a Bosnian Serb nationalist shot the heir to Austria-Hungary's throne, and Europe went to war.",
+       "goes": "SPOT 2 · OUTSIDE EVIDENCE"
+      },
+      {
+       "id": "j3",
+       "text": "Austria-Hungary ruled many peoples.",
+       "goes": null
+      },
+      {
+       "id": "j4",
+       "text": "Cartoons can be funny.",
+       "goes": null
+      }
+     ],
+     "hints": [
+      "The explanation says what the cartoon right before it shows. Look for “This shows…”",
+      "Outside evidence is true, isn't in Documents 7 or 8, and shows where the conflict led."
+     ],
+     "reasoning": "The explanation says what the boiling pot means; the outside fact shows the pot did boil over. That's evidence put to work.",
+     "distractors": {
+      "j3": "That's in Document 7, so it's document evidence, and it doesn't explain the cartoon.",
+      "j4": "True, but it doesn't connect to the issue. Outside evidence has to fit.",
+      "swap": "Both pieces belong, just in each other's spot. Which one explains, and which one brings in something new?"
+     }
+    }
+   ]
+  }
+ ]
+}

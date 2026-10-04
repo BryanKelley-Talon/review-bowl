@@ -1,23 +1,23 @@
 {
   "_course": "US History & Government 11R",
-  "_unit": "Year-round \u2014 Tier A course skill language",
-  "_activity": "Vocab Match \u2014 The Six Graded Skills",
-  "_built": "2026-09-21 by Sam (us11r-curriculum) \u00b7 hints added 2026-09-22 for Skills Review Bowl reuse",
-  "_licence": "ORIGINAL. Exact wording copied from US11R_Glossary_v2_2026-09-02, Tier A, so it reads the same everywhere it appears. No new content.",
+  "_unit": "Year-round — Tier A course skill language",
+  "_activity": "Vocab Match — The Six Graded Skills",
+  "_built": "2026-09-21 by Sam; right-hand lines changed 2026-10-03 to the gauge lines (skillbands.py BANDS), BK 15:45: \"yes change to the gauge lines. consistency.\" · Review Bowl copy keeps its left-side hints (2026-09-22) so the Bowl can ask it; ported 2026-10-04 by Josh (Sam pass 01:05).",
+  "_licence": "ORIGINAL. The skill lines are the gauge's own lines (skillbands.py BANDS), word for word, the same as the scoring pages and Arena Unit 0. No new content.",
   "reusable": true,
   "intro": "Match each skill line to what it actually asks you to do.",
   "left": [
     {
       "key": "a",
-      "label": "HC \u2014 Historical Context",
+      "label": "HC — Historical Context",
       "hints": [
         "Think about what comes BEFORE you make your argument.",
-        "It's the move that sets the scene \u2014 time, place, circumstances \u2014 not the argument itself."
+        "It's the move that sets the scene — time, place, circumstances — not the argument itself."
       ]
     },
     {
       "key": "b",
-      "label": "TH \u2014 Thesis",
+      "label": "TH — Thesis",
       "hints": [
         "This is about taking a side, not describing one.",
         "A clear position you can actually argue for or against."
@@ -25,7 +25,7 @@
     },
     {
       "key": "c",
-      "label": "DU \u2014 Document Use",
+      "label": "DU — Document Use",
       "hints": [
         "This is about USING a document, not just mentioning it exists.",
         "Name a specific detail from the document and use it as evidence."
@@ -33,15 +33,15 @@
     },
     {
       "key": "d",
-      "label": "EX \u2014 Explanation",
+      "label": "EX — Explanation",
       "hints": [
-        "This is the 'so what' move \u2014 why does the evidence matter?",
+        "This is the 'so what' move — why does the evidence matter?",
         "If your sentence doesn't say WHY the evidence proves your point, this skill isn't happening yet."
       ]
     },
     {
       "key": "e",
-      "label": "OE \u2014 Outside Evidence",
+      "label": "OE — Outside Evidence",
       "hints": [
         "This is knowledge from outside the documents you were given.",
         "The exam's own term for this is 'outside information.'"
@@ -49,37 +49,37 @@
     },
     {
       "key": "f",
-      "label": "CP \u2014 Civic Principle",
+      "label": "CP — Civic Principle",
       "hints": [
         "This means saying the actual name of a principle, not just describing it.",
-        "\"Federalism\" or \"equal protection\" said out loud \u2014 not just implied."
+        "\"Federalism\" or \"equal protection\" said out loud — not just implied."
       ]
     }
   ],
   "right": [
     {
       "key": "1",
-      "label": "Warm up the document \u2014 set the scene before you argue"
+      "label": "Warm up the document — set the scene before you argue"
     },
     {
       "key": "2",
-      "label": "Take a clear position and hold it"
+      "label": "Take a clear position and hold it. Try: “Although ___, ___ because ___.”"
     },
     {
       "key": "3",
-      "label": "Name it. Pull a specific detail. Use it as evidence"
+      "label": "Name the document. Pull a specific detail. Use it as evidence — don't just point at it"
     },
     {
       "key": "4",
-      "label": "The \"so what.\" Say why each piece of evidence matters"
+      "label": "The “so what.” After every piece of evidence, say why it matters"
     },
     {
       "key": "5",
-      "label": "Bring in something from your own knowledge, not in the documents"
+      "label": "Bring in something NOT in the documents — a law, case, or event"
     },
     {
       "key": "6",
-      "label": "Name it out loud \u2014 don't imply it"
+      "label": "Name it out loud — equal protection, federalism, checks and balances. Don't imply it"
     }
   ],
   "correct": {
@@ -91,12 +91,12 @@
     "f": "6"
   },
   "rationale": {
-    "a": "Historical Context sets the scene \u2014 the circumstances around the document \u2014 before you make an argument.",
+    "a": "Historical Context sets the scene — the circumstances around the document — before you make an argument.",
     "b": "Thesis is a clear, held position, not just a topic.",
     "c": "Document Use means naming a specific detail from a document and using it as evidence, not just gesturing at the source.",
-    "d": "Explanation is the \"so what\" \u2014 why the evidence matters, not just that it exists.",
-    "e": "Outside Evidence is knowledge from beyond the documents themselves \u2014 what the exam calls \"outside information.\"",
-    "f": "Civic Principle has to be named out loud (\"federalism,\" \"equal protection\") \u2014 implying it isn't enough."
+    "d": "Explanation is the \"so what\" — why the evidence matters, not just that it exists.",
+    "e": "Outside Evidence is knowledge from beyond the documents themselves — what the exam calls \"outside information.\"",
+    "f": "Civic Principle has to be named out loud (\"federalism,\" \"equal protection\") — implying it isn't enough."
   },
   "_hint_model": "2 escalating hints per pair, available during the regular season only. Playoffs run cold (no hints), per BK's ruling 2026-09-22."
 }

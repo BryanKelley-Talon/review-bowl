@@ -66,7 +66,7 @@
     },
     {
       "key": "4",
-      "label": "After: Franklin's Join or Die cartoon (Document 16) becomes the first prominent call to unite against a shared threat"
+      "label": "After: Franklin's Join or Die cartoon becomes the first prominent call to unite against a shared threat"
     }
   ],
   "correct": {
@@ -76,10 +76,10 @@
     "d": "4"
   },
   "rationale": {
-    "a": "Document 13 shows the line forming before 1676: the Punch ruling (1640), the law on children of enslaved mothers (1662). After Bacon's Rebellion, assemblies lock it in, ending in the 1705 code.",
+    "a": "The colonial law timeline shows the line forming before 1676: the Punch ruling (1640), the law on children of enslaved mothers (1662). After Bacon's Rebellion, assemblies lock it in, ending in the 1705 code.",
     "b": "Similar conditions before 1676 give way, after, to a deliberate legal and social separation of poor whites from enslaved people.",
     "c": "Bacon's Rebellion is the single event elites point back to when justifying the harder line that follows.",
-    "d": "Before 1754 the colonies had no shared political structure; Join or Die (Document 16) is the first prominent argument for uniting them."
+    "d": "Before 1754 the colonies had no shared political structure; Join or Die is the first prominent argument for uniting them."
   },
   "_filled": [
     "2026-09-27: two hints per pair from Sam's reviewbowl-us11r-fills-2026-09-27.json (BK's yes pending at port)"

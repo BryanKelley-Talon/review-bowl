@@ -564,3 +564,40 @@ body.rb-full{overscroll-behavior:none}
 .sport-progress.none{color:#9FB0C8}
 .hub-actions{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}
 .code{word-break:break-all}
+
+/* ---------- rehab v2: the desks' organizers (2026-10-04) ---------- */
+.rh-rule{margin:0}
+.rh-level{min-height:48px;min-width:96px;padding:8px 16px;border-radius:8px;border:2px solid var(--edge,#22304A);background:var(--card,#131C2E);
+  color:var(--white,#F4F6FA);font:800 18px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;cursor:pointer}
+.rh-level.on{border-color:var(--gold,#E3B341)}
+.rh-level.done{border-color:#4FC0B0;color:#9FE3D8}
+.rh-level:disabled{cursor:default}
+.rh-civic{margin-left:auto}
+.rh-civic-card{background:#0E1626;border:1px solid var(--edge,#22304A);border-radius:8px;padding:10px 14px;max-height:340px;overflow:auto}
+.rh-civic-card ul{margin:4px 0 10px;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:14.5px;line-height:1.45}
+.rh-civic-group{margin:6px 0 2px;font:700 13px/1.2 'Barlow Condensed',sans-serif;letter-spacing:.08em;color:var(--gold,#E3B341)}
+.rh-docs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.rh-doc{margin:0;background:#F4EEDF;color:#1B1A17;border-radius:6px;padding:10px 12px;font:15px/1.5 Georgia,'Libre Baskerville',serif}
+.rh-doc figcaption{font:13px/1.35 'Outfit',sans-serif;color:#3A3528;margin-bottom:6px}
+.rh-doc img{width:100%;height:auto;display:block;border-radius:3px;background:#fff}
+.rh-doc-text{margin:0}
+.rh-slots{display:grid;gap:8px}
+.rh-slots.sort{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.rh-slot{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;min-height:58px;padding:8px 10px;border-radius:8px;
+  border:2px dashed #4A5C7C;background:#0E1626;color:var(--white,#F4F6FA);font:500 15px/1.45 'Outfit',sans-serif;cursor:pointer}
+.rh-slot.ready{border-color:var(--gold,#E3B341)}
+.rh-slot.filled{border-style:solid;border-color:#4FC0B0;background:#12262A;cursor:default}
+.rh-slot:focus-visible,.rh-piece:focus-visible,.rh-level:focus-visible{outline:3px solid var(--gold,#E3B341);outline-offset:2px}
+.rh-slot-label{font:700 13px/1.2 'Barlow Condensed',sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#C9D4E5}
+.rh-paragraph{background:#0E1626;border:1px solid var(--edge,#22304A);border-radius:8px;padding:12px 14px;font:16px/1.65 'Outfit',sans-serif}
+.rh-slot.inline{display:flex;width:100%;margin:6px 0}
+.rh-bank{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.rh-piece{width:100%;text-align:left;min-height:48px;padding:10px 12px;border-radius:8px;border:2px solid var(--edge,#22304A);background:var(--card,#131C2E);
+  color:var(--white,#F4F6FA);font:500 15px/1.45 'Outfit',sans-serif;cursor:grab}
+.rh-piece.picked{border-color:var(--gold,#E3B341);box-shadow:0 0 0 2px rgba(227,179,65,.35)}
+.rh-line{min-height:1.4em;margin:0;font:600 15px/1.4 'Outfit',sans-serif}
+.rh-line.ok{color:#9FE3D8}
+.rh-line.miss{color:#FFC98F}
+@media (prefers-reduced-motion:reduce){.rh-piece,.rh-slot{transition:none}}
+.rehab > .btn-ghost{align-self:flex-start}
+.rh-slot:disabled{opacity:1;color:var(--white,#F4F6FA)}

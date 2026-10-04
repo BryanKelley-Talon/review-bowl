@@ -20,7 +20,7 @@
   "left": [
     {
       "key": "a",
-      "label": "Indentured servitude, from 1607 (Document 8)",
+      "label": "Indentured servitude, from 1607",
       "hints": [
         "Continuity means something that stayed the same. Was bound labor new, or there from the start?",
         "Look for the continuity answer about bound labor."
@@ -28,7 +28,7 @@
     },
     {
       "key": "b",
-      "label": "The 1640 ruling on three runaway servants (Document 13)",
+      "label": "The 1640 ruling on three runaway servants",
       "hints": [
         "Three servants ran away. What happened to John Punch that didn't happen to the other two?",
         "Look for the change answer with a sentence that has no end."
@@ -44,7 +44,7 @@
     },
     {
       "key": "d",
-      "label": "Fundamental Orders of Connecticut, 1639 (Document 17)",
+      "label": "Fundamental Orders of Connecticut, 1639",
       "hints": [
         "Self-government in the colonies: new in 1776, or there from early on?",
         "Look for continuity and self-government."
@@ -52,7 +52,7 @@
     },
     {
       "key": "e",
-      "label": "Blackstone on coverture, 1765 (Document 18)",
+      "label": "Blackstone on coverture, 1765",
       "hints": [
         "Blackstone wasn't proposing a new law. He was describing an old one.",
         "Look for continuity and a married woman's legal status."
@@ -92,8 +92,8 @@
     "a": "Indentured servants worked Virginia's tobacco from the colony's first years. Bound labor itself was not new; who got bound, and for how long, is what changed.",
     "b": "Two white servants got extra years. John Punch, a Black man, got servitude for life. Same act, and for the first time on the record, a sentence split by race.",
     "c": "Bacon's Rebellion, 1676, is the accelerant — after it, the split hardens into a permanent, race-based system.",
-    "d": "The Fundamental Orders, 1639, show representative self-government was already part of the colonies' founding idea — the continuity that carries to Document 18.",
-    "e": "Blackstone describes coverture as settled English law. Nobody had to pass it. The casefile says so: it was simply how things were."
+    "d": "The Fundamental Orders, 1639, show representative self-government was already part of the colonies' founding idea — the continuity that carries forward to 1765.",
+    "e": "Blackstone describes coverture as settled English law. Nobody had to pass it. It was simply how things were."
   },
   "_filled": [
     "2026-09-27: two hints per pair from Sam's reviewbowl-us11r-fills-2026-09-27.json (BK's yes pending at port)"

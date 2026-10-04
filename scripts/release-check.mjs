@@ -4,7 +4,7 @@
 //   · a rehab pack marked placeholder, or any PLACEHOLDER line in an enabled rehab pack
 // A gate that passes is not a verdict: render it and look (CONVENTIONS §10).
 import fs from 'node:fs'
-import { INJ_WORDS } from '../src/game/injury.js'
+import { INJ_WORDS, rehabSets } from '../src/game/injury.js'
 import { SAVE_WORDS } from '../src/save/words.js'
 const m = JSON.parse(fs.readFileSync('public/bowl.manifest.json', 'utf8'))
 const errors = []
@@ -16,9 +16,13 @@ for (const p of m.injuries?.rehab?.packs || []) {
   const txt = fs.readFileSync(`public/${p.file}`, 'utf8')
   const n = (txt.match(/PLACEHOLDER/g) || []).length
   if (n) errors.push(`${p.file}: ${n} PLACEHOLDER lines`)
+  const sets = rehabSets(JSON.parse(txt))
+  if (!sets.length) errors.push(`${p.file}: no usable rehab set`)
+  for (const st of sets) if (st.tasks.length < 3) errors.push(`${p.file}: set ${st.set} has ${st.tasks.length} usable levels, not 3`)
 }
-if (!(m.injuries?.rehab?.packs || []).some(p => p.enabled !== false && !p.placeholder))
-  errors.push('no real rehab pack is enabled yet, so an injured player could only heal on schedule')
+for (const course of ['us11r', 'global10r'])
+  if (!(m.injuries?.rehab?.packs || []).some(p => p.enabled !== false && !p.placeholder && p.course === course))
+    errors.push(`no rehab pack for ${course}, so an injured player there could only heal on schedule`)
 errors.forEach(e => console.log('ERROR', e))
 console.log(`\nrelease check: ${errors.length} errors`)
 process.exit(errors.length ? 1 : 0)

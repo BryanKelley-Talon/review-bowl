@@ -520,30 +520,45 @@ ok(encodeSaveCode(newCareer('us11r', 0, 5, 'volleyball')) !== encodeSaveCode(new
   eq(I.injuryAfterGame(null, { stat: 'hands', out: 2 }), { stat: 'hands', out: 2 }, 'a new injury starts counting next week')
   eq(I.injuryAfterGame({ stat: 'hands', out: 2 }, null), { stat: 'hands', out: 1 }, 'a game with the backup takes one off')
   eq(I.injuryAfterGame({ stat: 'hands', out: 1 }, null), null, 'then he is back')
-  // rehab: level 1 one game sooner, level 2 back now, a miss changes nothing
-  eq(I.afterRehab({ stat: 'speed', out: 2 }, 1, true), { stat: 'speed', out: 1 }, 'Level 1 right: back one game sooner')
-  eq(I.afterRehab({ stat: 'speed', out: 1 }, 1, true), null, 'Level 1 right with one game left: back for the next game')
-  eq(I.afterRehab({ stat: 'speed', out: 2 }, 2, true), null, 'Level 2 right: back for the next game')
-  eq(I.afterRehab({ stat: 'speed', out: 2 }, 2, false), { stat: 'speed', out: 2 }, 'a miss changes nothing: he heals on schedule')
+  // rehab (BK 07:43): each finished level takes a game off; two finished levels bring him back
+  eq(I.afterRehab({ stat: 'speed', out: 2 }), { stat: 'speed', out: 1 }, 'one level finished: back a game early')
+  eq(I.afterRehab(I.afterRehab({ stat: 'speed', out: 2 })), null, 'two levels finished: back for the next game')
+  eq(I.afterRehab({ stat: 'speed', out: 1 }), null, 'one game left: one level brings him back')
   // the career carries it through afterGame
   const c0 = { ...newCareer('us11r', 2, 7), phase: 'regular', week: 1 }
   const a1 = afterGame(c0, { result: RESULT.W, press: false, injury: { stat: 'throwing', out: 1 } }).career
   eq(a1.injury, { stat: 'throwing', out: 1 }, 'a game that hurts the quarterback ends with him out next week')
   const a2 = afterGame({ ...a1, phase: 'regular' }, { result: RESULT.L, press: false }).career
   eq(a2.injury, null, 'one game with the backup and he is back')
-  // the sort
-  const task = { task: 't', cards: [{ text: 'a', role: 'context' }, { text: 'b', role: 'claim' }, { text: 'c', role: 'evidence' }], hints: ['h', 'h'], reasoning: 'r' }
-  ok(I.sortIsRight(task, { 0: 'context', 1: 'claim', 2: 'evidence' }), 'every card in its own bin is right')
-  ok(!I.sortIsRight(task, { 0: 'claim', 1: 'context', 2: 'evidence' }), 'one swap is not')
-  ok(!I.sortIsRight(task, { 0: 'context', 1: 'claim' }), 'an unsorted card is not')
-  eq(I.rehabTasks([{ tasks: [{ ...task, course: 'us11r', level: 1 }, { ...task, course: 'global10r', level: 1 }, { ...task, course: 'us11r', level: 2 }] }], 'us11r', 1).length, 1, 'rehab tasks are picked by course and level')
-  eq(I.rehabTasks([{ tasks: [{ ...task, course: 'us11r', level: 1, hints: ['one'] }] }], 'us11r', 1).length, 0, 'a task without two hints is held back')
-  // every rehab pack the manifest names loads, and each course has both levels
+  // the organizers: every drop judged as it lands, with the desk's line for that moment
+  const sortT = { kind: 'sort', level: 'CRAWL', prompt: 'p', slots: ['CONTEXT', 'EVIDENCE'], pieces: [{ id: 'a', text: 'a', goes: 'CONTEXT' }, { id: 'b', text: 'b', goes: 'EVIDENCE' }],
+    hints: ['h', 'h'], reasoning: 'r', right: { CONTEXT: 'nice' }, distractors: { CONTEXT: 'ctx-miss', EVIDENCE: 'ev-miss' } }
+  ok(I.taskIsUsable(sortT), 'a sort task with one piece per slot is usable')
+  eq(I.judgeDrop(sortT, sortT.pieces[0], 'CONTEXT'), { ok: true, line: 'nice' }, 'a right drop shows the right line')
+  eq(I.judgeDrop(sortT, sortT.pieces[1], 'CONTEXT'), { ok: false, line: 'ctx-miss' }, 'a wrong drop shows the line for that slot')
+  ok(I.taskFinished(sortT, { CONTEXT: 'a', EVIDENCE: 'b' }) && !I.taskFinished(sortT, { CONTEXT: 'a' }), 'finished when every slot holds its own piece')
+  const ordT = { ...sortT, kind: 'order', slots: ['1', '2', '3'], pieces: [{ id: 'x', text: 'x', goes: '1' }, { id: 'y', text: 'y', goes: '2' }, { id: 'z', text: 'z', goes: '3' }], distractors: { early: 'E', late: 'L' }, right: undefined }
+  eq(I.judgeDrop(ordT, ordT.pieces[2], '1').line, 'E', 'order: too early')
+  eq(I.judgeDrop(ordT, ordT.pieces[0], '3').line, 'L', 'order: too late')
+  const jogT = { ...sortT, kind: 'find-and-place', paragraph: ['s', '[ SPOT 1 ]', '[ SPOT 2 ]'], slots: ['SPOT 1 · A', 'SPOT 2 · B'],
+    pieces: [{ id: 'j1', text: '1', goes: 'SPOT 1 · A' }, { id: 'j2', text: '2', goes: 'SPOT 2 · B' }, { id: 'j3', text: '3', goes: null }], distractors: { j3: 'nope', swap: 'swapped' }, right: undefined }
+  ok(I.taskIsUsable(jogT), 'find-and-place with a piece that fits nowhere is usable')
+  eq(I.judgeDrop(jogT, jogT.pieces[2], 'SPOT 1 · A').line, 'nope', 'a piece that fits nowhere shows its own line')
+  eq(I.judgeDrop(jogT, jogT.pieces[1], 'SPOT 1 · A').line, 'swapped', 'a right piece in the other spot shows the swap line')
+  eq(I.judgeDrop({ ...jogT, swap: 'top-swap', distractors: { j3: 'nope' } }, jogT.pieces[1], 'SPOT 1 · A').line, 'top-swap', 'the swap line can sit on the task (Sam) or in distractors (Will)')
+  ok(!I.taskIsUsable({ ...sortT, hints: ['one'] }), 'a task without two hints is held back')
+  ok(!I.taskIsUsable({ ...sortT, pieces: [...sortT.pieces, { id: 'q', text: 'q', goes: null }] }), 'only find-and-place may have a piece that fits nowhere')
+  // every rehab pack the manifest names: three usable levels in every set, and every task can be finished
   for (const meta of manifest.injuries?.rehab?.packs || []) {
-    const pack = pub(meta.file)
-    for (const course of ['us11r', 'global10r']) for (const lv of [1, 2])
-      ok(I.rehabTasks([pack], course, lv).length >= 1, `${meta.file}: ${course} has a Level ${lv} rehab task`)
+    const sets = I.rehabSets(pub(meta.file))
+    ok(sets.length >= 1 && sets.every(st => st.tasks.map(t => t.level).join() === 'CRAWL,WALK,JOG'), `${meta.file}: every set has CRAWL, WALK and JOG`)
+    for (const st of sets) for (const t of st.tasks) {
+      const placed = Object.fromEntries(t.pieces.filter(p => p.goes).map(p => [p.goes, p.id]))
+      ok(I.taskFinished(t, placed), `${meta.file} ${t.id}: the right pieces finish it`)
+      for (const p of t.pieces) for (const sl of t.slots) if (p.goes !== sl) ok(I.judgeDrop(t, p, sl).line, `${meta.file} ${t.id}: ${p.id} in ${sl} gets a desk line`)
+    }
   }
+
 }
 eq(newCareer('us11r', 0, 5).sport, 'football', 'a career with no sport named is football')
 for (let seed = 0; seed < 64; seed++) for (let t = 0; t < N_TEAMS; t++) {

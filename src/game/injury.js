@@ -55,34 +55,62 @@ export function injuryAfterGame(carried, fresh) {
   return out > 0 ? { stat: carried.stat, out } : null
 }
 
-// A rehab session in Practice Week. level 1 or 2; correct true/false.
-export function afterRehab(injury, level, correct) {
-  if (!injury || !correct) return injury
-  if (level >= 2) return null
+// A finished rehab level (BK 2026-10-04 07:43: "one level brings him back a game early; two
+// levels, he's back next game"). Each level a student finishes takes one game off; he's out
+// one or two games, so two finished levels always bring him back.
+export function afterRehab(injury) {
+  if (!injury) return injury
   const out = injury.out - 1
   return out > 0 ? { ...injury, out } : null
 }
 
-// ── the rehab task: sort each card into its bin ──────────────────────────────
-export const ROLES = ['context', 'claim', 'evidence', 'none']
+// ── the rehab tasks (Sam's CLE set, Will's EIE set; leo-ruling-2026-10-04-rehab-tasks) ──────
+// A pack: { _meta: { returnRule }, button?, civic_principles_card?, sets: [{ set, title, docs,
+// documents?, tasks: [task] }] }. A task: { id, level: CRAWL | WALK | JOG, kind: sort | order |
+// find-and-place, prompt, slots: [..], pieces: [{ id, text, goes: slot | null }], hints (2),
+// reasoning, distractors, right?, swap?, paragraph? (find-and-place: "[ SPOT n ]" marks a spot) }.
+export const LEVELS = ['CRAWL', 'WALK', 'JOG']
+const KINDS = ['sort', 'order', 'find-and-place']
 
-// placed: { [cardIndex]: role }. Right only when every card is in its own bin.
-export function sortIsRight(task, placed) {
-  return task.cards.every((c, i) => placed[i] === c.role)
+export function taskIsUsable(t) {
+  if (!t || !KINDS.includes(t.kind) || !LEVELS.includes(t.level) || !t.prompt) return false
+  if (!Array.isArray(t.slots) || !t.slots.length || !Array.isArray(t.pieces) || !t.pieces.length) return false
+  if (!Array.isArray(t.hints) || t.hints.length < 2 || !t.reasoning) return false
+  // every slot is filled by exactly one piece; a piece that fits nowhere is only for find-and-place
+  for (const sl of t.slots) if (t.pieces.filter(p => p.goes === sl).length !== 1) return false
+  if (t.pieces.some(p => p.goes !== null && !t.slots.includes(p.goes))) return false
+  if (t.kind !== 'find-and-place' && t.pieces.some(p => p.goes === null)) return false
+  if (t.kind === 'find-and-place') {
+    const spots = (t.paragraph || []).filter(x => /^\[ SPOT \d+ \]$/.test(x)).length
+    if (spots !== t.slots.length) return false
+  }
+  return true
 }
 
-// The rehab tasks for this course and level, from the manifest's rehab packs.
-// A task is usable when it has a task line, 3+ cards with known roles, two hints and a reason.
-export function rehabTasks(packs, course, level) {
-  const out = []
-  for (const p of packs) for (const t of p?.tasks || []) {
-    if (t.course !== course || Number(t.level) !== level) continue
-    if (!t.task || !Array.isArray(t.cards) || t.cards.length < 3) continue
-    if (!t.cards.every(c => c && c.text && ROLES.includes(c.role))) continue
-    if (!Array.isArray(t.hints) || t.hints.length < 2 || !t.reasoning) continue
-    out.push(t)
+// The usable sets for one pack: each keeps only its usable tasks, at most one per level.
+export function rehabSets(pack) {
+  return (pack?.sets || []).map(st => ({ ...st, tasks: LEVELS.map(lv => (st.tasks || []).find(t => t.level === lv && taskIsUsable(t))).filter(Boolean) }))
+    .filter(st => st.tasks.length)
+}
+
+// One drop: piece onto slot. { ok, line } — line is what the desk wrote for that moment:
+// a right line (CRAWL, Sam) on a correct drop; on a wrong one, the slot's line (sort), early or
+// late (order), the piece's own line when it fits nowhere, or the swap line (find-and-place).
+export function judgeDrop(task, piece, slot) {
+  if (piece.goes === slot) return { ok: true, line: task.right?.[slot] || null }
+  const d = task.distractors || {}
+  if (task.kind === 'sort') return { ok: false, line: d[slot] || null }
+  if (task.kind === 'order') {
+    const at = task.slots.indexOf(slot), want = task.slots.indexOf(piece.goes)
+    return { ok: false, line: (at < want ? d.early : d.late) || null }
   }
-  return out
+  if (piece.goes === null) return { ok: false, line: d[piece.id] || null }
+  return { ok: false, line: task.swap || d.swap || null }
+}
+
+// placed: { [slot]: pieceId }. Finished when every slot holds its own piece.
+export function taskFinished(task, placed) {
+  return task.slots.every(sl => { const p = task.pieces.find(x => x.id === placed[sl]); return p && p.goes === sl })
 }
 
 // ── the save code: one 4-bit field. 0 = nobody hurt; 1–8 = stat × games left. ──
@@ -99,7 +127,8 @@ export function injuryFromBits(v) {
 }
 
 // ── the words: proposed 2026-10-04 00:2x (injury proof, page 1); APPROVED by BK 00:33 ─────
-// ("I give my yes on all three things"). release-check still fails while a placeholder rehab pack is on.
+// ("I give my yes on all three things"). Rehab v2 (2026-10-04): the levels are the desks' CRAWL / WALK / JOG,
+// each task's prompt is the desk's, and the return rule is the desk's _meta.returnRule.
 const games = n => `${n} more ${n === 1 ? 'game' : 'games'}`
 export const INJ_WORDS = {
   _approved: true,
@@ -107,16 +136,8 @@ export const INJ_WORDS = {
   backupTag: 'Backup',
   rehabHead: 'Rehab',
   rehabBody: (name, pos, n) => `${name} (${pos}) is out ${games(n)}, and a backup is playing. Organize an essay and he comes back sooner.`,
-  level: { 1: 'Level 1 · sort 3 cards · back one game sooner', 2: 'Level 2 · sort 5 cards · back for the next game' },
-  sortHow: 'Tap a card, then tap where it goes.',
-  bins: { context: 'Context', claim: 'Claim', evidence: 'Evidence', none: 'Doesn’t fit' },
-  check: 'Check it',
   hint: 'Hint',
   right1: name => `Right. ${name} is back one game sooner.`,
   rightBack: name => `Right. ${name} is back for the next game.`,
-  wrong: (name, n) => `Not this time. ${name} heals on schedule: out ${games(n)}.`,
-  oneSession: 'One rehab session a week.',
   noTasks: 'Rehab opens when the essay tasks are ready. He heals on schedule until then.',
-  task: 'The task',
-  unsorted: 'Not sorted yet',
 }

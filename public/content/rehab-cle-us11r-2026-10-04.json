@@ -1,0 +1,456 @@
+{
+ "_meta": {
+  "what": "Review Bowl football · injury rehab tasks · US (Civic Literacy Essay)",
+  "from": "Sam, us11r-curriculum, 2026-10-04",
+  "ruled": "BK 07:43 (shape; leo-ruling-2026-10-04-rehab-tasks.md) · BK 07:52 'Previously worked docs and topics… cross units… cle for us' · BK 08:00 'Yes' (us11r-curriculum/_BRIEFCASE/US11R_ReviewBowl-Comb_and_Rehab-Additions_FOR-YES_2026-10-04.pdf: the CIVIC PRINCIPLES button and the documents on screen, into v2 = _BRIEFCASE/US11R_ReviewBowl-Rehab-CLE_v2_WORDING_for-yes_2026-10-04.pdf)",
+  "returnRule": "Finish any one level: the starter returns a game early. Finish two levels: he's back for the next game.",
+  "rules": [
+   "Every drag also works by tapping (tap the piece, tap the spot)",
+   "Choose and arrange only: nothing typed, nothing stored or sent; the save code carries the injury state",
+   "Levels name the paragraph, never the kid; nothing reads as a score",
+   "Fields match Will's EIE set and the Office/Locker Room items: hints (2), reasoning, distractors; plus 'right' lines on CRAWL",
+   "THE DOCUMENTS: every task shows its set's documents on screen (kids won't have their casefiles, BK 07:56). Quotations are 11.1 Casefiles A/B as printed",
+   "A CIVIC PRINCIPLES button sits on every rehab screen and opens the card list below, word for word (BK 07:56)",
+   "Sentences are desk-written model writing, never presented as sources",
+   "Built on previously worked documents, one CLE issue per set across units (BK 07:52); later units add a paragraph to each issue"
+  ]
+ },
+ "button": {
+  "label": "CIVIC PRINCIPLES",
+  "opens": "civic_principles_card",
+  "on": "every rehab screen"
+ },
+ "civic_principles_card": [
+  {
+   "group": "HOW POWER IS BUILT AND LIMITED",
+   "principles": [
+    {
+     "name": "Rule of Law",
+     "means": "No one is above the law, not even the people who make it.",
+     "look_for_it_when": "someone powerful is held to the rules, or tries to dodge them."
+    },
+    {
+     "name": "Limited Government",
+     "means": "Government can only do what the Constitution allows.",
+     "look_for_it_when": "someone says the government went too far."
+    },
+    {
+     "name": "Separation of Powers",
+     "means": "Power is split among three branches, each with its own job: make laws, carry out laws, judge laws.",
+     "look_for_it_when": "the fight is about which branch gets to act."
+    },
+    {
+     "name": "Checks and Balances",
+     "means": "Each branch can block or limit the others.",
+     "look_for_it_when": "there's a veto, an override, an impeachment, or a court striking something down."
+    },
+    {
+     "name": "Federalism",
+     "means": "Power is divided between the national government and the states. When they clash, valid federal law wins.",
+     "look_for_it_when": "it's the nation against a state."
+    },
+    {
+     "name": "Judicial Review",
+     "means": "Courts can strike down a law or action that breaks the Constitution.",
+     "look_for_it_when": "a court decides whether something is constitutional."
+    }
+   ]
+  },
+  {
+   "group": "WHERE GOVERNMENT'S POWER COMES FROM",
+   "principles": [
+    {
+     "name": "Popular Sovereignty (consent of the governed)",
+     "means": "Government's power comes from the people, and it rules only with their agreement.",
+     "look_for_it_when": "people give, or take back, their support for a government."
+    },
+    {
+     "name": "Representative Government",
+     "means": "The people elect officials to make decisions for them.",
+     "look_for_it_when": "the issue is voting, elections, or who speaks for whom."
+    },
+    {
+     "name": "Natural Rights",
+     "means": "Every person is born with rights (life, liberty, property) that government exists to protect.",
+     "look_for_it_when": "a right is treated as something you're born with, not something government hands out."
+    }
+   ]
+  },
+  {
+   "group": "WHAT GOVERNMENT MUST PROTECT",
+   "principles": [
+    {
+     "name": "Individual Rights (civil liberties)",
+     "means": "Freedoms government can't take away, like speech, religion, press and assembly.",
+     "look_for_it_when": "a personal freedom is limited, defended, or expanded."
+    },
+    {
+     "name": "Equal Protection",
+     "means": "The law must treat people equally.",
+     "look_for_it_when": "a group is treated differently, shut out, or separated by law."
+    },
+    {
+     "name": "Due Process",
+     "means": "Government must follow fair steps before it takes your life, liberty, or property.",
+     "look_for_it_when": "someone is arrested, held, or punished. Ask whether it was fair."
+    }
+   ]
+  }
+ ],
+ "sets": [
+  {
+   "set": "A",
+   "title": "A stronger union",
+   "issue_across_units": "11.1 now; adds 11.2 B (the Articles, Washington, Federalist 15) and 11.2 C next",
+   "docs": "11.1 Casefile B, Documents 16 and 16b; Casefile A, Document 4",
+   "documents": [
+    {
+     "label": "Document 16",
+     "source": "Source: political cartoon, Pennsylvania Gazette, 9 May 1754. Attributed to Benjamin Franklin.",
+     "image": "us11r-curriculum/STIMULUS_BANK/Unit_01/unit01-nv-d1-join-or-die-1754.png",
+     "alt": "A woodcut inside a black border. A snake is cut into eight separate pieces, each labeled with a colony or region's initials. Below it, in large capital letters: JOIN, or DIE."
+    },
+    {
+     "label": "Document 16b",
+     "source": "Source: Benjamin Franklin, Pennsylvania Gazette, 9 May 1754 (adapted)",
+     "text": "“…The Confidence of the French in this seems well-grounded on the present disunited State of the British Colonies, and the extreme Difficulty of bringing so many different Governments and Assemblies to agree in any speedy and effectual Measures for our common Defence and Security; while our Enemies have the very great Advantage of being under one Direction, with one Council, and one Purse.”"
+    },
+    {
+     "label": "Document 4",
+     "source": "Source: Miantonomo, Narragansett sachem, speaking to the Montaukett on Long Island, c. 1642. Recorded by an English listener and printed later in Great Native American Speeches.",
+     "text": "Brothers, we must be as one as the English are, or we shall all be destroyed."
+    }
+   ],
+   "tasks": [
+    {
+     "id": "A-crawl",
+     "level": "CRAWL",
+     "kind": "sort",
+     "prompt": "Name the parts. Drag each sentence to its job (or tap the sentence, then tap the job).",
+     "slots": [
+      "CONTEXT",
+      "EVIDENCE",
+      "EXPLANATION"
+     ],
+     "pieces": [
+      {
+       "id": "p1",
+       "text": "In 1754, each of Britain's colonies in North America had its own government, and war with France was coming on the frontier.",
+       "goes": "CONTEXT"
+      },
+      {
+       "id": "p2",
+       "text": "Document 16b shows the problem when Franklin blames “the present disunited State of the British Colonies.”",
+       "goes": "EVIDENCE"
+      },
+      {
+       "id": "p3",
+       "text": "This matters because people split into separate governments could not defend themselves against an enemy that acted as one.",
+       "goes": "EXPLANATION"
+      }
+     ],
+     "hints": [
+      "Which sentence sets the scene before anything else?",
+      "Which one says why the evidence matters? Look for “This matters because…”"
+     ],
+     "reasoning": "Context sets the scene, evidence names a document and pulls a detail, and the explanation says why it matters.",
+     "right": {
+      "CONTEXT": "That sets the scene: context first, every time.",
+      "EVIDENCE": "That's evidence: the document, named and put to work.",
+      "EXPLANATION": "That's the so what: why the evidence matters."
+     },
+     "distractors": {
+      "CONTEXT": "Look for the sentence that tells when and what was happening.",
+      "EVIDENCE": "Evidence names a document and pulls a detail from it.",
+      "EXPLANATION": "The explanation says why the evidence matters."
+     }
+    },
+    {
+     "id": "A-walk",
+     "level": "WALK",
+     "kind": "order",
+     "prompt": "Build the paragraph. Drag the five sentences into order (or tap a sentence, then tap its spot).",
+     "slots": [
+      "1 · CONTEXT",
+      "2 · EVIDENCE",
+      "3 · EVIDENCE",
+      "4 · EXPLANATION",
+      "5 · CIVIC PRINCIPLE"
+     ],
+     "pieces": [
+      {
+       "id": "s1",
+       "text": "In 1754, each of Britain's colonies in North America had its own government, and war with France was coming on the frontier.",
+       "goes": "1 · CONTEXT"
+      },
+      {
+       "id": "s2",
+       "text": "Document 16b shows the problem when Franklin blames “the present disunited State of the British Colonies.”",
+       "goes": "2 · EVIDENCE"
+      },
+      {
+       "id": "s3",
+       "text": "Document 4 shows the same idea from the other side, when Miantonomo warns, “we must be as one as the English are, or we shall all be destroyed.”",
+       "goes": "3 · EVIDENCE"
+      },
+      {
+       "id": "s4",
+       "text": "This matters because people split into separate governments could not defend themselves against an enemy that acted as one.",
+       "goes": "4 · EXPLANATION"
+      },
+      {
+       "id": "s5",
+       "text": "The civic principle at stake is federalism: power divided between one central government and the separate colonies, which would become states.",
+       "goes": "5 · CIVIC PRINCIPLE"
+      }
+     ],
+     "hints": [
+      "Start with the scene. What comes before the evidence?",
+      "The documents come next, then why they matter, and the principle, named out loud, comes last."
+     ],
+     "reasoning": "Context, two documents, why it matters, the principle named. That's the order the essay wants.",
+     "distractors": {
+      "early": "That one needs something before it. What does a reader need to know first?",
+      "late": "That one can come sooner. Does it set up the sentences after it?"
+     }
+    },
+    {
+     "id": "A-jog",
+     "level": "JOG",
+     "kind": "find-and-place",
+     "prompt": "Three pieces are missing. Find the evidence, the outside evidence and the civic principle, and drag each one into its spot. Three pieces don't belong. The CIVIC PRINCIPLES button opens the full list.",
+     "paragraph": [
+      "In 1754, each of Britain's colonies in North America had its own government, and war with France was coming on the frontier.",
+      "[ SPOT 1 ]",
+      "Document 4 shows the same idea from the other side, when Miantonomo warns, “we must be as one as the English are, or we shall all be destroyed.”",
+      "[ SPOT 2 ]",
+      "This matters because people split into separate governments could not defend themselves against an enemy that acted as one.",
+      "[ SPOT 3 ]"
+     ],
+     "slots": [
+      "SPOT 1 · EVIDENCE",
+      "SPOT 2 · OUTSIDE EVIDENCE",
+      "SPOT 3 · CIVIC PRINCIPLE"
+     ],
+     "pieces": [
+      {
+       "id": "j1",
+       "text": "Document 16b shows the problem when Franklin blames “the present disunited State of the British Colonies.”",
+       "goes": "SPOT 1 · EVIDENCE"
+      },
+      {
+       "id": "j2",
+       "text": "Outside the documents, I know that at the Albany Congress in 1754, the delegates approved Franklin's Plan of Union, but the colonial assemblies turned it down.",
+       "goes": "SPOT 2 · OUTSIDE EVIDENCE"
+      },
+      {
+       "id": "j3",
+       "text": "The civic principle at stake is federalism: power divided between one central government and the separate colonies, which would become states.",
+       "goes": "SPOT 3 · CIVIC PRINCIPLE"
+      },
+      {
+       "id": "j4",
+       "text": "Franklin printed this article in the Pennsylvania Gazette.",
+       "goes": null
+      },
+      {
+       "id": "j5",
+       "text": "Franklin's cartoon shows a snake cut into pieces above the words “JOIN, or DIE.”",
+       "goes": null
+      },
+      {
+       "id": "j6",
+       "text": "The colonies should have worked together.",
+       "goes": null
+      }
+     ],
+     "hints": [
+      "Evidence names a document and puts its own words to work. Outside evidence is true and isn't in Documents 4, 16 or 16b.",
+      "The principle is named out loud, from the card. Tap CIVIC PRINCIPLES if you need the list."
+     ],
+     "reasoning": "Franklin's own words prove the problem, the Albany Plan shows the union failing, and federalism names what was at stake.",
+     "distractors": {
+      "j4": "That's the source line: who and where. Evidence comes from inside the document.",
+      "j5": "That's Document 16, so it's document evidence, not outside evidence.",
+      "j6": "That hints at an idea. Name the principle instead."
+     },
+     "swap": "Both belong in this paragraph, just in each other's spot. Which one comes from a document?"
+    }
+   ]
+  },
+  {
+   "set": "B",
+   "title": "Who gets a voice",
+   "issue_across_units": "11.1 now; adds 11.2 A (the Declaration, Abigail Adams) next",
+   "docs": "11.1 Casefile B, Documents 17 and 18",
+   "documents": [
+    {
+     "label": "Document 17",
+     "source": "Source: Fundamental Orders of Connecticut, Section 1, January 14, 1639 (adapted).",
+     "text": "…one to be chosen Governor for the year ensuing and until another be chosen, and no other Magistrate to be chosen for more than one year… which choice shall be made by all that are admitted freemen and have taken the Oath of Fidelity, and do cohabit within this Jurisdiction…"
+    },
+    {
+     "label": "Document 18",
+     "source": "Source: William Blackstone, Commentaries on the Laws of England, Book I, Chapter 15, “Of Husband and Wife,” 1765.",
+     "text": "“By marriage, the husband and wife are one person in law: that is, the very being or legal existence of the woman is suspended during the marriage, or at least is incorporated and consolidated into that of the husband: under whose wing, protection, and cover, she performs everything…”"
+    }
+   ],
+   "tasks": [
+    {
+     "id": "B-crawl",
+     "level": "CRAWL",
+     "kind": "sort",
+     "prompt": "Name the parts. Drag each sentence to its job (or tap the sentence, then tap the job).",
+     "slots": [
+      "CONTEXT",
+      "EVIDENCE",
+      "EXPLANATION"
+     ],
+     "pieces": [
+      {
+       "id": "p1",
+       "text": "In the 1600s, English colonists in North America began writing their own rules for how they would govern themselves.",
+       "goes": "CONTEXT"
+      },
+      {
+       "id": "p2",
+       "text": "Document 17 shows this when the Fundamental Orders say the choice “shall be made by all that are admitted freemen.”",
+       "goes": "EVIDENCE"
+      },
+      {
+       "id": "p3",
+       "text": "This matters because the colonies' first experiments in self-government also decided who counted as “the people,” and many were left out.",
+       "goes": "EXPLANATION"
+      }
+     ],
+     "hints": [
+      "Which sentence sets the scene before anything else?",
+      "Which one says why the evidence matters? Look for “This matters because…”"
+     ],
+     "reasoning": "Context sets the scene, evidence names a document and pulls a detail, and the explanation says why it matters.",
+     "right": {
+      "CONTEXT": "That sets the scene: context first, every time.",
+      "EVIDENCE": "That's evidence: the document, named and put to work.",
+      "EXPLANATION": "That's the so what: why the evidence matters."
+     },
+     "distractors": {
+      "CONTEXT": "Look for the sentence that tells when and what was happening.",
+      "EVIDENCE": "Evidence names a document and pulls a detail from it.",
+      "EXPLANATION": "The explanation says why the evidence matters."
+     }
+    },
+    {
+     "id": "B-walk",
+     "level": "WALK",
+     "kind": "order",
+     "prompt": "Build the paragraph. Drag the five sentences into order (or tap a sentence, then tap its spot).",
+     "slots": [
+      "1 · CONTEXT",
+      "2 · EVIDENCE",
+      "3 · EVIDENCE",
+      "4 · EXPLANATION",
+      "5 · CIVIC PRINCIPLE"
+     ],
+     "pieces": [
+      {
+       "id": "s1",
+       "text": "In the 1600s, English colonists in North America began writing their own rules for how they would govern themselves.",
+       "goes": "1 · CONTEXT"
+      },
+      {
+       "id": "s2",
+       "text": "Document 17 shows this when the Fundamental Orders say the choice “shall be made by all that are admitted freemen.”",
+       "goes": "2 · EVIDENCE"
+      },
+      {
+       "id": "s3",
+       "text": "Document 18 shows who was left out: when a woman married, her “very being or legal existence” was “suspended during the marriage.”",
+       "goes": "3 · EVIDENCE"
+      },
+      {
+       "id": "s4",
+       "text": "This matters because the colonies' first experiments in self-government also decided who counted as “the people,” and many were left out.",
+       "goes": "4 · EXPLANATION"
+      },
+      {
+       "id": "s5",
+       "text": "The civic principle is representative government: the people elect officials to make decisions for them, so who counts as “the people” decides who has a voice.",
+       "goes": "5 · CIVIC PRINCIPLE"
+      }
+     ],
+     "hints": [
+      "Start with the scene. What comes before the evidence?",
+      "The documents come next, then why they matter, and the principle, named out loud, comes last."
+     ],
+     "reasoning": "Context, two documents, why it matters, the principle named. That's the order the essay wants.",
+     "distractors": {
+      "early": "That one needs something before it. What does a reader need to know first?",
+      "late": "That one can come sooner. Does it set up the sentences after it?"
+     }
+    },
+    {
+     "id": "B-jog",
+     "level": "JOG",
+     "kind": "find-and-place",
+     "prompt": "Three pieces are missing. Find the evidence, the outside evidence and the civic principle, and drag each one into its spot. Three pieces don't belong. The CIVIC PRINCIPLES button opens the full list.",
+     "paragraph": [
+      "In the 1600s, English colonists in North America began writing their own rules for how they would govern themselves.",
+      "[ SPOT 1 ]",
+      "Document 18 shows who was left out: when a woman married, her “very being or legal existence” was “suspended during the marriage.”",
+      "[ SPOT 2 ]",
+      "This matters because the colonies' first experiments in self-government also decided who counted as “the people,” and many were left out.",
+      "[ SPOT 3 ]"
+     ],
+     "slots": [
+      "SPOT 1 · EVIDENCE",
+      "SPOT 2 · OUTSIDE EVIDENCE",
+      "SPOT 3 · CIVIC PRINCIPLE"
+     ],
+     "pieces": [
+      {
+       "id": "j1",
+       "text": "Document 17 shows this when the Fundamental Orders say the choice “shall be made by all that are admitted freemen.”",
+       "goes": "SPOT 1 · EVIDENCE"
+      },
+      {
+       "id": "j2",
+       "text": "Outside the documents, I know that in most colonies, only men who owned property could vote.",
+       "goes": "SPOT 2 · OUTSIDE EVIDENCE"
+      },
+      {
+       "id": "j3",
+       "text": "The civic principle is representative government: the people elect officials to make decisions for them, so who counts as “the people” decides who has a voice.",
+       "goes": "SPOT 3 · CIVIC PRINCIPLE"
+      },
+      {
+       "id": "j4",
+       "text": "The Fundamental Orders were written in 1639.",
+       "goes": null
+      },
+      {
+       "id": "j5",
+       "text": "Under the Fundamental Orders, freemen chose a governor every year.",
+       "goes": null
+      },
+      {
+       "id": "j6",
+       "text": "Some people didn't get a say.",
+       "goes": null
+      }
+     ],
+     "hints": [
+      "Evidence names a document and puts its own words to work. Outside evidence is true and isn't in Documents 17 or 18.",
+      "The principle is named out loud, from the card. Tap CIVIC PRINCIPLES if you need the list."
+     ],
+     "reasoning": "The Orders' own words show who chose, the property rule shows who was shut out, and representative government names what was at stake.",
+     "distractors": {
+      "j4": "That's the source line: when. Evidence comes from inside the document.",
+      "j5": "That's in Document 17, so it's document evidence, not outside evidence.",
+      "j6": "That hints at an idea. Name the principle instead."
+     },
+     "swap": "Both belong in this paragraph, just in each other's spot. Which one comes from a document?"
+    }
+   ]
+  }
+ ]
+}

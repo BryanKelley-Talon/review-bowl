@@ -18,7 +18,7 @@ import { useMemo, useRef, useState } from 'react'
 import Question from './Question.jsx'
 import Newspaper from './Newspaper.jsx'
 import RehabTask from './RehabTask.jsx'
-import { INJ_WORDS as IW, afterRehab, rehabTasks } from '../game/injury.js'
+import { INJ_WORDS as IW, afterRehab, rehabSets } from '../game/injury.js'
 import { MAX_LEVEL, PRACTICE_FACILITY_MAX, RESULT, trainPlayer, upgradeFacility } from '../game/season.js'
 import { DEFENSE, LANE_OF, ratings, values } from '../game/ratings.js'
 import { POSITION_OF, TEAMS, roster } from '../game/teams.js'
@@ -44,9 +44,17 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
   const defenseNow = useRef(null)
   const [filmDone, setFilmDone] = useState(!!career.practiceDone)
   // Rehab (football injuries, 2026-10-04): one session a week, held in memory like training.
-  const [rehabRun, setRehabRun] = useState(null)    // { level, task, result }
-  const hurt = career.injury || null
-  const hurtAtStart = useRef(hurt)
+  const [rehabRun, setRehabRun] = useState(null)    // { level, task } the organizer on screen
+  const [finished, setFinished] = useState([])       // levels finished this week (each takes a game off)
+  const [rehabNote, setRehabNote] = useState(null)
+  const [civicOpen, setCivicOpen] = useState(false)
+  const hurtAtStart = useRef(career.injury || null)
+  // This course's pack, and one set for the week (Sam: one issue per set across units).
+  const rehabPack = rehab[0] || null
+  const rehabSet = useMemo(() => {
+    const sets = rehabSets(rehabPack)
+    return sets.length ? sets[Math.floor(Math.random() * sets.length)] : null
+  }, [rehabPack])
 
   const r = ratings(career)
   const v = values(r)
@@ -154,39 +162,63 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
 
       {sport === 'football' && hurtAtStart.current && (() => {
         const p = players[hurtAtStart.current.stat]
-        const pick = lv => {
-          const list = rehabTasks(rehab, career.course, lv)
-          if (!list.length) return
-          setRehabRun({ level: lv, task: list[Math.floor(Math.random() * list.length)], result: null })
-        }
-        const any = rehabTasks(rehab, career.course, 1).length + rehabTasks(rehab, career.course, 2).length
+        const now = career.injury || null
+        const levelDone = lv => finished.includes(lv)
         return (
           <section className="panel rehab-panel">
             <h3 className="h3">{IW.rehabHead}</h3>
             <p className="sub">{IW.rehabBody(p.name, p.position, hurtAtStart.current.out)}</p>
-            {!rehabRun && (any
-              ? <div className="rehab-levels">
-                  {[1, 2].map(lv => (
-                    <button key={lv} type="button" className="btn-secondary" disabled={!rehabTasks(rehab, career.course, lv).length}
-                            onClick={() => pick(lv)}>{IW.level[lv]}</button>
+            {!rehabSet && <p className="q-note">{IW.noTasks}</p>}
+            {rehabSet && <>
+              {rehabPack?._meta?.returnRule && <p className="sub rh-rule">{rehabPack._meta.returnRule}</p>}
+              <div className="rehab-levels" role="group" aria-label={rehabSet.title}>
+                {rehabSet.tasks.map(t => (
+                  <button key={t.level} type="button" aria-pressed={rehabRun?.level === t.level}
+                          className={`rh-level${rehabRun?.level === t.level ? ' on' : ''}${levelDone(t.level) ? ' done' : ''}`}
+                          disabled={levelDone(t.level) || (!now && !levelDone(t.level))}
+                          onClick={() => setRehabRun({ level: t.level, task: t })}>
+                    {t.level}{levelDone(t.level) ? ' ✓' : ''}
+                  </button>
+                ))}
+                {rehabPack?.button && (
+                  <button type="button" className="btn-ghost rh-civic" aria-expanded={civicOpen} onClick={() => setCivicOpen(o => !o)}>
+                    {rehabPack.button.label}
+                  </button>
+                )}
+              </div>
+              {civicOpen && rehabPack?.civic_principles_card && (
+                <div className="rh-civic-card">
+                  {rehabPack.civic_principles_card.map(g => (
+                    <div key={g.group}>
+                      <h4 className="rh-civic-group">{g.group}</h4>
+                      <ul>{g.principles.map(pr => <li key={pr.name}><b>{pr.name}:</b> {pr.means} Look for it when {pr.look_for_it_when}</li>)}</ul>
+                    </div>
                   ))}
                 </div>
-              : <p className="q-note">{IW.noTasks}</p>)}
-            {rehabRun && (
-              <RehabTask task={rehabRun.task} onDone={ok => {
-                const nextInj = afterRehab(hurtAtStart.current, rehabRun.level, ok)
-                setRehabRun(r => ({ ...r, result: ok, after: nextInj }))
-                if (ok) setCareer(c => ({ ...c, injury: afterRehab(c.injury, rehabRun.level, true) }))
-              }} />
-            )}
-            {rehabRun && rehabRun.result !== null && (
-              <p className="toast-inline" role="status">
-                {rehabRun.result
-                  ? (rehabRun.after ? IW.right1(p.name) : IW.rightBack(p.name))
-                  : IW.wrong(p.name, hurtAtStart.current.out)}
-                {' '}{IW.oneSession}
-              </p>
-            )}
+              )}
+              {!!(rehabSet.documents || []).length && (
+                <div className="rh-docs">
+                  {rehabSet.documents.map(d => (
+                    <figure key={d.label} className="rh-doc">
+                      <figcaption><b>{d.label}</b> · {d.source}</figcaption>
+                      {d.image && <img src={`/content/stimulus/${d.image.split('/').pop()}`} alt={d.alt || ''} loading="lazy" />}
+                      {d.text && <p className="rh-doc-text">{d.text}</p>}
+                    </figure>
+                  ))}
+                </div>
+              )}
+              {rehabRun && (   /* stays up when finished, so the desk's reasoning shows */
+                <RehabTask key={rehabRun.task.id} task={rehabRun.task} onFinished={() => {
+                  const lv = rehabRun.level
+                  setFinished(f => [...f, lv])
+                  const before = career.injury
+                  const after = afterRehab(before)
+                  setCareer(c => ({ ...c, injury: afterRehab(c.injury) }))
+                  setRehabNote(after ? IW.right1(p.name) : IW.rightBack(p.name))
+                }} />
+              )}
+              {rehabNote && <p className="toast-inline" role="status">{rehabNote}</p>}
+            </>}
           </section>
         )
       })()}
