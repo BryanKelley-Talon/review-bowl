@@ -601,3 +601,4 @@ body.rb-full{overscroll-behavior:none}
 @media (prefers-reduced-motion:reduce){.rh-piece,.rh-slot{transition:none}}
 .rehab > .btn-ghost{align-self:flex-start}
 .rh-slot:disabled{opacity:1;color:var(--white,#F4F6FA)}
+.rh-doc{position:relative;z-index:65}   /* a document reads over the badge when they meet at the screen's bottom edge (Sam 09:01: it covered JOIN,) */
