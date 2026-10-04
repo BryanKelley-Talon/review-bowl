@@ -27,8 +27,9 @@ import {
   opponentStrength, playoffOpponent, record, RESULT, schedule, seasonReview, standings, startNextSeason, takeJob,
 } from './game/season.js'
 import { roster, TEAMS } from './game/teams.js'
-import { decodeSaveCode, encodeSaveCode } from './save/saveCode.js'
-import { clearAutosave, readAutosave, writeAutosave } from './save/persist.js'
+import { careerFromFile, decodeSaveFile, encodeSaveFile, fileFromCareer } from './save/saveCode.js'
+import { clearAutosave, markTipSeen, readAutosave, tipSeen, writeAutosave } from './save/persist.js'
+import { SAVE_WORDS as SW } from './save/words.js'
 
 const money = units => `$${units * 10}k`
 const RES_WORD = { 1: 'W', 2: 'L', 3: 'T' }
@@ -48,35 +49,89 @@ function CoachLine({ lines }) {
   return line ? <p className="coach-code">{line}</p> : null
 }
 
-function CodeBox({ career, big, coach }) {
-  const code = encodeSaveCode(career)
+// Copy the code to the student's own clipboard (BK 2026-10-04 00:26). Local only: nothing is sent,
+// and the game never touches the student's Drive. The student pastes it into their own Google Doc.
+function CopyCode({ code }) {
+  const [state, setState] = useState(null)        // null | 'ok' | 'fail'
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(code); setState('ok') }
+    catch { setState('fail') }
+  }
+  return (
+    <div className="copy-code">
+      <button type="button" className="btn-primary" onClick={copy}>{SW.copy}</button>
+      <p className="sub small" role="status">{state === 'ok' ? SW.copied : state === 'fail' ? SW.copyFailed : ''}</p>
+    </div>
+  )
+}
+
+function CodeBox({ code, big, coach }) {
   return (
     <div className={`codebox${big ? ' big' : ''}`}>
       <div className="eyebrow">Your save code</div>
       <p className="code" aria-label="Your save code">{code}</p>
-      <p className="sub">Write it on your worksheet or take a screenshot. On any computer, <b>Enter a save code</b> picks up exactly here — team, record, cash, stats, all of it. It holds nothing about you.</p>
+      <CopyCode code={code} />
+      <p className="sub">{SW.codeBoxSub}</p>
       {coach && <CoachLine lines={coach} />}
+    </div>
+  )
+}
+
+// The save-code tip (BK 2026-10-04): from the title screen, and by itself the first time.
+function SaveTip({ onClose }) {
+  const ref = useRef(null)
+  useEffect(() => { ref.current?.focus() }, [])
+  useEffect(() => {
+    const k = e => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', k); return () => window.removeEventListener('keydown', k)
+  }, [onClose])
+  return (
+    <div className="save-scrim" onClick={onClose}>
+      <div className="save-card" role="dialog" aria-modal="true" aria-labelledby="save-tip-h" onClick={e => e.stopPropagation()}>
+        <h2 className="h2" id="save-tip-h">{SW.tipHead}</h2>
+        <ul className="save-lines">{SW.tipLines.map((l, i) => <li key={i}>{l}</li>)}</ul>
+        <button ref={ref} type="button" className="btn-primary" onClick={onClose}>{SW.gotIt}</button>
+      </div>
+    </div>
+  )
+}
+
+// After every game (BK 2026-10-04 00:26: "a pop-up box after every game, reminding them").
+function AfterGameSave({ code, onClose }) {
+  const ref = useRef(null)
+  useEffect(() => { ref.current?.focus() }, [])
+  return (
+    <div className="save-scrim">
+      <div className="save-card" role="dialog" aria-modal="true" aria-labelledby="save-after-h">
+        <h2 className="h2" id="save-after-h">{SW.afterHead}</h2>
+        <p className="sub">{SW.afterBody}</p>
+        <p className="code" aria-label="Your save code">{code}</p>
+        <CopyCode code={code} />
+        <button ref={ref} type="button" className="btn-secondary" onClick={onClose}>{SW.done}</button>
+      </div>
     </div>
   )
 }
 
 // ── title, doors, teams, code ────────────────────────────────────────────────
 function Title({ manifest, onNew, onContinue, onCode, onAbout }) {
-  const saved = useMemo(() => readAutosave(), [])
+  const saved = useMemo(() => readAutosave(), [])        // the whole file: both sports (2026-10-04)
+  const [tip, setTip] = useState(() => !tipSeen())
+  const closeTip = useCallback(() => { markTipSeen(); setTip(false) }, [])
   return (
     <div className="wrap title">
+      {tip && <SaveTip onClose={closeTip} />}
       <div className="eyebrow">Flashpoint History · The Arena</div>
       <h1 className="h1">Skills Review Bowl</h1>
       {/* BK 2026-10-03 15:31: "game", since the title now comes before the sport pick. */}
       <p className="tag">{SHARED_VB.tagline}</p>
       <div className="stack">
         {saved && (
-          <button type="button" className="btn-primary" onClick={() => onContinue(saved)}>
-            {SHARED_VB.continueLabel(TEAMS[saved.team].name, TERMS[sportOf(saved)].name, saved.season)}
-          </button>
+          <button type="button" className="btn-primary" onClick={() => onContinue(saved)}>{SW.continueAll}</button>
         )}
         <button type="button" className={saved ? 'btn-secondary' : 'btn-primary'} onClick={onNew}>New career</button>
         <button type="button" className="btn-secondary" onClick={onCode}>Enter a save code</button>
+        <button type="button" className="btn-ghost" onClick={() => setTip(true)}>{SW.tipButton}</button>
         <button type="button" className="btn-ghost" onClick={onAbout}>How it works</button>
       </div>
       {saved && <p className="sub small">The continue button is a copy on this computer. School computers can erase it — your save code is the real save.</p>}
@@ -85,7 +140,14 @@ function Title({ manifest, onNew, onContinue, onCode, onAbout }) {
 }
 
 // The sport pick (BK 2026-10-03 01:14; words 15:31). A career stays with its sport.
-function SportPick({ onPick, onBack }) {
+function SportPick({ onPick, onBack, file }) {
+  const progress = sp => {
+    const s = file?.seasons?.[sp]
+    if (!file) return null
+    if (!s) return SW.notStarted
+    const r = record(s.results)
+    return SW.progress(s.season, `${r.w}–${r.l}${r.t ? `–${r.t}` : ''}`, TEAMS[s.team].name)
+  }
   return (
     <div className="wrap">
       <button type="button" className="back" onClick={onBack}>← Back</button>
@@ -96,6 +158,7 @@ function SportPick({ onPick, onBack }) {
           <button key={id} type="button" className="card door" onClick={() => onPick(id)}>
             <div className="card-name">{TERMS[id].name}</div>
             <div className="card-blurb">{SHARED_VB.sportBlurb[id]}</div>
+            {file && <div className={`sport-progress${file.seasons?.[id] ? '' : ' none'}`}>{progress(id)}</div>}
           </button>
         ))}
       </div>
@@ -153,9 +216,9 @@ function CodeEntry({ manifest, onLoad, onBack }) {
   const go = () => {
     setError(null)
     try {
-      const c = decodeSaveCode(code)
-      if (!manifest.courses[c.course]) throw new Error('That code is for a course this version doesn’t have.')
-      onLoad(c)
+      const f = decodeSaveFile(code)
+      if (!manifest.courses[f.course]) throw new Error('That code is for a course this version doesn’t have.')
+      onLoad(f)
     } catch (e) { setError(e.message) }
   }
   return (
@@ -165,7 +228,7 @@ function CodeEntry({ manifest, onLoad, onBack }) {
       <div className="code-row">
         <input className="code-input" value={code} onChange={e => setCode(e.target.value)} autoFocus
                onKeyDown={e => { if (e.key === 'Enter' && code.trim()) go() }}
-               placeholder="XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-X" aria-label="Your save code" autoComplete="off" spellCheck={false} />
+               placeholder={SW.pastePlaceholder} aria-label="Your save code" autoComplete="off" spellCheck={false} />
         <button type="button" className="btn-primary" disabled={!code.trim()} onClick={go}>Load</button>
       </div>
       <p className="sub small">Dashes and capitals don't matter. An O can be a zero and an I or L can be a one.</p>
@@ -307,7 +370,7 @@ function Jobs({ career, onTake }) {
   )
 }
 
-function Hub({ career, setCareer, manifest, door, onPlay, onAnswer, onQuit, restored }) {
+function Hub({ career, code, setCareer, manifest, door, onPlay, onAnswer, onQuit, onSwitch, restored }) {
   const team = TEAMS[career.team]
   const rec = record(career.results)
   let next = null
@@ -333,7 +396,10 @@ function Hub({ career, setCareer, manifest, door, onPlay, onAnswer, onQuit, rest
             <span>Job security <span className="meter" aria-label={`${career.security} of 31`}><i style={{ width: `${career.security / 31 * 100}%` }} /></span></span>
           </div>
         </div>
-        <button type="button" className="btn-ghost hub-quit" onClick={onQuit}>Title screen</button>
+        <div className="hub-actions">
+          <button type="button" className="btn-ghost hub-quit" onClick={onSwitch}>{SW.switchSport}</button>
+          <button type="button" className="btn-ghost hub-quit" onClick={onQuit}>Title screen</button>
+        </div>
       </div>
 
       {career.phase === 'practice' && door && next && (
@@ -362,7 +428,7 @@ function Hub({ career, setCareer, manifest, door, onPlay, onAnswer, onQuit, rest
         <TeamPanel career={career} manifest={manifest} pool={door?.pool} />
         <div>
           {restored && <CoachLine lines={manifest.coaching?.code_restored} />}
-          <CodeBox career={career} />
+          <CodeBox code={code} />
           <Schedule career={career} />
           <Standings career={career} />
         </div>
@@ -372,10 +438,12 @@ function Hub({ career, setCareer, manifest, door, onPlay, onAnswer, onQuit, rest
 }
 
 // After every game: the save code is the first-class step, not an option (§4).
-function Postgame({ career, last, onDone, coach }) {
+function Postgame({ career, code, last, onDone, coach }) {
   const t = TEAMS[career.team], o = TEAMS[last.opp]
+  const [remind, setRemind] = useState(true)
   return (
     <div className="wrap narrow">
+      {remind && <AfterGameSave code={code} onClose={() => setRemind(false)} />}
       <div className="panel center">
         <div className="eyebrow">{last.label} · Final</div>
         <h2 className="h2">{t.abbr} {last.you} – {last.oppScore} {o.abbr}</h2>
@@ -385,9 +453,9 @@ function Postgame({ career, last, onDone, coach }) {
         <p className="sub arena-plug">Done for today? Keep climbing in the Arena.</p>
         <a className="btn-ghost arena-plug-link" href="https://thearena.flashpointhistory.com" target="_blank" rel="noopener">Open the Arena</a>
       </div>
-      <CodeBox career={career} big coach={coach} />
+      <CodeBox code={code} big coach={coach} />
       <div className="row center">
-        <button type="button" className="btn-primary" onClick={onDone}>I wrote it down — continue</button>
+        <button type="button" className="btn-primary" onClick={onDone}>{SW.continueAfter}</button>
       </div>
     </div>
   )
@@ -463,12 +531,26 @@ export default function App() {
   const [game, setGame] = useState(null)
   const [last, setLast] = useState(null)
 
+  // ONE CODE, BOTH SPORTS (BK 2026-10-04 00:22 / 00:26). The file holds both seasons and what they
+  // share (the course, the seed, the student's knowledge); `career` is the sport being played now.
+  const fileRef = useRef(null)
+  const [file, setFileState] = useState(null)
+  const setFile = useCallback(f => { fileRef.current = f; setFileState(f); if (f) writeAutosave(f) }, [])
   const setCareer = useCallback(next => {
     const value = typeof next === 'function' ? next(careerRef.current) : next
     careerRef.current = value
     setCareerState(value)
-    if (value) writeAutosave(value)
-  }, [])
+    if (value) setFile(fileFromCareer(value, fileRef.current))
+  }, [setFile])
+  const code = file ? encodeSaveFile(file) : ''
+  // The sport screen: a sport with a season picks it up; one without starts it on the same file.
+  const pickSport = sp => {
+    const f = fileRef.current
+    if (f && f.seasons?.[sp]) { setCareer(careerFromFile(f, sp)); setScreen('hub'); return }
+    setPendingSport(sp)
+    if (f) { setPendingCourse(f.course); setScreen('team'); return }
+    setScreen('door')
+  }
 
   useEffect(() => { window.scrollTo(0, 0) }, [screen])
 
@@ -522,18 +604,27 @@ export default function App() {
   let body
   if (screen === 'title') body = (
     <Title manifest={manifest}
-           onNew={() => setScreen('sport')}
-           onContinue={c => { setCareer(c); setScreen('hub') }}
+           onNew={() => { fileRef.current = null; setFileState(null); setScreen('sport') }}
+           onContinue={f => { setFile(f); setScreen('sport') }}
            onCode={() => setScreen('code')}
            onAbout={() => setScreen('about')} />
   )
-  else if (screen === 'sport') body = <SportPick onBack={() => setScreen('title')} onPick={sp => { setPendingSport(sp); setScreen('door') }} />
+  else if (screen === 'sport') body = <SportPick file={file} onBack={() => setScreen(career ? 'hub' : 'title')} onPick={pickSport} />
   else if (screen === 'door') body = <DoorPick manifest={manifest} onBack={() => setScreen('sport')}
                                                onPick={id => { setPendingCourse(id); setScreen('team') }} />
-  else if (screen === 'team') body = <TeamPick onBack={() => setScreen('door')}
-                                               onPick={i => { clearAutosave(); setCareer(newCareer(pendingCourse, i, undefined, pendingSport)); setScreen('hub') }} />
+  else if (screen === 'team') body = <TeamPick onBack={() => setScreen(fileRef.current ? 'sport' : 'door')}
+                                               onPick={i => {
+                                                 const f = fileRef.current
+                                                 if (f) {   // a second sport on the same file: same course, same seed, the knowledge carries
+                                                   setCareer({ ...newCareer(f.course, i, f.seed, pendingSport), form: { ...f.form } })
+                                                 } else {
+                                                   clearAutosave()
+                                                   setCareer(newCareer(pendingCourse, i, undefined, pendingSport))
+                                                 }
+                                                 setScreen('hub')
+                                               }} />
   else if (screen === 'code') body = <CodeEntry manifest={manifest} onBack={() => setScreen('title')}
-                                                onLoad={c => { setCareer(c); setRestored(true); setScreen('hub') }} />
+                                                onLoad={f => { setFile(f); setRestored(true); setScreen('sport') }} />
   else if (screen === 'about') body = <About manifest={manifest} door={door} sport={career ? sportOf(career) : 'football'} onBack={() => setScreen(career ? 'hub' : 'title')} />
   else if (screen === 'match' && game && door && sportOf(career) === 'volleyball') body = (
     <div className="wrap wide">
@@ -551,12 +642,12 @@ export default function App() {
     </div>
   )
   else if (screen === 'match') body = <div className="wrap"><p className="sub">Loading the question pool…</p></div>
-  else if (screen === 'post' && last) body = <Postgame career={career} last={last} coach={manifest.coaching?.code_new} onDone={() => { setRestored(false); setScreen('hub') }} />
+  else if (screen === 'post' && last) body = <Postgame career={career} code={code} last={last} coach={manifest.coaching?.code_new} onDone={() => { setRestored(false); setScreen('hub') }} />
   else if (career) body = (
-    <Hub career={career} setCareer={setCareer} manifest={manifest} door={door} onPlay={play} onAnswer={onAnswer} restored={restored}
-         onQuit={() => setScreen('title')} />
+    <Hub career={career} code={code} setCareer={setCareer} manifest={manifest} door={door} onPlay={play} onAnswer={onAnswer} restored={restored}
+         onQuit={() => setScreen('title')} onSwitch={() => setScreen('sport')} />
   )
-  else body = <Title manifest={manifest} onNew={() => setScreen('sport')} onContinue={c => { setCareer(c); setScreen('hub') }}
+  else body = <Title manifest={manifest} onNew={() => { fileRef.current = null; setFileState(null); setScreen('sport') }} onContinue={f => { setFile(f); setScreen('sport') }}
                      onCode={() => setScreen('code')} onAbout={() => setScreen('about')} />
 
   return (

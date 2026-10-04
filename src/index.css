@@ -551,3 +551,16 @@ body.rb-full{overscroll-behavior:none}
 @media (max-width:480px){ .rehab-card{grid-template-columns:26px 1fr;} .rehab-where{grid-column:2} }
 /* Long toasts (an injury line) wrap at every width instead of running under the full-screen button (2026-10-04). */
 .match .toast{white-space:normal;max-width:calc(100% - 170px);text-align:center;line-height:1.3}
+
+/* ---------- one save code: copy, the tip, the after-game box (2026-10-04) ---------- */
+.copy-code{display:flex;flex-direction:column;align-items:center;gap:4px;margin:6px 0}
+.copy-code .sub{min-height:1.3em;margin:0}
+.save-scrim{position:fixed;inset:0;z-index:60;background:rgba(5,8,14,.78);display:flex;align-items:center;justify-content:center;padding:16px}
+.save-card{width:100%;max-width:560px;max-height:calc(100vh - 32px);overflow:auto;background:#0B1220;border:2px solid var(--gold,#E3B341);
+  border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;text-align:left}
+.save-card .code{text-align:center;word-break:break-all}
+.save-lines{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px;font-size:16px;line-height:1.45}
+.sport-progress{margin-top:8px;font:700 14px/1.3 'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--gold,#E3B341)}
+.sport-progress.none{color:#9FB0C8}
+.hub-actions{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}
+.code{word-break:break-all}

@@ -5,8 +5,10 @@
 // A gate that passes is not a verdict: render it and look (CONVENTIONS §10).
 import fs from 'node:fs'
 import { INJ_WORDS } from '../src/game/injury.js'
+import { SAVE_WORDS } from '../src/save/words.js'
 const m = JSON.parse(fs.readFileSync('public/bowl.manifest.json', 'utf8'))
 const errors = []
+if (!SAVE_WORDS._approved) errors.push('the save-code words are working labels: BK has not approved them (SAVE_WORDS._approved in src/save/words.js)')
 if (!INJ_WORDS._approved) errors.push('the injury and rehab words are working labels: BK has not approved them (INJ_WORDS._approved in src/game/injury.js)')
 for (const p of m.injuries?.rehab?.packs || []) {
   if (p.enabled === false) continue

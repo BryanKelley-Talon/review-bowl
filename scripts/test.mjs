@@ -364,7 +364,7 @@ for (let i = 0; i < 300; i++) {
   x.levels = { throwing: 1 + i % 4, hands: 1 + (i + 1) % 4, speed: 1 + (i + 2) % 4, blocking: 1 + (i + 3) % 4, toughness: 1 + i % 4 }
   x.practiceDone = i % 3 === 0
   const code = encodeSaveCode(x)
-  ok(/^([0-9A-Z]{4}-){6}[0-9A-Z]$/.test(code), `code shape ${code}`)   // version 3: 25 characters (2026-10-04)
+  ok(/^([0-9A-Z]{4}-){9}[0-9A-Z]{3}$/.test(code), `code shape ${code}`)   // version 3: one code, both sports, 39 characters (2026-10-04)
   eq(decodeSaveCode(code.toLowerCase().replace(/1/g, 'l')), x, `round trip #${i}`)
 }
 const good = encodeSaveCode(newCareer('us11r', 2, 5))
@@ -459,7 +459,7 @@ eq([old.sport, old.team, old.season, old.week, old.cash, old.security, old.seed,
    ['football', 3, 2, 4, 12, 20, 41, 1, 13, 4], 'a pre-volleyball code loads as the same football career')
 eq(old.injury, null, 'a version-2 code loads with nobody hurt')
 const reold = encodeSaveCode(old)
-ok(reold.replace(/-/g, '').length === 25, 'its next code is a version-3 code (25 characters)')
+ok(reold.replace(/-/g, '').length === 39, 'its next code is a version-3 code (39 characters)')
 eq(decodeSaveCode(reold), old, 'and that code loads the very same career')
 for (let i = 0; i < 64; i++) {
   const x = newCareer(i % 2 ? 'us11r' : 'global10r', i % N_TEAMS, i, 'volleyball')
@@ -467,6 +467,33 @@ for (let i = 0; i < 64; i++) {
   ok(y.sport === 'volleyball' && sportOf(y) === 'volleyball', `volleyball career #${i} comes back as volleyball`)
 }
 ok(encodeSaveCode(newCareer('us11r', 0, 5, 'volleyball')) !== encodeSaveCode(newCareer('us11r', 0, 5, 'football')), 'the two sports write different codes')
+
+// ── one code for both sports (BK 2026-10-04 00:22 / 00:26) ─────────────────────
+{
+  const S = await import('../src/save/saveCode.js')
+  const fb = { ...newCareer('us11r', 4, 21, 'football'), season: 2, phase: 'regular', week: 5, results: [1, 1, 2, 1, 1, 0, 0, 0], injury: { stat: 'hands', out: 1 } }
+  const file1 = S.fileFromCareer(fb)
+  const vb = { ...newCareer('us11r', 7, 21, 'volleyball'), form: { ...fb.form, vocab: 12 }, week: 3, results: [1, 2, 1, 0, 0, 0, 0, 0], phase: 'practice' }
+  const file2 = S.fileFromCareer(vb, file1)
+  const code = S.encodeSaveFile(file2)
+  ok(code.replace(/-/g, '').length === S.CODE_LENGTH && S.CODE_LENGTH === 39, 'one code: 39 characters')
+  const back = S.decodeSaveFile(code)
+  eq(back.seasons.football.week, 5, 'the football season comes back')
+  eq(back.seasons.volleyball.week, 3, 'and the volleyball season, from the same code')
+  eq(back.seasons.football.team, 4, 'football keeps its own team')
+  eq(back.seasons.volleyball.team, 7, 'volleyball keeps its own team')
+  eq(back.lastSport, 'volleyball', 'the code remembers which sport was played last')
+  eq(S.careerFromFile(back, 'football').form.vocab, 12, 'knowledge carries across: a volleyball answer built the football form too')
+  eq(S.careerFromFile(back, 'football').injury, { stat: 'hands', out: 1 }, 'the football injury rides along')
+  eq(S.careerFromFile(back, 'volleyball').injury, null, 'volleyball has no injuries')
+  eq(S.careerFromFile(back, 'football'), { ...fb, form: { ...fb.form, vocab: 12 } }, 'the football career comes back whole')
+  const solo = S.decodeSaveFile(S.encodeSaveCode(fb))
+  eq(solo.seasons.volleyball, null, 'a code with one sport has the other not started')
+  const fromOld = S.decodeSaveFile('AC88-SR01-JJBV-DP29-2V8T-CD1')
+  ok(fromOld.seasons.football && fromOld.seasons.volleyball === null, 'a version-2 code becomes a file with that one season')
+  let bad = null; try { S.decodeSaveFile(code.slice(0, -1) + (code.endsWith('0') ? '1' : '0')) } catch (e) { bad = e.message }
+  ok(bad && /typo/.test(bad), 'a typo in the long code is caught')
+}
 
 // ── injuries and rehab (2026-10-04; BK 23:10/23:16, build ordered 23:57) ─────────
 {
