@@ -355,13 +355,13 @@
         {
           "file": "content/rehab-cle-us11r-2026-10-04.json",
           "course": "us11r",
-          "from": "Sam, sam-2026-10-04-reviewbowl-rehab-cle-us_v2.json (In/ 08:02): BK 07:43 shape, 07:52 previously worked documents, 08:00 'Yes' (CIVIC PRINCIPLES button, documents on screen). Ported byte for byte (md5 7f8af717…)."
+          "from": "Sam, sam-2026-10-04-reviewbowl-rehab-cle-us_v2.json (In/ 08:02): BK 07:43 shape, 07:52 previously worked documents, 08:00 'Yes' (CIVIC PRINCIPLES button, documents on screen). Ported byte for byte (md5 7f8af717…). Outside Information swap: Sam's v2 of 10/9 10:41 (sha256 3a2e5d59…), BK 10:12/10:35."
         },
         {
           "file": "content/rehab-cle-us11r-112B-2026-10-08.json",
           "course": "us11r",
           "opens_on": "2026-10-13",
-          "from": "Sam, sam-2026-10-08-reviewbowl-rehab-cle-us_112B-addition.json (In/ 22:58): Set A2, an addition to Set A on 11.2 B's Documents 11-13; BK 22:52 'review bowl seet approved.' v2 (In/ 09:20, the JOG swap line) ported byte for byte (sha256 9b1f7651…). Opens Tue 10/13 with Casefile B (previously worked documents, BK 10/4 07:52)."
+          "from": "Sam, sam-2026-10-08-reviewbowl-rehab-cle-us_112B-addition.json (In/ 22:58): Set A2, an addition to Set A on 11.2 B's Documents 11-13; BK 22:52 'review bowl seet approved.' v2 (In/ 09:20, the JOG swap line; then the Outside Information swap, Sam 10:41) ported byte for byte (sha256 9fa67b5c…). Opens Tue 10/13 with Casefile B (previously worked documents, BK 10/4 07:52)."
         },
         {
           "file": "content/rehab-eie-global10r-2026-10-04.json",

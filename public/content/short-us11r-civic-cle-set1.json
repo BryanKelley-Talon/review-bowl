@@ -268,7 +268,7 @@
       "options": {
         "1": "Thesis",
         "2": "Historical Context",
-        "3": "Outside Evidence",
+        "3": "Outside Information",
         "4": "Civic Principle"
       },
       "correct": "2",
@@ -327,7 +327,7 @@
         "“Outside” means outside the documents.",
         "It has to be relevant, and it has to be a fact you bring."
       ],
-      "reason": "The exam calls it outside information, and your gauge calls it Outside Evidence: relevant history you bring from outside the documents."
+      "reason": "Outside information is relevant history you bring from outside the documents. The exam and your gauge use the same name."
     },
     {
       "id": "cle-05",

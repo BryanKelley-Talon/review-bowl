@@ -126,7 +126,7 @@
      "id": "A2-jog",
      "level": "JOG",
      "kind": "find-and-place",
-     "prompt": "Three pieces are missing. Find the evidence, the outside evidence and the civic principle, and drag each one into its spot. Three pieces don't belong. The CIVIC PRINCIPLES button opens the full list.",
+     "prompt": "Three pieces are missing. Find the evidence, the outside information and the civic principle, and drag each one into its spot. Three pieces don't belong. The CIVIC PRINCIPLES button opens the full list.",
      "paragraph": [
       "In 1786, the national government under the Articles of Confederation could not tax, and armed farmers in Massachusetts shut down the courts.",
       "[ SPOT 1 ]",
@@ -137,7 +137,7 @@
      ],
      "slots": [
       "SPOT 1 · EVIDENCE",
-      "SPOT 2 · OUTSIDE EVIDENCE",
+      "SPOT 2 · OUTSIDE INFORMATION",
       "SPOT 3 · CIVIC PRINCIPLE"
      ],
      "pieces": [
@@ -149,7 +149,7 @@
       {
        "id": "j2",
        "text": "Outside the documents, I know that Massachusetts put down the uprising with an army paid for by private merchants, because Congress could not pay for troops of its own.",
-       "goes": "SPOT 2 · OUTSIDE EVIDENCE"
+       "goes": "SPOT 2 · OUTSIDE INFORMATION"
       },
       {
        "id": "j3",
@@ -173,13 +173,13 @@
       }
      ],
      "hints": [
-      "Evidence names a document and puts its own words to work. Outside evidence is true, isn't anywhere in Documents 11, 12 or 13 (source lines included), and backs up the paragraph.",
+      "Evidence names a document and puts its own words to work. Outside information is true, isn't anywhere in Documents 11, 12 or 13 (source lines included), and backs up the paragraph.",
       "The principle is named out loud, from the card. Tap CIVIC PRINCIPLES if you need the list."
      ],
      "reasoning": "Washington's own words show the fear, the merchant-paid army shows a Congress that couldn't act, and federalism names what was at stake.",
      "distractors": {
-      "j4": "True, but it only says who wrote what, and it's already in Document 12's source line, so it isn't outside evidence either.",
-      "j5": "True, and it's outside the documents, but it doesn't help show the government was too weak. Outside evidence has to back up the paragraph.",
+      "j4": "True, but it only says who wrote what, and it's already in Document 12's source line, so it isn't outside information either.",
+      "j5": "True, and it's outside the documents, but it doesn't help show the government was too weak. Outside information has to back up the paragraph.",
       "j6": "That's an opinion with nothing behind it. Every spot needs a document, a fact, or a principle."
      },
      "swap": "Both belong in this paragraph, just in each other's spot. Which one comes from a document?"

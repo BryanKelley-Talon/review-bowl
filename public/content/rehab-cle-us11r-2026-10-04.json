@@ -218,7 +218,7 @@
      "id": "A-jog",
      "level": "JOG",
      "kind": "find-and-place",
-     "prompt": "Three pieces are missing. Find the evidence, the outside evidence and the civic principle, and drag each one into its spot. Three pieces don't belong. The CIVIC PRINCIPLES button opens the full list.",
+     "prompt": "Three pieces are missing. Find the evidence, the outside information and the civic principle, and drag each one into its spot. Three pieces don't belong. The CIVIC PRINCIPLES button opens the full list.",
      "paragraph": [
       "In 1754, each of Britain's colonies in North America had its own government, and war with France was coming on the frontier.",
       "[ SPOT 1 ]",
@@ -229,7 +229,7 @@
      ],
      "slots": [
       "SPOT 1 · EVIDENCE",
-      "SPOT 2 · OUTSIDE EVIDENCE",
+      "SPOT 2 · OUTSIDE INFORMATION",
       "SPOT 3 · CIVIC PRINCIPLE"
      ],
      "pieces": [
@@ -241,7 +241,7 @@
       {
        "id": "j2",
        "text": "Outside the documents, I know that at the Albany Congress in 1754, the delegates approved Franklin's Plan of Union, but the colonial assemblies turned it down.",
-       "goes": "SPOT 2 · OUTSIDE EVIDENCE"
+       "goes": "SPOT 2 · OUTSIDE INFORMATION"
       },
       {
        "id": "j3",
@@ -265,13 +265,13 @@
       }
      ],
      "hints": [
-      "Evidence names a document and puts its own words to work. Outside evidence is true and isn't in Documents 4, 16 or 16b.",
+      "Evidence names a document and puts its own words to work. Outside information is true and isn't in Documents 4, 16 or 16b.",
       "The principle is named out loud, from the card. Tap CIVIC PRINCIPLES if you need the list."
      ],
      "reasoning": "Franklin's own words prove the problem, the Albany Plan shows the union failing, and federalism names what was at stake.",
      "distractors": {
       "j4": "That's the source line: who and where. Evidence comes from inside the document.",
-      "j5": "That's Document 16, so it's document evidence, not outside evidence.",
+      "j5": "That's Document 16, so it's document evidence, not outside information.",
       "j6": "That hints at an idea. Name the principle instead."
      },
      "swap": "Both belong in this paragraph, just in each other's spot. Which one comes from a document?"
@@ -392,7 +392,7 @@
      "id": "B-jog",
      "level": "JOG",
      "kind": "find-and-place",
-     "prompt": "Three pieces are missing. Find the evidence, the outside evidence and the civic principle, and drag each one into its spot. Three pieces don't belong. The CIVIC PRINCIPLES button opens the full list.",
+     "prompt": "Three pieces are missing. Find the evidence, the outside information and the civic principle, and drag each one into its spot. Three pieces don't belong. The CIVIC PRINCIPLES button opens the full list.",
      "paragraph": [
       "In the 1600s, English colonists in North America began writing their own rules for how they would govern themselves.",
       "[ SPOT 1 ]",
@@ -403,7 +403,7 @@
      ],
      "slots": [
       "SPOT 1 · EVIDENCE",
-      "SPOT 2 · OUTSIDE EVIDENCE",
+      "SPOT 2 · OUTSIDE INFORMATION",
       "SPOT 3 · CIVIC PRINCIPLE"
      ],
      "pieces": [
@@ -415,7 +415,7 @@
       {
        "id": "j2",
        "text": "Outside the documents, I know that in most colonies, only men who owned property could vote.",
-       "goes": "SPOT 2 · OUTSIDE EVIDENCE"
+       "goes": "SPOT 2 · OUTSIDE INFORMATION"
       },
       {
        "id": "j3",
@@ -439,13 +439,13 @@
       }
      ],
      "hints": [
-      "Evidence names a document and puts its own words to work. Outside evidence is true and isn't in Documents 17 or 18.",
+      "Evidence names a document and puts its own words to work. Outside information is true and isn't in Documents 17 or 18.",
       "The principle is named out loud, from the card. Tap CIVIC PRINCIPLES if you need the list."
      ],
      "reasoning": "The Orders' own words show who chose, the property rule shows who was shut out, and representative government names what was at stake.",
      "distractors": {
       "j4": "That's the source line: when. Evidence comes from inside the document.",
-      "j5": "That's in Document 17, so it's document evidence, not outside evidence.",
+      "j5": "That's in Document 17, so it's document evidence, not outside information.",
       "j6": "That hints at an idea. Name the principle instead."
      },
      "swap": "Both belong in this paragraph, just in each other's spot. Which one comes from a document?"
