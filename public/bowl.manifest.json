@@ -361,7 +361,7 @@
           "file": "content/rehab-cle-us11r-112B-2026-10-08.json",
           "course": "us11r",
           "opens_on": "2026-10-13",
-          "from": "Sam, sam-2026-10-08-reviewbowl-rehab-cle-us_112B-addition.json (In/ 22:58): Set A2, an addition to Set A on 11.2 B's Documents 11-13; BK 22:52 'review bowl seet approved.' Ported byte for byte (sha256 633db94b…). Opens Tue 10/13 with Casefile B (previously worked documents, BK 10/4 07:52)."
+          "from": "Sam, sam-2026-10-08-reviewbowl-rehab-cle-us_112B-addition.json (In/ 22:58): Set A2, an addition to Set A on 11.2 B's Documents 11-13; BK 22:52 'review bowl seet approved.' v2 (In/ 09:20, the JOG swap line) ported byte for byte (sha256 9b1f7651…). Opens Tue 10/13 with Casefile B (previously worked documents, BK 10/4 07:52)."
         },
         {
           "file": "content/rehab-eie-global10r-2026-10-04.json",
