@@ -358,6 +358,12 @@
           "from": "Sam, sam-2026-10-04-reviewbowl-rehab-cle-us_v2.json (In/ 08:02): BK 07:43 shape, 07:52 previously worked documents, 08:00 'Yes' (CIVIC PRINCIPLES button, documents on screen). Ported byte for byte (md5 7f8af717…)."
         },
         {
+          "file": "content/rehab-cle-us11r-112B-2026-10-08.json",
+          "course": "us11r",
+          "opens_on": "2026-10-13",
+          "from": "Sam, sam-2026-10-08-reviewbowl-rehab-cle-us_112B-addition.json (In/ 22:58): Set A2, an addition to Set A on 11.2 B's Documents 11-13; BK 22:52 'review bowl seet approved.' Ported byte for byte (sha256 633db94b…). Opens Tue 10/13 with Casefile B (previously worked documents, BK 10/4 07:52)."
+        },
+        {
           "file": "content/rehab-eie-global10r-2026-10-04.json",
           "course": "global10r",
           "from": "Will, will-2026-10-04-reviewbowl-rehab-eie-global_v3.json (In/ 09:07, BK 'All approved'): previously worked documents, ENDURING ISSUES card. Replaces v2. Ported byte for byte (md5 34792169…)."

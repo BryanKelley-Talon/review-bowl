@@ -373,8 +373,17 @@ export async function loadDoor(manifest, courseId) {
   const pool = buildPool(manifest, courseId, packsByFile, crops)
   const camp = (course.camp || []).map(c => ({ ...c, pack: packsByFile[c.file] || null }))
   // Rehab packs for football injuries (2026-10-04): this course's pack (Sam's CLE for US, Will's EIE for Global).
-  const rehabFiles = ((manifest.injuries?.rehab?.packs) || []).filter(p => p.enabled !== false && (!p.course || p.course === courseId)).map(p => p.file)
+  // A pack may carry opens_on (YYYY-MM-DD, the device's own date): it stays out until the day kids
+  // start those documents in class (11.2 B's Set A2 opens Tue 10/13; Josh 2026-10-09).
+  const today = localDay()
+  const rehabFiles = ((manifest.injuries?.rehab?.packs) || []).filter(p => p.enabled !== false && (!p.course || p.course === courseId) && (!p.opens_on || p.opens_on <= today)).map(p => p.file)
   const rehab = (await Promise.all(rehabFiles.map(f => fetch(`/${f}`).then(r => r.ok ? r.json() : null).catch(() => null))))
     .filter(Boolean)
   return { pool, camp, rehab }
+}
+
+// The device's date as YYYY-MM-DD, local time (no clock is ever sent anywhere).
+export function localDay(d = new Date()) {
+  const z = n => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${z(d.getMonth() + 1)}-${z(d.getDate())}`
 }

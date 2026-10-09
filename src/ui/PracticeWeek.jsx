@@ -50,7 +50,12 @@ export default function PracticeWeek({ career, setCareer, dealer, manifest, oppo
   const [civicOpen, setCivicOpen] = useState(false)
   const hurtAtStart = useRef(career.injury || null)
   // This course's pack, and one set for the week (Sam: one issue per set across units).
-  const rehabPack = rehab[0] || null
+  // A course may have more than one pack (Sam's Set A2 for 11.2 B is an addition, 2026-10-08):
+  // the sets pool together; the button, cards and return rule come from the first pack.
+  const rehabPack = useMemo(() => rehab.length ? { ...rehab[0], sets: rehab.flatMap(p => p.sets || []) } : null,
+    // keyed on what the packs are, not the array, so the week's set doesn't re-deal on a re-render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [rehab.map(p => p?._meta?.what || '').join('|')])
   const rehabSet = useMemo(() => {
     const sets = rehabSets(rehabPack)
     return sets.length ? sets[Math.floor(Math.random() * sets.length)] : null

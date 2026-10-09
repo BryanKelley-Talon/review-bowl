@@ -1,0 +1,189 @@
+{
+  "_meta": {
+    "what": "Review Bowl rehab (CLE, US) · Set A's 11.2 B paragraph · ADDITION to sam-2026-10-04-reviewbowl-rehab-cle-us_v2.json",
+    "from": "Sam, us11r-curriculum, 2026-10-08",
+    "status": "RULED · BK 2026-10-08 22:52: \"review bowl seet approved.\"",
+    "rules": "Same as v2. Documents quoted as printed in 11.2 Casefile B (shelf PDF, 2026-10-09). Explanation uses the ruled stem (BK 10/8 11:41)."
+  },
+  "sets": [
+    {
+      "set": "A2",
+      "extends": "A",
+      "title": "A stronger union · 11.2 B",
+      "issue_across_units": "Set A's 11.2 B paragraph (Docs 11-13). 11.2 C adds the next.",
+      "docs": "11.2 Casefile B, Documents 11, 12 and 13",
+      "documents": [
+        {
+          "label": "Document 11",
+          "source": "Source: Articles of Confederation, written 1777, in force 1781 (adapted)",
+          "text": "Article II. Each state keeps its sovereignty, its freedom, and its independence, along with every power that this confederation does not expressly give to the United States.\nArticle V. Delegates shall meet in one Congress. In deciding questions, each state shall have one vote.\nArticle VIII. The costs of war and all other common expenses shall be paid out of a common treasury, supplied by the states in proportion to the value of the land in each state. The taxes for that share shall be laid and collected by the legislatures of the several states.\nArticle XIII. No change shall ever be made to these articles unless it is agreed to in Congress and afterward confirmed by the legislature of every state."
+        },
+        {
+          "label": "Document 12",
+          "source": "Source: George Washington to James Madison, November 5, 1786 (adapted)",
+          "text": "No morning ever dawned brighter than ours did — and no day was ever more clouded than the present. Without some change in our political thinking, the structure we have spent seven years raising, at the cost of much blood and treasure, must fall. We are fast heading toward anarchy and confusion.\nA letter I have just received from General Knox, who has just returned from Massachusetts, is full of sad information about the temper and designs of a considerable part of that people.\nWhat stronger evidence can be given of the weakness of our governments than these disorders? If no power exists to check them, what security has a man of life, liberty, or property? Thirteen sovereignties pulling against each other, and all tugging at the federal head, will soon bring ruin on the whole."
+        },
+        {
+          "label": "Document 13",
+          "source": "Source: Alexander Hamilton, The Federalist Papers: No. 15, December 1, 1787 (adapted)",
+          "text": "The next question to examine is whether the present Confederation is enough to preserve the Union.\nUnder the Confederation, all thirteen separate sovereign wills must agree before any important measure of the Union can be carried out. What has happened is what should have been expected: the measures of the Union have not been carried out. The failures of the states have grown, step by step, until they have stopped all the wheels of the national government and brought them to a halt.\nEach state, listening to the persuasive voice of its own immediate interest, has withdrawn its support, until the frail and tottering building seems ready to fall upon our heads and crush us beneath its ruins."
+        }
+      ],
+      "tasks": [
+        {
+          "id": "A2-crawl",
+          "level": "CRAWL",
+          "kind": "sort",
+          "prompt": "Name the parts. Drag each sentence to its job (or tap the sentence, then tap the job).",
+          "slots": [
+            "CONTEXT",
+            "EVIDENCE",
+            "EXPLANATION"
+          ],
+          "pieces": [
+            {
+              "id": "p1",
+              "text": "In 1786, the national government under the Articles of Confederation could not tax, and armed farmers in Massachusetts shut down the courts.",
+              "goes": "CONTEXT"
+            },
+            {
+              "id": "p2",
+              "text": "Document 12 shows Washington's fear when he writes that the country is “fast heading toward anarchy and confusion.”",
+              "goes": "EVIDENCE"
+            },
+            {
+              "id": "p3",
+              "text": "This shows that leaders who had won the Revolution believed a government that could only ask the states for help could not hold the Union together, which matters because it explains why they wanted a stronger national government.",
+              "goes": "EXPLANATION"
+            }
+          ],
+          "hints": [
+            "Which sentence sets the scene before anything else?",
+            "Which one says what the evidence shows and why it matters? Look for “This shows…”"
+          ],
+          "reasoning": "Context sets the scene, evidence names a document and puts its words to work, and the explanation says what it shows and why it matters.",
+          "right": {
+            "CONTEXT": "That sets the scene: context first, every time.",
+            "EVIDENCE": "That's evidence: the document, named and put to work.",
+            "EXPLANATION": "That's the so what: what it shows, and why it matters."
+          },
+          "distractors": {
+            "CONTEXT": "Look for the sentence that tells when and what was happening.",
+            "EVIDENCE": "Evidence names a document and pulls its words.",
+            "EXPLANATION": "The explanation starts “This shows…” and says why it matters."
+          }
+        },
+        {
+          "id": "A2-walk",
+          "level": "WALK",
+          "kind": "order",
+          "prompt": "Build the paragraph. Drag the five sentences into order (or tap a sentence, then tap its spot).",
+          "slots": [
+            "1 · CONTEXT",
+            "2 · EVIDENCE",
+            "3 · EVIDENCE",
+            "4 · EXPLANATION",
+            "5 · CIVIC PRINCIPLE"
+          ],
+          "pieces": [
+            {
+              "id": "s1",
+              "text": "In 1786, the national government under the Articles of Confederation could not tax, and armed farmers in Massachusetts shut down the courts.",
+              "goes": "1 · CONTEXT"
+            },
+            {
+              "id": "s2",
+              "text": "Document 12 shows Washington's fear when he writes that the country is “fast heading toward anarchy and confusion.”",
+              "goes": "2 · EVIDENCE"
+            },
+            {
+              "id": "s3",
+              "text": "Document 13 shows the same danger when Hamilton writes that the failures of the states “have stopped all the wheels of the national government.”",
+              "goes": "3 · EVIDENCE"
+            },
+            {
+              "id": "s4",
+              "text": "This shows that leaders who had won the Revolution believed a government that could only ask the states for help could not hold the Union together, which matters because it explains why they wanted a stronger national government.",
+              "goes": "4 · EXPLANATION"
+            },
+            {
+              "id": "s5",
+              "text": "The civic principle at stake is federalism: Article II of Document 11 left each state its sovereignty, and a stronger Union meant moving power toward the national government.",
+              "goes": "5 · CIVIC PRINCIPLE"
+            }
+          ],
+          "hints": [
+            "Start with the scene. What comes before the evidence?",
+            "The documents come next, then what they show, and the principle, named out loud, comes last."
+          ],
+          "reasoning": "Context, two documents as evidence, what they show and why it matters, then the principle, backed by a third document. That's the order the essay wants.",
+          "distractors": {
+            "early": "That one needs something before it. What does a reader need to know first?",
+            "late": "That one can come sooner. Does it set up the sentences after it?"
+          }
+        },
+        {
+          "id": "A2-jog",
+          "level": "JOG",
+          "kind": "find-and-place",
+          "prompt": "Three pieces are missing. Find the evidence, the outside evidence and the civic principle, and drag each one into its spot. Three pieces don't belong. The CIVIC PRINCIPLES button opens the full list.",
+          "paragraph": [
+            "In 1786, the national government under the Articles of Confederation could not tax, and armed farmers in Massachusetts shut down the courts.",
+            "[ SPOT 1 ]",
+            "[ SPOT 2 ]",
+            "Document 13 shows the same danger when Hamilton writes that the failures of the states “have stopped all the wheels of the national government.”",
+            "This shows that leaders who had won the Revolution believed a government that could only ask the states for help could not hold the Union together, which matters because it explains why they wanted a stronger national government.",
+            "[ SPOT 3 ]"
+          ],
+          "slots": [
+            "SPOT 1 · EVIDENCE",
+            "SPOT 2 · OUTSIDE EVIDENCE",
+            "SPOT 3 · CIVIC PRINCIPLE"
+          ],
+          "pieces": [
+            {
+              "id": "j1",
+              "text": "Document 12 shows Washington's fear when he writes that the country is “fast heading toward anarchy and confusion.”",
+              "goes": "SPOT 1 · EVIDENCE"
+            },
+            {
+              "id": "j2",
+              "text": "Outside the documents, I know that Massachusetts put down the uprising with an army paid for by private merchants, because Congress could not pay for troops of its own.",
+              "goes": "SPOT 2 · OUTSIDE EVIDENCE"
+            },
+            {
+              "id": "j3",
+              "text": "The civic principle at stake is federalism: Article II of Document 11 left each state its sovereignty, and a stronger Union meant moving power toward the national government.",
+              "goes": "SPOT 3 · CIVIC PRINCIPLE"
+            },
+            {
+              "id": "j4",
+              "text": "Washington wrote Document 12 to James Madison in November 1786.",
+              "goes": null
+            },
+            {
+              "id": "j5",
+              "text": "Alexander Hamilton was born in the West Indies.",
+              "goes": null
+            },
+            {
+              "id": "j6",
+              "text": "The Articles of Confederation were a bad plan.",
+              "goes": null
+            }
+          ],
+          "hints": [
+            "Evidence names a document and puts its own words to work. Outside evidence is true, isn't anywhere in Documents 11, 12 or 13 (source lines included), and backs up the paragraph.",
+            "The principle is named out loud, from the card. Tap CIVIC PRINCIPLES if you need the list."
+          ],
+          "reasoning": "Washington's own words show the fear, the merchant-paid army shows a Congress that couldn't act, and federalism names what was at stake.",
+          "distractors": {
+            "j4": "True, but it only says who wrote what, and it's already in Document 12's source line, so it isn't outside evidence either.",
+            "j5": "True, and it's outside the documents, but it doesn't help show the government was too weak. Outside evidence has to back up the paragraph.",
+            "j6": "That's an opinion with nothing behind it. Every spot needs a document, a fact, or a principle."
+          }
+        }
+      ]
+    }
+  ]
+}
