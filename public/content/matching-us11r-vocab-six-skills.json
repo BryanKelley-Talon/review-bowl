@@ -9,7 +9,7 @@
   "left": [
     {
       "key": "a",
-      "label": "HC — Historical Context",
+      "label": "Historical Context",
       "hints": [
         "Think about what comes BEFORE you make your argument.",
         "It's the move that sets the scene — time, place, circumstances — not the argument itself."
@@ -17,7 +17,7 @@
     },
     {
       "key": "b",
-      "label": "TH — Thesis",
+      "label": "Thesis",
       "hints": [
         "This is about taking a side, not describing one.",
         "A clear position you can actually argue for or against."
@@ -25,7 +25,7 @@
     },
     {
       "key": "c",
-      "label": "DU — Document Use",
+      "label": "Document Use",
       "hints": [
         "This is about USING a document, not just mentioning it exists.",
         "Name a specific detail from the document and use it as evidence."
@@ -33,7 +33,7 @@
     },
     {
       "key": "d",
-      "label": "EX — Explanation",
+      "label": "Explanation",
       "hints": [
         "This is the 'so what' move — why does the evidence matter?",
         "If your sentence doesn't say WHY the evidence proves your point, this skill isn't happening yet."
@@ -41,7 +41,7 @@
     },
     {
       "key": "e",
-      "label": "OE — Outside Evidence",
+      "label": "Outside Information",
       "hints": [
         "This is knowledge from outside the documents you were given.",
         "The exam's own term for this is 'outside information.'"
@@ -49,7 +49,7 @@
     },
     {
       "key": "f",
-      "label": "CP — Civic Principle",
+      "label": "Civic Principle",
       "hints": [
         "This means saying the actual name of a principle, not just describing it.",
         "\"Federalism\" or \"equal protection\" said out loud — not just implied."
@@ -95,7 +95,7 @@
     "b": "Thesis is a clear, held position, not just a topic.",
     "c": "Document Use means naming a specific detail from a document and using it as evidence, not just gesturing at the source.",
     "d": "Explanation is the \"so what\" — why the evidence matters, not just that it exists.",
-    "e": "Outside Evidence is knowledge from beyond the documents themselves — what the exam calls \"outside information.\"",
+    "e": "Outside information is relevant history you bring that isn't in the documents. It's the exam's own name for it.",
     "f": "Civic Principle has to be named out loud (\"federalism,\" \"equal protection\") — implying it isn't enough."
   },
   "_hint_model": "2 escalating hints per pair, available during the regular season only. Playoffs run cold (no hints), per BK's ruling 2026-09-22."
