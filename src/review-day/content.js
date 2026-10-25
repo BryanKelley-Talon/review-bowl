@@ -48,10 +48,18 @@ export const BOARD_COLS = 5
 export const VALUES = [100, 200, 300, 400, 500]
 
 // Deal a board: five categories, preferring ones not dealt yet this session.
-export function dealBoard(pool, alreadyDealt = []) {
+// Run length (BK 2026-10-24 23:00, "yes to all"): 40 minutes = the full board, 5 categories × 5 squares, every list;
+// 20 minutes = a half board, 4 categories × the 100 · 300 · 500 squares, and 3 lists.
+export const RUNS = {
+  40: { cols: 5, rows: [0, 1, 2, 3, 4], lists: Infinity },
+  20: { cols: 4, rows: [0, 2, 4], lists: 3 },
+}
+export const runOf = setup => RUNS[setup?.run] || RUNS[40]
+
+export function dealBoard(pool, alreadyDealt = [], cols = BOARD_COLS) {
   const fresh = shuffle(pool.filter(c => !alreadyDealt.includes(c.key)))
   const used = shuffle(pool.filter(c => alreadyDealt.includes(c.key)))
-  return [...fresh, ...used].slice(0, BOARD_COLS).map(c => c.key)
+  return [...fresh, ...used].slice(0, cols).map(c => c.key)
 }
 
 // TOP ANSWERS: #1 is worth the most. Six answers run 60, 50 … 10; four run 40 … 10.

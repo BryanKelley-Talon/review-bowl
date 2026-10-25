@@ -14,7 +14,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import DisclaimerBadge from '../shared/DisclaimerBadge.jsx'
 import { TEAM_NAMES, W } from './words.js'
-import { VALUES, categoryPool, dealBoard, listPool, loadManifest, loadUnit, rankValue, shuffle } from './content.js'
+import { VALUES, categoryPool, dealBoard, listPool, loadManifest, loadUnit, rankValue, runOf, shuffle } from './content.js'
 import { clearState, readState, writeState } from './persist.js'
 import './review-day.css'
 
@@ -136,6 +136,7 @@ function Front({ manifest, saved, onStart, onResume }) {
   const [timer, setTimer] = useState(saved?.setup?.timer ?? 30)
   const [withChime, setChime] = useState(saved?.setup?.chime ?? false)
   const [topMode, setTopMode] = useState(saved?.setup?.topMode ?? 'write')
+  const [run, setRun] = useState(saved?.setup?.run ?? 40)
   const [teams, setTeams] = useState(4)
   const [names, setNames] = useState(() => pickNames(6))
   const reroll = i => setNames(ns => {
@@ -198,6 +199,11 @@ function Front({ manifest, saved, onStart, onResume }) {
         </div>
         <div className="rd-settings">
           <div className="rd-setting">
+            <span className="rd-setting-label">{W.runLabel}</span>
+            <Choice on={run === 40} cls="small" onClick={() => setRun(40)}>{W.run40}</Choice>
+            <Choice on={run === 20} cls="small" onClick={() => setRun(20)}>{W.run20}</Choice>
+          </div>
+          <div className="rd-setting">
             <span className="rd-setting-label">{W.topModeLabel}</span>
             <Choice on={topMode === 'write'} cls="small" onClick={() => setTopMode('write')}>{W.modeWrite}</Choice>
             <Choice on={topMode === 'turns'} cls="small" onClick={() => setTopMode('turns')}>{W.modeTurns}</Choice>
@@ -236,7 +242,7 @@ function Front({ manifest, saved, onStart, onResume }) {
 
       <div className="rd-go">
         <button type="button" className="rd-btn primary big" disabled={!ready}
-                onClick={() => onStart({ course, units: picked, format, teams, names: names.slice(0, teams), timer, chime: withChime, topMode })}>
+                onClick={() => onStart({ course, units: picked, format, teams, names: names.slice(0, teams), timer, chime: withChime, topMode, run })}>
           {W.start}
         </button>
       </div>
@@ -254,8 +260,9 @@ function Board({ cats, game, names, commit }) {
   const byKey = useMemo(() => Object.fromEntries(cats.map(c => [c.key, c])), [cats])
   const dealt = board.dealt.map(k => byKey[k]).filter(Boolean)
   const used = new Set(board.used)
-  const total = dealt.reduce((n, c) => n + Math.min(c.clues?.length || 0, VALUES.length), 0)
-  const cleared = dealt.length > 0 && dealt.every(c => (c.clues || []).slice(0, VALUES.length).every((_, i) => used.has(`${c.key}:${i}`)))
+  const run = runOf(setup)
+  const total = dealt.reduce((n, c) => n + run.rows.filter(i => c.clues?.[i]).length, 0)
+  const cleared = dealt.length > 0 && dealt.every(c => run.rows.every(i => !c.clues?.[i] || used.has(`${c.key}:${i}`)))
 
   const openClue = (key, i) => { setOpen({ key, i }); setRevealed(false); setHad([]) }
   const close = () => {
@@ -269,7 +276,7 @@ function Board({ cats, game, names, commit }) {
     setOpen(null)
   }
   const deal = () => commit(W.mvDeal, g => {
-    const next = dealBoard(cats, g.board.history)
+    const next = dealBoard(cats, g.board.history, runOf(g.setup).cols)
     return { ...g, board: { dealt: next, used: [], history: [...new Set([...g.board.history, ...next])] } }
   })
 
@@ -307,14 +314,14 @@ function Board({ cats, game, names, commit }) {
 
   return (
     <section className="rd-board-wrap">
-      <div className="rd-board" style={{ '--cols': Math.max(dealt.length, 1) }}>
+      <div className="rd-board" style={{ '--cols': Math.max(dealt.length, 1), '--rows': run.rows.length }}>
         {dealt.map(c => (
           <div key={c.key} className="rd-col">
             <div className="rd-cat">
               <span>{c.category}</span>
               {c.sample && <span className="rd-sample">{W.sample}</span>}
             </div>
-            {VALUES.map((v, i) => {
+            {run.rows.map(i => { const v = VALUES[i]
               const has = !!c.clues?.[i]
               const gone = used.has(`${c.key}:${i}`)
               return (
@@ -526,11 +533,12 @@ function HowTo({ game, onClose }) {
 function freshPlay(setup, data, names) {
   const cats = categoryPool(data)
   const lists = listPool(data)
-  const dealt = dealBoard(cats, [])
+  const run = runOf(setup)
+  const dealt = dealBoard(cats, [], run.cols)
   return {
     setup: { ...setup, names }, format: setup.format, scores: Array(setup.teams).fill(0),
     board: { dealt, used: [], history: dealt },
-    top: { order: shuffle(lists.map(l => l.key)), idx: 0, flipped: [], misses: 0, pot: 0, phase: 'play', msg: '', atPlay: 0 },
+    top: { order: shuffle(lists.map(l => l.key)).slice(0, run.lists), idx: 0, flipped: [], misses: 0, pot: 0, phase: 'play', msg: '', atPlay: 0 },
     history: [], rev: 0, showHelp: true,
   }
 }

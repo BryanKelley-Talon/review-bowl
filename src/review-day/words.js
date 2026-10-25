@@ -43,6 +43,9 @@ export const W = {
 
   // BK 2026-10-24 22:52, "yes to all": undo, timer, new class, both TOP ANSWERS modes (A default), the How to play cards.
   // Settings on the front
+  runLabel: 'Run length:',
+  run40: '40 minutes',
+  run20: '20 minutes',
   timerLabel: 'Timer:',
   timerOff: 'Off',
   secs: s => `${s}`,

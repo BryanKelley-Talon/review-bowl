@@ -77,7 +77,7 @@
 /* ---------- THE BOARD ---------- */
 .rd-board-wrap{flex:1; display:flex; flex-direction:column; padding:clamp(8px,1.2vh,20px) clamp(8px,1.2vw,24px) 72px; position:relative}
 .rd-board{flex:1; display:grid; grid-template-columns:repeat(var(--cols),1fr); gap:clamp(6px,.6vw,12px)}
-.rd-col{display:grid; grid-template-rows:auto repeat(5,1fr); gap:clamp(6px,.6vw,12px)}
+.rd-col{display:grid; grid-template-rows:auto repeat(var(--rows,5),1fr); gap:clamp(6px,.6vw,12px)}
 .rd-cat{
   display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; text-align:center;
   min-height:clamp(64px,11vh,140px); padding:8px; border-radius:10px; background:#0e1830; border:2px solid var(--arena-gold);
