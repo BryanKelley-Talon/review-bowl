@@ -1,0 +1,64 @@
+{
+ "_source": [
+  {
+   "file": "thearena public/content/docassist-gs10r-10.2.json",
+   "md5": "04baea70d0e151debf7ad69fd3181ae2"
+  },
+  {
+   "file": "thearena public/content/enduring-issues-gs10r.json",
+   "md5": "0b5f3b0949e714f651c9caa9b64c59b5"
+  }
+ ],
+ "title": "THE SIX UMBRELLAS",
+ "items": [
+  {
+   "n": "1",
+   "name": "POWER & ITS ABUSE",
+   "subs": [
+    "Abuse of Power",
+    "Imperialism",
+    "Human Rights Violations",
+    "Inequality"
+   ]
+  },
+  {
+   "n": "2",
+   "name": "CONFLICT",
+   "subs": [
+    "Conflict"
+   ]
+  },
+  {
+   "n": "3",
+   "name": "IDENTITY & NATIONALISM",
+   "subs": [
+    "Nationalism",
+    "Cultural Exchange and Diffusion"
+   ]
+  },
+  {
+   "n": "4",
+   "name": "WEALTH & RESOURCES",
+   "subs": [
+    "Economic Development",
+    "Scarcity"
+   ]
+  },
+  {
+   "n": "5",
+   "name": "TECHNOLOGY & ENVIRONMENT",
+   "subs": [
+    "Scientific and Technological Change",
+    "Environmental Crisis"
+   ]
+  },
+  {
+   "n": "6",
+   "name": "A CONNECTED WORLD",
+   "subs": [
+    "Cooperation",
+    "Population and Migration"
+   ]
+  }
+ ]
+}

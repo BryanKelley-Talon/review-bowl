@@ -1,0 +1,71 @@
+{
+ "_source": [
+  {
+   "file": "thearena public/content/docassist-us11r-11.2.json",
+   "md5": "2c378db9d4acac90905c8f2565105523"
+  }
+ ],
+ "title": "Civic Principles",
+ "items": [
+  {
+   "n": "1",
+   "name": "Rule of Law",
+   "group": "HOW POWER IS BUILT AND LIMITED"
+  },
+  {
+   "n": "2",
+   "name": "Limited Government",
+   "group": "HOW POWER IS BUILT AND LIMITED"
+  },
+  {
+   "n": "3",
+   "name": "Separation of Powers",
+   "group": "HOW POWER IS BUILT AND LIMITED"
+  },
+  {
+   "n": "4",
+   "name": "Checks and Balances",
+   "group": "HOW POWER IS BUILT AND LIMITED"
+  },
+  {
+   "n": "5",
+   "name": "Federalism",
+   "group": "HOW POWER IS BUILT AND LIMITED"
+  },
+  {
+   "n": "6",
+   "name": "Judicial Review",
+   "group": "HOW POWER IS BUILT AND LIMITED"
+  },
+  {
+   "n": "7",
+   "name": "Popular Sovereignty (consent of the governed)",
+   "group": "WHERE GOVERNMENT'S POWER COMES FROM"
+  },
+  {
+   "n": "8",
+   "name": "Representative Government",
+   "group": "WHERE GOVERNMENT'S POWER COMES FROM"
+  },
+  {
+   "n": "9",
+   "name": "Natural Rights",
+   "group": "WHERE GOVERNMENT'S POWER COMES FROM"
+  },
+  {
+   "n": "10",
+   "name": "Individual Rights (civil liberties)",
+   "group": "WHAT GOVERNMENT MUST PROTECT"
+  },
+  {
+   "n": "11",
+   "name": "Equal Protection",
+   "group": "WHAT GOVERNMENT MUST PROTECT"
+  },
+  {
+   "n": "12",
+   "name": "Due Process",
+   "group": "WHAT GOVERNMENT MUST PROTECT"
+  }
+ ]
+}

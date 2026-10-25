@@ -1,0 +1,387 @@
+{
+ "_source": [
+  {
+   "file": "thearena public/content/atlas-us11r.json",
+   "md5": "b8fbe962a0543bd110e89fa919183c25"
+  }
+ ],
+ "maps": [
+  {
+   "id": "11.1-A-01",
+   "unit": "11.1",
+   "title": "Who was already here",
+   "image": "/review-day/arena/atlas/us11r-11.1-A-01.webp",
+   "width": 2400,
+   "height": 1629,
+   "image_alt": "A colored map of the present-day United States titled Indian Tribes, Cultures & Languages. Large capital letters name culture areas: NORTHWEST COAST, PLATEAU, CALIFORNIA, GREAT BASIN, SOUTHWEST, PLAINS, NORTHEAST and SOUTHEAST. Inside them, hundreds of nations are named in smaller type, such as the Nez Perce, Comanche, Shawnee, Delaware, Susquehanna, Cherokee and Natchez. Each color stands for a language family, explained in a key at the lower right.",
+   "source": "William C. Sturtevant (Smithsonian Institution), Early Indian Tribes, Culture Areas, and Linguistic Stocks, 1967, in The National Atlas of the United States of America (U.S. Geological Survey). Library of Congress, https://www.loc.gov/item/95682185/. Public domain.",
+   "steps": [
+    {
+     "tag": "TITLE",
+     "ask": "What is this map about?",
+     "answer": "The Native nations, culture areas and languages of what became the United States.",
+     "focus": [
+      1860,
+      20,
+      500,
+      80
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "KEY",
+     "ask": "What do the colors stand for?",
+     "answer": "Language families. The key names them, such as Algonkian and Iroquoian.",
+     "focus": [
+      1925,
+      975,
+      365,
+      405
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "WHAT IT SHOWS",
+     "ask": "Name one nation that lived in the Northeast.",
+     "answer": "The Delaware, near the coast, and the Susquehanna, just inland, are both named there.",
+     "focus": [
+      1350,
+      320,
+      795,
+      640
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "THREAD",
+     "ask": "Which thread does this map pull?",
+     "answer": "Thread 1, Is There One America? · Native Americans: every part of the map was already someone's homeland.",
+     "focus": [
+      70,
+      70,
+      2260,
+      1420
+     ],
+     "answer_focus": null
+    }
+   ]
+  },
+  {
+   "id": "11.1-B-01",
+   "unit": "11.1",
+   "title": "Three empires, one continent, 1700–1763",
+   "image": "/review-day/arena/atlas/us11r-11.1-B-01.webp",
+   "width": 2000,
+   "height": 1252,
+   "image_alt": "A world map from a historical atlas titled The Struggle for Colonial Dominion, 1700–1763. Colors show who held what: British possessions in pink, French in green, Spanish in orange, Portuguese in yellow and Dutch in gray. In North America, the British colonies are pink along the Atlantic coast, French lands are green to the north and inland, and Spanish lands are orange to the south and west. Insets show the West Indies and Captain Cook's voyages in the Pacific.",
+   "source": "William R. Shepherd, \"The Struggle for Colonial Dominion, 1700–1763,\" Historical Atlas (New York: Henry Holt, 1923), p. 136. Perry-Castañeda Library Map Collection, University of Texas at Austin, via Wikimedia Commons. Public domain.",
+   "steps": [
+    {
+     "tag": "TITLE",
+     "ask": "What years does this map show?",
+     "answer": "1700 to 1763: the struggle for colonial dominion.",
+     "focus": [
+      15,
+      210,
+      60,
+      705
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "KEY",
+     "ask": "Which color is British? Which is French? Which is Spanish?",
+     "answer": "British is pink, French is green, and Spanish is orange.",
+     "focus": [
+      775,
+      980,
+      520,
+      195
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "WHERE",
+     "ask": "Where are the French lands, compared with the British colonies?",
+     "answer": "North and inland, behind the British colonies on the Atlantic coast.",
+     "focus": [
+      425,
+      255,
+      435,
+      360
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "WHAT IT SHOWS",
+     "ask": "Was North America the only place these empires competed?",
+     "answer": "No. The map shows their colonies in South America, Africa, India and the West Indies too.",
+     "focus": [
+      70,
+      60,
+      1880,
+      1100
+     ],
+     "answer_focus": null
+    }
+   ]
+  },
+  {
+   "id": "11.2-A-01",
+   "unit": "11.2",
+   "title": "The map Britain printed in 1763",
+   "image": "/review-day/arena/atlas/us11r-11.2-A-01.webp",
+   "width": 2400,
+   "height": 1954,
+   "image_alt": "A black-and-white engraved map from 1763 of eastern North America, from Hudson Bay and Newfoundland down to Florida and the Gulf of Mexico. The colonies are named along the Atlantic coast, among them New York, Pennsylvania, Virginia, the Carolinas and Georgia, with Boston and Philadelphia marked. The new Government of Quebec is outlined along the St. Lawrence River. Inland, the map names Native nations such as the Senecas, Delawares, Cherokees, Creeks and Chickasaws. A decorated frame at the lower right holds the title, and an inset shows East Florida.",
+   "source": "Thomas Kitchin, A New Map of the British Dominions in North America, with the Limits of the Governments Annexed Thereto by the Late Treaty of Peace, and Settled by Proclamation, October 7th 1763, engraved for the Annual Register, 1763. Library of Congress Geography and Map Division, https://www.loc.gov/item/75696331/. Public domain.",
+   "steps": [
+    {
+     "tag": "TITLE",
+     "ask": "When was this map made, and what does the title say it shows?",
+     "answer": "1763: Britain's lands in North America, with the governments set up by the Proclamation of October 7, 1763.",
+     "focus": [
+      1815,
+      1315,
+      320,
+      500
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "WHERE",
+     "ask": "What new government does Britain draw in the north?",
+     "answer": "Quebec, a new government along the St. Lawrence River.",
+     "focus": [
+      1320,
+      110,
+      520,
+      400
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "WHAT IT SHOWS",
+     "ask": "Who lives there, on this map?",
+     "answer": "Native nations: the map names the Cherokees, Creeks and Chickasaws.",
+     "focus": [
+      150,
+      1195,
+      590,
+      450
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "WHERE",
+     "ask": "What new British colony does the inset show?",
+     "answer": "East Florida, one of two colonies Britain made from the Florida it won from Spain in 1763.",
+     "focus": [
+      1280,
+      1315,
+      410,
+      500
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "THREAD",
+     "ask": "Which thread does this map pull?",
+     "answer": "Thread 1, Is There One America? · Native Americans: Britain's own map still names the Native nations on the land.",
+     "focus": [
+      40,
+      40,
+      2320,
+      1870
+     ],
+     "answer_focus": null
+    }
+   ]
+  },
+  {
+   "id": "11.2-A-02",
+   "unit": "11.2",
+   "title": "The Proclamation Line of 1763",
+   "image": "/review-day/arena/atlas/us11r-11.2-A-02.webp",
+   "width": 2101,
+   "height": 1358,
+   "image_alt": "A colored map from a historical atlas showing eastern North America from 1763 to 1775. The Thirteen Colonies are pink along the Atlantic coast. A red line, the Proclamation Line of 1763, runs behind them along the mountains, and the land west of it is gray-blue, labeled in the key as Crown lands reserved for Indians by the proclamation. Spanish Louisiana is yellow in the west, and the Province of Quebec is outlined in the north. An inset at the lower right shows New York and Pennsylvania up close.",
+   "source": "William R. Shepherd, \"The British Colonies in North America, 1763–1775,\" Historical Atlas (New York: Henry Holt, 1911). Perry-Castañeda Library Map Collection, University of Texas at Austin; color-enhanced copy on Wikimedia Commons. Public domain.",
+   "steps": [
+    {
+     "tag": "KEY",
+     "ask": "What does the gray-blue color mean?",
+     "answer": "Crown lands reserved for Indians by the Proclamation of 1763.",
+     "focus": [
+      1730,
+      295,
+      360,
+      350
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "WHAT IT SHOWS",
+     "ask": "What's on each side of the line?",
+     "answer": "The Thirteen Colonies (pink) to the east, and land reserved for Native nations (gray-blue) to the west.",
+     "focus": [
+      565,
+      250,
+      640,
+      935
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "WHERE",
+     "ask": "Who held the land west of the Mississippi?",
+     "answer": "Spain. Louisiana is yellow, the color for Spanish possessions.",
+     "focus": [
+      55,
+      250,
+      210,
+      785
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "THREAD",
+     "ask": "Which thread does this map pull?",
+     "answer": "Thread 1, Is There One America? · Native Americans: the line set aside land for Native nations, and colonists wanted it.",
+     "focus": [
+      565,
+      250,
+      640,
+      935
+     ],
+     "answer_focus": null
+    }
+   ]
+  },
+  {
+   "id": "11.2-A-03",
+   "unit": "11.2",
+   "title": "Boston, 1775",
+   "image": "/review-day/arena/atlas/us11r-11.2-A-03.webp",
+   "width": 2400,
+   "height": 1930,
+   "image_alt": "An engraved map from February 1775 of Boston and its harbor. Boston sits on a small peninsula at the upper left, its streets packed tightly together and joined to the mainland by a thin neck of land. Charlestown, Cambridge, Roxbury and Dorchester surround it. The harbor is full of islands, among them Castle Island with its fort, and small numbers in the water mark its depth. A scale of miles sits at the lower left.",
+   "source": "A Plan of the Town and Chart of the Harbour of Boston, Gentleman's Magazine, vol. 45 (January 1775), dated February 1, 1775 on the plate. Library of Congress Geography and Map Division, https://www.loc.gov/item/2001624924/. Public domain.",
+   "steps": [
+    {
+     "tag": "TITLE",
+     "ask": "What does this map show, and when?",
+     "answer": "The town and harbor of Boston, early in 1775.",
+     "focus": [
+      1710,
+      65,
+      600,
+      355
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "WHERE",
+     "ask": "How is Boston joined to the mainland?",
+     "answer": "By a thin strip of land called Boston Neck.",
+     "focus": [
+      390,
+      390,
+      400,
+      245
+     ],
+     "answer_focus": [
+      560,
+      580,
+      130,
+      110
+     ]
+    },
+    {
+     "tag": "WHAT IT SHOWS",
+     "ask": "Find Castle Island. What's on it?",
+     "answer": "A fort, guarding the way into the harbor.",
+     "focus": [
+      850,
+      680,
+      180,
+      145
+     ],
+     "answer_focus": null
+    }
+   ]
+  },
+  {
+   "id": "11.2-B-01",
+   "unit": "11.2",
+   "title": "The new United States, 1783",
+   "image": "/review-day/arena/atlas/us11r-11.2-B-01.webp",
+   "width": 2000,
+   "height": 1759,
+   "image_alt": "A hand-colored map of the United States after the peace treaty of 1783. Colored borders run through the Great Lakes in the north, down the Mississippi River in the west, and along Florida in the south. The states are named along the Atlantic coast, from Massachusetts to Georgia. Between the mountains and the Mississippi, the map names Native nations and lands, such as the Mascoutens and the Illinois Country. A long block of text at the lower right prints articles of the treaty.",
+   "source": "John Cary, An Accurate Map of the United States of America, with Part of the Surrounding Provinces, Agreeable to the Treaty of Peace of 1783 (London, 1783). Library of Congress Geography and Map Division, https://www.loc.gov/item/gm71005488/. Public domain.",
+   "steps": [
+    {
+     "tag": "TITLE",
+     "ask": "What does the title say this map shows?",
+     "answer": "The United States, with the borders agreed in the Treaty of Peace of 1783.",
+     "focus": [
+      1445,
+      860,
+      410,
+      410
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "WHERE",
+     "ask": "Where is the new nation's northern border?",
+     "answer": "Through the Great Lakes: a colored line runs along them.",
+     "focus": [
+      625,
+      240,
+      810,
+      505
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "WHERE",
+     "ask": "What river is the western border?",
+     "answer": "The Mississippi River.",
+     "focus": [
+      315,
+      310,
+      165,
+      1350
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "WHAT IT SHOWS",
+     "ask": "Who still lives there, on this map?",
+     "answer": "Native nations: the map names the Mascoutens, among others.",
+     "focus": [
+      410,
+      595,
+      480,
+      280
+     ],
+     "answer_focus": null
+    },
+    {
+     "tag": "WHAT IT SHOWS",
+     "ask": "What is printed there?",
+     "answer": "The peace treaty itself, starting with Article I, which recognizes the United States as free and independent.",
+     "focus": [
+      1440,
+      1255,
+      440,
+      440
+     ],
+     "answer_focus": null
+    }
+   ]
+  }
+ ]
+}

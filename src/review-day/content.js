@@ -64,3 +64,35 @@ export function dealBoard(pool, alreadyDealt = [], cols = BOARD_COLS) {
 
 // TOP ANSWERS: #1 is worth the most. Six answers run 60, 50 … 10; four run 40 … 10.
 export const rankValue = (rank, n) => (n - rank) * 10
+
+// ── the Arena's own blessed content, imported word for word (scripts/import-arena-refs.py) ──
+const arenaCache = new Map()
+export async function loadArena(name) {
+  if (arenaCache.has(name)) return arenaCache.get(name)
+  const p = fetch(`/review-day/arena/${name}`, { cache: 'no-cache' }).then(r => (r.ok ? r.json() : null)).catch(() => null)
+  arenaCache.set(name, p)
+  return p
+}
+
+// Everything a course's modes can draw on: its unit files and the Arena's maps, stops and cards.
+export async function loadCourse(manifest, course) {
+  const cdef = manifest.courses.find(c => c.id === course)
+  const units = await Promise.all((cdef?.units || []).map(async u => ({ ...u, data: u.file ? await loadUnit(u.file).catch(() => null) : null })))
+  const us = course === 'us11r'
+  const [civic, umbrellas, threads, ei, atlas] = await Promise.all([
+    us ? loadArena('civic-us11r.json') : null,
+    us ? null : loadArena('umbrellas-gs10r.json'),
+    us ? loadArena('threads-us11r.json') : null,
+    us ? null : loadArena('ei-gs10r.json'),
+    loadArena(`atlas-${course}.json`),
+  ])
+  return { course, units, arena: { civic, umbrellas, threads, ei, atlas } }
+}
+
+// The year an event starts, for IN ORDER. "1600s"-style decades and centuries are left out: too loose to order.
+export function startYear(when) {
+  const s = String(when || '')
+  if (/\d{3,4}s\b/.test(s)) return null
+  const m = s.match(/\b(\d{4})\b/)
+  return m ? Number(m[1]) : null
+}

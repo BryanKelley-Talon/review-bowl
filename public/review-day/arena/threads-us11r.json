@@ -1,0 +1,304 @@
+{
+ "_source": [
+  {
+   "file": "thearena public/content/threads-us11r.json",
+   "md5": "e4b2e5f9dd84ddb5b54f09d92c0e2ed3"
+  }
+ ],
+ "lines": [
+  {
+   "id": "t1",
+   "number": 1,
+   "name": "Is There One America?",
+   "question": "Is there one America, with the same rights for everyone in it?"
+  },
+  {
+   "id": "t2",
+   "number": 2,
+   "name": "America in the World",
+   "question": "When should the United States intervene in the affairs of other nations — and at what cost to its own democratic principles?"
+  },
+  {
+   "id": "t3",
+   "number": 3,
+   "name": "The Role and Size of Government",
+   "question": "How much should the federal government do for its citizens — and at what point does government intervention become a threat to liberty?"
+  },
+  {
+   "id": "t4",
+   "number": 4,
+   "name": "Presidential Power",
+   "question": "How much power should one person have in a democracy — and who checks the president when the Constitution is silent?"
+  },
+  {
+   "id": "t5",
+   "number": 5,
+   "name": "Reform in America",
+   "question": "When the system fails to deliver on its promises, what methods of reform are available — and which ones actually work?"
+  },
+  {
+   "id": "t6",
+   "number": 6,
+   "name": "Immigration and the American Identity",
+   "question": "Who counts as American — and when the country restricts entry based on race, religion, or national origin, is it protecting its character or betraying it?"
+  },
+  {
+   "id": "t7",
+   "number": 7,
+   "name": "Civil Liberties in Wartime",
+   "question": "When national security conflicts with constitutional rights, which wins — and who decides?"
+  }
+ ],
+ "stops": [
+  {
+   "id": "s-1600s-disease",
+   "unit": "11.1",
+   "casefile": "A",
+   "when": "1600s",
+   "title": "Contact brings disease",
+   "what_happened": "Europeans brought diseases Native peoples had never faced, like smallpox. Over the 1600s, Native populations along the coast collapsed.",
+   "on_lines": [
+    {
+     "line": "t1",
+     "sub": "t1-native",
+     "reason": "Native nations lose huge numbers of people to European diseases they had never met."
+    }
+   ]
+  },
+  {
+   "id": "s-1642-miantonomo",
+   "unit": "11.1",
+   "casefile": "A",
+   "when": "c. 1642",
+   "title": "Miantonomo's warning",
+   "what_happened": "A Narragansett leader tells a neighboring nation that the English are taking their land, their animals and their food. His answer: Native nations must act as one, or lose everything.",
+   "on_lines": [
+    {
+     "line": "t1",
+     "sub": "t1-native",
+     "reason": "A Narragansett leader warns that his people's land and food are being taken."
+    }
+   ]
+  },
+  {
+   "id": "s-1744-lancaster",
+   "unit": "11.1",
+   "casefile": "A",
+   "when": "1744",
+   "title": "The Lancaster Treaty",
+   "what_happened": "Haudenosaunee (Iroquois) leaders meet negotiators from Virginia, Maryland and Pennsylvania. Their speaker, Gachradodow, reminds them that the colonists grew rich on land Native peoples lost for good.",
+   "on_lines": [
+    {
+     "line": "t1",
+     "sub": "t1-native",
+     "reason": "Six Nations leaders bargain with colonial governments over land settlers have already taken."
+    }
+   ]
+  },
+  {
+   "id": "s-1619-1705-slave-law",
+   "unit": "11.1",
+   "casefile": "B",
+   "when": "1619–1705",
+   "title": "Slavery built by law",
+   "what_happened": "In 1619 the first captive Africans at Jamestown were classed as servants. Law by law, the colonies turned that into slavery for life, passed from mother to child, until Virginia's 1705 code declared enslaved people property.",
+   "on_lines": [
+    {
+     "line": "t1",
+     "sub": "t1-aa",
+     "reason": "Colonial law turns slavery into a condition for life, passed from mother to child."
+    }
+   ]
+  },
+  {
+   "id": "s-1738-venture-smith",
+   "unit": "11.1",
+   "casefile": "B",
+   "when": "1738",
+   "title": "Venture Smith is kidnapped and sold",
+   "what_happened": "Venture Smith was kidnapped in Africa as a child and sold for four gallons of rum and a piece of calico. He was enslaved in New England, later bought his own freedom, and told his story himself.",
+   "on_lines": [
+    {
+     "line": "t1",
+     "sub": "t1-aa",
+     "reason": "A man kidnapped as a child in Africa and enslaved in New England has to buy his own freedom."
+    }
+   ]
+  },
+  {
+   "id": "s-1754-join-or-die",
+   "unit": "11.1",
+   "casefile": "B",
+   "when": "1754",
+   "title": "Join, or Die",
+   "what_happened": "Benjamin Franklin prints a snake cut into pieces labeled with the colonies' names. His message: the colonies must unite against France, or they won't survive.",
+   "on_lines": [
+    {
+     "line": "t3",
+     "sub": null,
+     "reason": "Franklin argues the colonies are too weak apart to survive."
+    }
+   ]
+  },
+  {
+   "id": "s-1765-blackstone",
+   "unit": "11.1",
+   "casefile": "B",
+   "when": "1765",
+   "title": "Coverture: a wife disappears in law",
+   "what_happened": "An English legal guide the colonies followed spells out the rule: when a woman marries, her legal existence is “suspended.” She can't own property, sign a contract or sue in her own name.",
+   "on_lines": [
+    {
+     "line": "t1",
+     "sub": "t1-women",
+     "reason": "English law, which the colonies follow, suspends a married woman's legal existence."
+    }
+   ]
+  },
+  {
+   "id": "s-1763-proclamation",
+   "unit": "11.2",
+   "casefile": "A",
+   "when": "1763",
+   "title": "The Proclamation Line",
+   "what_happened": "After winning the French and Indian War, Britain bans colonists from settling west of the Appalachian Mountains to keep peace with Native nations. Colonists who fought for that land are angry.",
+   "on_lines": [
+    {
+     "line": "t1",
+     "sub": "t1-native",
+     "reason": "Britain sets aside land west of the mountains for Native nations, and colonists resent it."
+    }
+   ]
+  },
+  {
+   "id": "s-1765-stamp-act-congress",
+   "unit": "11.2",
+   "casefile": "A",
+   "when": "1765",
+   "title": "The Stamp Act Congress",
+   "what_happened": "Parliament taxes printed paper in the colonies. Delegates from nine colonies meet and answer: only our own elected assemblies can tax us.",
+   "on_lines": [
+    {
+     "line": "t1",
+     "sub": null,
+     "reason": "The colonists claim the rights of English people for themselves: no tax without their own vote."
+    }
+   ]
+  },
+  {
+   "id": "s-1770-boston",
+   "unit": "11.2",
+   "casefile": "A",
+   "when": "1770",
+   "title": "The Boston Massacre, told two ways",
+   "what_happened": "British soldiers fire into a crowd in Boston, and five colonists die, among them Crispus Attucks, a sailor of African and Native descent. Paul Revere's engraving and Captain Preston's testimony tell the story very differently.",
+   "on_lines": [
+    {
+     "line": "t1",
+     "sub": null,
+     "reason": "Among the five killed is Crispus Attucks, a sailor of African and Native descent."
+    }
+   ]
+  },
+  {
+   "id": "s-1776-declaration",
+   "unit": "11.2",
+   "casefile": "A",
+   "when": "1776",
+   "title": "“All men are created equal”",
+   "what_happened": "The Continental Congress declares independence and claims that all men are created equal, with rights no government can take away. About one in five people in the colonies is enslaved.",
+   "on_lines": [
+    {
+     "line": "t1",
+     "sub": null,
+     "reason": "The promise itself: all men are created equal, with rights no government can take away."
+    },
+    {
+     "line": "t1",
+     "sub": "t1-aa",
+     "reason": "About one in five people in the colonies is enslaved when the promise is made."
+    },
+    {
+     "line": "t1",
+     "sub": "t1-women",
+     "reason": "“All men” leaves women out, months after Abigail Adams asked John to “remember the ladies.”"
+    }
+   ]
+  },
+  {
+   "id": "s-1776-abigail-adams",
+   "unit": "11.2",
+   "casefile": "A",
+   "when": "1776",
+   "title": "“Remember the ladies”",
+   "what_happened": "While Congress debates independence, Abigail Adams asks her husband John to remember the ladies in the new laws. He laughs it off, and women get no vote.",
+   "on_lines": [
+    {
+     "line": "t1",
+     "sub": "t1-women",
+     "reason": "She asks for women to have a voice in the new laws, and is laughed off."
+    }
+   ]
+  },
+  {
+   "id": "s-1781-articles",
+   "unit": "11.2",
+   "casefile": "B",
+   "when": "1781",
+   "title": "The Articles of Confederation",
+   "what_happened": "After years of fighting a king, the states build a national government that is weak on purpose. Congress can't tax, can't regulate trade and can't make the states do anything.",
+   "on_lines": [
+    {
+     "line": "t3",
+     "sub": null,
+     "reason": "The first national government is too weak to tax, regulate trade or keep order."
+    },
+    {
+     "line": "t4",
+     "sub": null,
+     "reason": "People who just fought a king build a government with no executive branch to lead it."
+    }
+   ]
+  },
+  {
+   "id": "s-1787-constitution",
+   "unit": "11.2",
+   "casefile": "B",
+   "when": "1787",
+   "title": "The Constitution: who gets counted, and who gets power",
+   "what_happened": "The Constitution builds a stronger national government and splits its power among three branches that check each other. It also counts three of every five enslaved people toward a state's seats in the House, which gives slave states more power in Congress.",
+   "on_lines": [
+    {
+     "line": "t3",
+     "sub": null,
+     "reason": "A stronger national government, with its power split so no branch can take over."
+    },
+    {
+     "line": "t1",
+     "sub": "t1-aa",
+     "reason": "To divide up seats in Congress, the Constitution counts three of every five enslaved people."
+    }
+   ]
+  },
+  {
+   "id": "s-1791-bill-of-rights",
+   "unit": "11.2",
+   "casefile": "B",
+   "when": "1791",
+   "title": "The Bill of Rights",
+   "what_happened": "Anti-Federalists warn that the new government could crush people's liberties. The first ten amendments answer them with freedom of speech, press and religion, and protection from unfair searches and trials.",
+   "on_lines": [
+    {
+     "line": "t7",
+     "sub": null,
+     "reason": "The First Amendment's promise: “Congress shall make no law” limiting speech or the press."
+    },
+    {
+     "line": "t3",
+     "sub": null,
+     "reason": "Critics feared the new government was too strong, so its limits were written down."
+    }
+   ]
+  }
+ ]
+}

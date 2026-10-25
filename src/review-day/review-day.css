@@ -179,3 +179,103 @@
 .rd-top .rd-ring{width:clamp(80px,6.5vw,124px)}
 .rd-bar-top .rd-team{padding:4px 10px; font-size:clamp(14px,1vw,20px)}
 .rd-teambtn{min-height:56px}
+
+/* ===================== overnight modes (10/24, drafts) ===================== */
+.rd-choice.dim{opacity:.55}
+.rd-choice:disabled{opacity:.45; cursor:default}
+.rd-choice.num.wide{min-width:110px}
+.rd-teambtn.done{background:var(--team); color:#0B1220; opacity:.6}
+
+/* wagers and counts */
+.rd-wagers{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr)); gap:10px; width:100%; max-width:1400px}
+.rd-wager{display:flex; align-items:center; gap:12px; padding:8px 12px; border-radius:12px; background:rgba(19,28,46,.92); border:2px solid var(--team); justify-content:space-between; flex-wrap:wrap}
+.rd-stepper{display:inline-flex; align-items:center; gap:8px}
+.rd-stepper .rd-btn.small{min-width:56px; font-size:clamp(22px,1.8vw,34px)}
+.rd-stepper-val{font:700 clamp(26px,2.2vw,44px)/1 'Barlow Condensed',sans-serif; min-width:3ch; text-align:center}
+.rd-standings{list-style:none; display:flex; flex-direction:column; gap:10px; align-items:center}
+.rd-standings .rd-team{font-size:clamp(22px,2vw,40px); padding:10px 20px}
+
+/* lightning */
+.rd-flash{width:min(900px,90%); height:12px; border-radius:6px; background:#22304A; overflow:hidden; position:relative}
+.rd-flash::after{content:''; position:absolute; inset:0; background:var(--arena-gold); transform-origin:left; animation:rd-drain var(--secs) linear forwards}
+@keyframes rd-drain{from{transform:scaleX(1)} to{transform:scaleX(0)}}
+.rd-lightning-answers{columns:2; column-gap:40px; font-size:clamp(18px,1.5vw,30px); max-width:1400px; width:100%; text-align:left; padding-left:1.6em}
+.rd-lightning-answers li{margin:4px 0; break-inside:avoid}
+
+/* reference strip beside a prompt */
+.rd-clue-body{display:flex; gap:clamp(12px,2vw,36px); width:100%; align-items:flex-start; justify-content:center}
+.rd-clue-main{flex:1; display:flex; flex-direction:column; align-items:center; gap:clamp(10px,1.6vh,22px); min-width:0}
+.rd-ref{flex:0 0 clamp(240px,22vw,420px); text-align:left; background:rgba(14,24,48,.95); border:2px solid var(--tile-edge); border-radius:12px; padding:12px 14px}
+.rd-ref-title{font:700 clamp(16px,1.2vw,24px)/1.1 'Barlow Condensed',sans-serif; letter-spacing:.08em; color:var(--arena-gold); margin-bottom:8px; text-transform:uppercase}
+.rd-ref-list{list-style:none; display:flex; flex-direction:column; gap:6px}
+.rd-ref-list li{display:grid; grid-template-columns:auto 1fr; column-gap:8px; font-size:clamp(14px,1vw,20px); line-height:1.25}
+.rd-ref-n{color:var(--arena-gold); font-weight:700}
+.rd-ref-name{font-weight:600}
+.rd-ref-subs{grid-column:2; color:#d6deea; font-size:.9em}
+.rd-event-head{font:700 clamp(20px,1.8vw,36px)/1.15 'Barlow Condensed',sans-serif; letter-spacing:.04em; color:var(--arena-gold)}
+.rd-clue-text.small{font-size:clamp(22px,2.2vw,44px)}
+@media (max-width: 1100px){ .rd-clue-body{flex-direction:column; align-items:center} .rd-ref{flex-basis:auto; width:100%} }
+
+/* map drop */
+.rd-map{width:100%; max-width:1200px; display:flex; flex-direction:column; gap:6px; align-items:center}
+.rd-map-frame{position:relative; width:100%; max-height:52vh; display:flex; justify-content:center}
+.rd-map-frame img{max-width:100%; max-height:52vh; width:auto; height:auto; border-radius:8px; border:2px solid var(--tile-edge); background:#fff}
+.rd-map-frame{width:fit-content; margin:0 auto}
+.rd-map-focus{position:absolute; border:4px solid #FF6A13; border-radius:8px; box-shadow:0 0 0 9999px rgba(0,0,0,.25); pointer-events:none}
+.rd-map-cap{font-size:clamp(12px,.85vw,16px); color:#d6deea; text-align:center}
+
+/* odd one out, who am i, in order */
+.rd-terms{list-style:none; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; width:100%; max-width:1300px}
+.rd-terms li{display:flex; align-items:center; gap:14px; padding:14px 18px; border-radius:12px; background:var(--tile); border:2px solid var(--tile-edge); font:600 clamp(22px,2.2vw,44px)/1.15 'Outfit',sans-serif; text-align:left}
+.rd-terms li.odd{border-color:#FF6A13; background:#3a2414}
+.rd-letter{display:inline-grid; place-items:center; min-width:1.6em; height:1.6em; border-radius:8px; background:#0e1830; border:2px solid var(--arena-gold); color:var(--arena-gold); font:700 clamp(20px,1.8vw,36px)/1 'Barlow Condensed',sans-serif}
+.rd-who-clues{list-style:none; counter-reset:c; display:flex; flex-direction:column; gap:10px; width:100%; max-width:1300px; text-align:left}
+.rd-who-clues li{counter-increment:c; padding:12px 18px; border-radius:12px; background:var(--tile); border:2px solid var(--tile-edge); font:600 clamp(22px,2.1vw,42px)/1.25 'Outfit',sans-serif; animation:rd-in 220ms ease-out}
+.rd-who-clues li::before{content:counter(c) '.  '; color:var(--arena-gold)}
+
+/* race lanes */
+.rd-lanes-mode{flex:1; width:100%; padding:clamp(8px,1.2vh,18px) clamp(10px,1.4vw,24px) 80px; display:flex; flex-direction:column; align-items:center; gap:clamp(8px,1.2vh,16px); text-align:center}
+.rd-events{list-style:none; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; width:100%; max-width:1500px}
+.rd-events li{display:flex; align-items:center; gap:14px; padding:10px 16px; border-radius:12px; background:var(--tile); border:2px solid var(--tile-edge); text-align:left; flex-wrap:wrap}
+.rd-event-title{font:600 clamp(20px,1.8vw,36px)/1.2 'Outfit',sans-serif; flex:1}
+.rd-event-when{font:700 clamp(18px,1.4vw,28px)/1 'Barlow Condensed',sans-serif; color:var(--arena-gold)}
+.rd-detective{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.2fr); gap:16px; width:100%; max-width:1700px; text-align:left}
+.rd-detective .rd-doc{max-width:none}
+.rd-dq{list-style:none; counter-reset:q; display:flex; flex-direction:column; gap:8px}
+.rd-dq li{counter-increment:q; padding:8px 12px; border-radius:10px; background:var(--tile); border:2px solid var(--tile-edge); display:flex; flex-direction:column; gap:4px}
+.rd-dq-ask{font:700 clamp(17px,1.3vw,26px)/1.2 'Outfit',sans-serif}
+.rd-dq-ask::before{content:counter(q) '.  '; color:var(--arena-gold)}
+.rd-dq-choices{display:flex; flex-wrap:wrap; gap:6px 16px; font-size:clamp(15px,1.05vw,21px)}
+.rd-dq-choice b{color:var(--arena-gold)}
+.rd-dq-choice.right{outline:3px solid #7FCFA0; border-radius:6px; padding:0 4px}
+.rd-dq-why{font-size:clamp(14px,1vw,19px); color:#d6deea}
+.rd-lanes{display:grid; grid-template-columns:repeat(var(--lanes),minmax(0,1fr)); gap:10px; width:100%}
+.rd-lane{display:flex; flex-direction:column; align-items:center; gap:8px; padding:10px 8px; border-radius:14px; background:rgba(19,28,46,.95); border:3px solid var(--team); touch-action:manipulation; user-select:none}
+.rd-lane.locked{background:rgba(30,42,70,.98)}
+.rd-lane .rd-team{font-size:clamp(13px,.95vw,19px)}
+.rd-lane-keys{display:flex; flex-wrap:wrap; gap:8px; justify-content:center}
+.rd-key{min-width:64px; min-height:64px; border-radius:12px; background:var(--tile); border:2px solid var(--tile-edge); color:var(--arena-white); font:700 clamp(24px,2vw,40px)/1 'Barlow Condensed',sans-serif; touch-action:manipulation}
+.rd-key.small{min-width:48px; min-height:48px; font-size:clamp(18px,1.4vw,28px)}
+.rd-key.on{background:var(--team); color:#0B1220; border-color:var(--team)}
+.rd-key.right{outline:3px solid #7FCFA0}
+.rd-key.wrong{outline:3px solid #ff7a6a}
+.rd-key:disabled{cursor:default}
+.rd-lane-seq{font:700 clamp(18px,1.5vw,30px)/1 'Barlow Condensed',sans-serif; letter-spacing:.06em; min-height:1.2em}
+.rd-lane-rows{display:flex; flex-direction:column; gap:6px}
+.rd-lane-row{display:flex; align-items:center; gap:6px}
+.rd-lane-q{font:700 clamp(16px,1.2vw,24px)/1 'Barlow Condensed',sans-serif; color:var(--arena-gold); min-width:1.2em}
+.rd-lane-actions{display:flex; gap:8px}
+.rd-lane-status{font:700 clamp(16px,1.2vw,24px)/1 'Barlow Condensed',sans-serif; color:var(--arena-gold); letter-spacing:.05em}
+.rd-lane-result{font:700 clamp(16px,1.2vw,24px)/1.1 'Barlow Condensed',sans-serif; color:#ffd9d2}
+.rd-lane-result.all{color:#7FCFA0}
+.rd-modes-group{margin:8px 0}
+@media (max-width: 1100px){ .rd-detective{grid-template-columns:1fr} .rd-events{grid-template-columns:1fr} .rd-lanes{grid-template-columns:repeat(2,minmax(0,1fr))} }
+/* map drop: map left, question right, all on one screen */
+.rd-clue.with-map .rd-clue-body{display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); align-items:start}
+.rd-clue.with-map .rd-map-frame, .rd-clue.with-map .rd-map-frame img{max-height:70vh}
+.rd-clue.with-map .rd-clue-main{align-items:center}
+@media (max-width: 1100px){ .rd-clue.with-map .rd-clue-body{grid-template-columns:1fr} .rd-clue.with-map .rd-map-frame img{max-height:48vh} }
+.rd-clue.with-ref .rd-clue-text.small{font-size:clamp(20px,1.9vw,38px)}
+.rd-answer.long{font:600 clamp(22px,2vw,40px)/1.25 'Outfit',sans-serif; max-width:60ch; text-align:center}
+.rd-clue.with-ref, .rd-clue.with-map{padding-bottom:64px; gap:clamp(8px,1.2vh,16px)}
+.rd-clue.with-ref .rd-reveal, .rd-clue.with-map .rd-reveal{gap:clamp(6px,1vh,14px)}

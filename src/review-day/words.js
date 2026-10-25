@@ -39,6 +39,7 @@ export const W = {
   nextList: 'Next list',
   listsDone: 'That was the last list. Start again from the menu for a new order.',
   sample: 'SAMPLE',
+  threadsTitle: 'The Threads', // the Arena's own label for the list (thearena src/refcards.jsx REF_WORDS)
   listTag: (unit, n) => `${unit} · List ${n}`,
 
   // BK 2026-10-24 22:52, "yes to all": undo, timer, new class, both TOP ANSWERS modes (A default), the How to play cards.
@@ -122,6 +123,105 @@ export const W = {
       'A hit takes all the points.',
     ],
   }),
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DRAFT WORDS — the overnight build of 2026-10-24 (BK 23:15: "Let's proceed on an overnight build of these games").
+// None of these is approved yet. They go to BK as one list in the morning proof; nothing here ships until he says yes.
+// The ship gate fails while public/review-day/manifest.json has "lab": true.
+// ─────────────────────────────────────────────────────────────────────────────
+export const D = {
+  purposeLabel: 'What is this for?',
+  purposes: { opener: 'Opener', closer: 'Closer', test: 'Test Review', regents: 'Regents Review' },
+  timeLabel: 'How much time?',
+  minutes: m => `${m} min`,
+  modeLabel: 'Pick a mode.',
+  noModes: 'Nothing fits that yet. Try another time.',
+  notReady: 'Not ready for these units yet.',
+  needContent: "These units don't have this mode's content yet.",
+  modes: 'Modes',
+  modesTitle: 'Switch modes. Teams and scores stay.',
+  draft: 'DRAFT',
+
+  // FINAL ANSWER
+  final: 'FINAL ANSWER',
+  finalSub: 'One last clue. Every team wagers, then answers.',
+  wager: 'Write your wager.',
+  wagerRule: 'Wager up to your score, or up to 500 if you have less.',
+  setWagers: 'Enter each team\'s wager.',
+  allIn: 'All in',
+  showClue: 'Show the clue',
+  settle: 'Settle the wagers',
+  finalScores: 'Final scores.',
+  // LIGHTNING ROUND
+  lightning: 'LIGHTNING ROUND',
+  lightningSub: 'Ten quick clues in sixty seconds. Write as many as you can.',
+  getReady: 'Number your paper 1 to 10.',
+  go: 'Go',
+  clueOf: (i, n) => `Clue ${i} of ${n}`,
+  pencils: 'Pencils down.',
+  showAnswers: 'Show the answers',
+  howMany: 'How many did each team get?',
+  addPoints: 'Add the points',
+  // shared round words
+  nextRound: 'Next round',
+  roundsDone: 'That was the last round.',
+  writeGuess: 'Write your guess.',
+  nextClue: 'Next clue',
+  // DOCUMENT DETECTIVE
+  detective: 'DOCUMENT DETECTIVE',
+  detectiveSub: 'Four questions about one document. Send a runner to tap in your answers.',
+  // IN ORDER
+  order: 'IN ORDER',
+  orderSub: 'Put the events in order. Send a runner to tap them in.',
+  orderTap: 'Tap the events from earliest to latest.',
+  // lanes
+  lockIn: 'Lock in',
+  clear: 'Clear',
+  locked: n => `Locked in ${n === 1 ? '1st' : n === 2 ? '2nd' : n === 3 ? '3rd' : n + 'th'}`,
+  showOrder: 'Show the order',
+  showResults: 'Show the answers',
+  firstRight: name => `${name} locked in first with it all right.`,
+  laneRight: 'All right',
+  laneMissed: n => `${n} right`,
+  laneNot: 'Not this time.',
+  // WHO AM I?
+  who: 'WHO AM I?',
+  whoSub: 'Clues come one at a time, hardest first. Name them early for more points.',
+  worth: v => `Worth ${v} now`,
+  // ODD ONE OUT
+  odd: 'ODD ONE OUT',
+  oddSub: "Four terms. One doesn't belong. Say which, and why.",
+  oddWrite: "Write which one doesn't belong, and why.",
+  oddWho: 'Tap every team that picked it.',
+  oddWhy: 'Tap every team whose why matched.',
+  // NAME THE PRINCIPLE / NAME THE ISSUE
+  principle: 'NAME THE PRINCIPLE',
+  principleSub: 'Name the Civic Principle, in the card\'s words.',
+  issue: 'NAME THE ISSUE',
+  issueSub: 'Name the enduring issue, the exact issue, not the umbrella.',
+  writeIt: 'Write your answer, in the card\'s words.',
+  // THREAD RUN
+  threads: 'THREAD RUN',
+  threadsSub: 'Which Thread does this event belong to? Say why.',
+  threadWrite: 'Write the Thread, and why.',
+  // MAP DROP
+  map: 'MAP DROP',
+  mapSub: 'A map, a question. Every team writes.',
+  nextMap: 'Next map',
+  // How to play, the new modes
+  how: {
+    final: { title: 'HOW TO PLAY · FINAL ANSWER', setup: 'Same teams, same boards.', steps: ['Look at the category and your score.', 'Write your wager. Wager up to your score, or up to 500 if you have less.', 'Read the clue. Write your answer.', 'Right adds your wager. Wrong takes it away.'] },
+    lightning: { title: 'HOW TO PLAY · LIGHTNING ROUND', setup: 'One sheet per team. Number it 1 to 10.', steps: ['Ten clues flash by, about six seconds each.', 'Write as many answers as you can. Skip what you don\'t know.', 'When it stops, the answers show.', 'Every right answer is worth 10.'] },
+    detective: { title: 'HOW TO PLAY · DOCUMENT DETECTIVE', setup: 'Each team picks one runner. Walk, don\'t run.', steps: ['Read the document with your team.', 'Decide your four answers at your seats.', 'Your runner taps them in your team\'s lane, then taps Lock in.', 'Every right answer scores. First team locked in with all four right gets a bonus.'] },
+    order: { title: 'HOW TO PLAY · IN ORDER', setup: 'Each team picks one runner. Walk, don\'t run.', steps: ['Read the events with your team.', 'Decide the order at your seats, earliest first.', 'Your runner taps the events in order in your lane, then taps Lock in.', 'The right order scores. First team locked in right gets a bonus.'] },
+    who: { title: 'HOW TO PLAY · WHO AM I?', setup: 'Same teams, same boards.', steps: ['A clue appears. Write your guess.', 'Right now? You score what it\'s worth.', 'Not yet? Another clue comes, worth less.', 'Four clues, then the answer.'] },
+    odd: { title: 'HOW TO PLAY · ODD ONE OUT', setup: 'Same teams, same boards.', steps: ['Four terms appear.', 'Write the one that doesn\'t belong, and why.', 'The right pick scores.', 'A why that matches scores again.'] },
+    principle: { title: 'HOW TO PLAY · NAME THE PRINCIPLE', setup: 'Same teams, same boards.', steps: ['Read the event.', 'Write the Civic Principle it shows, in the card\'s words.', 'The card is on the screen. Use it.', 'Every team that has it scores.'] },
+    issue: { title: 'HOW TO PLAY · NAME THE ISSUE', setup: 'Same teams, same boards.', steps: ['Read the event.', 'Write the enduring issue it shows: the exact issue, not the umbrella.', 'The umbrellas are on the screen. Use them.', 'Every team that has it scores.'] },
+    threads: { title: 'HOW TO PLAY · THREAD RUN', setup: 'Same teams, same boards.', steps: ['Read the event.', 'Write the Thread it belongs to, and one reason why.', 'The Threads are on the screen.', 'Every team that has it scores.'] },
+    map: { title: 'HOW TO PLAY · MAP DROP', setup: 'Same teams, same boards.', steps: ['Look at the map and the question.', 'Write your answer.', 'Boards up when your teacher says.', 'Every team that has it scores.'] },
+  },
 }
 
 // Team names: dealt at random at the front, re-rolled with "New name" (BK 2026-10-24 22:47: "yes to randomizer and list. it's perfect.").

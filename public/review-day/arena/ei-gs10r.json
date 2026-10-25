@@ -1,0 +1,406 @@
+{
+ "_source": [
+  {
+   "file": "thearena public/content/enduring-issues-gs10r.json",
+   "md5": "0b5f3b0949e714f651c9caa9b64c59b5"
+  }
+ ],
+ "lines": [
+  {
+   "id": "u1",
+   "number": 1,
+   "name": "POWER & ITS ABUSE",
+   "subs": [
+    {
+     "id": "u1-abuse-of-power",
+     "name": "Abuse of Power"
+    },
+    {
+     "id": "u1-imperialism",
+     "name": "Imperialism"
+    },
+    {
+     "id": "u1-human-rights-violations",
+     "name": "Human Rights Violations"
+    },
+    {
+     "id": "u1-inequality",
+     "name": "Inequality"
+    }
+   ]
+  },
+  {
+   "id": "u2",
+   "number": 2,
+   "name": "CONFLICT",
+   "subs": [
+    {
+     "id": "u2-conflict",
+     "name": "Conflict"
+    }
+   ]
+  },
+  {
+   "id": "u3",
+   "number": 3,
+   "name": "IDENTITY & NATIONALISM",
+   "subs": [
+    {
+     "id": "u3-nationalism",
+     "name": "Nationalism"
+    },
+    {
+     "id": "u3-cultural-exchange-and-diffusion",
+     "name": "Cultural Exchange and Diffusion"
+    }
+   ]
+  },
+  {
+   "id": "u4",
+   "number": 4,
+   "name": "WEALTH & RESOURCES",
+   "subs": [
+    {
+     "id": "u4-economic-development",
+     "name": "Economic Development"
+    },
+    {
+     "id": "u4-scarcity",
+     "name": "Scarcity"
+    }
+   ]
+  },
+  {
+   "id": "u5",
+   "number": 5,
+   "name": "TECHNOLOGY & ENVIRONMENT",
+   "subs": [
+    {
+     "id": "u5-scientific-and-technological-change",
+     "name": "Scientific and Technological Change"
+    },
+    {
+     "id": "u5-environmental-crisis",
+     "name": "Environmental Crisis"
+    }
+   ]
+  },
+  {
+   "id": "u6",
+   "number": 6,
+   "name": "A CONNECTED WORLD",
+   "subs": [
+    {
+     "id": "u6-cooperation",
+     "name": "Cooperation"
+    },
+    {
+     "id": "u6-population-and-migration",
+     "name": "Population and Migration"
+    }
+   ]
+  }
+ ],
+ "stops": [
+  {
+   "id": "s-1658-aurangzeb",
+   "unit": "10.1",
+   "casefile": "A",
+   "when": "1658–1707",
+   "title": "Aurangzeb ends Mughal tolerance",
+   "what_happened": "The Mughal emperor Aurangzeb, a devout Muslim, brings back a tax on non-Muslims and dismisses his Hindu clerks. Hindu Indians remember his rule as oppressive for generations.",
+   "on_lines": [
+    {
+     "line": "u1",
+     "sub": "u1-abuse-of-power",
+     "reason": "He uses the emperor's power to tax and push out the Hindus he rules, people who did not share his faith."
+    }
+   ]
+  },
+  {
+   "id": "s-1683-ottoman",
+   "unit": "10.1",
+   "casefile": "A",
+   "when": "1683",
+   "title": "The Ottomans fail at Vienna, and start to slip",
+   "what_happened": "The Ottoman army's last attempt to take Vienna fails. With no new conquests, and trade moving to the Americas and new sea routes, the empire begins a slow decline.",
+   "on_lines": [
+    {
+     "line": "u4",
+     "sub": "u4-economic-development",
+     "reason": "Trade moves to the Americas and new routes, cheap goods from India and the Far East undercut Ottoman trade, and unemployment rises."
+    },
+    {
+     "line": "u2",
+     "sub": "u2-conflict",
+     "reason": "The document starts the decline with a lost war: the failed attempt to conquer Vienna in 1683."
+    }
+   ]
+  },
+  {
+   "id": "s-1617-jahangir",
+   "unit": "10.1",
+   "casefile": "A",
+   "when": "1617",
+   "title": "Jahangir opens his ports to the English",
+   "what_happened": "The Mughal emperor Jahangir answers a letter from King James I of England. He orders every port in his empire to welcome English merchants and let them live, buy and sell freely.",
+   "on_lines": [
+    {
+     "line": "u6",
+     "sub": "u6-cooperation",
+     "reason": "Two rulers trade gifts and promises, and Jahangir orders his whole empire to welcome English merchants as \"the subjects of my friend.\""
+    },
+    {
+     "line": "u3",
+     "sub": "u3-cultural-exchange-and-diffusion",
+     "reason": "English merchants may now live anywhere in the empire, and buy, sell and carry goods home to England."
+    }
+   ]
+  },
+  {
+   "id": "s-1635-japan",
+   "unit": "10.1",
+   "casefile": "A",
+   "when": "1635",
+   "title": "Japan closes its doors",
+   "what_happened": "The Tokugawa government forbids any Japanese person to leave the country, on pain of death. It also pays rewards to anyone who turns in a Christian.",
+   "on_lines": [
+    {
+     "line": "u3",
+     "sub": "u3-cultural-exchange-and-diffusion",
+     "reason": "Japan cuts off the flow of people and ideas: no one may leave, anyone who returns dies, and Christian teaching is hunted down."
+    },
+    {
+     "line": "u1",
+     "sub": "u1-human-rights-violations",
+     "reason": "People are put to death for traveling abroad, and informers are paid to reveal where Christians are."
+    }
+   ]
+  },
+  {
+   "id": "s-1600s-tokaido",
+   "unit": "10.1",
+   "casefile": "A",
+   "when": "1600s",
+   "title": "The Tōkaidō: the shogun's road",
+   "what_happened": "The Tokugawa shoguns run Japan's most important highway as a government road. Their messengers go first, and checkpoints keep ordinary travelers off it at night.",
+   "on_lines": [
+    {
+     "line": "u1",
+     "sub": "u1-abuse-of-power",
+     "reason": "The shogun decides who may travel and when, and barriers and checkpoints let the government control movement across Japan."
+    }
+   ]
+  },
+  {
+   "id": "s-1682-versailles",
+   "unit": "10.1",
+   "casefile": "A",
+   "when": "1682",
+   "title": "Louis XIV keeps his nobles at Versailles",
+   "what_happened": "Louis XIV moves the French court out of Paris to his palace at Versailles. He expects the nobles to stay there under his eye, and to spend until they depend on him.",
+   "on_lines": [
+    {
+     "line": "u1",
+     "sub": "u1-abuse-of-power",
+     "reason": "Louis watches every noble at court and makes them live beyond their income until they depend on him, so no one can rival his power."
+    }
+   ]
+  },
+  {
+   "id": "s-1690-locke",
+   "unit": "10.2",
+   "casefile": "A",
+   "when": "1690",
+   "title": "Locke: the people can take power back",
+   "what_happened": "John Locke argues that people form governments to protect their life, liberty and property. A government that grabs absolute power breaks the deal, and the people may take their power back.",
+   "on_lines": [
+    {
+     "line": "u1",
+     "sub": "u1-abuse-of-power",
+     "reason": "Locke names the danger: a government that takes \"absolute power\" over people's lives and liberties loses its right to rule."
+    }
+   ]
+  },
+  {
+   "id": "s-1748-montesquieu",
+   "unit": "10.2",
+   "casefile": "A",
+   "when": "1748",
+   "title": "Montesquieu: divide the power",
+   "what_happened": "Montesquieu argues that if the same person or group makes the laws, enforces them and judges them, there is no liberty. Power has to be divided.",
+   "on_lines": [
+    {
+     "line": "u1",
+     "sub": "u1-abuse-of-power",
+     "reason": "He warns that when lawmaking and enforcing sit in one set of hands, \"tyrannical laws\" follow."
+    }
+   ]
+  },
+  {
+   "id": "s-1762-rousseau",
+   "unit": "10.2",
+   "casefile": "A",
+   "when": "1762",
+   "title": "Rousseau: the general will",
+   "what_happened": "Jean-Jacques Rousseau asks how people can live under a government and still stay free. His answer is the social contract: the people unite, and the law follows the general will, the common good.",
+   "on_lines": [
+    {
+     "line": "u3",
+     "sub": "u3-nationalism",
+     "reason": "Rousseau says a people united can govern itself and each person can still \"obey himself alone.\" A people ruling itself is the idea nationalists build on."
+    },
+    {
+     "line": "u1",
+     "sub": "u1-abuse-of-power",
+     "reason": "The casefile asks the hard question: what happens when a leader claims to speak for the general will and jails the people who disagree?"
+    }
+   ]
+  },
+  {
+   "id": "s-1767-catherine",
+   "unit": "10.2",
+   "casefile": "A",
+   "when": "1767",
+   "title": "Catherine the Great: equal laws, except for serfs",
+   "what_happened": "Catherine the Great writes that all citizens should be subject to the same laws. The same year, her government orders serfs to obey their landlords absolutely, and punishes any who complain to her.",
+   "on_lines": [
+    {
+     "line": "u1",
+     "sub": "u1-inequality",
+     "reason": "Her own words say everyone answers to the same laws, but serfs owe their landlords \"absolute obedience\" and may not even complain."
+    },
+    {
+     "line": "u1",
+     "sub": "u1-abuse-of-power",
+     "reason": "Serfs who petition the empress are whipped with the knout and sent to forced labor for life."
+    }
+   ]
+  },
+  {
+   "id": "s-1789-slave-trade",
+   "unit": "10.2",
+   "casefile": "A",
+   "when": "1789",
+   "title": "Two voices against the slave trade",
+   "what_happened": "In 1789, William Wilberforce tells Parliament the slave trade must be abolished. Olaudah Equiano tells his own story of being carried below decks across the Atlantic to work for strangers.",
+   "on_lines": [
+    {
+     "line": "u1",
+     "sub": "u1-human-rights-violations",
+     "reason": "Equiano is taken from his country with no chance of return and packed below decks; Wilberforce calls the trade a wickedness that must end."
+    },
+    {
+     "line": "u6",
+     "sub": "u6-population-and-migration",
+     "reason": "Equiano is moved across an ocean by force, never to return home: a migration no one chose."
+    }
+   ]
+  },
+  {
+   "id": "s-1792-wollstonecraft",
+   "unit": "10.2",
+   "casefile": "A",
+   "when": "1792",
+   "title": "Wollstonecraft: what about women?",
+   "what_happened": "Mary Wollstonecraft writes to a member of France's National Assembly. If women are shut out of the new constitution, she says, the men who wrote it are acting like tyrants.",
+   "on_lines": [
+    {
+     "line": "u1",
+     "sub": "u1-inequality",
+     "reason": "Women are left out of the new rights, and she says only one thing could justify it: proof that women lack reason."
+    }
+   ]
+  },
+  {
+   "id": "s-1789-third-estate",
+   "unit": "10.2",
+   "casefile": "B",
+   "when": "1789",
+   "title": "The Third Estate: everything, and nothing",
+   "what_happened": "On the eve of the Revolution, Abbé Sieyès says the Third Estate, the common people, is everything in France and has counted for nothing. A popular cartoon shows a peasant carrying a priest and a noble on his back.",
+   "on_lines": [
+    {
+     "line": "u1",
+     "sub": "u1-inequality",
+     "reason": "Sieyès's three answers, everything, nothing, something, and the cartoon's bent-over peasant show who carries France and who rides."
+    }
+   ]
+  },
+  {
+   "id": "s-1789-rights-of-man",
+   "unit": "10.2",
+   "casefile": "B",
+   "when": "1789",
+   "title": "The Declaration of the Rights of Man",
+   "what_happened": "France's new National Assembly declares that men are born and remain free and equal in rights. Law is to be the expression of the general will, and every citizen has a right to take part in making it.",
+   "on_lines": [
+    {
+     "line": "u1",
+     "sub": "u1-inequality",
+     "reason": "It says men are \"born and remain free and equal in rights,\" ending the old rule that birth decides your rights. Document 4 asks who it still left out."
+    }
+   ]
+  },
+  {
+   "id": "s-1791-gouges",
+   "unit": "10.2",
+   "casefile": "B",
+   "when": "1791",
+   "title": "Olympe de Gouges: the rights of woman",
+   "what_happened": "Olympe de Gouges rewrites the Declaration for women. Woman is born free and equal to man in rights, she writes, and the only limit on those rights has been the tyranny of men.",
+   "on_lines": [
+    {
+     "line": "u1",
+     "sub": "u1-inequality",
+     "reason": "She keeps the Declaration's own words and adds woman to them, showing exactly who the first version left out."
+    }
+   ]
+  },
+  {
+   "id": "s-1793-terror",
+   "unit": "10.2",
+   "casefile": "B",
+   "when": "1793–1794",
+   "title": "The Reign of Terror",
+   "what_happened": "With France at war and divided, Robespierre and the National Convention pass the Law of Suspects. Revolutionary courts send thousands to their deaths, and most of them are peasants and workers, not nobles.",
+   "on_lines": [
+    {
+     "line": "u1",
+     "sub": "u1-abuse-of-power",
+     "reason": "The Law of Suspects turns the courts into the government's weapon against anyone suspected of being an enemy of the Republic."
+    },
+    {
+     "line": "u1",
+     "sub": "u1-human-rights-violations",
+     "reason": "People can be tried and put to death on suspicion, and the chart shows most of the executed were peasants and workers."
+    },
+    {
+     "line": "u2",
+     "sub": "u2-conflict",
+     "reason": "Robespierre defends the Terror as a war: \"a Republic surrounded by enemies,\" foreign and inside France."
+    }
+   ]
+  },
+  {
+   "id": "s-1812-napoleon",
+   "unit": "10.2",
+   "casefile": "B",
+   "when": "1812",
+   "title": "Napoleon's empire at its height",
+   "what_happened": "By 1812 Napoleon's France controls or dominates most of Europe. The map marks the battles that built it.",
+   "on_lines": [
+    {
+     "line": "u1",
+     "sub": "u1-imperialism",
+     "reason": "France rules some lands directly and others through rulers it controls; the map's key shows both."
+    },
+    {
+     "line": "u2",
+     "sub": "u2-conflict",
+     "reason": "The battle sites across the map show the empire was built by war."
+    }
+   ]
+  }
+ ]
+}

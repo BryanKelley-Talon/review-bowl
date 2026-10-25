@@ -8,8 +8,10 @@ const m = JSON.parse(fs.readFileSync(`${dir}/manifest.json`, 'utf8'))
 const fails = []; const notes = []
 const empty = v => typeof v !== 'string' || !v.trim()
 const DATE = /\b(Mon|Tue|Wed|Thu|Fri)(day)?\b[ ,]*\d{1,2}\/\d{1,2}|\b\d{1,2}\/\d{1,2}\/(20)?2\d\b/
+if (m.lab) (ship ? fails : notes).push('manifest: "lab": true shows the draft modes')
 for (const c of m.courses) for (const u of c.units) {
   const where = `${c.id} ${u.unit}`
+  if (!u.file) { notes.push(`${where}: no unit file yet (Arena-content modes only)`); continue }
   if (!fs.existsSync(`${dir}/${u.file}`)) { fails.push(`${where}: file missing (${u.file})`); continue }
   const d = JSON.parse(fs.readFileSync(`${dir}/${u.file}`, 'utf8'))
   if (u.sample || d._sample) { (ship ? fails : notes).push(`${where}: SAMPLE file in the manifest`); continue }
@@ -34,6 +36,14 @@ for (const c of m.courses) for (const u of c.units) {
       }
     })
   })
+  // template v2 sections (drafts, 10/24 overnight): optional; checked only when present
+  ;(d.detective || []).forEach((x, i) => { const at = `${where}: detective ${i + 1}`
+    if (!x.document || empty(x.document.text) || empty(x.document.source)) fails.push(`${at}: needs a document with text and source`)
+    if (!Array.isArray(x.questions) || x.questions.length !== 4) fails.push(`${at}: needs 4 questions`)
+    ;(x.questions || []).forEach((q, j) => { if (empty(q.ask) || !Array.isArray(q.choices) || q.choices.length < 2 || !(q.answer >= 0 && q.answer < q.choices.length)) fails.push(`${at} q${j + 1}: needs ask, choices and an answer index`) }) })
+  ;(d.who_am_i || []).forEach((x, i) => { if (empty(x.answer) || !Array.isArray(x.clues) || x.clues.length !== 4) fails.push(`${where}: who_am_i ${i + 1}: needs an answer and 4 clues`) })
+  ;(d.odd_one_out || []).forEach((x, i) => { if (!Array.isArray(x.terms) || x.terms.length !== 4 || !(x.odd >= 0 && x.odd < 4) || empty(x.why)) fails.push(`${where}: odd_one_out ${i + 1}: needs 4 terms, odd 0-3 and why`) })
+  ;(d.name_it || []).forEach((x, i) => { if (empty(x.prompt) || empty(x.answer)) fails.push(`${where}: name_it ${i + 1}: needs prompt and answer`) })
   if (!Array.isArray(d.top_answers) || d.top_answers.length !== 6) fails.push(`${where}: top_answers needs 6 lists (has ${d.top_answers?.length ?? 0})`)
   ;(d.top_answers || []).forEach((l, li) => {
     const at = `${where}: list ${li + 1}`

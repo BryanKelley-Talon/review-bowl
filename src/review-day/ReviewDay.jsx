@@ -1,142 +1,70 @@
 // ============================================================
-// REVIEW DAY — the whole-class review formats, on the classroom touch display.
-// Leo's order 2026-10-24 22:18; BK ruled the concept 22:30:
-//   1 · REVIEW DAY · THE BOARD · TOP ANSWERS (no show names, no "game" on screen)
-//   2 · team points show — "a team style review game and it's not related to student grades"
-//   3 · every team answers every clue — "maximizes engagement"
-//   4 · units are single choices, each on or off — "choose exactly what units to cover or one at a time"
-//   5 · the desks fill one template file per unit
-// Then: random gym team names (22:47); and at 22:52, "yes to all": Undo ("select the move you want to undo"),
-// a teacher-run timer, New class, TOP ANSWERS in two modes (everyone writes is the default), How to play cards.
-// LAWS: no student data, no log-ins, nothing sent. Storage only remembers the board through a reload or
-// the lunch bell, and the screen works with it wiped. Every word on screen lives in words.js or the desks' files.
+// REVIEW DAY — whole-class review on the classroom touch display.
+// Leo's order 2026-10-24 22:18; BK ruled the concept 22:30 (names, team points, every team answers,
+// single-choice units, the desks' template); 22:47 random gym team names; 22:52 "yes to all" (Undo, the timer,
+// New class, TOP ANSWERS' two modes, How to play); 23:00 run length; 23:14 sort by purpose and time;
+// 23:15 "Let's proceed on an overnight build of these games" — the new modes are DRAFTS until BK approves
+// their words, and show only when public/review-day/manifest.json has "lab": true.
+// LAWS: no student data, no log-ins, nothing sent. Storage only remembers the screen through a reload or the
+// lunch bell, and everything works with it wiped. Every word on screen lives in words.js or the content files.
 // ============================================================
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import DisclaimerBadge from '../shared/DisclaimerBadge.jsx'
-import { TEAM_NAMES, W } from './words.js'
-import { VALUES, categoryPool, dealBoard, listPool, loadManifest, loadUnit, rankValue, runOf, shuffle } from './content.js'
+import { D, TEAM_NAMES, W } from './words.js'
+import { loadCourse, loadManifest, shuffle } from './content.js'
+import { PURPOSES, TIMES, modeById, modesFor } from './registry.js'
 import { clearState, readState, writeState } from './persist.js'
+import { Choice, Modal, TEAM_LOOK, TeamTag } from './ui.jsx'
+import { Board, FinalAnswer, Lightning, TopAnswers, fileInit } from './modes/fileModes.jsx'
+import { Lanes, laneInit } from './modes/lanes.jsx'
+import { WhoAmI, WriteReveal, revealInit } from './modes/revealModes.jsx'
 import './review-day.css'
 
-// Teams are told apart by name and shape first, colour second (CONVENTIONS §6, Feel Floor).
-const TEAM_LOOK = [
-  { shape: '●', color: '#E3B341' },
-  { shape: '▲', color: '#7FB2D9' },
-  { shape: '■', color: '#7FCFA0' },
-  { shape: '◆', color: '#F09A80' },
-  { shape: '★', color: '#C3A8F0' },
-  { shape: '✚', color: '#F4F6FA' },
-]
 const TIMER_CHOICES = [15, 30, 45, 60, 0] // 0 = off
 const UNDO_DEPTH = 10
-
 const pickNames = n => shuffle(TEAM_NAMES).slice(0, n)
+const INIT = { ...fileInit, ...laneInit, ...revealInit }
+const initMode = (id, ctx, setup, game) => (INIT[id] ? INIT[id](ctx, setup, game) : {})
 
-function TeamTag({ i, name, score }) {
-  const t = TEAM_LOOK[i]
-  return (
-    <span className="rd-team" style={{ '--team': t.color }}>
-      <span className="rd-shape" aria-hidden="true">{t.shape}</span>
-      <span className="rd-team-name">{name || W.team(i + 1)}</span>
-      {score !== undefined && <span className="rd-score">{score}</span>}
-    </span>
-  )
+function howCard(setup) {
+  const m = setup.mode
+  if (m === 'board') return W.howBoard(setup.timer)
+  if (m === 'top') return setup.topMode === 'turns' ? W.howTopTurns() : W.howTopWrite(setup.timer)
+  return D.how[m] || null
 }
 
-function TeamPicker({ teams, names, had, setHad }) {
-  return (
-    <div className="rd-row center">
-      {Array.from({ length: teams }, (_, t) => {
-        const on = had.includes(t)
-        return (
-          <button key={t} type="button" className={`rd-teambtn${on ? ' on' : ''}`} aria-pressed={on}
-                  style={{ '--team': TEAM_LOOK[t].color }}
-                  onClick={() => setHad(h => (h.includes(t) ? h.filter(x => x !== t) : [...h, t]))}>
-            <span aria-hidden="true">{on ? '✓ ' : ''}{TEAM_LOOK[t].shape}</span> {names[t]}
-          </button>
-        )
-      })}
-    </div>
-  )
-}
-
-function DocumentBox({ doc }) {
-  if (!doc) return null
-  return (
-    <figure className="rd-doc">
-      <figcaption className="rd-doc-source">{doc.source}{doc.adapted ? ` ${W.adapted}` : ''}</figcaption>
-      <blockquote className="rd-doc-text">{doc.text}</blockquote>
-    </figure>
-  )
-}
-
-// ── the timer: the teacher starts it; at zero it says "Boards up." and never reveals anything itself ──
-function chime() {
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)()
-    const o = ctx.createOscillator(); const g = ctx.createGain()
-    o.type = 'sine'; o.frequency.value = 880
-    g.gain.setValueAtTime(0.0001, ctx.currentTime)
-    g.gain.exponentialRampToValueAtTime(0.2, ctx.currentTime + 0.02)
-    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.9)
-    o.connect(g).connect(ctx.destination); o.start(); o.stop(ctx.currentTime + 1)
-  } catch { /* no sound is fine */ }
-}
-
-function Timer({ seconds, withChime }) {
-  const [left, setLeft] = useState(seconds)
-  const [total, setTotal] = useState(seconds)
-  const [running, setRunning] = useState(false)
-  const [started, setStarted] = useState(false)
-  useEffect(() => {
-    if (!running) return
-    const id = setInterval(() => setLeft(l => {
-      if (l <= 1) { setRunning(false); if (withChime) chime(); return 0 }
-      return l - 1
-    }), 1000)
-    return () => clearInterval(id)
-  }, [running, withChime])
-  if (!seconds) return null
-  const done = started && left === 0
-  const frac = total ? left / total : 0
-  return (
-    <div className={`rd-timer${done ? ' done' : ''}`}>
-      <div className="rd-ring" style={{ '--frac': frac }} role="timer" aria-live="off" aria-label={`${left} seconds`}>
-        <span>{done ? '0' : left}</span>
-      </div>
-      {done && <p className="rd-boardsup" role="status">{W.boardsUp}</p>}
-      <div className="rd-row center">
-        {!running && !done && (
-          <button type="button" className="rd-btn" onClick={() => { setStarted(true); setRunning(true) }}>{W.startTimer}</button>
-        )}
-        {running && <button type="button" className="rd-btn" onClick={() => setRunning(false)}>{W.pause}</button>}
-        {started && (
-          <button type="button" className="rd-btn" onClick={() => { setLeft(l => l + 10); setTotal(t => Math.max(t, left + 10)); if (done) setRunning(true) }}>{W.plus10}</button>
-        )}
-      </div>
-    </div>
-  )
-}
-
-function Choice({ on, onClick, children, cls = '' }) {
-  return (
-    <button type="button" className={`rd-choice ${cls}${on ? ' on' : ''}`} aria-pressed={on} onClick={onClick}>{children}</button>
-  )
-}
-
-// ── the front: course · units · format · settings · teams ────────────────────
+// ── the front ────────────────────────────────────────────────────────────────
 function Front({ manifest, saved, onStart, onResume }) {
+  const lab = !!manifest.lab
   const courses = manifest.courses || []
   const [course, setCourse] = useState(saved?.setup?.course || courses[0]?.id || null)
-  const cdef = courses.find(c => c.id === course)
-  const unitIds = (cdef?.units || []).map(u => u.unit)
-  // Default: the newest unit only. A unit day reviews that unit (BK 22:30).
-  const [picked, setPicked] = useState(() => unitIds.length ? [unitIds[unitIds.length - 1]] : [])
-  const [format, setFormat] = useState('board')
+  const [ctx, setCtx] = useState(null)
+  useEffect(() => { let on = true; setCtx(null); loadCourse(manifest, course).then(c => on && setCtx(c)); return () => { on = false } }, [manifest, course])
+
+  const purposes = PURPOSES.filter(p => modesFor({ course, purpose: p, lab }).length)
+  const [purpose, setPurpose] = useState('test')
+  const p = purposes.includes(purpose) ? purpose : purposes[0]
+  const times = TIMES.filter(t => modesFor({ course, purpose: p, minutes: t, lab }).length)
+  const [minutes, setMinutes] = useState(40)
+  const mins = times.includes(minutes) ? minutes : times[times.length - 1]
+  const modes = modesFor({ course, purpose: p, minutes: mins, lab })
+  const allIds = (ctx?.units || []).map(u => u.unit)
+  const countFor = (m, ids) => (ctx ? m.count(ctx, ids) : 0)
+  const [modeId, setModeId] = useState('board')
+  const ready = modes.filter(m => countFor(m, allIds) > 0)
+  const mode = modes.find(m => m.id === modeId && countFor(m, allIds) > 0) || ready[0] || modes[0]
+
+  // Units: Regents Review and all-year modes start with every unit on; anything else, the newest unit with content.
+  const withContent = mode && ctx ? ctx.units.filter(u => countFor(mode, [u.unit]) > 0).map(u => u.unit) : []
+  const defaultUnits = p === 'regents' || mode?.cumulative ? withContent : withContent.slice(-1)
+  const [picked, setPicked] = useState(null)
+  useEffect(() => { setPicked(null) }, [course, p, mode?.id])
+  const units = picked ?? defaultUnits
+  const toggle = u => setPicked(units.includes(u) ? units.filter(x => x !== u) : [...units, u])
+
   const [timer, setTimer] = useState(saved?.setup?.timer ?? 30)
   const [withChime, setChime] = useState(saved?.setup?.chime ?? false)
   const [topMode, setTopMode] = useState(saved?.setup?.topMode ?? 'write')
-  const [run, setRun] = useState(saved?.setup?.run ?? 40)
   const [teams, setTeams] = useState(4)
   const [names, setNames] = useState(() => pickNames(6))
   const reroll = i => setNames(ns => {
@@ -144,38 +72,62 @@ function Front({ manifest, saved, onStart, onResume }) {
     const next = ns.slice(); next[i] = free[Math.floor(Math.random() * free.length)]
     return next
   })
-  const chooseCourse = id => {
-    setCourse(id)
-    const ids = (courses.find(c => c.id === id)?.units || []).map(u => u.unit)
-    setPicked(ids.length ? [ids[ids.length - 1]] : [])
-  }
-  const toggle = u => setPicked(p => (p.includes(u) ? p.filter(x => x !== u) : [...p, u]))
-  const ready = course && picked.length > 0
+  const canStart = ctx && mode && units.length > 0 && countFor(mode, units) > 0
 
   return (
     <main className="rd-front">
       <h1 className="rd-title">{W.title}</h1>
       {saved && (
-        <div className="rd-resume">
-          <button type="button" className="rd-btn primary" onClick={onResume}>{W.resume}</button>
-        </div>
+        <div className="rd-resume"><button type="button" className="rd-btn primary" onClick={onResume}>{W.resume}</button></div>
       )}
 
       <section className="rd-step">
         <h2>{W.pickCourse}</h2>
         <div className="rd-row">
-          {courses.map(c => <Choice key={c.id} on={course === c.id} onClick={() => chooseCourse(c.id)}>{c.name}</Choice>)}
+          {courses.map(c => <Choice key={c.id} on={course === c.id} onClick={() => setCourse(c.id)}>{c.name}</Choice>)}
         </div>
       </section>
 
       <section className="rd-step">
-        <h2>{W.pickUnits}</h2>
-        {unitIds.length === 0 ? <p className="rd-note">{W.noUnits}</p> : (
-          <div className="rd-row">
-            {cdef.units.map(u => {
-              const on = picked.includes(u.unit)
+        <h2>{D.purposeLabel}</h2>
+        <div className="rd-row">
+          {purposes.map(x => <Choice key={x} on={p === x} onClick={() => setPurpose(x)}>{D.purposes[x]}</Choice>)}
+        </div>
+      </section>
+
+      <section className="rd-step">
+        <h2>{D.timeLabel}</h2>
+        <div className="rd-row">
+          {times.map(t => <Choice key={t} cls="num wide" on={mins === t} onClick={() => setMinutes(t)}>{D.minutes(t)}</Choice>)}
+        </div>
+      </section>
+
+      <section className="rd-step">
+        <h2>{D.modeLabel}</h2>
+        {!modes.length ? <p className="rd-note">{D.noModes}</p> : (
+          <div className="rd-row formats">
+            {modes.map(m => {
+              const has = countFor(m, allIds) > 0
               return (
-                <Choice key={u.unit} on={on} cls="unit" onClick={() => toggle(u.unit)}>
+                <Choice key={m.id} on={mode?.id === m.id} cls="format" disabled={!has} onClick={() => setModeId(m.id)}>
+                  <span className="rd-format-name">{m.name(course)} {m.draft && <span className="rd-sample">{D.draft}</span>}</span>
+                  <span className="rd-format-sub">{has ? m.sub(course) : D.notReady}</span>
+                </Choice>
+              )
+            })}
+          </div>
+        )}
+      </section>
+
+      <section className="rd-step">
+        <h2>{W.pickUnits}</h2>
+        {!ctx?.units?.length ? <p className="rd-note">{W.noUnits}</p> : (
+          <div className="rd-row">
+            {ctx.units.map(u => {
+              const on = units.includes(u.unit)
+              const has = mode ? countFor(mode, [u.unit]) > 0 : false
+              return (
+                <Choice key={u.unit} on={on} cls={`unit${has ? '' : ' dim'}`} onClick={() => toggle(u.unit)}>
                   <span className="rd-check" aria-hidden="true">{on ? '✓' : ''}</span>
                   <span>{u.unit} · {u.title}</span>
                   {u.sample && <span className="rd-sample">{W.sample}</span>}
@@ -184,35 +136,22 @@ function Front({ manifest, saved, onStart, onResume }) {
             })}
           </div>
         )}
-        {unitIds.length > 0 && !picked.length && <p className="rd-note" role="status">{W.needUnit}</p>}
+        {ctx && mode && !units.length && <p className="rd-note" role="status">{W.needUnit}</p>}
+        {ctx && mode && units.length > 0 && !canStart && <p className="rd-note" role="status">{D.needContent}</p>}
       </section>
 
       <section className="rd-step">
-        <h2>{W.pickFormat}</h2>
-        <div className="rd-row formats">
-          {[['board', W.board, W.boardSub], ['top', W.top, W.topSub]].map(([id, name, sub]) => (
-            <Choice key={id} on={format === id} cls="format" onClick={() => setFormat(id)}>
-              <span className="rd-format-name">{name}</span>
-              <span className="rd-format-sub">{sub}</span>
-            </Choice>
-          ))}
-        </div>
         <div className="rd-settings">
-          <div className="rd-setting">
-            <span className="rd-setting-label">{W.runLabel}</span>
-            <Choice on={run === 40} cls="small" onClick={() => setRun(40)}>{W.run40}</Choice>
-            <Choice on={run === 20} cls="small" onClick={() => setRun(20)}>{W.run20}</Choice>
-          </div>
-          <div className="rd-setting">
-            <span className="rd-setting-label">{W.topModeLabel}</span>
-            <Choice on={topMode === 'write'} cls="small" onClick={() => setTopMode('write')}>{W.modeWrite}</Choice>
-            <Choice on={topMode === 'turns'} cls="small" onClick={() => setTopMode('turns')}>{W.modeTurns}</Choice>
-          </div>
+          {mode?.id === 'top' && (
+            <div className="rd-setting">
+              <span className="rd-setting-label">{W.topModeLabel}</span>
+              <Choice on={topMode === 'write'} cls="small" onClick={() => setTopMode('write')}>{W.modeWrite}</Choice>
+              <Choice on={topMode === 'turns'} cls="small" onClick={() => setTopMode('turns')}>{W.modeTurns}</Choice>
+            </div>
+          )}
           <div className="rd-setting">
             <span className="rd-setting-label">{W.timerLabel}</span>
-            {TIMER_CHOICES.map(s => (
-              <Choice key={s} on={timer === s} cls="small" onClick={() => setTimer(s)}>{s ? W.secs(s) : W.timerOff}</Choice>
-            ))}
+            {TIMER_CHOICES.map(s => <Choice key={s} on={timer === s} cls="small" onClick={() => setTimer(s)}>{s ? W.secs(s) : W.timerOff}</Choice>)}
           </div>
           {timer > 0 && (
             <div className="rd-setting">
@@ -241,8 +180,8 @@ function Front({ manifest, saved, onStart, onResume }) {
       </section>
 
       <div className="rd-go">
-        <button type="button" className="rd-btn primary big" disabled={!ready}
-                onClick={() => onStart({ course, units: picked, format, teams, names: names.slice(0, teams), timer, chime: withChime, topMode, run })}>
+        <button type="button" className="rd-btn primary big" disabled={!canStart}
+                onClick={() => onStart(ctx, { course, purpose: p, minutes: mins, mode: mode.id, units, teams, names: names.slice(0, teams), timer, chime: withChime, topMode })}>
           {W.start}
         </button>
       </div>
@@ -250,337 +189,48 @@ function Front({ manifest, saved, onStart, onResume }) {
   )
 }
 
-// ── THE BOARD ────────────────────────────────────────────────────────────────
-function Board({ cats, game, names, commit }) {
-  const { board, setup } = game
-  const [open, setOpen] = useState(null) // { key, i }
-  const [revealed, setRevealed] = useState(false)
-  const [had, setHad] = useState([])
-
-  const byKey = useMemo(() => Object.fromEntries(cats.map(c => [c.key, c])), [cats])
-  const dealt = board.dealt.map(k => byKey[k]).filter(Boolean)
-  const used = new Set(board.used)
-  const run = runOf(setup)
-  const total = dealt.reduce((n, c) => n + run.rows.filter(i => c.clues?.[i]).length, 0)
-  const cleared = dealt.length > 0 && dealt.every(c => run.rows.every(i => !c.clues?.[i] || used.has(`${c.key}:${i}`)))
-
-  const openClue = (key, i) => { setOpen({ key, i }); setRevealed(false); setHad([]) }
-  const close = () => {
-    const value = VALUES[open.i]
-    const cat = byKey[open.key]
-    const sq = `${open.key}:${open.i}`
-    commit(W.mvSquare(value, had.map(t => names[t]), cat.category), g => {
-      const scores = g.scores.slice(); had.forEach(t => { scores[t] += value })
-      return { ...g, scores, board: { ...g.board, used: [...g.board.used, sq] } }
-    })
-    setOpen(null)
-  }
-  const deal = () => commit(W.mvDeal, g => {
-    const next = dealBoard(cats, g.board.history, runOf(g.setup).cols)
-    return { ...g, board: { dealt: next, used: [], history: [...new Set([...g.board.history, ...next])] } }
-  })
-
-  if (open) {
-    const cat = byKey[open.key]
-    const clue = cat.clues[open.i]
-    return (
-      <section className="rd-clue" aria-live="polite">
-        <div className="rd-clue-head">
-          <span className="rd-cat-name">{cat.category}</span>
-          {cat.sample && <span className="rd-sample">{W.sample}</span>}
-          <span className="rd-value">{VALUES[open.i]}</span>
-        </div>
-        <DocumentBox doc={clue.document} />
-        <p className="rd-clue-text">{clue.clue}</p>
-        {!revealed ? (
-          <>
-            <p className="rd-prompt">{W.write}</p>
-            <Timer seconds={setup.timer} withChime={setup.chime} />
-            <button type="button" className="rd-btn primary big" onClick={() => setRevealed(true)}>{W.show}</button>
-          </>
-        ) : (
-          <div className="rd-reveal">
-            <p className="rd-answer">{clue.answer}</p>
-            {clue.also?.length > 0 && <p className="rd-also"><b>{W.alsoRight}</b> {clue.also.join(' · ')}</p>}
-            {clue.why && <p className="rd-why">{clue.why}</p>}
-            <p className="rd-prompt small">{W.whoHad}</p>
-            <TeamPicker teams={setup.teams} names={names} had={had} setHad={setHad} />
-            <button type="button" className="rd-btn primary big" onClick={close}>{W.back}</button>
-          </div>
-        )}
-      </section>
-    )
-  }
-
-  return (
-    <section className="rd-board-wrap">
-      <div className="rd-board" style={{ '--cols': Math.max(dealt.length, 1), '--rows': run.rows.length }}>
-        {dealt.map(c => (
-          <div key={c.key} className="rd-col">
-            <div className="rd-cat">
-              <span>{c.category}</span>
-              {c.sample && <span className="rd-sample">{W.sample}</span>}
-            </div>
-            {run.rows.map(i => { const v = VALUES[i]
-              const has = !!c.clues?.[i]
-              const gone = used.has(`${c.key}:${i}`)
-              return (
-                <button key={v} type="button" className={`rd-tile${gone ? ' gone' : ''}`} disabled={!has || gone}
-                        aria-label={gone ? `${c.category}, ${v}, done` : `${c.category}, ${v}`}
-                        onClick={() => openClue(c.key, i)}>
-                  {gone ? '' : v}
-                </button>
-              )
-            })}
-          </div>
-        ))}
-      </div>
-      {(cleared || total === 0) && (
-        <div className="rd-cleared">
-          <p className="rd-prompt">{W.cleared}</p>
-          <button type="button" className="rd-btn primary big" onClick={deal}>{W.deal}</button>
-        </div>
-      )}
-    </section>
-  )
-}
-
-// ── TOP ANSWERS ──────────────────────────────────────────────────────────────
-function Bars({ list, flipped, onTap }) {
-  const n = list.answers.length
-  return (
-    <ol className={`rd-bars${n >= 4 ? ' two' : ''}`} style={{ '--rows': Math.ceil(n / 2) }}>
-      {list.answers.map((a, r) => {
-        const up = flipped.has(r)
-        return (
-          <li key={r}>
-            <button type="button" className={`rd-bar${up ? ' up' : ''}${onTap ? '' : ' still'}`}
-                    onClick={onTap ? () => onTap(r) : undefined} aria-disabled={up || !onTap}
-                    aria-label={up ? `${r + 1}: ${a.text}` : `Answer ${r + 1}, face down`}>
-              <span className="rd-bar-num">{r + 1}</span>
-              <span className="rd-bar-text">
-                {up ? a.text : ''}
-                {up && a.also?.length > 0 && <span className="rd-bar-also">{W.alsoRight} {a.also.join(' · ')}</span>}
-              </span>
-              <span className="rd-bar-val">{up ? rankValue(r, n) : ''}</span>
-            </button>
-          </li>
-        )
-      })}
-    </ol>
-  )
-}
-
-function TopAnswers({ lists, game, names, commit }) {
-  const { top, setup } = game
-  const teams = setup.teams
-  const byKey = useMemo(() => Object.fromEntries(lists.map(l => [l.key, l])), [lists])
-  const list = byKey[top.order[top.idx]]
-  const [had, setHad] = useState([])
-  useEffect(() => { setHad([]) }, [top.idx, top.flipped.length])
-  if (!list) return <section className="rd-top"><p className="rd-prompt">{W.listsDone}</p></section>
-
-  const n = list.answers.length
-  const tag = W.listTag(list.unit, Number(list.key.split('#')[1]) + 1)
-  const flipped = new Set(top.flipped)
-  const nextTop = t => ({ ...t, idx: t.idx + 1, flipped: [], misses: 0, pot: 0, phase: 'play', msg: '', atPlay: (t.atPlay + 1) % teams })
-
-  const head = (who) => (
-    <>
-      <div className="rd-clue-head">
-        <span className="rd-cat-name">{W.top}</span>
-        <span className="rd-listtag">{tag}</span>
-        {list.sample && <span className="rd-sample">{W.sample}</span>}
-        {who !== undefined && <TeamTag i={who} name={names[who]} />}
-      </div>
-      <p className="rd-clue-text">{list.prompt}</p>
-    </>
-  )
-
-  // A · everyone writes (the default): the bars flip from the bottom to the top; tap every team that had each one.
-  if (setup.topMode !== 'turns') {
-    const lastUp = top.flipped.length ? top.flipped[top.flipped.length - 1] : null
-    const awardPending = g => {
-      if (lastUp === null || !had.length) return g
-      const pts = rankValue(lastUp, n); const scores = g.scores.slice(); had.forEach(t => { scores[t] += pts })
-      return { ...g, scores }
-    }
-    const pendingLabel = () => W.mvAward(lastUp + 1, rankValue(lastUp, n), had.map(t => names[t]), tag)
-    const flipNext = () => {
-      const r = n - 1 - top.flipped.length
-      if (lastUp !== null && had.length) commit(pendingLabel(), awardPending)
-      commit(W.mvFlip(r + 1, tag), g => ({ ...g, top: { ...g.top, flipped: [...g.top.flipped, r] } }))
-    }
-    const next = () => {
-      if (lastUp !== null && had.length) commit(pendingLabel(), awardPending)
-      commit(W.mvNext(tag), g => ({ ...g, top: nextTop(g.top) }))
-    }
-    const allUp = top.flipped.length >= n
-    return (
-      <section className="rd-top">
-        {head()}
-        {top.flipped.length === 0 && (
-          <>
-            <p className="rd-prompt">{W.writeMany}</p>
-            <Timer key={top.idx} seconds={setup.timer} withChime={setup.chime} />
-          </>
-        )}
-        <Bars list={list} flipped={flipped} />
-        {lastUp !== null && (
-          <>
-            <p className="rd-prompt small">{W.whoHad}</p>
-            <TeamPicker teams={teams} names={names} had={had} setHad={setHad} />
-          </>
-        )}
-        <div className="rd-row center">
-          {!allUp && <button type="button" className="rd-btn primary big" onClick={flipNext}>{W.flipNext}</button>}
-          {allUp && <button type="button" className="rd-btn primary big" onClick={next}>{W.nextList}</button>}
-        </div>
-      </section>
-    )
-  }
-
-  // B · turns and steals
-  const stealer = (top.atPlay + 1) % teams
-  const flip = r => {
-    if (flipped.has(r)) return
-    if (top.phase === 'done') { commit(W.mvFlip(r + 1, tag), g => ({ ...g, top: { ...g.top, flipped: [...g.top.flipped, r] } })); return }
-    const pot = top.pot + rankValue(r, n)
-    const nowFlipped = [...top.flipped, r]
-    if (top.phase === 'steal') {
-      commit(W.mvSteal(names[stealer], pot, tag), g => {
-        const scores = g.scores.slice(); scores[stealer] += pot
-        return { ...g, scores, top: { ...g.top, flipped: nowFlipped, pot, phase: 'done', msg: W.stealWon(names[stealer]) } }
-      })
-    } else if (nowFlipped.length === n) {
-      commit(W.mvKeep(names[top.atPlay], pot, tag), g => {
-        const scores = g.scores.slice(); scores[top.atPlay] += pot
-        return { ...g, scores, top: { ...g.top, flipped: nowFlipped, pot, phase: 'done', msg: W.allFound(names[top.atPlay]) } }
-      })
-    } else {
-      commit(W.mvFlip(r + 1, tag), g => ({ ...g, top: { ...g.top, flipped: nowFlipped, pot } }))
-    }
-  }
-  const miss = () => {
-    if (top.phase === 'steal') {
-      commit(W.mvKeep(names[top.atPlay], top.pot, tag), g => {
-        const scores = g.scores.slice(); scores[top.atPlay] += top.pot
-        return { ...g, scores, top: { ...g.top, phase: 'done', msg: W.stealLost(names[top.atPlay]) } }
-      })
-      return
-    }
-    const misses = top.misses + 1
-    commit(W.mvMiss(tag), g => ({
-      ...g, top: misses >= 3
-        ? { ...g.top, misses, phase: 'steal', msg: `${W.steal} ${W.stealBy(names[stealer])}` }
-        : { ...g.top, misses },
-    }))
-  }
-  const showRest = () => commit(W.mvRest(tag), g => ({ ...g, top: { ...g.top, flipped: list.answers.map((_, r) => r) } }))
-  const next = () => commit(W.mvNext(tag), g => ({ ...g, top: nextTop(g.top) }))
-
-  return (
-    <section className="rd-top">
-      {head(top.phase === 'steal' ? stealer : top.atPlay)}
-      <p className="rd-prompt small" role="status">{top.msg || W.atPlay(names[top.atPlay])}</p>
-      <Bars list={list} flipped={flipped} onTap={flip} />
-      <div className="rd-strikes" aria-label={`${top.misses} of 3 misses`}>
-        {[0, 1, 2].map(i => <span key={i} className={`rd-x${i < top.misses ? ' on' : ''}`} aria-hidden="true">✕</span>)}
-      </div>
-      <div className="rd-row center">
-        {top.phase !== 'done' && <button type="button" className="rd-btn big miss" onClick={miss}>{W.miss}</button>}
-        {top.phase === 'done' && flipped.size < n && <button type="button" className="rd-btn big" onClick={showRest}>{W.showRest}</button>}
-        {top.phase === 'done' && <button type="button" className="rd-btn primary big" onClick={next}>{W.nextList}</button>}
-      </div>
-    </section>
-  )
-}
-
-// ── pop-ups ──────────────────────────────────────────────────────────────────
-function Modal({ label, children, onClose }) {
-  const ref = useRef(null)
-  useEffect(() => {
-    ref.current?.querySelector('button')?.focus()
-    const onKey = e => { if (e.key === 'Escape') onClose() }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [onClose])
-  return (
-    <div className="rd-scrim" onClick={onClose}>
-      <div className="rd-modal" role="dialog" aria-modal="true" aria-label={label} ref={ref} onClick={e => e.stopPropagation()}>
-        {children}
-      </div>
-    </div>
-  )
-}
-
-function HowTo({ game, onClose }) {
-  const s = game.setup.timer
-  const card = game.format === 'board' ? W.howBoard(s) : game.setup.topMode === 'turns' ? W.howTopTurns() : W.howTopWrite(s)
-  return (
-    <Modal label={card.title} onClose={onClose}>
-      <h2 className="rd-modal-title">{card.title}</h2>
-      <p className="rd-how"><b>{W.setUp}</b> {card.setup}</p>
-      <p className="rd-how"><b>{game.format === 'board' ? W.everyClue : W.everyList}</b></p>
-      <ol className="rd-how-steps">{card.steps.map((t, i) => <li key={i}>{t}</li>)}</ol>
-      {card.rule && <p className="rd-how rule">{card.rule}</p>}
-      <div className="rd-row center"><button type="button" className="rd-btn primary big" onClick={onClose}>{W.letsGo}</button></div>
-    </Modal>
-  )
-}
-
 // ── the host ─────────────────────────────────────────────────────────────────
-function freshPlay(setup, data, names) {
-  const cats = categoryPool(data)
-  const lists = listPool(data)
-  const run = runOf(setup)
-  const dealt = dealBoard(cats, [], run.cols)
-  return {
-    setup: { ...setup, names }, format: setup.format, scores: Array(setup.teams).fill(0),
-    board: { dealt, used: [], history: dealt },
-    top: { order: shuffle(lists.map(l => l.key)).slice(0, run.lists), idx: 0, flipped: [], misses: 0, pot: 0, phase: 'play', msg: '', atPlay: 0 },
-    history: [], rev: 0, showHelp: true,
-  }
+function freshGame(ctx, setup) {
+  const game = { setup, scores: Array(setup.teams).fill(0), modeState: {}, history: [], rev: 0, showHelp: true }
+  game.modeState[setup.mode] = initMode(setup.mode, ctx, setup, game)
+  return game
 }
 
 export default function ReviewDay() {
   const [manifest, setManifest] = useState(null)
   const [failed, setFailed] = useState(false)
   const [saved] = useState(readState)
-  const [game, setGame] = useState(null)     // persisted: setup, scores, board, top, format, history
-  const [units, setUnits] = useState(null)   // the picked units' files (refetched after a reload)
-  const [pop, setPop] = useState(null)       // 'undo' | 'newclass' | null
+  const [game, setGame] = useState(null)
+  const [ctx, setCtx] = useState(null)
+  const [pop, setPop] = useState(null) // 'undo' | 'newclass' | 'modes' | null
 
   useEffect(() => { loadManifest().then(setManifest).catch(() => setFailed(true)) }, [])
   useEffect(() => { document.title = 'Review Day · Flashpoint History' }, [])
   useEffect(() => { if (game) writeState(game) }, [game])
 
-  const fileFor = useCallback((course, unit) =>
-    manifest?.courses?.find(c => c.id === course)?.units?.find(u => u.unit === unit)?.file, [manifest])
-  const loadPicked = useCallback(async setup => {
-    const files = setup.units.map(u => fileFor(setup.course, u)).filter(Boolean)
-    return Promise.all(files.map(loadUnit))
-  }, [fileFor])
-
-  const start = async setup => {
-    const data = await loadPicked(setup)
-    clearState()
-    setUnits(data)
-    setGame(freshPlay(setup, data, setup.names))
-  }
+  const start = (c, setup) => { clearState(); setCtx(c); setGame(freshGame(c, setup)) }
   const resume = async () => {
-    try { setUnits(await loadPicked(saved.setup)); setGame({ history: [], rev: 0, ...saved, showHelp: false }) }
+    try { const c = await loadCourse(manifest, saved.setup.course); setCtx(c); setGame({ history: [], rev: 0, ...saved, showHelp: false }) }
     catch { clearState() }
   }
-  const menu = () => { setGame(null); setUnits(null) }
+  const menu = () => { setGame(null); setCtx(null) }
   const newClass = () => {
-    setGame(g => freshPlay(g.setup, units, pickNames(g.setup.teams)))
+    setGame(g => freshGame(ctx, { ...g.setup, names: pickNames(g.setup.teams) }))
+    setPop(null)
+  }
+  const switchMode = id => {
+    setGame(g => {
+      const m = modeById(id)
+      const setup = { ...g.setup, mode: id, minutes: m.times.includes(g.setup.minutes) ? g.setup.minutes : m.times[m.times.length - 1] }
+      const modeState = g.modeState[id] ? g.modeState : { ...g.modeState, [id]: initMode(id, ctx, setup, g) }
+      return { ...g, setup, modeState, showHelp: true }
+    })
     setPop(null)
   }
 
   // Every scoring move goes through here, so Undo can put the screen back exactly as it was.
   const commit = useCallback((label, mutate) => setGame(g => {
-    const snap = { scores: g.scores, board: g.board, top: g.top }
+    const snap = { scores: g.scores, modeState: g.modeState }
     const history = [...(g.history || []), { label, snap }].slice(-UNDO_DEPTH)
     return { ...mutate(g), history }
   }), [])
@@ -588,30 +238,47 @@ export default function ReviewDay() {
     setGame(g => ({ ...g, ...g.history[i].snap, history: g.history.slice(0, i), rev: (g.rev || 0) + 1 }))
     setPop(null)
   }
+  const setMS = useCallback(f => setGame(g => {
+    const id = g.setup.mode
+    return { ...g, modeState: { ...g.modeState, [id]: typeof f === 'function' ? f(g.modeState[id]) : f } }
+  }), [])
 
-  const cats = useMemo(() => (units ? categoryPool(units) : []), [units])
-  const lists = useMemo(() => (units ? listPool(units) : []), [units])
   const names = useMemo(() => (game ? Array.from({ length: game.setup.teams }, (_, i) => game.setup.names?.[i] || W.team(i + 1)) : []), [game])
 
   if (failed) return <div className="rd"><main className="rd-front"><h1 className="rd-title">{W.title}</h1><p className="rd-note">{W.noUnits}</p></main></div>
   if (!manifest) return <div className="rd" />
 
-  const atFront = !game || !units
+  const atFront = !game || !ctx
+  const id = game?.setup.mode
+  const mode = id && modeById(id)
+  const ms = game?.modeState?.[id]
+  const props = { ctx, game, names, commit, setMS, ms }
+  const k = `${id}-${game?.rev}`
+  let screen = null
+  if (!atFront && ms) {
+    if (id === 'board') screen = <Board key={k} {...props} />
+    else if (id === 'top') screen = <TopAnswers key={k} {...props} />
+    else if (id === 'final') screen = <FinalAnswer key={k} {...props} />
+    else if (id === 'lightning') screen = <Lightning key={k} {...props} />
+    else if (id === 'order' || id === 'detective') screen = <Lanes key={k} kind={id} {...props} />
+    else if (id === 'who') screen = <WhoAmI key={k} {...props} />
+    else screen = <WriteReveal key={k} kind={id} {...props} />
+  }
+  const how = !atFront && howCard(game.setup)
+  const lab = !!manifest.lab
+  const switchable = !atFront ? modesFor({ course: game.setup.course, lab }).filter(m => m.count(ctx, game.setup.units) > 0) : []
+
   return (
     <div className={`rd${atFront ? ' front' : ''}`}>
       {atFront ? (
-        <Front manifest={manifest} saved={saved} onStart={start} onResume={resume} />
+        <Front manifest={manifest} saved={saved?.modeState ? saved : null} onStart={start} onResume={resume} />
       ) : (
         <>
           <header className="rd-bar-top">
             <span className="rd-mark">{W.title}</span>
-            <div className="rd-switch" role="group">
-              {[['board', W.board], ['top', W.top]].map(([id, name]) => (
-                <button key={id} type="button" className={`rd-tab${game.format === id ? ' on' : ''}`} aria-pressed={game.format === id}
-                        onClick={() => setGame(g => ({ ...g, format: id }))}>{name}</button>
-              ))}
-            </div>
+            <span className="rd-tab on" aria-current="true">{mode?.name(game.setup.course)}</span>
             <div className="rd-tools">
+              {switchable.length > 1 && <button type="button" className="rd-btn small" onClick={() => setPop('modes')}>{D.modes}</button>}
               <button type="button" className="rd-btn small" onClick={() => setGame(g => ({ ...g, showHelp: true }))}>{W.howTo}</button>
               <button type="button" className="rd-btn small" onClick={() => setPop('undo')}>{W.undo}</button>
               <button type="button" className="rd-btn small" onClick={() => setPop('newclass')}>{W.newClass}</button>
@@ -621,11 +288,40 @@ export default function ReviewDay() {
               {game.scores.map((s, i) => <TeamTag key={i} i={i} name={names[i]} score={s} />)}
             </div>
           </header>
-          {game.format === 'board'
-            ? <Board key={`b${game.rev}`} cats={cats} game={game} names={names} commit={commit} />
-            : <TopAnswers key={`t${game.rev}`} lists={lists} game={game} names={names} commit={commit} />}
+          {screen}
 
-          {game.showHelp && <HowTo game={game} onClose={() => setGame(g => ({ ...g, showHelp: false }))} />}
+          {game.showHelp && how && (
+            <Modal label={how.title} onClose={() => setGame(g => ({ ...g, showHelp: false }))}>
+              <h2 className="rd-modal-title">{how.title}</h2>
+              <p className="rd-how"><b>{W.setUp}</b> {how.setup}</p>
+              <ol className="rd-how-steps">{how.steps.map((t, i) => <li key={i}>{t}</li>)}</ol>
+              {how.rule && <p className="rd-how rule">{how.rule}</p>}
+              <div className="rd-row center"><button type="button" className="rd-btn primary big" onClick={() => setGame(g => ({ ...g, showHelp: false }))}>{W.letsGo}</button></div>
+            </Modal>
+          )}
+
+          {pop === 'modes' && (
+            <Modal label={D.modesTitle} onClose={() => setPop(null)}>
+              <h2 className="rd-modal-title">{D.modesTitle}</h2>
+              {PURPOSES.map(pp => {
+                const list = switchable.filter(m => m.purposes.includes(pp))
+                if (!list.length) return null
+                return (
+                  <div key={pp} className="rd-modes-group">
+                    <p className="rd-how"><b>{D.purposes[pp]}</b></p>
+                    <div className="rd-row">
+                      {list.map(m => (
+                        <Choice key={m.id} cls="small" on={m.id === id} onClick={() => switchMode(m.id)}>
+                          {m.name(game.setup.course)} · {m.times.map(D.minutes).join(' / ')}
+                        </Choice>
+                      ))}
+                    </div>
+                  </div>
+                )
+              })}
+              <div className="rd-row center"><button type="button" className="rd-btn" onClick={() => setPop(null)}>{W.cancel}</button></div>
+            </Modal>
+          )}
 
           {pop === 'undo' && (
             <Modal label={W.undoTitle} onClose={() => setPop(null)}>

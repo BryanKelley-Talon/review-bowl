@@ -1,7 +1,7 @@
 // The screen remembers the board through a reload or the mid-period lunch bell (periods 6 and 7):
 // which squares are gone, which lists were played, the team totals. Nothing about a student, ever.
 // Storage is a convenience (canon §1): if it's blocked or wiped, Review Day starts clean and works.
-const KEY = 'review-day-v1'
+const KEY = 'review-day-v2' // v2: modes (10/24 overnight); a v1 save is simply ignored
 
 export function readState() {
   try {

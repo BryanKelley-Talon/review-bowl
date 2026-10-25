@@ -432,5 +432,305 @@
    ],
    "_ranked_by": "sample"
   }
+ ],
+ "detective": [
+  {
+   "document": {
+    "text": "Sample document 1. The desk puts a real document here, with its source line.",
+    "source": "Sample source line 1",
+    "adapted": false,
+    "_pointer": "sample"
+   },
+   "questions": [
+    {
+     "ask": "Sample: Who made it?",
+     "choices": [
+      "Sample choice A",
+      "Sample choice B",
+      "Sample choice C",
+      "Sample choice D"
+     ],
+     "answer": 1,
+     "why": "The one-line reason shows here."
+    },
+    {
+     "ask": "Sample: Who was it for?",
+     "choices": [
+      "Sample choice A",
+      "Sample choice B",
+      "Sample choice C",
+      "Sample choice D"
+     ],
+     "answer": 2,
+     "why": "The one-line reason shows here."
+    },
+    {
+     "ask": "Sample: Why was it made?",
+     "choices": [
+      "Sample choice A",
+      "Sample choice B",
+      "Sample choice C",
+      "Sample choice D"
+     ],
+     "answer": 3,
+     "why": "The one-line reason shows here."
+    },
+    {
+     "ask": "Sample: What was going on when it was made?",
+     "choices": [
+      "Sample choice A",
+      "Sample choice B",
+      "Sample choice C",
+      "Sample choice D"
+     ],
+     "answer": 0,
+     "why": "The one-line reason shows here."
+    }
+   ]
+  },
+  {
+   "document": {
+    "text": "Sample document 2. The desk puts a real document here, with its source line.",
+    "source": "Sample source line 2",
+    "adapted": false,
+    "_pointer": "sample"
+   },
+   "questions": [
+    {
+     "ask": "Sample: Who made it?",
+     "choices": [
+      "Sample choice A",
+      "Sample choice B",
+      "Sample choice C",
+      "Sample choice D"
+     ],
+     "answer": 2,
+     "why": "The one-line reason shows here."
+    },
+    {
+     "ask": "Sample: Who was it for?",
+     "choices": [
+      "Sample choice A",
+      "Sample choice B",
+      "Sample choice C",
+      "Sample choice D"
+     ],
+     "answer": 3,
+     "why": "The one-line reason shows here."
+    },
+    {
+     "ask": "Sample: Why was it made?",
+     "choices": [
+      "Sample choice A",
+      "Sample choice B",
+      "Sample choice C",
+      "Sample choice D"
+     ],
+     "answer": 0,
+     "why": "The one-line reason shows here."
+    },
+    {
+     "ask": "Sample: What was going on when it was made?",
+     "choices": [
+      "Sample choice A",
+      "Sample choice B",
+      "Sample choice C",
+      "Sample choice D"
+     ],
+     "answer": 1,
+     "why": "The one-line reason shows here."
+    }
+   ]
+  },
+  {
+   "document": {
+    "text": "Sample document 3. The desk puts a real document here, with its source line.",
+    "source": "Sample source line 3",
+    "adapted": false,
+    "_pointer": "sample"
+   },
+   "questions": [
+    {
+     "ask": "Sample: Who made it?",
+     "choices": [
+      "Sample choice A",
+      "Sample choice B",
+      "Sample choice C",
+      "Sample choice D"
+     ],
+     "answer": 3,
+     "why": "The one-line reason shows here."
+    },
+    {
+     "ask": "Sample: Who was it for?",
+     "choices": [
+      "Sample choice A",
+      "Sample choice B",
+      "Sample choice C",
+      "Sample choice D"
+     ],
+     "answer": 0,
+     "why": "The one-line reason shows here."
+    },
+    {
+     "ask": "Sample: Why was it made?",
+     "choices": [
+      "Sample choice A",
+      "Sample choice B",
+      "Sample choice C",
+      "Sample choice D"
+     ],
+     "answer": 1,
+     "why": "The one-line reason shows here."
+    },
+    {
+     "ask": "Sample: What was going on when it was made?",
+     "choices": [
+      "Sample choice A",
+      "Sample choice B",
+      "Sample choice C",
+      "Sample choice D"
+     ],
+     "answer": 2,
+     "why": "The one-line reason shows here."
+    }
+   ]
+  }
+ ],
+ "who_am_i": [
+  {
+   "answer": "Sample person 1",
+   "also": [],
+   "why": "The one-line reason shows here.",
+   "clues": [
+    "Sample clue 1 (hardest) for person 1.",
+    "Sample clue 2 for person 1.",
+    "Sample clue 3 for person 1.",
+    "Sample clue 4 (easiest) for person 1."
+   ]
+  },
+  {
+   "answer": "Sample person 2",
+   "also": [],
+   "why": "The one-line reason shows here.",
+   "clues": [
+    "Sample clue 1 (hardest) for person 2.",
+    "Sample clue 2 for person 2.",
+    "Sample clue 3 for person 2.",
+    "Sample clue 4 (easiest) for person 2."
+   ]
+  },
+  {
+   "answer": "Sample person 3",
+   "also": [],
+   "why": "The one-line reason shows here.",
+   "clues": [
+    "Sample clue 1 (hardest) for person 3.",
+    "Sample clue 2 for person 3.",
+    "Sample clue 3 for person 3.",
+    "Sample clue 4 (easiest) for person 3."
+   ]
+  },
+  {
+   "answer": "Sample person 4",
+   "also": [],
+   "why": "The one-line reason shows here.",
+   "clues": [
+    "Sample clue 1 (hardest) for person 4.",
+    "Sample clue 2 for person 4.",
+    "Sample clue 3 for person 4.",
+    "Sample clue 4 (easiest) for person 4."
+   ]
+  }
+ ],
+ "odd_one_out": [
+  {
+   "terms": [
+    "Sample term 1A",
+    "Sample term 1B",
+    "Sample term 1C",
+    "Sample term 1D"
+   ],
+   "odd": 1,
+   "why": "Why the odd one is odd shows here."
+  },
+  {
+   "terms": [
+    "Sample term 2A",
+    "Sample term 2B",
+    "Sample term 2C",
+    "Sample term 2D"
+   ],
+   "odd": 2,
+   "why": "Why the odd one is odd shows here."
+  },
+  {
+   "terms": [
+    "Sample term 3A",
+    "Sample term 3B",
+    "Sample term 3C",
+    "Sample term 3D"
+   ],
+   "odd": 3,
+   "why": "Why the odd one is odd shows here."
+  },
+  {
+   "terms": [
+    "Sample term 4A",
+    "Sample term 4B",
+    "Sample term 4C",
+    "Sample term 4D"
+   ],
+   "odd": 0,
+   "why": "Why the odd one is odd shows here."
+  },
+  {
+   "terms": [
+    "Sample term 5A",
+    "Sample term 5B",
+    "Sample term 5C",
+    "Sample term 5D"
+   ],
+   "odd": 1,
+   "why": "Why the odd one is odd shows here."
+  }
+ ],
+ "name_it": [
+  {
+   "prompt": "Sample event 1. The desk describes an event or a situation here.",
+   "answer": "Sample principle (card words)",
+   "also": [],
+   "why": "The one-line reason shows here."
+  },
+  {
+   "prompt": "Sample event 2. The desk describes an event or a situation here.",
+   "answer": "Sample principle (card words)",
+   "also": [],
+   "why": "The one-line reason shows here."
+  },
+  {
+   "prompt": "Sample event 3. The desk describes an event or a situation here.",
+   "answer": "Sample principle (card words)",
+   "also": [],
+   "why": "The one-line reason shows here."
+  },
+  {
+   "prompt": "Sample event 4. The desk describes an event or a situation here.",
+   "answer": "Sample principle (card words)",
+   "also": [],
+   "why": "The one-line reason shows here."
+  },
+  {
+   "prompt": "Sample event 5. The desk describes an event or a situation here.",
+   "answer": "Sample principle (card words)",
+   "also": [],
+   "why": "The one-line reason shows here."
+  },
+  {
+   "prompt": "Sample event 6. The desk describes an event or a situation here.",
+   "answer": "Sample principle (card words)",
+   "also": [],
+   "why": "The one-line reason shows here."
+  }
  ]
 }
