@@ -12,7 +12,7 @@
 // ============================================================
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import DisclaimerBadge from '../shared/DisclaimerBadge.jsx'
-import { W } from './words.js'
+import { TEAM_NAMES, W } from './words.js'
 import { VALUES, categoryPool, dealBoard, listPool, loadManifest, loadUnit, rankValue, shuffle } from './content.js'
 import { clearState, readState, writeState } from './persist.js'
 import './review-day.css'
@@ -27,12 +27,12 @@ const TEAM_LOOK = [
   { shape: '✚', color: '#F4F6FA' },
 ]
 
-function TeamTag({ i, score, big }) {
+function TeamTag({ i, name, score, big }) {
   const t = TEAM_LOOK[i]
   return (
     <span className={`rd-team${big ? ' big' : ''}`} style={{ '--team': t.color }}>
       <span className="rd-shape" aria-hidden="true">{t.shape}</span>
-      <span className="rd-team-name">{W.team(i + 1)}</span>
+      <span className="rd-team-name">{name || W.team(i + 1)}</span>
       {score !== undefined && <span className="rd-score">{score}</span>}
     </span>
   )
@@ -58,6 +58,12 @@ function Front({ manifest, saved, onStart, onResume }) {
   const [picked, setPicked] = useState(() => unitIds.length ? [unitIds[unitIds.length - 1]] : [])
   const [format, setFormat] = useState('board')
   const [teams, setTeams] = useState(4)
+  const [names, setNames] = useState(() => shuffle(TEAM_NAMES).slice(0, 6))
+  const reroll = i => setNames(ns => {
+    const free = TEAM_NAMES.filter(n => !ns.includes(n))
+    const next = ns.slice(); next[i] = free[Math.floor(Math.random() * free.length)]
+    return next
+  })
 
   const chooseCourse = id => {
     setCourse(id)
@@ -128,18 +134,28 @@ function Front({ manifest, saved, onStart, onResume }) {
                     aria-pressed={teams === n} onClick={() => setTeams(n)}>{n}</button>
           ))}
         </div>
+        <ul className="rd-names">
+          {names.slice(0, teams).map((nm, i) => (
+            <li key={i} style={{ '--team': TEAM_LOOK[i].color }}>
+              <span className="rd-shape" aria-hidden="true">{TEAM_LOOK[i].shape}</span>
+              <span className="rd-name">{nm}</span>
+              <button type="button" className="rd-btn small" onClick={() => reroll(i)}
+                      aria-label={`${W.newName} for ${nm}`}>{W.newName}</button>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <div className="rd-go">
         <button type="button" className="rd-btn primary big" disabled={!ready}
-                onClick={() => onStart({ course, units: picked, format, teams })}>{W.start}</button>
+                onClick={() => onStart({ course, units: picked, format, teams, names: names.slice(0, teams) })}>{W.start}</button>
       </div>
     </main>
   )
 }
 
 // ── THE BOARD ────────────────────────────────────────────────────────────────
-function Board({ cats, board, setBoard, teams, award, pool }) {
+function Board({ cats, board, setBoard, teams, names, award, pool }) {
   const [open, setOpen] = useState(null) // { key, i }
   const [revealed, setRevealed] = useState(false)
   const [had, setHad] = useState([])
@@ -192,7 +208,7 @@ function Board({ cats, board, setBoard, teams, award, pool }) {
                   <button key={t} type="button" className={`rd-teambtn${on ? ' on' : ''}`} aria-pressed={on}
                           style={{ '--team': TEAM_LOOK[t].color }}
                           onClick={() => setHad(h => (h.includes(t) ? h.filter(x => x !== t) : [...h, t]))}>
-                    <span aria-hidden="true">{on ? '✓ ' : ''}{TEAM_LOOK[t].shape}</span> {W.team(t + 1)}
+                    <span aria-hidden="true">{on ? '✓ ' : ''}{TEAM_LOOK[t].shape}</span> {names[t]}
                   </button>
                 )
               })}
@@ -238,7 +254,7 @@ function Board({ cats, board, setBoard, teams, award, pool }) {
 }
 
 // ── TOP ANSWERS ──────────────────────────────────────────────────────────────
-function TopAnswers({ lists, top, setTop, teams, award }) {
+function TopAnswers({ lists, top, setTop, teams, names, award }) {
   const byKey = useMemo(() => Object.fromEntries(lists.map(l => [l.key, l])), [lists])
   const list = byKey[top.order[top.idx]]
   if (!list) return <section className="rd-top"><p className="rd-prompt">{W.listsDone}</p></section>
@@ -254,10 +270,10 @@ function TopAnswers({ lists, top, setTop, teams, award }) {
     const nowFlipped = [...top.flipped, r]
     if (top.phase === 'steal') {
       award([[stealer, pot]])
-      setTop(t => ({ ...t, flipped: nowFlipped, pot, phase: 'done', msg: W.stealWon(stealer + 1) }))
+      setTop(t => ({ ...t, flipped: nowFlipped, pot, phase: 'done', msg: W.stealWon(names[stealer]) }))
     } else if (nowFlipped.length === n) {
       award([[top.atPlay, pot]])
-      setTop(t => ({ ...t, flipped: nowFlipped, pot, phase: 'done', msg: W.allFound(top.atPlay + 1) }))
+      setTop(t => ({ ...t, flipped: nowFlipped, pot, phase: 'done', msg: W.allFound(names[top.atPlay]) }))
     } else {
       setTop(t => ({ ...t, flipped: nowFlipped, pot }))
     }
@@ -265,11 +281,11 @@ function TopAnswers({ lists, top, setTop, teams, award }) {
   const miss = () => {
     if (top.phase === 'steal') {
       award([[top.atPlay, top.pot]])
-      setTop(t => ({ ...t, phase: 'done', msg: W.stealLost(top.atPlay + 1) }))
+      setTop(t => ({ ...t, phase: 'done', msg: W.stealLost(names[top.atPlay]) }))
       return
     }
     const misses = top.misses + 1
-    if (misses >= 3) setTop(t => ({ ...t, misses, phase: 'steal', msg: `${W.steal} ${W.stealBy(stealer + 1)}` }))
+    if (misses >= 3) setTop(t => ({ ...t, misses, phase: 'steal', msg: `${W.steal} ${W.stealBy(names[stealer])}` }))
     else setTop(t => ({ ...t, misses }))
   }
   const showRest = () => setTop(t => ({ ...t, flipped: list.answers.map((_, r) => r) }))
@@ -282,11 +298,11 @@ function TopAnswers({ lists, top, setTop, teams, award }) {
       <div className="rd-clue-head">
         <span className="rd-cat-name">{W.top}</span>
         {list.sample && <span className="rd-sample">{W.sample}</span>}
-        <TeamTag i={top.phase === 'steal' ? stealer : top.atPlay} />
+        <TeamTag i={top.phase === 'steal' ? stealer : top.atPlay} name={names[top.phase === 'steal' ? stealer : top.atPlay]} />
       </div>
       <p className="rd-clue-text">{list.prompt}</p>
       <p className="rd-prompt small" role="status">
-        {top.msg || W.atPlay(top.atPlay + 1)}
+        {top.msg || W.atPlay(names[top.atPlay])}
       </p>
       <ol className={`rd-bars${n > 4 ? ' two' : ''}`} style={{ '--rows': Math.ceil(n / 2) }}>
         {list.answers.map((a, r) => {
@@ -364,6 +380,7 @@ export default function ReviewDay() {
   }), [])
 
   const cats = useMemo(() => (units ? categoryPool(units) : []), [units])
+  const names = useMemo(() => (game ? Array.from({ length: game.setup.teams }, (_, i) => game.setup.names?.[i] || W.team(i + 1)) : []), [game])
   const lists = useMemo(() => (units ? listPool(units) : []), [units])
 
   if (failed) return <div className="rd"><main className="rd-front"><h1 className="rd-title">{W.title}</h1><p className="rd-note">{W.noUnits}</p></main></div>
@@ -385,15 +402,15 @@ export default function ReviewDay() {
               ))}
             </div>
             <div className="rd-teams">
-              {game.scores.map((s, i) => <TeamTag key={i} i={i} score={s} />)}
+              {game.scores.map((s, i) => <TeamTag key={i} i={i} name={names[i]} score={s} />)}
             </div>
             <button type="button" className="rd-btn small" onClick={menu}>{W.menu}</button>
           </header>
           {game.format === 'board' ? (
-            <Board cats={cats} pool={cats} board={game.board} teams={game.setup.teams} award={award}
+            <Board cats={cats} pool={cats} board={game.board} teams={game.setup.teams} names={names} award={award}
                    setBoard={f => setGame(g => ({ ...g, board: typeof f === 'function' ? f(g.board) : f }))} />
           ) : (
-            <TopAnswers lists={lists} top={game.top} teams={game.setup.teams} award={award}
+            <TopAnswers lists={lists} top={game.top} teams={game.setup.teams} names={names} award={award}
                         setTop={f => setGame(g => ({ ...g, top: typeof f === 'function' ? f(g.top) : f }))} />
           )}
         </>
