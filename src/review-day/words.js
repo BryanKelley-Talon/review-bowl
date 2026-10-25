@@ -1,0 +1,41 @@
+// REVIEW DAY — every word on screen, in one place (BK 2026-10-24 22:30 ruled the names and the shape;
+// proof: _BRIEFCASE/josh-proof-2026-10-24-review-day-concept.pdf). A change here is a change BK sees first.
+// Unit content (categories, clues, lists) comes from the desks' files, never from this file.
+export const W = {
+  title: 'REVIEW DAY',
+  pickCourse: 'Pick a course.',
+  pickUnits: 'Pick the units. Tap a unit to add it or take it out.',
+  pickFormat: 'Pick a format.',
+  board: 'THE BOARD',
+  boardSub: 'Pick a category and a value. Every team answers.',
+  top: 'TOP ANSWERS',
+  topSub: 'Find every answer on the list. Three misses and the other team can steal.',
+  teams: 'How many teams?',
+  start: 'Start',
+  resume: 'Pick up where you left off',
+  needUnit: 'Pick at least one unit.',
+  noUnits: 'No units are ready for this course yet.',
+  menu: 'Menu',
+  team: n => `Team ${n}`,
+  // THE BOARD
+  write: 'Write your answer.',
+  show: 'Show the answer',
+  alsoRight: 'Also right:',
+  whoHad: 'Tap every team that had it.',
+  back: 'Back to the board',
+  cleared: 'Board cleared.',
+  deal: 'Deal a new board',
+  adapted: '(adapted)',
+  // TOP ANSWERS
+  atPlay: n => `Team ${n} is up.`,
+  miss: 'Miss',
+  steal: 'Steal. The other team gets one try.',
+  stealBy: n => `Team ${n} steals.`,
+  stealWon: n => `Team ${n} stole it.`,
+  stealLost: n => `Team ${n} keeps it.`,
+  allFound: n => `Every answer found. Team ${n} takes it.`,
+  showRest: 'Show the rest',
+  nextList: 'Next list',
+  listsDone: 'That was the last list. Start again from the menu for a new order.',
+  sample: 'SAMPLE',
+}

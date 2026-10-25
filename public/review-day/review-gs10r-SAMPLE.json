@@ -1,0 +1,477 @@
+{
+ "_sample": true,
+ "course": "gs10r",
+ "unit": "SAMPLE",
+ "unit_title": "Sample, not for class",
+ "board": [
+  {
+   "category": "10.2 checkpoint, part 1",
+   "clues": [
+    {
+     "clue": "According to Locke, what problem do people face in the state of nature?",
+     "answer": "The enjoyment of their rights is unsafe and insecure",
+     "also": [],
+     "why": "Locke says rights in the state of nature are constantly exposed to attack, so enjoying them is unsafe and insecure. People join a society to protect their life, liberty and property.",
+     "document": {
+      "text": "“If man in the state of nature is free, if he is absolute lord of his own person and possessions, why will he give up his freedom? Why will he put himself under the control of any person or institution? The obvious answer is that rights in the state of nature are constantly exposed to the attack of others. Since every man is equal and since most men do not concern themselves with equity and justice, the enjoyment of rights in the state of nature is unsafe and insecure. Hence each man joins in society with others to preserve his life, liberty, and property.”",
+      "source": "John Locke, Two Treatises of Government, 1690",
+      "adapted": true,
+      "_pointer": "review-bowl public/content/station-gs10r-10.2-checkpoint-practice.json cp-1"
+     }
+    },
+    {
+     "clue": "According to this passage, what happens when a legislature seizes absolute power over the people?",
+     "answer": "Power passes back to the people, who may resume their original liberty",
+     "also": [],
+     "why": "Locke says a legislature that grabs absolute power forfeits it. The power passes to the people, who have a right to resume their original liberty.",
+     "document": {
+      "text": "“[When] the legislature shall . . . grasp [for] themselves, or put into the hands of any other, an absolute power over their lives, liberties, and estates of the people, . . . they forfeit the power the people had put into their hands for quite contrary ends, and it [passes] to the people, who have a right to resume their original liberty. . . .”",
+      "source": "John Locke, Two Treatises of Government, 1690",
+      "adapted": true,
+      "_pointer": "review-bowl public/content/station-gs10r-10.2-checkpoint-practice.json cp-2"
+     }
+    },
+    {
+     "clue": "This passage was written in which region, and during which movement?",
+     "answer": "Europe, during the Enlightenment",
+     "also": [],
+     "why": "Montesquieu was a French writer of the Enlightenment, the European movement that questioned absolute rule. His argument for separating government powers is one of its best-known ideas.",
+     "document": {
+      "text": "“. . . Nor is there liberty if the power of judging is not separate from legislative power and from executive power. If it were joined to legislative power, the power over the life and liberty of the citizens would be arbitrary, for the judge would be the legislator. If it were joined to executive power, the judge could have the force of an oppressor. . . .”",
+      "source": "Baron de Montesquieu, The Spirit of the Laws, 1748",
+      "adapted": true,
+      "_pointer": "review-bowl public/content/station-gs10r-10.2-checkpoint-practice.json cp-3"
+     }
+    },
+    {
+     "clue": "What problem does Montesquieu identify in this passage?",
+     "answer": "Concentration of power in the same hands",
+     "also": [],
+     "why": "Montesquieu says that when the power to make laws and the power to enforce them sit with the same person or group, there can be no liberty. They could pass tyrannical laws and enforce them tyrannically.",
+     "document": {
+      "text": "“When the legislative and executive powers are united in the same person, or in the same body of magistrates [government officials], there can be no liberty; because apprehensions [fears] may arise, lest the same monarch or senate should enact tyrannical laws to execute them in a tyrannical manner. . . .”",
+      "source": "Baron de Montesquieu, The Spirit of the Laws, 1748",
+      "adapted": true,
+      "_pointer": "review-bowl public/content/station-gs10r-10.2-checkpoint-practice.json cp-4"
+     }
+    },
+    {
+     "clue": "According to Rousseau, how is the general will different from the will of all?",
+     "answer": "The general will takes account only of the common interest",
+     "also": [],
+     "why": "Rousseau says the will of all is just private interests added up. The general will looks only at the common interest: what is good for everyone together.",
+     "document": {
+      "text": "“There is often a great deal of difference between the will of all and the general will; the latter takes account only of the common interest, while the former takes private interest into account, and is no more than a sum of particular wills.”",
+      "source": "Jean-Jacques Rousseau, The Social Contract, 1762. Translated by G. D. H. Cole, 1913. Book II, Chapter III.",
+      "adapted": false,
+      "_pointer": "review-bowl public/content/station-gs10r-10.2-checkpoint-practice.json cp-5"
+     }
+    }
+   ]
+  },
+  {
+   "category": "10.2 checkpoint, part 2",
+   "clues": [
+    {
+     "clue": "According to this passage, what does Wollstonecraft demand of those who would exclude women?",
+     "answer": "That they first prove women lack reason",
+     "also": [],
+     "why": "Wollstonecraft dares anyone who would shut women out to prove first that women lack reason. Without that proof, she says, excluding them is acting like a tyrant.",
+     "document": {
+      "text": "“. . . if she be not prepared by education to become the companion of man, she will stop the progress of knowledge. . . . If women are to be excluded . . . prove first . . . that they want [lack] reason, else this flaw in your NEW CONSTITUTION will ever show that man must . . . act like a tyrant. . . .”",
+      "source": "Mary Wollstonecraft, A Vindication of the Rights of Woman, 1792. Addressed to Talleyrand-Périgord, a member of the French National Assembly.",
+      "adapted": false,
+      "_pointer": "review-bowl public/content/station-gs10r-10.2-checkpoint-practice.json cp-6"
+     }
+    },
+    {
+     "clue": "This document was written by",
+     "answer": "a British writer addressing a member of the French National Assembly",
+     "also": [],
+     "why": "Wollstonecraft was a British writer. The source line shows she addressed her book to Talleyrand-Périgord, a member of the French National Assembly.",
+     "document": {
+      "text": "“. . . if she be not prepared by education to become the companion of man, she will stop the progress of knowledge. . . . If women are to be excluded . . . prove first . . . that they want [lack] reason, else this flaw in your NEW CONSTITUTION will ever show that man must . . . act like a tyrant. . . .”",
+      "source": "Mary Wollstonecraft, A Vindication of the Rights of Woman, 1792. Addressed to Talleyrand-Périgord, a member of the French National Assembly.",
+      "adapted": false,
+      "_pointer": "review-bowl public/content/station-gs10r-10.2-checkpoint-practice.json cp-7"
+     }
+    },
+    {
+     "clue": "Which enduring issue is best supported by this passage?",
+     "answer": "Power and Its Abuse",
+     "also": [],
+     "why": "Wollstonecraft argues that shutting women out of rights is how men act like tyrants. Who holds power over whom, and whether it's used unfairly, is Power and Its Abuse.",
+     "document": {
+      "text": "“. . . if she be not prepared by education to become the companion of man, she will stop the progress of knowledge. . . . If women are to be excluded . . . prove first . . . that they want [lack] reason, else this flaw in your NEW CONSTITUTION will ever show that man must . . . act like a tyrant. . . .”",
+      "source": "Mary Wollstonecraft, A Vindication of the Rights of Woman, 1792. Addressed to Talleyrand-Périgord, a member of the French National Assembly.",
+      "adapted": false,
+      "_pointer": "review-bowl public/content/station-gs10r-10.2-checkpoint-practice.json cp-8"
+     }
+    },
+    {
+     "clue": "According to Catherine the Great, what does equality among citizens consist of?",
+     "answer": "All citizens being subject to the same laws",
+     "also": [],
+     "why": "Catherine defines it in the passage: the equality of citizens consists in all of them being subject to the same laws.",
+     "document": {
+      "text": "“. . . The Laws ought to be so framed, as to secure the Safety of every Citizen as much as possible. . . . The Equality of the Citizens consists in this; that they should all be subject to the same Laws. . . .”",
+      "source": "Documents of Catherine the Great, W. F. Reddaway, ed., Cambridge University Press",
+      "adapted": true,
+      "_pointer": "review-bowl public/content/station-gs10r-10.2-checkpoint-practice.json cp-9"
+     }
+    },
+    {
+     "clue": "Catherine the Great ruled which state, and during which movement?",
+     "answer": "Russia, during the Enlightenment",
+     "also": [],
+     "why": "Catherine the Great ruled Russia in the 1700s. She read the Enlightenment philosophers and borrowed their ideas for Russia's laws, which is why she's called an enlightened monarch.",
+     "document": {
+      "text": "“. . . The Laws ought to be so framed, as to secure the Safety of every Citizen as much as possible. . . . The Equality of the Citizens consists in this; that they should all be subject to the same Laws. . . .”",
+      "source": "Documents of Catherine the Great, W. F. Reddaway, ed., Cambridge University Press",
+      "adapted": true,
+      "_pointer": "review-bowl public/content/station-gs10r-10.2-checkpoint-practice.json cp-10"
+     }
+    }
+   ]
+  },
+  {
+   "category": "Sample category 3",
+   "clues": [
+    {
+     "clue": "Sample clue for category 3, square 1. Sam or Will writes the real one.",
+     "answer": "Sample answer 3.1",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 3, square 2. Sam or Will writes the real one.",
+     "answer": "Sample answer 3.2",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 3, square 3. Sam or Will writes the real one.",
+     "answer": "Sample answer 3.3",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 3, square 4. Sam or Will writes the real one.",
+     "answer": "Sample answer 3.4",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 3, square 5. Sam or Will writes the real one.",
+     "answer": "Sample answer 3.5",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    }
+   ]
+  },
+  {
+   "category": "Sample category 4",
+   "clues": [
+    {
+     "clue": "Sample clue for category 4, square 1. Sam or Will writes the real one.",
+     "answer": "Sample answer 4.1",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 4, square 2. Sam or Will writes the real one.",
+     "answer": "Sample answer 4.2",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 4, square 3. Sam or Will writes the real one.",
+     "answer": "Sample answer 4.3",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 4, square 4. Sam or Will writes the real one.",
+     "answer": "Sample answer 4.4",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 4, square 5. Sam or Will writes the real one.",
+     "answer": "Sample answer 4.5",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    }
+   ]
+  },
+  {
+   "category": "Sample category 5",
+   "clues": [
+    {
+     "clue": "Sample clue for category 5, square 1. Sam or Will writes the real one.",
+     "answer": "Sample answer 5.1",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 5, square 2. Sam or Will writes the real one.",
+     "answer": "Sample answer 5.2",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 5, square 3. Sam or Will writes the real one.",
+     "answer": "Sample answer 5.3",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 5, square 4. Sam or Will writes the real one.",
+     "answer": "Sample answer 5.4",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 5, square 5. Sam or Will writes the real one.",
+     "answer": "Sample answer 5.5",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    }
+   ]
+  },
+  {
+   "category": "Sample category 6",
+   "clues": [
+    {
+     "clue": "Sample clue for category 6, square 1. Sam or Will writes the real one.",
+     "answer": "Sample answer 6.1",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 6, square 2. Sam or Will writes the real one.",
+     "answer": "Sample answer 6.2",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 6, square 3. Sam or Will writes the real one.",
+     "answer": "Sample answer 6.3",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 6, square 4. Sam or Will writes the real one.",
+     "answer": "Sample answer 6.4",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 6, square 5. Sam or Will writes the real one.",
+     "answer": "Sample answer 6.5",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    }
+   ]
+  }
+ ],
+ "top_answers": [
+  {
+   "prompt": "Sample list 1: name one … (the desk writes this prompt)",
+   "answers": [
+    {
+     "text": "Sample answer #1",
+     "also": []
+    },
+    {
+     "text": "Sample answer #2",
+     "also": []
+    },
+    {
+     "text": "Sample answer #3",
+     "also": []
+    },
+    {
+     "text": "Sample answer #4",
+     "also": []
+    }
+   ],
+   "_ranked_by": "sample"
+  },
+  {
+   "prompt": "Sample list 2: name one … (the desk writes this prompt)",
+   "answers": [
+    {
+     "text": "Sample answer #1",
+     "also": []
+    },
+    {
+     "text": "Sample answer #2",
+     "also": []
+    },
+    {
+     "text": "Sample answer #3",
+     "also": []
+    },
+    {
+     "text": "Sample answer #4",
+     "also": []
+    },
+    {
+     "text": "Sample answer #5",
+     "also": []
+    },
+    {
+     "text": "Sample answer #6",
+     "also": []
+    }
+   ],
+   "_ranked_by": "sample"
+  },
+  {
+   "prompt": "Sample list 3: name one … (the desk writes this prompt)",
+   "answers": [
+    {
+     "text": "Sample answer #1",
+     "also": []
+    },
+    {
+     "text": "Sample answer #2",
+     "also": []
+    },
+    {
+     "text": "Sample answer #3",
+     "also": []
+    },
+    {
+     "text": "Sample answer #4",
+     "also": []
+    }
+   ],
+   "_ranked_by": "sample"
+  },
+  {
+   "prompt": "Sample list 4: name one … (the desk writes this prompt)",
+   "answers": [
+    {
+     "text": "Sample answer #1",
+     "also": []
+    },
+    {
+     "text": "Sample answer #2",
+     "also": []
+    },
+    {
+     "text": "Sample answer #3",
+     "also": []
+    },
+    {
+     "text": "Sample answer #4",
+     "also": []
+    },
+    {
+     "text": "Sample answer #5",
+     "also": []
+    },
+    {
+     "text": "Sample answer #6",
+     "also": []
+    }
+   ],
+   "_ranked_by": "sample"
+  },
+  {
+   "prompt": "Sample list 5: name one … (the desk writes this prompt)",
+   "answers": [
+    {
+     "text": "Sample answer #1",
+     "also": []
+    },
+    {
+     "text": "Sample answer #2",
+     "also": []
+    },
+    {
+     "text": "Sample answer #3",
+     "also": []
+    },
+    {
+     "text": "Sample answer #4",
+     "also": []
+    }
+   ],
+   "_ranked_by": "sample"
+  },
+  {
+   "prompt": "Sample list 6: name one … (the desk writes this prompt)",
+   "answers": [
+    {
+     "text": "Sample answer #1",
+     "also": []
+    },
+    {
+     "text": "Sample answer #2",
+     "also": []
+    },
+    {
+     "text": "Sample answer #3",
+     "also": []
+    },
+    {
+     "text": "Sample answer #4",
+     "also": []
+    },
+    {
+     "text": "Sample answer #5",
+     "also": []
+    },
+    {
+     "text": "Sample answer #6",
+     "also": []
+    }
+   ],
+   "_ranked_by": "sample"
+  }
+ ],
+ "_licence": "Questions written by Will (global10r-curriculum). Stimuli for items cp-1 to cp-4 and cp-9 to cp-10 are NYSED-released Regents passages routed through the New Visions Global II Part 1 bank: TEACH-ONLY, not sellable. Items cp-5 to cp-8 are public-domain texts (Rousseau, Cole translation 1913; Wollstonecraft 1792). Free Arena and Bowl use is non-commercial (BK, 2026-09-22)."
+}

@@ -1,0 +1,12 @@
+{
+  "_README": "REVIEW DAY manifest. One line per unit file the desks send (template: flashpoint OUTPUTS/review-day/). Units list oldest first; the newest is on by default. Lines with sample: true are for preview links only; the ship gate (npm run gate:review-day -- --ship) fails if one is here.",
+  "courses": [
+    { "id": "us11r", "name": "US History and Government 11R", "units": [
+      { "unit": "SAMPLE", "title": "Sample, not for class", "file": "review-us11r-SAMPLE.json", "sample": true },
+      { "unit": "SAMPLE-2", "title": "Second sample unit, to try the picker", "file": "review-us11r-SAMPLE-2.json", "sample": true }
+    ] },
+    { "id": "gs10r", "name": "Global History and Geography 10R", "units": [
+      { "unit": "SAMPLE", "title": "Sample, not for class", "file": "review-gs10r-SAMPLE.json", "sample": true }
+    ] }
+  ]
+}

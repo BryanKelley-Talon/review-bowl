@@ -1,0 +1,139 @@
+/* REVIEW DAY — built for the classroom touch display (16:9), read from the back row.
+   Navy and gold, the Arena sub-brand (tokens/arena-navy.css). Every pairing is the token file's,
+   measured ≥ 4.5:1 on the navy; tiles and buttons carry ≥ 3:1 edges.
+   Backdrop: BK's Gemini art, 2026-10-24 22:34 (field house and Friday-night field), 5% frame crop, WebP.
+   Full strength behind the front door; under a deeper navy scrim during play so text reads from the back row. */
+.rd{
+  --rd-art: url('/review-day/art/review-day-backdrop-field-house-night.webp');
+  --rd-scrim: linear-gradient(180deg, rgba(11,18,32,.82), rgba(11,18,32,.94));
+  --tile:#1B2A47; --tile-edge:#6882AD; --tile-gone:#101a2c;
+  min-height:100vh; color:var(--arena-white);
+  background:
+    var(--rd-scrim),
+    var(--rd-art) center/cover no-repeat fixed,
+    radial-gradient(120% 80% at 50% 110%, #3a2a12 0%, #0B1220 60%);
+  font:400 clamp(16px, 1.25vw, 26px)/1.4 'Outfit', system-ui, sans-serif;
+  display:flex; flex-direction:column;
+}
+.rd button{cursor:pointer}
+.rd button:disabled{cursor:default}
+.rd-foot{position:fixed; right:12px; bottom:12px; z-index:40}
+
+/* ---------- the front ---------- */
+.rd.front{--rd-scrim: linear-gradient(90deg, rgba(11,18,32,.88) 0%, rgba(11,18,32,.70) 55%, rgba(11,18,32,.35) 100%)}
+.rd-front{max-width:1400px; width:100%; margin:0 auto; padding:clamp(16px,3vh,48px) clamp(16px,3vw,56px) 96px}
+.rd-title{font:700 clamp(40px,5.5vw,104px)/1 'Barlow Condensed',sans-serif; letter-spacing:.06em; color:var(--arena-gold); margin-bottom:clamp(12px,2vh,28px)}
+.rd-step{margin:clamp(12px,2.2vh,30px) 0}
+.rd-step h2{font:600 clamp(18px,1.6vw,32px)/1.2 'Outfit',sans-serif; margin-bottom:10px}
+.rd-row{display:flex; flex-wrap:wrap; gap:clamp(8px,.9vw,18px)}
+.rd-row.center{justify-content:center}
+.rd-note{color:var(--arena-grey); margin-top:8px}
+.rd-resume{margin-bottom:8px}
+
+.rd-choice{
+  min-height:64px; padding:12px 22px; border-radius:12px; text-align:left;
+  background:var(--tile); border:2px solid var(--tile-edge); color:var(--arena-white);
+  font:600 clamp(16px,1.3vw,26px)/1.25 'Outfit',sans-serif;
+  box-shadow:0 4px 14px rgba(0,0,0,.35); transition:transform 90ms ease, background 90ms ease;
+  display:inline-flex; align-items:center; gap:12px;
+}
+.rd-choice:active{transform:scale(.97)}
+.rd-choice.on{background:#2b3b5e; border-color:var(--arena-gold); box-shadow:0 0 0 3px var(--arena-gold) inset}
+.rd-choice.num{min-width:84px; justify-content:center; font-size:clamp(22px,2vw,40px)}
+.rd-check{display:inline-grid; place-items:center; width:1.4em; height:1.4em; border-radius:6px; border:2px solid var(--tile-edge); color:var(--arena-gold); font-weight:800}
+.rd-choice.on .rd-check{border-color:var(--arena-gold)}
+.rd-row.formats .rd-choice{flex:1 1 380px; flex-direction:column; align-items:flex-start; gap:6px; padding:18px 24px}
+.rd-format-name{font:700 clamp(24px,2.4vw,48px)/1 'Barlow Condensed',sans-serif; letter-spacing:.05em; color:var(--arena-gold)}
+.rd-format-sub{font-weight:400; color:var(--arena-white)}
+.rd-sample{font:700 .62em/1 'Barlow Condensed',sans-serif; letter-spacing:.14em; padding:4px 7px; border-radius:5px; background:#5a1f1f; color:#ffd9d2; border:1px solid #e08c82}
+.rd-go{margin-top:clamp(16px,3vh,40px); display:flex; align-items:center; gap:16px}
+
+.rd-btn{
+  min-height:56px; padding:10px 26px; border-radius:12px; border:2px solid var(--tile-edge);
+  background:var(--tile); color:var(--arena-white); font:700 clamp(18px,1.4vw,28px)/1 'Barlow Condensed',sans-serif; letter-spacing:.05em;
+  box-shadow:0 4px 14px rgba(0,0,0,.35); transition:transform 90ms ease;
+}
+.rd-btn:active{transform:scale(.97)}
+.rd-btn.primary{background:var(--arena-gold); color:#0B1220; border-color:var(--arena-gold-lit)}
+.rd-btn.primary:disabled{background:#3a4560; color:#b8c3d6; border-color:#56627c}
+.rd-btn.big{min-height:clamp(64px,8vh,96px); padding:12px 40px; font-size:clamp(24px,2.2vw,44px)}
+.rd-btn.small{min-height:48px; padding:8px 18px}
+.rd-btn.miss{border-color:#e08c82; color:#ffd9d2; background:#3b1f26}
+
+/* ---------- the top bar ---------- */
+.rd-bar-top{
+  display:flex; align-items:center; gap:clamp(8px,1vw,20px); flex-wrap:wrap;
+  padding:10px clamp(12px,1.5vw,28px); background:rgba(11,18,32,.92); border-bottom:2px solid var(--arena-gold);
+}
+.rd-mark{font:700 clamp(20px,1.8vw,34px)/1 'Barlow Condensed',sans-serif; letter-spacing:.08em; color:var(--arena-gold)}
+.rd-switch{display:flex; gap:6px}
+.rd-tab{min-height:48px; padding:6px 16px; border-radius:10px; border:2px solid var(--tile-edge); background:var(--tile); color:var(--arena-white); font:700 clamp(15px,1.15vw,22px)/1 'Barlow Condensed',sans-serif; letter-spacing:.06em}
+.rd-tab.on{background:var(--arena-gold); color:#0B1220; border-color:var(--arena-gold-lit)}
+.rd-teams{display:flex; flex-wrap:wrap; gap:8px; margin-left:auto}
+.rd-team{display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius:10px; background:#131C2E; border:2px solid var(--team); font:600 clamp(15px,1.15vw,24px)/1 'Outfit',sans-serif}
+.rd-shape{color:var(--team); font-size:1.15em}
+.rd-score{font:700 1.25em/1 'Barlow Condensed',sans-serif; color:var(--arena-white); min-width:2.2em; text-align:right}
+
+/* ---------- THE BOARD ---------- */
+.rd-board-wrap{flex:1; display:flex; flex-direction:column; padding:clamp(8px,1.2vh,20px) clamp(8px,1.2vw,24px) 72px; position:relative}
+.rd-board{flex:1; display:grid; grid-template-columns:repeat(var(--cols),1fr); gap:clamp(6px,.6vw,12px)}
+.rd-col{display:grid; grid-template-rows:auto repeat(5,1fr); gap:clamp(6px,.6vw,12px)}
+.rd-cat{
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; text-align:center;
+  min-height:clamp(64px,11vh,140px); padding:8px; border-radius:10px; background:#0e1830; border:2px solid var(--arena-gold);
+  font:700 clamp(17px,1.5vw,32px)/1.1 'Barlow Condensed',sans-serif; letter-spacing:.04em; text-transform:uppercase; color:var(--arena-white);
+}
+.rd-tile{
+  min-height:clamp(56px,10vh,140px); border-radius:10px; background:var(--tile); border:2px solid var(--tile-edge);
+  font:700 clamp(30px,3.6vw,76px)/1 'Barlow Condensed',sans-serif; color:var(--arena-gold);
+  box-shadow:0 4px 14px rgba(0,0,0,.35); transition:transform 90ms ease, background 140ms ease;
+}
+.rd-tile:active{transform:scale(.96)}
+.rd-tile:disabled{opacity:1}
+.rd-tile.gone{background:var(--tile-gone); border-color:#2a3650; box-shadow:none}
+.rd-cleared{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; background:rgba(11,18,32,.88)}
+
+/* ---------- a clue ---------- */
+.rd-clue, .rd-top{flex:1; max-width:1500px; width:100%; margin:0 auto; padding:clamp(12px,2.5vh,40px) clamp(16px,3vw,56px) 96px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:clamp(10px,1.8vh,26px)}
+.rd-clue-head{display:flex; align-items:center; gap:14px; flex-wrap:wrap; justify-content:center}
+.rd-cat-name{font:700 clamp(20px,1.8vw,36px)/1 'Barlow Condensed',sans-serif; letter-spacing:.08em; text-transform:uppercase; color:var(--arena-gold)}
+.rd-value{font:700 clamp(20px,1.8vw,36px)/1 'Barlow Condensed',sans-serif; padding:6px 12px; border-radius:8px; border:2px solid var(--arena-gold); color:var(--arena-gold)}
+.rd-clue-text{font:600 clamp(26px,3vw,64px)/1.2 'Outfit',sans-serif; max-width:30ch}
+.rd-prompt{font:600 clamp(20px,1.8vw,36px)/1.2 'Outfit',sans-serif; color:var(--arena-gold)}
+.rd-prompt.small{font-size:clamp(18px,1.4vw,28px)}
+.rd-doc{max-width:1100px; width:100%; text-align:left; background:#F4F1E8; color:#1c1a15; border-radius:10px; padding:clamp(12px,1.4vw,26px); border-left:8px solid var(--arena-gold)}
+.rd-doc-source{font:600 clamp(14px,1vw,20px)/1.3 'Outfit',sans-serif; color:#3b3a33; margin-bottom:8px}
+.rd-doc-text{font:400 clamp(17px,1.35vw,28px)/1.45 Georgia, 'Libre Baskerville', serif; white-space:pre-line}
+.rd-reveal{display:flex; flex-direction:column; align-items:center; gap:clamp(10px,1.6vh,22px); animation:rd-in 220ms ease-out}
+.rd-answer{font:700 clamp(32px,4vw,84px)/1.05 'Barlow Condensed',sans-serif; color:var(--arena-white); padding:10px 24px; border-radius:12px; border:3px solid var(--arena-gold); background:#13213d}
+.rd-also{font-size:clamp(18px,1.5vw,30px)}
+.rd-why{font-size:clamp(18px,1.5vw,30px); color:#d6deea; max-width:60ch}
+.rd-teambtn{min-height:64px; min-width:150px; padding:10px 18px; border-radius:12px; background:var(--tile); border:3px solid var(--team); color:var(--arena-white); font:700 clamp(18px,1.4vw,28px)/1 'Outfit',sans-serif}
+.rd-teambtn.on{background:var(--team); color:#0B1220}
+
+/* ---------- TOP ANSWERS ---------- */
+.rd-bars{list-style:none; width:100%; max-width:1200px; display:grid; grid-template-columns:1fr; gap:clamp(8px,1vh,14px)}
+.rd-bars.two{grid-template-columns:1fr 1fr; grid-template-rows:repeat(var(--rows),auto); grid-auto-flow:column}
+.rd-bar{
+  width:100%; min-height:clamp(64px,9vh,110px); display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:16px;
+  padding:8px 18px; border-radius:12px; background:var(--tile); border:2px solid var(--tile-edge); text-align:left;
+  box-shadow:0 4px 14px rgba(0,0,0,.35);
+}
+.rd-bar-num{display:grid; place-items:center; width:1.7em; height:1.7em; border-radius:50%; background:#0e1830; border:2px solid var(--arena-gold); color:var(--arena-gold); font:700 clamp(22px,2vw,40px)/1 'Barlow Condensed',sans-serif}
+.rd-bar-text{font:700 clamp(22px,2.1vw,44px)/1.1 'Barlow Condensed',sans-serif; color:var(--arena-white); display:flex; flex-direction:column; gap:4px}
+.rd-bar-also{font:400 clamp(14px,1vw,20px)/1.2 'Outfit',sans-serif; color:#d6deea}
+.rd-bar-val{font:700 clamp(24px,2.2vw,46px)/1 'Barlow Condensed',sans-serif; color:var(--arena-gold); min-width:2em; text-align:right}
+.rd-bar.up{pointer-events:none; background:#20365c; border-color:var(--arena-gold); animation:rd-flip 260ms ease-out}
+.rd-strikes{display:flex; gap:18px}
+.rd-x{font:800 clamp(40px,4vw,84px)/1 'Outfit',sans-serif; color:#2a3650}
+.rd-x.on{color:#ff7a6a; animation:rd-in 200ms ease-out}
+
+@keyframes rd-in{from{opacity:0; transform:scale(.92)} to{opacity:1; transform:none}}
+@keyframes rd-flip{from{transform:rotateX(90deg)} to{transform:none}}
+@media (prefers-reduced-motion: reduce){
+  .rd *{animation:none !important; transition:none !important}
+}
+@media (max-width: 720px){
+  .rd-bars.two{grid-template-columns:1fr; grid-auto-flow:row}
+  .rd-teams{margin-left:0}
+}

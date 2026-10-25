@@ -1,0 +1,436 @@
+{
+ "_sample": true,
+ "course": "us11r",
+ "unit": "SAMPLE-2",
+ "unit_title": "Second sample unit, to try the picker",
+ "board": [
+  {
+   "category": "Sample category 7",
+   "clues": [
+    {
+     "clue": "Sample clue for category 7, square 1. Sam or Will writes the real one.",
+     "answer": "Sample answer 7.1",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 7, square 2. Sam or Will writes the real one.",
+     "answer": "Sample answer 7.2",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 7, square 3. Sam or Will writes the real one.",
+     "answer": "Sample answer 7.3",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 7, square 4. Sam or Will writes the real one.",
+     "answer": "Sample answer 7.4",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 7, square 5. Sam or Will writes the real one.",
+     "answer": "Sample answer 7.5",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    }
+   ]
+  },
+  {
+   "category": "Sample category 8",
+   "clues": [
+    {
+     "clue": "Sample clue for category 8, square 1. Sam or Will writes the real one.",
+     "answer": "Sample answer 8.1",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 8, square 2. Sam or Will writes the real one.",
+     "answer": "Sample answer 8.2",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 8, square 3. Sam or Will writes the real one.",
+     "answer": "Sample answer 8.3",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 8, square 4. Sam or Will writes the real one.",
+     "answer": "Sample answer 8.4",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 8, square 5. Sam or Will writes the real one.",
+     "answer": "Sample answer 8.5",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    }
+   ]
+  },
+  {
+   "category": "Sample category 9",
+   "clues": [
+    {
+     "clue": "Sample clue for category 9, square 1. Sam or Will writes the real one.",
+     "answer": "Sample answer 9.1",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 9, square 2. Sam or Will writes the real one.",
+     "answer": "Sample answer 9.2",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 9, square 3. Sam or Will writes the real one.",
+     "answer": "Sample answer 9.3",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 9, square 4. Sam or Will writes the real one.",
+     "answer": "Sample answer 9.4",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 9, square 5. Sam or Will writes the real one.",
+     "answer": "Sample answer 9.5",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    }
+   ]
+  },
+  {
+   "category": "Sample category 10",
+   "clues": [
+    {
+     "clue": "Sample clue for category 10, square 1. Sam or Will writes the real one.",
+     "answer": "Sample answer 10.1",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 10, square 2. Sam or Will writes the real one.",
+     "answer": "Sample answer 10.2",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 10, square 3. Sam or Will writes the real one.",
+     "answer": "Sample answer 10.3",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 10, square 4. Sam or Will writes the real one.",
+     "answer": "Sample answer 10.4",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 10, square 5. Sam or Will writes the real one.",
+     "answer": "Sample answer 10.5",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    }
+   ]
+  },
+  {
+   "category": "Sample category 11",
+   "clues": [
+    {
+     "clue": "Sample clue for category 11, square 1. Sam or Will writes the real one.",
+     "answer": "Sample answer 11.1",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 11, square 2. Sam or Will writes the real one.",
+     "answer": "Sample answer 11.2",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 11, square 3. Sam or Will writes the real one.",
+     "answer": "Sample answer 11.3",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 11, square 4. Sam or Will writes the real one.",
+     "answer": "Sample answer 11.4",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 11, square 5. Sam or Will writes the real one.",
+     "answer": "Sample answer 11.5",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    }
+   ]
+  },
+  {
+   "category": "Sample category 12",
+   "clues": [
+    {
+     "clue": "Sample clue for category 12, square 1. Sam or Will writes the real one.",
+     "answer": "Sample answer 12.1",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 12, square 2. Sam or Will writes the real one.",
+     "answer": "Sample answer 12.2",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 12, square 3. Sam or Will writes the real one.",
+     "answer": "Sample answer 12.3",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 12, square 4. Sam or Will writes the real one.",
+     "answer": "Sample answer 12.4",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    },
+    {
+     "clue": "Sample clue for category 12, square 5. Sam or Will writes the real one.",
+     "answer": "Sample answer 12.5",
+     "also": [
+      "another answer the teacher would take"
+     ],
+     "why": "The one-line reason shows here after the reveal."
+    }
+   ]
+  }
+ ],
+ "top_answers": [
+  {
+   "prompt": "Sample list 1: name one … (the desk writes this prompt)",
+   "answers": [
+    {
+     "text": "Sample answer #1",
+     "also": []
+    },
+    {
+     "text": "Sample answer #2",
+     "also": []
+    },
+    {
+     "text": "Sample answer #3",
+     "also": []
+    },
+    {
+     "text": "Sample answer #4",
+     "also": []
+    }
+   ],
+   "_ranked_by": "sample"
+  },
+  {
+   "prompt": "Sample list 2: name one … (the desk writes this prompt)",
+   "answers": [
+    {
+     "text": "Sample answer #1",
+     "also": []
+    },
+    {
+     "text": "Sample answer #2",
+     "also": []
+    },
+    {
+     "text": "Sample answer #3",
+     "also": []
+    },
+    {
+     "text": "Sample answer #4",
+     "also": []
+    },
+    {
+     "text": "Sample answer #5",
+     "also": []
+    },
+    {
+     "text": "Sample answer #6",
+     "also": []
+    }
+   ],
+   "_ranked_by": "sample"
+  },
+  {
+   "prompt": "Sample list 3: name one … (the desk writes this prompt)",
+   "answers": [
+    {
+     "text": "Sample answer #1",
+     "also": []
+    },
+    {
+     "text": "Sample answer #2",
+     "also": []
+    },
+    {
+     "text": "Sample answer #3",
+     "also": []
+    },
+    {
+     "text": "Sample answer #4",
+     "also": []
+    }
+   ],
+   "_ranked_by": "sample"
+  },
+  {
+   "prompt": "Sample list 4: name one … (the desk writes this prompt)",
+   "answers": [
+    {
+     "text": "Sample answer #1",
+     "also": []
+    },
+    {
+     "text": "Sample answer #2",
+     "also": []
+    },
+    {
+     "text": "Sample answer #3",
+     "also": []
+    },
+    {
+     "text": "Sample answer #4",
+     "also": []
+    },
+    {
+     "text": "Sample answer #5",
+     "also": []
+    },
+    {
+     "text": "Sample answer #6",
+     "also": []
+    }
+   ],
+   "_ranked_by": "sample"
+  },
+  {
+   "prompt": "Sample list 5: name one … (the desk writes this prompt)",
+   "answers": [
+    {
+     "text": "Sample answer #1",
+     "also": []
+    },
+    {
+     "text": "Sample answer #2",
+     "also": []
+    },
+    {
+     "text": "Sample answer #3",
+     "also": []
+    },
+    {
+     "text": "Sample answer #4",
+     "also": []
+    }
+   ],
+   "_ranked_by": "sample"
+  },
+  {
+   "prompt": "Sample list 6: name one … (the desk writes this prompt)",
+   "answers": [
+    {
+     "text": "Sample answer #1",
+     "also": []
+    },
+    {
+     "text": "Sample answer #2",
+     "also": []
+    },
+    {
+     "text": "Sample answer #3",
+     "also": []
+    },
+    {
+     "text": "Sample answer #4",
+     "also": []
+    },
+    {
+     "text": "Sample answer #5",
+     "also": []
+    },
+    {
+     "text": "Sample answer #6",
+     "also": []
+    }
+   ],
+   "_ranked_by": "sample"
+  }
+ ]
+}
