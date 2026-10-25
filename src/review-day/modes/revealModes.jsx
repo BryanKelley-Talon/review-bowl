@@ -2,7 +2,7 @@
 // every team that had it. MAP DROP, NAME THE ISSUE (Global) and THREAD RUN (US) run on the Arena's own blessed
 // Atlas walks and map stops, word for word; NAME THE PRINCIPLE (US), ODD ONE OUT and WHO AM I? need the desks'
 // template v2 sections and show SAMPLE content until those exist.
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { D, W } from '../words.js'
 import { shuffle } from '../content.js'
 import { ROUNDS, fromFiles, inUnits, stopsFor } from '../registry.js'
@@ -25,14 +25,72 @@ export const revealInit = {
   who: (ctx, setup) => ({ rounds: shuffle(fromFiles(ctx, setup.units, 'who_am_i')).slice(0, ROUNDS.who).map(x => x.key), idx: 0, shown: 1, found: [], revealed: false }),
 }
 
+// MAP DROP's map (BK 10/25: kids may "come right up and look at board, encouraged"): as big as the screen allows.
+// Tap zooms 2× onto the area the question asks about (or where you tapped); tap again for the whole map.
+// Two fingers pinch-zoom; one finger drags a zoomed map. Nothing here is stored.
 function MapView({ map, step, revealed }) {
   const box = (revealed && step.answer_focus) || step.focus
   const pct = b => b && { left: `${(b[0] / map.width) * 100}%`, top: `${(b[1] / map.height) * 100}%`, width: `${(b[2] / map.width) * 100}%`, height: `${(b[3] / map.height) * 100}%` }
+  const center = b => (b ? { x: ((b[0] + b[2] / 2) / map.width) * 100, y: ((b[1] + b[3] / 2) / map.height) * 100 } : { x: 50, y: 50 })
+  const [view, setView] = useState({ s: 1, x: 50, y: 50 })
+  const pts = useRef(new Map())
+  const gesture = useRef(null)
+  const frame = useRef(null)
+  useEffect(() => { setView({ s: 1, x: 50, y: 50 }) }, [step])
+  const rel = e => {
+    const r = frame.current.getBoundingClientRect()
+    return { x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 }
+  }
+  const down = e => {
+    frame.current.setPointerCapture?.(e.pointerId)
+    pts.current.set(e.pointerId, { x: e.clientX, y: e.clientY })
+    const list = [...pts.current.values()]
+    if (list.length === 2) {
+      const d = Math.hypot(list[0].x - list[1].x, list[0].y - list[1].y)
+      gesture.current = { kind: 'pinch', d, s: view.s }
+    } else gesture.current = { kind: 'tap', x0: e.clientX, y0: e.clientY, view }
+  }
+  const move = e => {
+    if (!pts.current.has(e.pointerId)) return
+    pts.current.set(e.pointerId, { x: e.clientX, y: e.clientY })
+    const g = gesture.current
+    if (!g) return
+    if (g.kind === 'pinch' && pts.current.size === 2) {
+      const [a, b] = [...pts.current.values()]
+      const d = Math.hypot(a.x - b.x, a.y - b.y)
+      const mid = rel({ clientX: (a.x + b.x) / 2, clientY: (a.y + b.y) / 2 })
+      setView({ s: Math.min(4, Math.max(1, g.s * (d / g.d))), x: mid.x, y: mid.y })
+    } else if (g.kind !== 'pinch' && g.view.s > 1) {
+      const dx = e.clientX - g.x0, dy = e.clientY - g.y0
+      if (Math.hypot(dx, dy) > 8) {
+        g.kind = 'drag'
+        const r = frame.current.getBoundingClientRect()
+        setView(v => ({ ...v, x: Math.min(100, Math.max(0, g.view.x - (dx / r.width) * 100 / (g.view.s - 1))), y: Math.min(100, Math.max(0, g.view.y - (dy / r.height) * 100 / (g.view.s - 1))) }))
+      }
+    }
+  }
+  const up = e => {
+    const g = gesture.current
+    pts.current.delete(e.pointerId)
+    if (g?.kind === 'tap' && pts.current.size === 0) {
+      if (view.s > 1) setView({ s: 1, x: 50, y: 50 })
+      else { const c = box ? center(box) : rel(e); setView({ s: 2, x: c.x, y: c.y }) }
+    }
+    if (pts.current.size === 0) gesture.current = null
+  }
+  const onKey = e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setView(v => (v.s > 1 ? { s: 1, x: 50, y: 50 } : { s: 2, ...center(box) })) }
+  }
   return (
     <figure className="rd-map">
-      <div className="rd-map-frame">
-        <img src={map.image} alt={map.image_alt} width={map.width} height={map.height} />
-        {box && <span className="rd-map-focus" style={pct(box)} aria-hidden="true" />}
+      <div className={`rd-map-frame${view.s > 1 ? ' zoomed' : ''}`} ref={frame} role="button" tabIndex={0}
+           aria-label={`${map.image_alt} ${view.s > 1 ? D.mapZoomOut : D.mapZoomIn}`}
+           onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} onKeyDown={onKey}>
+        <div className="rd-map-inner" style={{ transform: `scale(${view.s})`, transformOrigin: `${view.x}% ${view.y}%` }}>
+          <img src={map.image} alt="" width={map.width} height={map.height} draggable={false} />
+          {box && <span className="rd-map-focus" style={pct(box)} aria-hidden="true" />}
+        </div>
+        <span className="rd-map-hint" aria-hidden="true">{view.s > 1 ? D.mapZoomOut : D.mapZoomIn}</span>
       </div>
       {/* The title and source line can give the answer away ("printed in 1763"), so they show with the answer. */}
       {revealed && <figcaption className="rd-map-cap"><b>{map.title}</b> · {map.source}</figcaption>}
@@ -108,6 +166,7 @@ export function WriteReveal({ kind, ctx, game, names, commit, setMS, ms }) {
         <span className="rd-listtag">{ms.idx + 1} / {ms.rounds.length}</span>
         {r.sample && <span className="rd-sample">{W.sample}</span>}
       </div>
+      {r.map && <p className="rd-map-q">{r.prompt}</p>}
       <div className="rd-clue-body">
         {r.map && <MapView map={r.map} step={r.step} revealed={ms.revealed} />}
         <div className="rd-clue-main">
@@ -118,7 +177,7 @@ export function WriteReveal({ kind, ctx, game, names, commit, setMS, ms }) {
               {r.terms.map((t, i) => <li key={i} className={ms.revealed && i === r.oddIdx ? 'odd' : ''}><span className="rd-letter">{LETTERS[i]}</span>{t}</li>)}
             </ol>
           )}
-          {r.prompt && <p className={`rd-clue-text${r.map || r.head || r.ref ? ' small' : ''}`}>{r.prompt}</p>}
+          {r.prompt && !r.map && <p className={`rd-clue-text${r.head || r.ref ? ' small' : ''}`}>{r.prompt}</p>}
           {!ms.revealed ? (
             <>
               <p className="rd-prompt">{WRITE[kind]()}</p>

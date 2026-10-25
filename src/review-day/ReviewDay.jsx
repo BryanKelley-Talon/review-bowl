@@ -10,7 +10,7 @@
 // ============================================================
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import DisclaimerBadge from '../shared/DisclaimerBadge.jsx'
-import { D, TEAM_NAMES, W } from './words.js'
+import { D, FS, TEAM_NAMES, W, WHERE, applyWhere } from './words.js'
 import { loadCourse, loadManifest, shuffle } from './content.js'
 import { PURPOSES, TIMES, modeById, modesFor } from './registry.js'
 import { clearState, readState, writeState } from './persist.js'
@@ -31,6 +31,27 @@ function howCard(setup) {
   if (m === 'board') return W.howBoard(setup.timer)
   if (m === 'top') return setup.topMode === 'turns' ? W.howTopTurns() : W.howTopWrite(setup.timer)
   return D.how[m] || null
+}
+
+// ── full screen: the browser's bars go away so Review Day fills the board (BK 10/25: "as big as we can make it") ──
+function useFullscreen() {
+  const [on, setOn] = useState(() => !!document.fullscreenElement)
+  useEffect(() => {
+    const f = () => setOn(!!document.fullscreenElement)
+    document.addEventListener('fullscreenchange', f)
+    return () => document.removeEventListener('fullscreenchange', f)
+  }, [])
+  const toggle = useCallback(() => {
+    try {
+      if (document.fullscreenElement) document.exitFullscreen?.()
+      else document.documentElement.requestFullscreen?.()
+    } catch { /* a browser that can't go full screen just stays as it is */ }
+  }, [])
+  return [on, toggle]
+}
+function FullScreenButton() {
+  const [on, toggle] = useFullscreen()
+  return <button type="button" className="rd-btn small rd-fs" onClick={toggle} aria-pressed={on}>{on ? FS.exit : FS.enter}</button>
 }
 
 // ── the front ────────────────────────────────────────────────────────────────
@@ -62,6 +83,8 @@ function Front({ manifest, saved, onStart, onResume }) {
   const units = picked ?? defaultUnits
   const toggle = u => setPicked(units.includes(u) ? units.filter(x => x !== u) : [...units, u])
 
+  const [where, setWhere] = useState(saved?.setup?.where ?? 'room')
+  applyWhere(where)
   const [timer, setTimer] = useState(saved?.setup?.timer ?? 30)
   const [withChime, setChime] = useState(saved?.setup?.chime ?? false)
   const [topMode, setTopMode] = useState(saved?.setup?.topMode ?? 'write')
@@ -76,7 +99,10 @@ function Front({ manifest, saved, onStart, onResume }) {
 
   return (
     <main className="rd-front">
-      <h1 className="rd-title">{W.title}</h1>
+      <div className="rd-front-head">
+        <h1 className="rd-title">{W.title}</h1>
+        <FullScreenButton />
+      </div>
       {saved && (
         <div className="rd-resume"><button type="button" className="rd-btn primary" onClick={onResume}>{W.resume}</button></div>
       )}
@@ -85,6 +111,14 @@ function Front({ manifest, saved, onStart, onResume }) {
         <h2>{W.pickCourse}</h2>
         <div className="rd-row">
           {courses.map(c => <Choice key={c.id} on={course === c.id} onClick={() => setCourse(c.id)}>{c.name}</Choice>)}
+        </div>
+      </section>
+
+      <section className="rd-step">
+        <h2>{WHERE.label}</h2>
+        <div className="rd-row">
+          <Choice on={where === 'room'} onClick={() => setWhere('room')}>{WHERE.room}</Choice>
+          <Choice on={where === 'group'} onClick={() => setWhere('group')}>{WHERE.group}</Choice>
         </div>
       </section>
 
@@ -181,7 +215,7 @@ function Front({ manifest, saved, onStart, onResume }) {
 
       <div className="rd-go">
         <button type="button" className="rd-btn primary big" disabled={!canStart}
-                onClick={() => onStart(ctx, { course, purpose: p, minutes: mins, mode: mode.id, units, teams, names: names.slice(0, teams), timer, chime: withChime, topMode })}>
+                onClick={() => onStart(ctx, { course, purpose: p, minutes: mins, mode: mode.id, units, teams, names: names.slice(0, teams), timer, chime: withChime, topMode, where })}>
           {W.start}
         </button>
       </div>
@@ -243,6 +277,15 @@ export default function ReviewDay() {
     return { ...g, modeState: { ...g.modeState, [id]: typeof f === 'function' ? f(g.modeState[id]) : f } }
   }), [])
 
+  const [fsOn, toggleFs] = useFullscreen()
+  useEffect(() => {
+    const onKey = e => {
+      if ((e.key === 'f' || e.key === 'F') && !e.metaKey && !e.ctrlKey && !e.altKey && !/input|textarea|select/i.test(e.target?.tagName || '')) toggleFs()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [toggleFs])
+  if (game) applyWhere(game.setup.where || 'room')
   const names = useMemo(() => (game ? Array.from({ length: game.setup.teams }, (_, i) => game.setup.names?.[i] || W.team(i + 1)) : []), [game])
 
   if (failed) return <div className="rd"><main className="rd-front"><h1 className="rd-title">{W.title}</h1><p className="rd-note">{W.noUnits}</p></main></div>
@@ -269,7 +312,7 @@ export default function ReviewDay() {
   const switchable = !atFront ? modesFor({ course: game.setup.course, lab }).filter(m => m.count(ctx, game.setup.units) > 0) : []
 
   return (
-    <div className={`rd${atFront ? ' front' : ''}`}>
+    <div className={`rd${atFront ? ' front' : ''}${fsOn ? ' fs' : ''}`} data-mode={atFront ? undefined : id}>
       {atFront ? (
         <Front manifest={manifest} saved={saved?.modeState ? saved : null} onStart={start} onResume={resume} />
       ) : (
@@ -278,6 +321,7 @@ export default function ReviewDay() {
             <span className="rd-mark">{W.title}</span>
             <span className="rd-tab on" aria-current="true">{mode?.name(game.setup.course)}</span>
             <div className="rd-tools">
+              <FullScreenButton />
               {switchable.length > 1 && <button type="button" className="rd-btn small" onClick={() => setPop('modes')}>{D.modes}</button>}
               <button type="button" className="rd-btn small" onClick={() => setGame(g => ({ ...g, showHelp: true }))}>{W.howTo}</button>
               <button type="button" className="rd-btn small" onClick={() => setPop('undo')}>{W.undo}</button>

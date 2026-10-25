@@ -209,6 +209,8 @@ export const D = {
   map: 'MAP DROP',
   mapSub: 'A map, a question. Every team writes.',
   nextMap: 'Next map',
+  mapZoomIn: 'Tap the map to zoom in.',
+  mapZoomOut: 'Tap again for the whole map.',
   // How to play, the new modes
   how: {
     final: { title: 'HOW TO PLAY · FINAL ANSWER', setup: 'Same teams, same boards.', steps: ['Look at the category and your score.', 'Write your wager. Wager up to your score, or up to 500 if you have less.', 'Read the clue. Write your answer.', 'Right adds your wager. Wrong takes it away.'] },
@@ -234,3 +236,76 @@ export const TEAM_NAMES = [
   'The Clipboard Coaches', 'The Sideline Scholars', 'The Varsity Brains', 'The Pep Rally', 'The Sweatband Society',
   'The Stretching Circle', 'The Kickball Captains', 'The Pickleball Pros', 'The Field Day Champs', 'The Parachute Day Crew',
 ]
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SMALL GROUP (BK 2026-10-25 10:10: "all of these games could be played within small groups too...group of 4, each
+// person is their own team"; 10:12 "yes to both": the where choice, The Board's small-group card, and "player").
+// applyWhere() swaps these into W and D while a small-group game runs, and puts the whole-class words back after.
+// The small-group cards for the other modes follow The Board's pattern and are DRAFTS (BK: same pattern), listed for his yes.
+// ─────────────────────────────────────────────────────────────────────────────
+export const WHERE = {
+  label: 'Where are you playing?',
+  room: 'Whole class on the board',
+  group: 'Small group at a laptop',
+}
+const GROUP_SETUP = 'Four players around one laptop. Everyone has scrap paper. Pick a reader.'
+const GROUP_W = {
+  teams: 'How many players?',
+  whoHad: 'Tap every player who had it.',
+  team: n => `Player ${n}`,
+  howBoard: () => ({
+    title: 'HOW TO PLAY · THE BOARD · SMALL GROUP',
+    setup: GROUP_SETUP,
+    steps: [
+      'Take turns picking a category and a value.',
+      'The reader reads the clue out loud.',
+      'Everyone writes an answer.',
+      'The reader taps Show the answer. Everyone who had it scores.',
+    ],
+    rule: 'Keep your answer covered until the reader shows it.',
+  }),
+  // drafts below this line (BK: "same pattern")
+  howTopWrite: () => ({
+    title: 'HOW TO PLAY · TOP ANSWERS · SMALL GROUP',
+    setup: GROUP_SETUP,
+    steps: ['The reader reads the prompt out loud. It has 4 to 6 answers.', 'Everyone writes as many answers as they can.', 'The reader flips the answers, from the bottom to the top.', 'Every player who had an answer scores its points.'],
+    rule: 'Keep your answers covered until they flip.',
+  }),
+  howTopTurns: () => ({
+    title: 'HOW TO PLAY · TOP ANSWERS · SMALL GROUP',
+    setup: GROUP_SETUP,
+    steps: ['The reader reads the prompt out loud. It has 4 to 6 answers.', 'The player who\'s up says answers out loud, one at a time.', 'Three misses and the next player gets one steal.', 'A hit takes all the points.'],
+  }),
+}
+const GROUP_D = {
+  modesTitle: 'Switch modes. Players and scores stay.',
+  oddWho: 'Tap every player who picked it.',
+  oddWhy: 'Tap every player whose why matched.',
+  detectiveSub: 'Four questions about one document. Take turns tapping in your answers.',
+  orderSub: 'Put the events in order. Take turns tapping them in.',
+  firstRight: name => `${name} locked in first with it all right.`,
+  how: {
+    final: { title: 'HOW TO PLAY · FINAL ANSWER · SMALL GROUP', setup: GROUP_SETUP, steps: ['Look at the category and your score.', 'Write your wager. Wager up to your score, or up to 500 if you have less.', 'The reader reads the clue. Write your answer.', 'Right adds your wager. Wrong takes it away.'] },
+    lightning: { title: 'HOW TO PLAY · LIGHTNING ROUND · SMALL GROUP', setup: 'Four players around one laptop. Everyone numbers a paper 1 to 10.', steps: ['Ten clues flash by, about six seconds each.', 'Write as many answers as you can. Skip what you don\'t know.', 'When it stops, the answers show.', 'Every right answer is worth 10.'] },
+    detective: { title: 'HOW TO PLAY · DOCUMENT DETECTIVE · SMALL GROUP', setup: GROUP_SETUP, steps: ['The reader reads the document and the four questions out loud.', 'Everyone writes their four answers.', 'Take turns at the laptop: tap your letters in your lane, then Lock in.', 'Every right answer scores. First player locked in with all four right gets a bonus.'] },
+    order: { title: 'HOW TO PLAY · IN ORDER · SMALL GROUP', setup: GROUP_SETUP, steps: ['The reader reads the events out loud.', 'Everyone writes the order, earliest first.', 'Take turns at the laptop: tap the events in your lane, then Lock in.', 'The right order scores. First player locked in right gets a bonus.'] },
+    who: { title: 'HOW TO PLAY · WHO AM I? · SMALL GROUP', setup: GROUP_SETUP, steps: ['The reader reads a clue. Write your guess.', 'Right now? You score what it\'s worth.', 'Not yet? Another clue comes, worth less.', 'Four clues, then the answer.'] },
+    odd: { title: 'HOW TO PLAY · ODD ONE OUT · SMALL GROUP', setup: GROUP_SETUP, steps: ['The reader reads the four terms.', 'Write the one that doesn\'t belong, and why.', 'The right pick scores.', 'A why that matches scores again.'] },
+    principle: { title: 'HOW TO PLAY · NAME THE PRINCIPLE · SMALL GROUP', setup: GROUP_SETUP, steps: ['The reader reads the event.', 'Write the Civic Principle it shows, in the card\'s words.', 'The card is on the screen. Use it.', 'Every player who has it scores.'] },
+    issue: { title: 'HOW TO PLAY · NAME THE ISSUE · SMALL GROUP', setup: GROUP_SETUP, steps: ['The reader reads the event.', 'Write the enduring issue it shows: the exact issue, not the umbrella.', 'The umbrellas are on the screen. Use them.', 'Every player who has it scores.'] },
+    threads: { title: 'HOW TO PLAY · THREAD RUN · SMALL GROUP', setup: GROUP_SETUP, steps: ['The reader reads the event.', 'Write the Thread it belongs to, and one reason why.', 'The Threads are on the screen.', 'Every player who has it scores.'] },
+    map: { title: 'HOW TO PLAY · MAP DROP · SMALL GROUP', setup: GROUP_SETUP, steps: ['The reader reads the question. Look closely at the map.', 'Write your answer.', 'The reader taps Show the answer.', 'Every player who has it scores.'] },
+  },
+}
+const SAVED_W = Object.fromEntries(Object.keys(GROUP_W).map(k => [k, W[k]]))
+const SAVED_D = Object.fromEntries(Object.keys(GROUP_D).map(k => [k, D[k]]))
+let currentWhere = 'room'
+export function applyWhere(where) {
+  if (where === currentWhere) return
+  currentWhere = where
+  Object.assign(W, where === 'group' ? GROUP_W : SAVED_W)
+  Object.assign(D, where === 'group' ? GROUP_D : SAVED_D)
+}
+
+// Full screen (proposed 10/25 for BK's yes; button in the top bar and on the front, F key too).
+export const FS = { enter: 'Full screen', exit: 'Exit full screen' }
