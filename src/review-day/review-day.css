@@ -143,3 +143,39 @@
 .rd-names li{display:flex; align-items:center; gap:14px; padding:8px 10px 8px 16px; border-radius:12px; background:rgba(19,28,46,.92); border:2px solid var(--team)}
 .rd-names .rd-shape{font-size:1.4em}
 .rd-name{flex:1; font:700 clamp(20px,1.7vw,34px)/1.1 'Barlow Condensed',sans-serif; letter-spacing:.03em}
+
+/* settings, timer, pop-ups, undo (BK 22:52) */
+.rd-settings{display:flex; flex-direction:column; gap:10px; margin-top:14px}
+.rd-setting{display:flex; flex-wrap:wrap; align-items:center; gap:10px}
+.rd-setting-label{font:600 clamp(16px,1.25vw,24px)/1.2 'Outfit',sans-serif; min-width:9.5em}
+.rd-choice.small{min-height:52px; padding:8px 18px; font-size:clamp(15px,1.1vw,22px)}
+.rd-tools{display:flex; gap:8px; flex-wrap:wrap}
+.rd-listtag{font:700 clamp(15px,1.1vw,22px)/1 'Barlow Condensed',sans-serif; letter-spacing:.08em; padding:6px 10px; border-radius:8px; border:2px solid var(--tile-edge); color:var(--arena-white)}
+.rd-bar.still{cursor:default}
+.rd-timer{display:flex; flex-direction:column; align-items:center; gap:10px}
+.rd-ring{--frac:1; width:clamp(96px,9vw,170px); aspect-ratio:1; border-radius:50%; display:grid; place-items:center;
+  background:conic-gradient(var(--arena-gold) calc(var(--frac) * 360deg), #22304A 0); position:relative}
+.rd-ring::before{content:''; position:absolute; inset:12%; border-radius:50%; background:#0e1830}
+.rd-ring span{position:relative; font:700 clamp(36px,3.6vw,72px)/1 'Barlow Condensed',sans-serif; color:var(--arena-white)}
+.rd-timer.done .rd-ring{background:var(--arena-gold)}
+.rd-boardsup{font:700 clamp(28px,2.8vw,56px)/1 'Barlow Condensed',sans-serif; letter-spacing:.06em; color:var(--arena-gold)}
+.rd-scrim{position:fixed; inset:0; z-index:60; background:rgba(5,9,18,.78); display:grid; place-items:center; padding:20px}
+.rd-modal{width:min(1100px,100%); max-height:92vh; overflow:auto; background:#101a2e; border:3px solid var(--arena-gold); border-radius:16px; padding:clamp(18px,2.4vw,44px); box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.rd-modal-title{font:700 clamp(28px,2.8vw,56px)/1.05 'Barlow Condensed',sans-serif; letter-spacing:.05em; color:var(--arena-gold); margin-bottom:14px}
+.rd-how{font-size:clamp(18px,1.6vw,32px); margin:8px 0}
+.rd-how.rule{color:var(--arena-gold); font-weight:600}
+.rd-how.note{color:#d6deea; font-size:clamp(15px,1.15vw,22px)}
+.rd-how-steps{font-size:clamp(18px,1.6vw,32px); padding-left:1.4em; margin:6px 0 14px; display:flex; flex-direction:column; gap:6px}
+.rd-undo{list-style:none; display:flex; flex-direction:column; gap:8px; margin:6px 0}
+.rd-undo-move{width:100%; text-align:left; min-height:56px; padding:10px 16px; border-radius:10px; background:var(--tile); border:2px solid var(--tile-edge); color:var(--arena-white); font:600 clamp(16px,1.3vw,26px)/1.25 'Outfit',sans-serif}
+.rd-undo-move:hover,.rd-undo-move:focus-visible{border-color:var(--arena-gold)}
+
+/* layout pass after the first full-size render: two header rows, lists fit one screen */
+.rd-tools{margin-left:auto}
+.rd-bar-top .rd-teams{flex-basis:100%; margin-left:0; justify-content:center}
+.rd-bar{min-height:clamp(52px,7vh,92px)}
+.rd-top{gap:clamp(8px,1.3vh,18px); padding-top:clamp(10px,1.6vh,26px)}
+.rd-top .rd-clue-text{font-size:clamp(24px,2.6vw,54px)}
+.rd-top .rd-ring{width:clamp(80px,6.5vw,124px)}
+.rd-bar-top .rd-team{padding:4px 10px; font-size:clamp(14px,1vw,20px)}
+.rd-teambtn{min-height:56px}

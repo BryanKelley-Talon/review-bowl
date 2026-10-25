@@ -39,6 +39,86 @@ export const W = {
   nextList: 'Next list',
   listsDone: 'That was the last list. Start again from the menu for a new order.',
   sample: 'SAMPLE',
+  listTag: (unit, n) => `${unit} · List ${n}`,
+
+  // BK 2026-10-24 22:52, "yes to all": undo, timer, new class, both TOP ANSWERS modes (A default), the How to play cards.
+  // Settings on the front
+  timerLabel: 'Timer:',
+  timerOff: 'Off',
+  secs: s => `${s}`,
+  chimeLabel: 'Chime at zero:',
+  on: 'On',
+  off: 'Off',
+  topModeLabel: 'TOP ANSWERS:',
+  modeWrite: 'Everyone writes',
+  modeTurns: 'Turns and steals',
+  // Timer
+  startTimer: 'Start timer',
+  plus10: '+10',
+  pause: 'Pause',
+  boardsUp: 'Boards up.',
+  // TOP ANSWERS, everyone writes
+  writeMany: 'Write your answers.',
+  flipNext: 'Flip the next answer',
+  // Undo
+  undo: 'Undo',
+  undoTitle: 'Select the move you want to undo.',
+  undoNote: 'Undoing a move also undoes every move after it.',
+  undoNone: 'Nothing to undo yet.',
+  cancel: 'Cancel',
+  mvSquare: (value, teams, cat) => teams.length ? `${value} to ${teams.join(', ')} · ${cat}` : `${cat} ${value} · no team`,
+  mvDeal: 'New board dealt',
+  mvFlip: (rank, tag) => `#${rank} flipped · ${tag}`,
+  mvAward: (rank, pts, teams, tag) => `#${rank}: ${pts} to ${teams.join(', ')} · ${tag}`,
+  mvMiss: tag => `Miss · ${tag}`,
+  mvRest: tag => `The rest shown · ${tag}`,
+  mvSteal: (name, pts, tag) => `Steal: ${pts} to ${name} · ${tag}`,
+  mvKeep: (name, pts, tag) => `${pts} to ${name} · ${tag}`,
+  mvNext: tag => `Next list · after ${tag}`,
+  // New class
+  newClass: 'New class',
+  newClassTitle: 'Start over for a new class?',
+  newClassNote: 'This clears the scores and the board.',
+  startOver: 'Start over',
+  keepPlaying: 'Keep playing',
+  // How to play
+  howTo: 'How to play',
+  letsGo: "Let's go",
+  setUp: 'Set up.',
+  everyClue: 'Every clue.',
+  everyList: 'Every list.',
+  youHave: s => (s ? ` You have ${s} seconds.` : ''),
+  howBoard: s => ({
+    title: 'HOW TO PLAY · THE BOARD',
+    setup: 'Sit with your team, facing the screen. One board and one marker per team. Pick a writer.',
+    steps: [
+      'A team picks a category and a value. Teams take turns.',
+      'Read the clue. Talk it over with your team, quietly.',
+      `Your writer writes one answer.${W.youHave(s)}`,
+      'Boards up when your teacher says. Every team that has it scores.',
+    ],
+    rule: "Keep your answer hidden until boards up. Spelling doesn't count. The idea does.",
+  }),
+  howTopWrite: s => ({
+    title: 'HOW TO PLAY · TOP ANSWERS',
+    setup: 'Same teams, same boards.',
+    steps: [
+      'Read the prompt. It has 4 to 6 answers. #1 is the strongest.',
+      `Your team writes as many answers as you can.${W.youHave(s)}`,
+      'Boards up. The answers flip from the bottom to the top.',
+      'Every team that had an answer scores its points.',
+    ],
+  }),
+  howTopTurns: () => ({
+    title: 'HOW TO PLAY · TOP ANSWERS',
+    setup: 'Same teams, same boards.',
+    steps: [
+      'Read the prompt. It has 4 to 6 answers. #1 is the strongest.',
+      "The team that's up gives answers out loud, one at a time.",
+      'Three misses and the next team gets one steal.',
+      'A hit takes all the points.',
+    ],
+  }),
 }
 
 // Team names: dealt at random at the front, re-rolled with "New name" (BK 2026-10-24 22:47: "yes to randomizer and list. it's perfect.").
