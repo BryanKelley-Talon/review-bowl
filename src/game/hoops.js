@@ -734,7 +734,11 @@ function drawDunkCele(c, e) {
 // ── sprites: Bulls vs Blazers builds (BK 2026-10-31 19:16–19:18): big, chunky players, broad in the
 // shoulders, a tank cut, baggy shorts, high-tops; and a referee in stripes (19:20). Posed skeletons,
 // shaded in three tones and outlined, cached per pose so a Chromebook never redraws one from scratch.
-const DIG3 = { 0: '###|# #|# #|# #|###', 1: ' # |## | # | # |###', 2: '###|  #|###|#  |###', 3: '###|  #|###|  #|###', 4: '# #|# #|###|  #|  #', 5: '###|#  |###|  #|###' }
+// Jersey numerals, 4 wide × 6 tall (the 1 is 3 wide): only 0–5 ever appear on a legal high school number.
+const JERSEY = Object.fromEntries(Object.entries({
+  0: '.##.|#..#|#..#|#..#|#..#|.##.', 1: '.#.|##.|.#.|.#.|.#.|###', 2: '.##.|#..#|..#.|.#..|#...|####',
+  3: '###.|...#|.##.|...#|...#|###.', 4: '#..#|#..#|####|...#|...#|...#', 5: '####|#...|###.|...#|...#|###.',
+}).map(([k, v]) => [k, v.split('|')]))
 // joints, facing +x, feet on y = 0, in sprite units (SPR px each). The body is 46 units tall.
 const POSES = {
   ready: { hip: [-1, -20], sh: [1, -33], head: [2, -40], kB: [-3, -10], fB: [-5, 0], kF: [3, -10], fF: [3, 0], eB: [2, -25], hB: [4, -19], eF: [4, -25], hF: [6, -19] },
@@ -863,12 +867,24 @@ function paintSprite(ctx, p, poseName, f, air, s, ox, oy) {
     fr(X(hd[0] + 4.3) - flip(0.8), Y(hd[1] + 0.6), 0.8 * s, 1.2 * s, skd)
   }
   if (!armsUp) arm(j.eF, j.hF, false, p.sleeve)
-  // the number, never mirrored, big enough to read across the floor
+  // the number, never mirrored: tall block jersey numerals at the game's own pixel size, in the trim
+  // colour with a thin outline that contrasts with it (BK 19:33: the blown-up 3×5 digits looked bad)
   if (!ref && p.num != null) {
-    const m = lp(H0, S0, 0.5), n = String(p.num), px = Math.max(1, Math.round(s * 1.25)), wN = (n.length * 4 - 1) * px
-    const nx = Math.round(X(m[0] + 0.6) - wN / 2), ny = Math.round(Y(m[1]) - 2.5 * px)
-    for (const [dx, col] of [[1, Jdd], [0, T]]) { ctx.fillStyle = col
-      for (let c = 0; c < n.length; c++) { const g = DIG3[n[c]].split('|'); for (let yy = 0; yy < 5; yy++) for (let xx = 0; xx < 3; xx++) if (g[yy][xx] === '#') ctx.fillRect(nx + (c * 4 + xx) * px + dx, ny + yy * px + dx, px, px) } }
+    const m = lp(H0, S0, 0.56), n = String(p.num), px = Math.max(1, Math.round(s * 0.8))
+    const glyphs = [...n].map(c => JERSEY[c]), wN = glyphs.reduce((w, g) => w + g[0].length, 0) + (glyphs.length - 1), hN = 6
+    const nx = Math.round(X(m[0] + 0.6) - wN * px / 2), ny = Math.round(Y(m[1]) - hN * px / 2)
+    const ink = T, edge = lum(T) > 0.45 ? shade(J, dark ? -0.6 : -0.55) : '#f4f4f4', o = Math.max(1, Math.round(px / 2))
+    for (const [pass, col] of [[0, edge], [1, ink]]) {
+      ctx.fillStyle = col
+      let cx = nx
+      for (const g of glyphs) {
+        for (let yy = 0; yy < hN; yy++) for (let xx = 0; xx < g[yy].length; xx++) if (g[yy][xx] === '#') {
+          if (pass === 0) ctx.fillRect(cx + xx * px - o, ny + yy * px - o, px + 2 * o, px + 2 * o)
+          else ctx.fillRect(cx + xx * px, ny + yy * px, px, px)
+        }
+        cx += (g[0].length + 1) * px
+      }
+    }
   }
 }
 function outline(c, col, th) { const x = c.getContext('2d'); const d = x.getImageData(0, 0, c.width, c.height); const a = d.data, w = c.width, h = c.height
