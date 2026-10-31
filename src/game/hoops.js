@@ -70,7 +70,7 @@ export function createHoops(canvas, opts = {}) {
 // The Pixel Standard: 480×270, whole-number scaling, smoothing off. The court is a high school
 // court, 84 by 50 feet, seen from the side and a little above (oblique, like the Genesis game):
 // x runs baseline to baseline, y from the near sideline (0) to the far one (50), z is height.
-const W = 480, H = 270, KX = 7.2, KY = 2.6, KZ = 7, SHX = -0.22, Y0 = 262, SPR = 1.25
+const W = 480, H = 270, KX = 7.2, KY = 2.6, KZ = 8.5, SHX = -0.22, Y0 = 262, SPR = 1.25
 const HALF = 42, MARGIN = 9, RIM = 36.75, RIMZ = 10, FTX = 23
 const CAMMAX = HALF + MARGIN - W / 2 / KX
 const PAR = 0.55                                           // the wall and stands slide at this share of the floor
@@ -99,7 +99,7 @@ const S = { phase: 'idle', ts: 1, paused: false, g: null, trip: 0, you: opts.you
   homeYou: opts.home !== 'them', girls: !!opts.girls, stats: {}, ostats: {}, oppStrength: 5, steady: !!opts.steady, readBoost: false,
   players: [], ball: { x: 0, y: 25, z: 0, f: null, held: null, dribble: false, trail: [] }, pops: [], cele: null, band: null, film: null,
   q: 3, play: null, guess: null, aiCall: null, readAt: Infinity, callEnd: 0, contactAt: 0, win: null, grade: null, contest: null, box: null,
-  shooter: null, chances: 0, meter: null, ft: null, tutorial: null, bigAsked: -1, cheerUntil: 0, kits: null, shake: 0 }
+  shooter: null, chances: 0, netSnap: 0, boardShake: 0, rimBend: 0, ref: null, meter: null, ft: null, tutorial: null, bigAsked: -1, cheerUntil: 0, kits: null, shake: 0 }
 let gt = 0, rt = 0, timers = []
 const after = (t, fn) => timers.push({ at: gt + t, fn })
 // A possession's own timers: anything left over from a trip that has ended does nothing.
@@ -119,7 +119,8 @@ function makeSide(side, r) {
   let pi = 0
   return ROLES.map(role => ({ role, side, x: 0, y: 25, z: 0, tx: 0, ty: 25, pose: 'ready', poseUntil: 0, jump: null, face: 1,
     skin: SKIN[Math.floor(r() * SKIN.length)], hair: HAIR[Math.floor(r() * HAIR.length)],
-    tail: S.girls && r() < 0.65, band: r() < 0.25, num: mine[role] ?? pool[pi++] }))
+    hairStyle: (S.girls ? ['pony', 'bun', 'braids', 'pony', 'puffs', 'short'] : ['short', 'fade', 'afro', 'braids', 'buzz', 'fade'])[Math.floor(r() * 6)],
+    band: r() < 0.25, sleeve: r() < 0.22 ? (r() < 0.5 ? '#f2f2f2' : '#1a1a1e') : null, num: mine[role] ?? pool[pi++] }))
 }
 const side = s => S.players.filter(p => p.side === s)
 const roleOf = (s, ro) => S.players.find(p => p.side === s && p.role === ro)
@@ -139,10 +140,15 @@ function guardSpots(offSide) {
 
 // ───────────────────────── ball ─────────────────────────
 function fly(from, to, dur, apex, onEnd) { const b = S.ball; b.held = null; b.dribble = false; b.f = { from: { ...from }, to: { ...to }, t0: gt, dur, apex, onEnd }; b.x = from.x; b.y = from.y; b.z = from.z }
-function hand(p) { return { x: p.x + p.face * 0.9, y: p.y - 0.2, z: p.pose === 'set' || p.pose === 'spike' || p.pose === 'hero' ? 7.6 + p.z : 3.4 + p.z } }
 function ballStep() {
   const b = S.ball
-  if (b.held) { const h = hand(b.held); b.x = h.x; b.y = h.y; b.z = b.dribble ? 0.25 + Math.abs(Math.sin(gt * 9)) * 2.6 : h.z; return }
+  if (b.held) {
+    const p = b.held
+    // the dribble: the ball goes floor to hand, and the hand pose follows it (drawPlayer reads dribUp)
+    if (b.dribble) { const u = Math.abs(Math.cos(gt * 7.5)); b.x = p.x + p.face * 1.15; b.y = p.y - 0.3; b.z = 0.3 + (2.9 + p.z - 0.3) * u; p.dribUp = u > 0.55 }
+    else { const h = handOf(p); b.x = h.x; b.y = h.y; b.z = h.z }
+    return
+  }
   const f = b.f; if (!f) return
   const u = clamp((gt - f.t0) / f.dur, 0, 1)
   b.x = f.from.x + (f.to.x - f.from.x) * u; b.y = f.from.y + (f.to.y - f.from.y) * u
@@ -242,7 +248,7 @@ function runPlay(off, play, forced) {
   if (S.guessed && mark) { mark.tx = sh.x + (d * RIM - sh.x) * 0.15; mark.ty = sh.y }
   if (sh === pg) { tov ? steal(off, mark) : shotSetup(off, play, d, O, D); return }
   pose(pg, 'bump', 0.4)
-  const from = hand(pg), to = { x: sh.x, y: sh.y, z: 3.4 }
+  const from = handOf(pg), to = { x: sh.x, y: sh.y, z: 3.4 }
   if (tov) { const mid = { x: (from.x + to.x) / 2, y: (from.y + to.y) / 2, z: 3 }; if (mark) { mark.tx = mid.x; mark.ty = mid.y }
     fly(from, mid, 0.35, 0.4, () => steal(off, mark)); return }
   fly(from, to, 0.4, 0.5, () => { S.ball.held = sh; shotSetup(off, play, d, O, D) })
@@ -252,15 +258,15 @@ function steal(off, by) {
   pop(W8.pop.steal, S.ball.x, S.ball.y, 4); S.ball.f = null; S.ball.held = p; S.ball.dribble = true; pose(p, 'bump', 0.4)
   endTrip(off, 0)
 }
-// Each play goes to its spot and rises at its own pace; the ring closes at the release.
+// Each play goes to its spot; the ring closes on the release (a drive: on the takeoff).
 function shotSetup(off, play, d, O, D) {
   const sh = S.shooter
-  const windup = play === 'drive' ? 1.0 : play === 'post' ? 0.85 : 0.65
-  if (play === 'drive') { sh.tx = d * (RIM - 3.2); sh.ty = 25 + (sh.y < 25 ? -3 : 3); S.ball.dribble = true; later(windup - 0.32, () => { S.ball.dribble = false; jump(sh, 1.1, 0.7); pose(sh, 'spike', 0.8) }) }
-  else if (play === 'post') { sh.tx = d * (RIM - 4.5); sh.ty = sh.y; S.ball.dribble = true; later(windup - 0.3, () => { S.ball.dribble = false; jump(sh, 0.6, 0.6); pose(sh, 'spike', 0.7) }) }
-  else { S.ball.dribble = false; later(windup - 0.35, () => { jump(sh, 0.8, 0.7); pose(sh, 'set', 0.8) }) }
+  const windup = play === 'drive' ? 0.95 : play === 'post' ? 0.85 : 0.7
+  if (play === 'drive') { sh.tx = d * (RIM - 4.8); sh.ty = 25 + (sh.y < 25 ? -2.5 : 2.5); S.ball.dribble = true }
+  else if (play === 'post') { sh.tx = d * (RIM - 4.5); sh.ty = sh.y; S.ball.dribble = true; later(windup - 0.3, () => { S.ball.dribble = false; pose(sh, 'shootLoad', 0.4) }) }
+  else { S.ball.dribble = false; later(windup - 0.6, () => pose(sh, 'shootLoad', 0.3)); later(windup - 0.3, () => { jump(sh, 0.75, 0.75); pose(sh, 'set', 0.8) }) }
   const mark = roleOf(1 - off, sh.role)
-  if (mark) { mark.locked = true; later(windup - 0.25, () => { jump(mark, 0.9, 0.65); pose(mark, 'block', 0.7) }) }
+  if (mark) { mark.locked = true; later(windup - 0.2, () => { jump(mark, 1.0, 0.7); pose(mark, 'block', 0.75) }) }
   S.contactAt = gt + windup
   if (off === 0) {
     if (S.forced) { S.phase = 'play'; later(windup, () => release(off, 'off')); return }
@@ -292,7 +298,8 @@ function contestTap() {
   if (err < -0.45) { S.contest = 'early'; pop(W8.pop.reach, sh.x, sh.y, 7) }
   else { S.contest = RU.gradeOf(err, S.win); pop(S.contest === 'perfect' ? W8.pop.perfect : S.contest === 'good' ? W8.pop.good : err < 0 ? W8.pop.early : W8.pop.late, sh.x, sh.y, 7) }
 }
-// The ball leaves the shooter's hands: foul, make or miss, all from hoopsRules.
+// The ball leaves the shooter's hands: foul, make or miss, all from hoopsRules. A perfect drive that
+// goes in is a dunk (the computer's perfect drives dunk most of the time too).
 function release(off, grade) {
   if (!['shoot', 'play', 'contest', 'contestLate'].includes(S.phase)) return
   const d = dirOf(off), O = off === 0 ? S.stats : S.ostats, D = off === 0 ? S.ostats : S.stats, play = S.play
@@ -300,29 +307,33 @@ function release(off, grade) {
   S.phase = 'flight'; S.ts = 1; ui(off === 0 ? '' : W8.theyShoot, [])
   const foul = Math.random() < RU.foulChance({ play, contest })
   const made = Math.random() < RU.makeChance({ play, grade, off: O, def: D, guessed: S.guessed, contest })
-  const sh = S.shooter
-  const from = { x: sh.x + sh.face * 0.6, y: sh.y, z: 7.6 + sh.z }
-  const dist = Math.hypot(d * RIM - sh.x, 25 - sh.y)
-  const rim = rimPt(d)
-  if (foul) pop(W8.pop.foul, sh.x, sh.y, 9)
-  const dunk = off === 0 && play === 'drive' && grade === 'perfect' && made
-  fly(from, made ? rim : { x: rim.x - d * rand(0.3, 0.9), y: rim.y + rand(-0.8, 0.8), z: rim.z + 0.4 }, clamp(0.4 + dist * 0.025, 0.42, 0.95), dunk ? 0.4 : clamp(dist * 0.12, 0.8, 3.2), () => {
-    if (made) {
-      fly({ ...S.ball }, { x: rim.x, y: 25, z: 0.4 }, 0.35, 0, null)
-      S.shake = reduced ? 0 : play === 'drive' ? 3 : 0
-      const pts = RU.POINTS[play]
-      pop(play === 'shooter' ? W8.pop.swish : W8.pop.bucket, rim.x, 25, 12)
-      const word = foul ? W8.cele.andOne : dunk ? W8.cele.dunk : play === 'shooter' ? W8.cele.three : null
-      const then = () => (foul ? freeThrows(off, RU.ftCount(play, true), pts) : endTrip(off, pts))
-      if (off === 0 && word) { S.cheerUntil = rt + 1.8; celebrate(word, dunk ? 'hero' : play === 'shooter' ? 'set' : 'spike', then) } else later(0.5, then)
-      return
-    }
-    pop(W8.pop.miss, rim.x, 25, 13)
-    if (foul) { later(0.4, () => freeThrows(off, RU.ftCount(play, false), 0)); return }
-    rebound(off)
-  })
+  const sh = S.shooter, rim = rimPt(d)
+  const dunk = play === 'drive' && made && grade === 'perfect' && (off === 0 || Math.random() < 0.6)
+  if (foul) { pop(W8.pop.foul, sh.x, sh.y, 9); refSignal('foul') }
+  const finish = isDunk => {
+    S.netSnap = Math.max(S.netSnap, 0.7)
+    const pts = RU.POINTS[play]
+    pop(play === 'shooter' ? W8.pop.swish : W8.pop.bucket, rim.x, 25, 13)
+    if (!foul) refSignal(play === 'shooter' ? 'three' : 'two')
+    const word = foul ? W8.cele.andOne : isDunk ? W8.cele.dunk : play === 'shooter' ? W8.cele.three : null
+    const then = () => (foul ? freeThrows(off, RU.ftCount(play, true), pts) : endTrip(off, pts))
+    const go = () => { if (off === 0 && word) { S.cheerUntil = rt + 1.8; celebrate(word, play === 'shooter' ? 'release' : 'layup', then, isDunk) } else later(0.5, then) }
+    if (isDunk) later(0.6, go); else go()
+  }
+  const shoot = () => {
+    const from = handOf(sh), dist = Math.hypot(d * RIM - sh.x, 25 - sh.y)
+    fly(from, made ? rim : { x: rim.x - d * rand(0.3, 0.9), y: rim.y + rand(-0.8, 0.8), z: rim.z + 0.4 }, clamp(0.4 + dist * 0.025, 0.42, 0.95), clamp(dist * 0.12, 0.8, 3.2), () => {
+      if (made) { fly({ ...S.ball }, { x: rim.x, y: 25, z: 0.4 }, 0.35, 0, null); finish(false); return }
+      pop(W8.pop.miss, rim.x, 25, 14)
+      if (foul) { later(0.4, () => freeThrows(off, RU.ftCount(play, false), 0)); return }
+      rebound(off)
+    })
+  }
+  if (dunk) { dunkSeq(sh, d, () => finish(true)); return }
+  if (play === 'drive') { S.ball.dribble = false; sh.tx = d * (RIM - 3); jump(sh, 1.15, 0.75); pose(sh, 'layup', 0.8); later(0.3, shoot); return }
+  if (play === 'post') { jump(sh, 0.7, 0.6); pose(sh, 'layup', 0.7); later(0.22, shoot); return }
+  pose(sh, 'release', 0.5); shoot()
 }
-
 // ── the rebound: both sides box out, and the student taps for the student's team either way ──
 function rebound(off) {
   const d = dirOf(off), rim = rimPt(d)
@@ -331,7 +342,7 @@ function rebound(off) {
   const v = S.stats.Rebounding, k = (S.steady ? 1.9 : 1) * (S.readBoost ? 1.3 : 1)
   S.win = { perfect: (0.06 + v * 0.006) * k, ok: (0.14 + v * 0.012) * k }
   S.land = land; S.contactAt = gt + 0.75
-  for (const s of [0, 1]) { const big = roleOf(s, s === off ? 'PF' : 'C'); big.tx = land.x + rand(-1, 1); big.ty = land.y + (s === off ? -1.2 : 1.2) }
+  for (const s of [0, 1]) { const big = roleOf(s, s === off ? 'PF' : 'C'); big.tx = land.x + rand(-1, 1); big.ty = land.y + (s === off ? -1.2 : 1.2); big.face = Math.sign(d * RIM - big.x) || d; pose(big, 'boxout', 0.8) }
   ui(W8.reboundCall, []); coach('rebound')
   fly({ ...S.ball }, { ...land, z: 4.5 }, 0.75, 1.6, null)
   later(0.75 + S.win.ok, () => { if (S.phase === 'rebound') resolveBoard(off) })
@@ -355,7 +366,7 @@ function resolveBoard(off) {
     const d = dirOf(off), pg = roleOf(off, 'PG')
     for (const p of side(off)) { const s = spot(p.role, d); p.tx = s.x; p.ty = s.y }
     guardSpots(off)
-    fly(hand(who), hand(pg), 0.4, 0.4, () => { S.ball.held = pg; S.ball.dribble = true; for (const p of S.players) p.locked = false; later(0.5, () => (off === 0 ? callPlay(true) : guardPlay(true))) })
+    fly(handOf(who), handOf(pg), 0.4, 0.4, () => { S.ball.held = pg; S.ball.dribble = true; for (const p of S.players) p.locked = false; later(0.5, () => (off === 0 ? callPlay(true) : guardPlay(true))) })
   })
 }
 
@@ -377,7 +388,7 @@ function nextFt() {
   if (F.i >= F.n) { const pts = F.pts; S.ft = null; endTrip(F.off, pts); return }
   F.i++
   if (F.off === 0) {
-    S.phase = 'ftMeter'; S.ts = 1; S.meter = { t0: gt, green: RU.ftGreen(S.stats.FreeThrows, S.steady) }
+    S.phase = 'ftMeter'; S.ts = 1; S.meter = { t0: gt, green: RU.ftGreen(S.stats.FreeThrows, S.steady) }; pose(S.shooter, 'shootLoad', 30)
     ui(W8.ftCall(F.i, F.n), [])
     if (AUTO) later(0.6 + Math.random() * 0.5, ftTap)
   } else {
@@ -391,9 +402,9 @@ function ftTap() { if (S.phase !== 'ftMeter' || !S.meter) return
   S.meter = null; ftShot(made) }
 function ftShot(made) {
   const F = S.ft, d = dirOf(F.off), sh = S.shooter, rim = rimPt(d)
-  S.phase = 'ftFlight'; pose(sh, 'set', 0.6)
-  fly(hand(sh), made ? rim : { x: rim.x - d * 0.7, y: 25 + rand(-0.6, 0.6), z: rim.z + 0.3 }, 0.75, 2.2, () => {
-    if (made) { F.pts++; fly({ ...S.ball }, { x: rim.x, y: 25, z: 0.4 }, 0.3, 0, null); pop(W8.pop.ftGood, rim.x, 25, 12) }
+  S.phase = 'ftFlight'; pose(sh, 'release', 0.6)
+  fly(handOf(sh), made ? rim : { x: rim.x - d * 0.7, y: 25 + rand(-0.6, 0.6), z: rim.z + 0.3 }, 0.75, 2.2, () => {
+    if (made) { F.pts++; S.netSnap = 0.6; fly({ ...S.ball }, { x: rim.x, y: 25, z: 0.4 }, 0.3, 0, null); pop(W8.pop.ftGood, rim.x, 25, 13) }
     else { pop(W8.pop.ftMiss, rim.x, 25, 12); fly({ ...S.ball }, { x: rim.x - d * 3, y: 25 + rand(-4, 4), z: 0 }, 0.4, 0.6, null) }
     later(0.6, () => { S.ball.f = null; S.ball.held = sh; nextFt() })
   })
@@ -416,7 +427,7 @@ function endTrip(off, pts) {
   }
   later(1.0, next)
 }
-function celebrate(word, heroPose, then) { S.cele = { word, heroPose, t0: rt, dur: reduced ? 1.0 : 1.6, then } }
+function celebrate(word, heroPose, then, dunk = false) { S.cele = { word, heroPose, dunk, t0: rt, dur: reduced ? 1.2 : dunk ? 2.0 : 1.6, then } }
 function askTimeout() {
   if (S.paused || !S.g || S.g.timeouts <= 0 || !['bringUp', 'callPlay', 'guard'].includes(S.phase)) return
   S.paused = true; opts.onTimeout && opts.onTimeout()
@@ -605,80 +616,260 @@ function drawCrowd(ox) {
     if (up) { R(x - 2, y - 3 + dy, 1, 3, f.skin); R(x + 3, y - 3 + dy, 1, 3, f.skin) }
   }
 }
-// The basket: a padded stanchion behind the baseline, the arm, the board, the orange rim and the net.
-function drawHoop(s) {
-  // the stanchion stands at the back of the apron, clear of the baseline lettering
-  const [bx, by] = P(s * (HALF + MARGIN - 1.2), 25), [ax, ay] = P(s * (RIM + 1.25), 25, 12.6)
-  const hc = home().c[0], pad = lum(hc) < 0.12 ? home().c[1] : hc
-  R(bx - 4, by - 20, 9, 20, OUTC); R(bx - 3, by - 19, 7, 19, pad); R(bx - 3, by - 19, 2, 19, shade(pad, 0.3))
-  R(bx - 2, ay - 2, 4, by - ay - 18, '#6c7280'); L(bx, ay, ax, ay, '#6c7280'); L(bx, ay + 1, ax, ay + 1, '#454a55')
-  // the board, shown a little open to the camera (the Genesis game's cheat)
-  const bw = 9, bh = 26, bxl = ax - (s > 0 ? bw : 0)
-  R(bxl - 1, ay - 9, bw + 2, bh + 2, OUTC); R(bxl, ay - 8, bw, bh, '#dfe8ee'); R(bxl + (s > 0 ? 1 : bw - 4), ay - 6, 3, bh - 6, '#b8c6d0')
-  R(bxl + 2, ay + 6, bw - 4, 1, '#E04B2C'); R(bxl + 2, ay + 6, 1, 7, '#E04B2C'); R(bxl + bw - 3, ay + 6, 1, 7, '#E04B2C')
-  const [rx, ry] = P(s * RIM, 25, RIMZ)
-  // the net, then the rim over it
-  for (let i = 0; i < 6; i++) { const t = i / 5; L(rx - 5 + t * 10, ry + 1, rx - 3 + t * 6, ry + 9, '#eef1f4') }
-  L(rx - 3, ry + 5, rx + 3, ry + 5, '#cfd6dc'); L(rx - 3, ry + 9, rx + 3, ry + 9, '#cfd6dc')
-  ell(rx, ry, 6, 1.6, '#E04B2C'); ell(rx, ry + 1, 6, 1.6, '#a8341d')
+// The basket (BK 19:16: "the hoop can be better"): a padded stanchion behind the baseline, a pole and
+// a truss arm, a glass board seen a little open to the camera with its frame and shooter's square, a
+// thick orange rim, and a mesh net that snaps when the ball goes through. The back half draws with
+// the court; the net and the rim's front lip draw over everything, so a made ball drops INTO the net.
+const hoopShake = () => (S.boardShake > 0.02 && !reduced ? Math.round(Math.sin(rt * 60) * S.boardShake * 2) : 0)
+function rimArc(cx, cy, back) {
+  const bend = back ? 0 : S.rimBend * 3
+  for (let i = 0; i <= 28; i++) {
+    const a = (back ? Math.PI : 0) + Math.PI * i / 28
+    const x = Math.round(cx + Math.cos(a) * 7.5), y = Math.round(cy + Math.sin(a) * (2.6 + (back ? 0 : bend)))
+    if (back) R(x, y, 1, 2, '#9c3412')
+    else { R(x, y, 1, 2, '#E2541F'); if (i > 4 && i < 24) R(x, y + 2, 1, 1, '#8a2a10'); if (i % 3 === 0) R(x, y, 1, 1, '#ff9a5a') }
+  }
+}
+function drawHoopBack(s) {
+  const hm = home(), pad = lum(hm.c[0]) < 0.12 ? hm.c[1] : hm.c[0], padD = shade(pad, -0.32), padL = shade(pad, 0.3)
+  const sh = hoopShake()
+  const [b0x, b0y] = P(s * (HALF + MARGIN - 3.4), 25), [b1x] = P(s * (HALF + MARGIN - 0.4), 25)
+  const left = Math.min(b0x, b1x), wB = Math.abs(b1x - b0x), baseH = Math.round(3.2 * KZ)
+  R(left - 1, b0y - baseH - 1, wB + 2, baseH + 2, OUTC); R(left, b0y - baseH, wB, baseH, pad); R(left, b0y - baseH, wB, 2, padL); R(left, b0y - 4, wB, 4, padD)
+  const px = Math.round((b0x + b1x) / 2), [, ptop] = P(s * (HALF + MARGIN - 1.9), 25, 13.4), baseTop = b0y - baseH
+  R(px - 3, ptop, 6, baseTop - ptop, OUTC); R(px - 2, ptop, 4, baseTop - ptop, '#7d8494'); R(px - 2, ptop, 1, baseTop - ptop, '#aeb5c2')
+  const [, pp] = P(s * HALF, 25, 6.6); R(px - 4, pp, 8, baseTop - pp, OUTC); R(px - 3, pp + 1, 6, baseTop - pp - 1, pad); R(px - 3, pp + 1, 2, baseTop - pp - 1, padL)
+  // the truss out to the board
+  const [ax, ayT] = P(s * 38.6, 25, 13.1), [, ayB] = P(s * 38.6, 25, 11.8)
+  L(px, ptop + 1, ax, ayT + sh, '#4f5562'); L(px, ptop, ax, ayT - 1 + sh, '#a5acb9'); L(px, ptop + 9, ax, ayB + sh, '#4f5562')
+  for (let i = 0; i < 5; i++) { const t0 = i / 5, t1 = (i + 1) / 5; L(px + (ax - px) * t0, ptop + (ayT - ptop) * t0, px + (ax - px) * t1, ptop + 9 + (ayB - ptop - 9) * t1, '#6c7380') }
+  // the board
+  const [cx, cyM] = P(s * 38, 25, 11.6), bw = 32, bh = 24, x0 = Math.round(cx - bw / 2), y0 = Math.round(cyM - bh / 2) + sh
+  G.globalAlpha = 0.34; R(x0, y0, bw, bh, '#cfe6f2'); G.globalAlpha = 0.2; R(x0 + 3, y0 + 3, 5, bh - 8, '#ffffff'); R(x0 + 9, y0 + 3, 2, bh - 8, '#ffffff'); G.globalAlpha = 1
+  R(x0 - 1, y0 - 1, bw + 2, 1, OUTC); R(x0 - 1, y0 + bh, bw + 2, 1, OUTC); R(x0 - 1, y0, 1, bh, OUTC); R(x0 + bw, y0, 1, bh, OUTC)
+  for (const [x, y, w, h] of [[x0, y0, bw, 2], [x0, y0 + bh - 2, bw, 2], [x0, y0, 2, bh], [x0 + bw - 2, y0, 2, bh]]) R(x, y, w, h, '#f2f6f9')
+  const [rx, ry0] = P(s * RIM, 25, RIMZ), ry = ry0 + sh, sqW = 13, sqH = 9, sqX = Math.round(cx - sqW / 2), sqY = ry - sqH - 2
+  R(sqX, sqY, sqW, 2, '#f2f6f9'); R(sqX, sqY, 2, sqH, '#f2f6f9'); R(sqX + sqW - 2, sqY, 2, sqH, '#f2f6f9')
+  R(x0, y0 + bh, bw, 3, pad); R(x0, y0 + bh, bw, 1, padL)
+  // the bracket, then the back half of the rim
+  R(Math.min(cx, rx) , ry - 1, Math.abs(rx - cx) + 1, 3, '#3f444e')
+  rimArc(rx, ry, true)
+}
+function drawNet(rx, ry, wTop, wBot, len, snap, sway, rows = 4, cols = 6, col = '#eef1f4', thick = 1) {
+  const at = (r, c) => { const t = r / rows, w = wTop + (wBot - wTop) * t; return [rx + sway * t + w * (-1 + 2 * c / cols), ry + 1 + len * t] }
+  G.globalAlpha = 0.9
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+    const a = at(r, c), b = at(r + 1, c + 1), e = at(r, c + 1), f2 = at(r + 1, c)
+    for (let k = 0; k < thick; k++) { L(a[0] + k, a[1], b[0] + k, b[1], col); L(e[0] + k, e[1], f2[0] + k, f2[1], col) }
+  }
+  G.globalAlpha = 1
+}
+function drawHoopFront(s) {
+  const sh = hoopShake(), [rx, ry0] = P(s * RIM, 25, RIMZ), ry = ry0 + sh
+  if (rx < -20 || rx > W + 20) return
+  drawNet(rx, ry + Math.round(S.rimBend * 2), 7, 4, 12 * (1 + S.netSnap * 0.5), S.netSnap, reduced ? 0 : Math.sin(rt * 22) * S.netSnap * 2)
+  rimArc(rx, ry, false)
 }
 
-// ── sprites: volleyball's posed skeleton, dressed for basketball ──
-const DIG3 = { 0: '###|# #|# #|# #|###', 1: ' # |## | # | # |###', 2: '###|  #|###|#  |###', 3: '###|  #|###|  #|###', 4: '# #|# #|###|  #|  #', 5: '###|#  |###|  #|###' }
-const POSES = {
-  ready: { hip: [-1, -16], sh: [1, -27], head: [3, -32], kB: [-3, -8], fB: [-5, 0], kF: [3, -8], fF: [2, 0], eB: [3, -21], hB: [6, -18], eF: [4, -21], hF: [7, -17] },
-  ready2: { hip: [-1, -15.5], sh: [1, -26.4], head: [3, -31.4], kB: [-3, -7.8], fB: [-5, 0], kF: [3, -7.8], fF: [2, 0], eB: [3, -20.5], hB: [6, -17.4], eF: [4, -20.5], hF: [7, -16.4] },
-  dribble: { hip: [-1, -16], sh: [1, -27], head: [3, -32], kB: [-3, -8], fB: [-5, 0], kF: [3, -8], fF: [3, 0], eB: [2, -21], hB: [4, -18], eF: [5, -20], hF: [8, -14] },
-  defend: { hip: [-1, -14], sh: [1, -25], head: [3, -30], kB: [-6, -8], fB: [-9, 0], kF: [5, -8], fF: [8, 0], eB: [-4, -20], hB: [-9, -19], eF: [6, -20], hF: [11, -19] },
-  runA: { hip: [0, -19], sh: [2, -30], head: [3, -35], kB: [-1, -9], fB: [-2, 0], kF: [3, -12], fF: [1, -6], eB: [1, -24], hB: [2, -20], eF: [2, -24], hF: [3, -21] },
-  runB: { hip: [0, -19], sh: [2, -30], head: [3, -35], kB: [3, -12], fB: [1, -6], kF: [-1, -9], fF: [-2, 0], eB: [2, -24], hB: [3, -21], eF: [1, -24], hF: [2, -20] },
-  run0: { hip: [0, -18], sh: [2, -29], head: [3, -34], kB: [-3, -9], fB: [-6, -3], kF: [3, -10], fF: [3, 0], eB: [-2, -24], hB: [-1, -19], eF: [4, -24], hF: [6, -28] },
-  run1: { hip: [0, -18], sh: [2, -29], head: [3, -34], kB: [2, -10], fB: [1, 0], kF: [-2, -9], fF: [-5, -3], eB: [4, -24], hB: [6, -28], eF: [-2, -24], hF: [-1, -19] },
-  land: { hip: [0, -14], sh: [1, -25], head: [2, -30], kB: [-3, -7], fB: [-4, 0], kF: [3, -7], fF: [3, 0], eB: [3, -19], hB: [5, -15], eF: [4, -19], hF: [6, -15] },
-  bump: { hip: [-1, -16], sh: [1, -27], head: [3, -32], kB: [-3, -8], fB: [-5, 0], kF: [3, -8], fF: [2, 0], eB: [5, -24], hB: [10, -24], eF: [5, -23], hF: [10, -23] },
-  set: { hip: [0, -19], sh: [0, -30], head: [1, -35], kB: [-1, -10], fB: [-2, 0], kF: [2, -10], fF: [2, 0], eB: [0, -35], hB: [2, -41], eF: [3, -35], hF: [4, -41] },
-  spike: { hip: [-1, -19], sh: [-1, -30], head: [0, -35], kB: [-3, -12], fB: [-6, -5], kF: [2, -11], fF: [0, -3], eB: [-3, -24], hB: [-1, -20], eF: [4, -35], hF: [6, -42] },
-  block: { hip: [0, -19], sh: [0, -30], head: [0, -35], kB: [-1, -10], fB: [-1, -1], kF: [1, -10], fF: [1, -1], eB: [0, -38], hB: [1, -45], eF: [2, -38], hF: [3, -45] },
-  hero: { hip: [-1, -19], sh: [0, -30], head: [2, -35], kB: [-3, -12], fB: [-6, -5], kF: [2, -11], fF: [0, -3], eB: [4, -26], hB: [7, -22], eF: [6, -36], hF: [9, -43] },
+// ── the dunk (BK 19:18: "Need a good slam dunk too") ──
+// The driver takes off on the tap, cocks the ball back, throws it down through the rim and hangs on
+// it; the net snaps, the board shakes, the floor shakes, and the close-up follows.
+function dunkSeq(sh, d, onSlam) {
+  const rim = rimPt(d)
+  sh.tx = d * (RIM - 1.7); sh.ty = 25; sh.face = d
+  S.ball.dribble = false; S.ball.held = sh
+  pose(sh, 'dunkReach', 0.6); jump(sh, 1.5, 0.9); dust(sh.x, sh.y, 8)
+  later(0.42, () => {
+    pose(sh, 'dunkSlam', 0.3)
+    fly(handOf(sh), { x: rim.x, y: 25, z: RIMZ - 0.3 }, 0.07, 0, () => {
+      S.netSnap = 1; S.boardShake = 1; S.rimBend = 1; S.shake = reduced ? 0 : 4
+      fly({ ...S.ball }, { x: rim.x, y: 25, z: 0.4 }, 0.32, 0, null)
+      onSlam()
+    })
+    later(0.1, () => { sh.jump = null; sh.z = HANG_Z; sh.hang = gt + 0.5; pose(sh, 'hang', 0.6) })
+  })
 }
+// The referee works the far sideline, trailing the play, and signals what happened.
+function refSignal(kind) { if (S.ref) pose(S.ref, kind === 'three' ? 'block' : kind === 'foul' ? 'signalFoul' : 'bump', 0.9) }
+function burstBg(e) {
+  const kit = S.kits[0], cx = 138, cy = 148, n = 20, rot = reduced ? 0 : e * 0.5, c1 = kit.j, c2 = lum(kit.j) < 0.15 ? shade(kit.t, -0.35) : shade(kit.j, -0.35)
+  R(0, 0, W, H, '#05070d')
+  for (let i = 0; i < n; i++) { const a0 = rot + i / n * Math.PI * 2, a1 = a0 + Math.PI / n; G.fillStyle = i % 2 ? c1 : c2; G.beginPath(); G.moveTo(cx, cy); G.lineTo(cx + Math.cos(a0) * W * 1.1, cy + Math.sin(a0) * W * 1.1); G.lineTo(cx + Math.cos(a1) * W * 1.1, cy + Math.sin(a1) * W * 1.1); G.closePath(); G.fill() }
+  const bd = 35; G.globalAlpha = 0.55; R(0, 0, W, bd, '#05070d'); R(0, H - bd - 2, W, bd + 2, '#05070d'); G.globalAlpha = 1; R(0, bd, W, 2, '#E3B341'); R(0, H - bd - 4, W, 2, '#E3B341')
+}
+const GRAD = ['#fff6c8', '#ffe27a', '#f7c948', '#f0b232', '#e8962a', '#df7a22', '#c85a18']
+// The dunk's own close-up: the rim and board big on the right, the player hanging on it, the ball
+// dropping through a snapping net. Reduced motion gets the finished frame, still.
+function drawDunkCele(c, e) {
+  const k = reduced ? 1 : clamp((e - 0.05) / 0.3, 0, 1), ease = 1 - (1 - k) * (1 - k)
+  burstBg(e)
+  const rx = 330, ry = 132, RX = 62
+  // the board's lower edge and its shooter's square
+  G.globalAlpha = 0.3; R(rx - 110, 36, 220, 92, '#cfe6f2'); G.globalAlpha = 1
+  R(rx - 110, 124, 220, 5, '#f2f6f9'); R(rx - 112, 36, 4, 93, '#f2f6f9'); R(rx + 108, 36, 4, 93, '#f2f6f9')
+  R(rx - 44, 64, 88, 5, '#f2f6f9'); R(rx - 44, 64, 5, 60, '#f2f6f9'); R(rx + 39, 64, 5, 60, '#f2f6f9')
+  R(rx - 6, 128, 12, 6, '#3f444e')
+  // the back of the rim
+  for (let i = 0; i <= 60; i++) { const a = Math.PI + Math.PI * i / 60; R(Math.round(rx + Math.cos(a) * RX), Math.round(ry + Math.sin(a) * 16), 3, 5, '#9c3412') }
+  // the ball, dropping through
+  const bu = reduced ? 1 : clamp((e - 0.25) / 0.3, 0, 1), by = Math.round(ry - 46 + bu * 74), bx = rx - 6
+  disc(bx, by, 17, OUTC); disc(bx, by, 15, '#E07A2E'); disc(bx - 5, by - 6, 5, '#F6A85C'); R(bx - 15, by, 31, 2, '#5a2a10'); R(bx, by - 15, 2, 31, '#5a2a10')
+  // the net: long, snapping when the ball arrives
+  const snap = reduced ? 0.4 : clamp(1 - Math.abs(e - 0.55) * 2.2, 0, 1)
+  drawNet(rx, ry + 2, RX - 4, RX * 0.5, 64 * (1 + snap * 0.35), snap, reduced ? 0 : Math.sin(e * 30) * snap * 6, 4, 8, '#eef1f4', 2)
+  // the player, hanging on the front of the rim
+  const h = S.shooter || side(0)[0], s3 = 3 * SPR, spr = sprite(h, bu >= 1 ? 'hang' : 'dunkSlam', 1, true, s3)
+  const hf = POSES[bu >= 1 ? 'hang' : 'dunkSlam'].hF, hx = Math.round(28 * s3 + hf[0] * s3), hy = Math.round(60 * s3 + hf[1] * s3)
+  const tx = rx - RX + 14 - hx, ty = ry - 6 - hy
+  G.drawImage(spr, Math.round(tx - (1 - ease) * 160), Math.round(ty + (1 - ease) * 120))
+  // the front of the rim, bending under the weight
+  const bend = reduced ? 3 : 2 + snap * 5
+  for (let i = 0; i <= 60; i++) { const a = Math.PI * i / 60; const x = Math.round(rx + Math.cos(a) * RX), y = Math.round(ry + Math.sin(a) * (16 + bend)); R(x, y, 3, 6, '#E2541F'); R(x, y, 3, 2, '#ff9a5a') }
+  // the word
+  const kw = reduced ? 1 : clamp((e - 0.3) / 0.2, 0, 1), word = c.word, ks = 6, ww = tw(word, ks), wx = Math.round(16 - (1 - kw) * 200)
+  R(wx - 8, 44, ww + 16, 60, 'rgba(5,7,13,.72)'); txtG(word, wx, 52, ks, GRAD, OUTC)
+  const sub = W8.celeSub(TEAMS[S.you].abbr); txt(sub, wx, 112, '#ffffff', 2, OUTC)
+}
+
+// ── sprites: Bulls vs Blazers builds (BK 2026-10-31 19:16–19:18): big, chunky players, broad in the
+// shoulders, a tank cut, baggy shorts, high-tops; and a referee in stripes (19:20). Posed skeletons,
+// shaded in three tones and outlined, cached per pose so a Chromebook never redraws one from scratch.
+const DIG3 = { 0: '###|# #|# #|# #|###', 1: ' # |## | # | # |###', 2: '###|  #|###|#  |###', 3: '###|  #|###|  #|###', 4: '# #|# #|###|  #|  #', 5: '###|#  |###|  #|###' }
+// joints, facing +x, feet on y = 0, in sprite units (SPR px each). The body is 46 units tall.
+const POSES = {
+  ready: { hip: [-1, -20], sh: [1, -33], head: [2, -40], kB: [-3, -10], fB: [-5, 0], kF: [3, -10], fF: [3, 0], eB: [2, -25], hB: [4, -19], eF: [4, -25], hF: [6, -19] },
+  ready2: { hip: [-1, -19.6], sh: [1, -32.5], head: [2, -39.5], kB: [-3, -9.8], fB: [-5, 0], kF: [3, -9.8], fF: [3, 0], eB: [2, -24.5], hB: [4, -18.6], eF: [4, -24.5], hF: [6, -18.6] },
+  dribbleUp: { hip: [-1, -19], sh: [2, -32], head: [3, -39], kB: [-4, -10], fB: [-6, 0], kF: [4, -10], fF: [4, 0], eB: [0, -25], hB: [1, -19], eF: [6, -25], hF: [10, -20] },
+  dribbleDown: { hip: [-1, -19], sh: [2, -32], head: [3, -39], kB: [-4, -10], fB: [-6, 0], kF: [4, -10], fF: [4, 0], eB: [0, -25], hB: [1, -19], eF: [7, -23], hF: [11, -15] },
+  dribRun0: { hip: [0, -21], sh: [3, -34], head: [4, -41], kB: [-3, -11], fB: [-7, -4], kF: [4, -12], fF: [4, 0], eB: [-3, -28], hB: [-2, -22], eF: [7, -27], hF: [11, -21] },
+  dribRun1: { hip: [0, -21], sh: [3, -34], head: [4, -41], kB: [3, -12], fB: [2, 0], kF: [-3, -11], fF: [-7, -4], eB: [-2, -27], hB: [-1, -21], eF: [7, -26], hF: [11, -18] },
+  run0: { hip: [0, -21], sh: [3, -34], head: [4, -41], kB: [-3, -11], fB: [-7, -4], kF: [4, -12], fF: [4, 0], eB: [-3, -28], hB: [-2, -22], eF: [6, -28], hF: [8, -33] },
+  run1: { hip: [0, -21], sh: [3, -34], head: [4, -41], kB: [3, -12], fB: [2, 0], kF: [-3, -11], fF: [-7, -4], eB: [6, -28], hB: [8, -33], eF: [-3, -28], hF: [-2, -22] },
+  runA: { hip: [0, -22], sh: [3, -35], head: [4, -42], kB: [-1, -11], fB: [-2, 0], kF: [4, -14], fF: [1, -7], eB: [1, -29], hB: [2, -24], eF: [3, -29], hF: [4, -25] },
+  runB: { hip: [0, -22], sh: [3, -35], head: [4, -42], kB: [4, -14], fB: [1, -7], kF: [-1, -11], fF: [-2, 0], eB: [3, -29], hB: [4, -25], eF: [1, -29], hF: [2, -24] },
+  defend: { hip: [-1, -17], sh: [1, -30], head: [3, -37], kB: [-7, -9], fB: [-10, 0], kF: [6, -9], fF: [9, 0], eB: [-5, -25], hB: [-11, -24], eF: [7, -25], hF: [13, -24] },
+  defend2: { hip: [-1, -17.5], sh: [1, -30.5], head: [3, -37.5], kB: [-4, -9], fB: [-6, 0], kF: [4, -9], fF: [6, 0], eB: [-5, -25], hB: [-11, -25], eF: [7, -25], hF: [13, -25] },
+  boxout: { hip: [-4, -17], sh: [0, -29], head: [3, -36], kB: [-8, -9], fB: [-10, 0], kF: [3, -9], fF: [5, 0], eB: [-7, -25], hB: [-12, -22], eF: [5, -27], hF: [9, -31] },
+  shootLoad: { hip: [0, -17], sh: [1, -30], head: [2, -37], kB: [-2, -9], fB: [-3, 0], kF: [3, -9], fF: [3, 0], eB: [4, -26], hB: [5, -32], eF: [6, -26], hF: [6, -33] },
+  set: { hip: [0, -22], sh: [0, -35], head: [1, -42], kB: [-1, -11], fB: [-2, 0], kF: [2, -11], fF: [2, 0], eB: [1, -42], hB: [3, -48], eF: [4, -42], hF: [4, -49] },
+  release: { hip: [0, -22], sh: [0, -35], head: [1, -42], kB: [-1, -12], fB: [-2, -2], kF: [2, -12], fF: [2, -2], eB: [2, -40], hB: [4, -45], eF: [5, -43], hF: [10, -48] },
+  layup: { hip: [-1, -22], sh: [0, -35], head: [2, -42], kB: [-3, -13], fB: [-6, -5], kF: [3, -17], fF: [2, -9], eB: [-3, -28], hB: [-2, -23], eF: [4, -43], hF: [6, -52] },
+  block: { hip: [0, -22], sh: [0, -35], head: [0, -42], kB: [-1, -11], fB: [-1, -1], kF: [1, -11], fF: [1, -1], eB: [0, -44], hB: [1, -52], eF: [2, -44], hF: [3, -52] },
+  signalFoul: { hip: [-1, -20], sh: [0, -33], head: [1, -40], kB: [-3, -10], fB: [-4, 0], kF: [3, -10], fF: [3, 0], eB: [3, -25], hB: [5, -20], eF: [1, -42], hF: [1, -50] },
+  dunkReach: { hip: [-1, -22], sh: [-1, -35], head: [1, -42], kB: [-3, -13], fB: [-6, -6], kF: [3, -16], fF: [1, -8], eB: [-2, -44], hB: [-6, -50], eF: [0, -45], hF: [-4, -51] },
+  dunkSlam: { hip: [0, -22], sh: [1, -35], head: [0, -42], kB: [-2, -12], fB: [-4, -3], kF: [2, -12], fF: [2, -3], eB: [8, -38], hB: [14, -42], eF: [9, -37], hF: [15, -41] },
+  hang: { hip: [-1, -25], sh: [1, -38], head: [-2, -44], kB: [-2, -14], fB: [-4, -4], kF: [1, -14], fF: [0, -4], eB: [7, -44], hB: [12, -51], eF: [8, -45], hF: [13, -52] },
+  land: { hip: [0, -16], sh: [1, -29], head: [2, -36], kB: [-3, -8], fB: [-5, 0], kF: [3, -8], fF: [4, 0], eB: [3, -23], hB: [6, -18], eF: [4, -23], hF: [7, -18] },
+  bump: { hip: [-1, -20], sh: [1, -33], head: [3, -40], kB: [-3, -10], fB: [-5, 0], kF: [3, -10], fF: [3, 0], eB: [6, -28], hB: [12, -28], eF: [6, -27], hF: [12, -27] },
+  hero: { hip: [-1, -22], sh: [0, -35], head: [2, -42], kB: [-3, -13], fB: [-6, -6], kF: [3, -14], fF: [1, -4], eB: [4, -30], hB: [8, -26], eF: [6, -44], hF: [9, -53] },
+}
+// Where a player's front hand is, in court feet: the ball sits in it.
+function handOf(p) {
+  const ps = POSES[p.shown || p.pose] || POSES.ready, [hx, hy] = ps.hF
+  return { x: p.x + p.face * hx * SPR / KX, y: p.y - 0.2, z: p.z + -hy * SPR / KZ }
+}
+const HANG_Z = RIMZ - -POSES.hang.hF[1] * SPR / KZ + 0.15   // feet off the floor when the hands are on the rim
 function paintSprite(ctx, p, poseName, f, air, s, ox, oy) {
-  const k = S.kits[p.side], J = k.j, T = k.t
-  const dark = lum(J) < 0.2, Jd = shade(J, dark ? 0.16 : -0.3), Jl = shade(J, dark ? 0.42 : 0.28), Jdd = shade(J, dark ? -0.5 : -0.5)
-  const sk = p.skin, skd = shade(sk, -0.24), skl = shade(sk, 0.18), hair = p.hair, hairl = shade(hair, 0.3)
-  const j = JSON.parse(JSON.stringify(POSES[poseName] || POSES.ready))
+  const ref = !!p.ref
+  const kit = ref ? { j: '#f4f4f4', t: '#151515' } : S.kits[p.side], J = kit.j, T = kit.t
+  const dark = lum(J) < 0.2
+  const Jd = shade(J, dark ? 0.2 : -0.26), Jl = shade(J, dark ? 0.5 : 0.32), Jdd = shade(J, dark ? 0.08 : -0.48)
+  const sk = p.skin, skd = shade(sk, -0.25), skl = shade(sk, 0.22), skdd = shade(sk, -0.45)
+  const hair = p.hair, hairl = shade(hair, 0.35), haird = shade(hair, -0.3)
+  const j = POSES[poseName] || POSES.ready
   const X = v => ox + f * v * s, Y = v => oy + v * s
   const fr = (x, y, w, h, c) => { ctx.fillStyle = c; ctx.fillRect(Math.round(x), Math.round(y), Math.max(1, Math.round(w)), Math.max(1, Math.round(h))) }
   const seg = (a, b, t, c) => { const x0 = X(a[0]), y0 = Y(a[1]), x1 = X(b[0]), y1 = Y(b[1]); const n = Math.ceil(Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0))) + 1; const tt = t * s; ctx.fillStyle = c
     for (let i = 0; i <= n; i++) { const u = i / n; ctx.fillRect(Math.round(x0 + (x1 - x0) * u - tt / 2), Math.round(y0 + (y1 - y0) * u - tt / 2), Math.round(tt), Math.round(tt)) } }
   const lp = (a, b, u) => [a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u]
   const blob = (c, r, col, dx = 0, dy = 0) => { const cx = X(c[0] + dx), cy = Y(c[1] + dy), rr = r * s; ctx.fillStyle = col; for (let yy = -rr; yy <= rr; yy++) { const w = Math.sqrt(Math.max(0, rr * rr - yy * yy)); ctx.fillRect(Math.round(cx - w), Math.round(cy + yy), Math.round(w * 2), 1) } }
-  const leg = (kn, ft, back) => { const c = back ? skd : sk; seg(j.hip, kn, 4.2, c); seg(kn, ft, 3.2, c); if (!back) seg(lp(j.hip, kn, 0.15), lp(j.hip, kn, 0.8), 1, skl)
-    // high socks and sneakers
-    seg(lp(kn, ft, 0.45), ft, 3.4, back ? '#cfd3da' : '#f4f4f6'); seg(lp(kn, ft, 0.5), lp(kn, ft, 0.56), 3.5, back ? shade(T, -0.3) : T)
-    const fx = X(ft[0]), fy = Y(ft[1]), sw = 5.6 * s, sh = 2.8 * s, x0 = f > 0 ? fx - 1.6 * s : fx - sw + 1.6 * s
-    fr(x0, fy - sh + 0.6 * s, sw, sh, back ? '#c8c8d0' : '#f6f6f8'); fr(x0, fy - 0.6 * s, sw, 1 * s, back ? shade(J, -0.3) : J); fr(x0, fy + 0.4 * s, sw, 1 * s, '#2a2a30') }
-  const arm = (e, h, back) => { const c = back ? skd : sk; seg(j.sh, e, 3.1, c); seg(e, h, 2.7, c); if (!back) seg(lp(j.sh, e, 0.4), lp(e, h, 0.6), 1, skl); blob(h, 1.5, back ? skd : skl) }
-  arm(j.eB, j.hB, true); leg(j.kB, j.fB, true); leg(j.kF, j.fF, false)
-  // long shorts in the jersey colour, a trim stripe down the side
-  const knF = lp(j.hip, j.kF, 0.78), knB = lp(j.hip, j.kB, 0.78)
-  seg(j.hip, knF, 7.6, Jd); seg(j.hip, knB, 7.2, shade(Jd, -0.15)); seg([j.hip[0] + 0.6, j.hip[1]], lp(j.hip, j.kF, 0.7), 5.2, J)
-  seg(lp(j.hip, j.kF, 0.1), lp(j.hip, j.kF, 0.72), 1, T)
-  // the tank: three tones, trim at the arm holes and the neck
-  seg(j.hip, j.sh, 9.2, Jd); seg([j.hip[0] + 0.9, j.hip[1]], [j.sh[0] + 0.9, j.sh[1]], 7, J); seg([j.hip[0] + 3.7, j.hip[1] - 1], [j.sh[0] + 3.7, j.sh[1] + 1.5], 1, Jl)
-  seg([j.hip[0] - 4.1, j.hip[1] - 0.5], [j.sh[0] - 4.1, j.sh[1] + 1], 1, Jdd)
-  seg([j.sh[0] - 3.5, j.sh[1] + 0.5], [j.sh[0] + 3.8, j.sh[1] + 0.5], 1.2, T)
-  const hd = j.head; seg([j.sh[0] + 1.2, j.sh[1] + 0.5], [hd[0] + 0.2, hd[1] + 3.2], 2.6, skd)
-  if (p.tail) { const sw = air ? 1 : 0; seg([hd[0] - 3.8, hd[1] - 1], [hd[0] - 5.6, hd[1] + 2 + sw], 2.6, hair); seg([hd[0] - 5.6, hd[1] + 2 + sw], [hd[0] - 6.2, hd[1] + 4.5 + sw], 2.2, shade(hair, -0.2)); fr(X(hd[0] - 4.2) - s, Y(hd[1] - 1.2), 2 * s, 1.4 * s, T) }
-  blob(hd, p.tail ? 4.2 : 3.9, hair, -0.5, p.tail ? -0.4 : -0.9); blob(hd, 3.6, sk, 1.3, 1.0); blob(hd, 1.3, skd, -0.6, 1.6); blob(hd, 1.1, hairl, -0.4, -3.3)
-  if (p.band) seg([hd[0] - 3.6, hd[1] - 2.3], [hd[0] + 3.6, hd[1] - 2.6], 1.2, T)
-  fr(X(hd[0] + 2.8) - (f > 0 ? 0 : s), Y(hd[1] - 0.2), 1 * s, 1.5 * s, '#141414')
-  if (s > 1) { fr(X(hd[0] + 3.0) - (f > 0 ? 0 : s), Y(hd[1] + 0.1), 0.5 * s, 0.6 * s, '#ffffff'); fr(X(hd[0] + 2.6) - (f > 0 ? 0 : s), Y(hd[1] + 2.5), 1.4 * s, 0.5 * s, shade(sk, -0.4)) }
-  arm(j.eF, j.hF, false)
-  // the number, never mirrored: one or two digits, 3×5 each
-  const m = lp(j.hip, j.sh, 0.55), n = String(p.num), wN = n.length * 4 - 1
-  const nx = X(m[0] + 0.9) - (wN / 2) * s, ny = Y(m[1]) - 2.5 * s
-  ctx.fillStyle = T
-  for (let c = 0; c < n.length; c++) { const g = DIG3[n[c]].split('|'); for (let yy = 0; yy < 5; yy++) for (let xx = 0; xx < 3; xx++) if (g[yy][xx] === '#') ctx.fillRect(Math.round(nx + (c * 4 + xx) * s), Math.round(ny + yy * s), Math.max(1, Math.round(s)), Math.max(1, Math.round(s))) }
+  const poly = (pts, c) => { ctx.fillStyle = c; ctx.beginPath(); pts.forEach(([a, b], i) => (i ? ctx.lineTo(X(a), Y(b)) : ctx.moveTo(X(a), Y(b)))); ctx.closePath(); ctx.fill() }
+  const shoeC = ref ? '#151515' : '#f6f6f8', shoeD = ref ? '#0a0a0a' : '#c9c9d1'
+  const leg = (kn, ft, back) => {
+    const c = back ? skd : sk
+    if (ref) { seg(j.hip, kn, 5.8, back ? '#101014' : '#1d1d22'); seg(kn, ft, 5, back ? '#101014' : '#1d1d22') }
+    else {
+      seg(j.hip, kn, 5.6, c); seg(kn, ft, 4.4, c)
+      if (!back) { seg(lp(kn, ft, 0.12), lp(kn, ft, 0.42), 1.3, skl); seg(lp(j.hip, kn, 0.45), lp(j.hip, kn, 0.85), 1.2, skl) }
+      seg(lp(kn, ft, 0.55), ft, 4.8, back ? '#d5d8de' : '#f6f6f8')
+      seg(lp(kn, ft, 0.6), lp(kn, ft, 0.66), 4.9, back ? shade(T, -0.3) : T)
+    }
+    // high-tops
+    const fx = X(ft[0]), fy = Y(ft[1]), sw = 7.6 * s, shh = 3.8 * s, x0 = f > 0 ? fx - 2.4 * s : fx - sw + 2.4 * s
+    fr(x0, fy - shh + 0.8 * s, sw, shh, back ? shoeD : shoeC)
+    if (!ref) fr(x0 + (f > 0 ? 1.5 * s : sw - 4.5 * s), fy - shh * 0.55, 3 * s, 1.1 * s, back ? shade(J, -0.3) : J)
+    fr(x0, fy + 0.6 * s, sw, 1.2 * s, '#26262c')
+  }
+  const arm = (e, h, back, sleeve) => {
+    const c = back ? skd : sk
+    seg(j.sh, e, 4.4, c); seg(e, h, 3.8, c)
+    if (ref) { seg(j.sh, lp(j.sh, e, 0.55), 4.9, back ? '#cfcfcf' : '#f4f4f4'); for (let i = 0; i < 2; i++) seg(lp(j.sh, e, 0.12 + i * 0.22), lp(j.sh, e, 0.2 + i * 0.22), 4.9, '#151515') }
+    else if (!back) { seg(lp(j.sh, e, 0.25), lp(j.sh, e, 0.7), 1.4, skl); seg(lp(e, h, 0.1), lp(e, h, 0.5), 1.1, skl) }
+    else seg(lp(j.sh, e, 0.3), lp(e, h, 0.6), 1.2, skdd)
+    if (sleeve) seg(lp(j.sh, e, 0.35), lp(e, h, 0.85), 4.1, back ? shade(sleeve, -0.25) : sleeve)
+    blob(h, 2.1, back ? skd : sk); if (!back) blob(h, 1, skl, 0.3, -0.5)
+  }
+  // hands above the head (a jumper, a block, a dunk): both arms go behind the head so the face reads
+  const armsUp = j.hF[1] < j.head[1] - 3
+  arm(j.eB, j.hB, true, null)
+  leg(j.kB, j.fB, true); leg(j.kF, j.fF, false)
+  const H0 = j.hip, S0 = j.sh
+  // baggy shorts in the jersey colour, a stripe down the side, trim at the hem
+  if (!ref) {
+    const kF8 = lp(H0, j.kF, 0.82), kB8 = lp(H0, j.kB, 0.82)
+    seg(H0, kB8, 8.4, shade(Jd, -0.12)); seg(H0, kF8, 8.8, Jd); seg([H0[0] + 0.8, H0[1]], lp(H0, j.kF, 0.75), 6, J)
+    const sF = lp(H0, j.kF, 0.05), eF8 = lp(H0, j.kF, 0.78)
+    seg([sF[0] + 3.4, sF[1]], [eF8[0] + 3.4, eF8[1]], 1.1, T)
+    seg([kF8[0] - 3.8, kF8[1] + 0.5], [kF8[0] + 3.8, kF8[1] + 0.5], 0.9, shade(J, dark ? 0.3 : -0.35))
+  }
+  // the tank: shoulders broader than the waist, the deltoids showing at the arm holes
+  const sw = 7, ww = 5.6
+  if (!ref) { blob([S0[0] - 5.2, S0[1] + 1.4], 2.6, skd); blob([S0[0] + 5.4, S0[1] + 1.4], 2.7, sk) }
+  poly([[S0[0] - sw + 1.6, S0[1]], [S0[0] + sw - 1.4, S0[1]], [H0[0] + ww, H0[1] - 1], [H0[0] - ww, H0[1] - 1]], Jd)
+  poly([[S0[0] - sw + 3, S0[1] + 0.6], [S0[0] + sw - 1.6, S0[1] + 0.6], [H0[0] + ww - 0.4, H0[1] - 1.2], [H0[0] - ww + 1.6, H0[1] - 1.2]], J)
+  seg([S0[0] + sw - 2.2, S0[1] + 1.5], [H0[0] + ww - 1, H0[1] - 1.6], 1.1, Jl)
+  seg([S0[0] - sw + 2, S0[1] + 1], [H0[0] - ww + 0.6, H0[1] - 1.4], 1, Jdd)
+  if (ref) { for (let k = -2; k <= 2; k++) seg([S0[0] + k * 2.4, S0[1] + 0.3], [H0[0] + k * 2, H0[1] - 1], 1.1, '#151515'); seg([H0[0] - ww, H0[1] - 0.6], [H0[0] + ww, H0[1] - 0.6], 1.4, '#151515') }
+  else {
+    seg([S0[0] - sw + 1.8, S0[1] + 0.4], [S0[0] - sw + 2.6, S0[1] + 4.2], 1.1, T)
+    seg([S0[0] + sw - 1.6, S0[1] + 0.4], [S0[0] + sw - 2.4, S0[1] + 4.2], 1.1, T)
+    seg([S0[0] - 1.6, S0[1] + 0.4], [S0[0] + 0.6, S0[1] + 3], 1.1, T); seg([S0[0] + 2.8, S0[1] + 0.4], [S0[0] + 0.6, S0[1] + 3], 1.1, T)
+  }
+  // neck, then the head with its hair
+  if (armsUp) arm(j.eF, j.hF, false, p.sleeve)
+  const hd = j.head, st = ref ? 'buzz' : p.hairStyle || 'short'
+  seg([S0[0] + 0.6, S0[1] + 0.8], [hd[0], hd[1] + 3.4], 3.8, skd)
+  if (ref) blob([S0[0] + 1.6, S0[1] + 2.4], 0.9, '#cfd6dc')
+  if (st === 'pony') { const sw2 = air ? 1 : 0; seg([hd[0] - 4, hd[1] - 1.5], [hd[0] - 6.4, hd[1] + 2 + sw2], 3, hair); seg([hd[0] - 6.4, hd[1] + 2 + sw2], [hd[0] - 7, hd[1] + 5.2 + sw2], 2.4, haird) }
+  if (st === 'bun') blob([hd[0] - 3.4, hd[1] - 4.4], 2.5, hair)
+  if (st === 'afro') { blob(hd, 6.6, hair, -0.9, -2); blob(hd, 2.2, hairl, -1.6, -5.4) }
+  if (st === 'puffs') { blob([hd[0] - 3.6, hd[1] - 4.6], 2.4, hair); blob([hd[0] + 1, hd[1] - 5.4], 2.3, hair) }
+  const cap = st === 'buzz' ? [4.8, -0.4, -0.6] : st === 'fade' ? [4.9, -0.5, -1.1] : [5, -0.5, -1.0]
+  blob(hd, cap[0], st === 'fade' ? shade(hair, 0.2) : hair, cap[1], cap[2])
+  if (st === 'fade') blob(hd, 3.6, hair, -0.4, -2.4)
+  blob(hd, 4.3, sk, 1.2, 1.1)
+  blob(hd, 1.6, skd, -1.1, 2.2)
+  blob([hd[0] - 0.8, hd[1] + 0.6], 1.1, skd)
+  if (st === 'braids') for (let i = 0; i < 3; i++) seg([hd[0] - 3 + i * 2.2, hd[1] - 4.6], [hd[0] - 4.6 + i * 1.3, hd[1] + 0.6], 0.8, haird)
+  if (st !== 'afro') blob(hd, 1.1, hairl, -0.6, -4)
+  if (p.band) seg([hd[0] - 4, hd[1] - 2.6], [hd[0] + 4, hd[1] - 2.9], 1.4, T)
+  const ex = hd[0] + 2.9, ey = hd[1] - 0.4, flip = n => (f > 0 ? 0 : n * s)
+  fr(X(ex) - flip(1), Y(ey), Math.max(1, s), Math.max(1, 1.5 * s), '#141414')
+  fr(X(ex - 0.6) - flip(1.8), Y(ey - 1.5), Math.max(1, 1.8 * s), Math.max(1, 0.6 * s), haird)
+  if (s > 2) {
+    fr(X(ex + 0.4) - flip(0.5), Y(ey + 0.2), 0.5 * s, 0.5 * s, '#ffffff')
+    const shout = ['dunkSlam', 'hang', 'hero'].includes(poseName)
+    fr(X(hd[0] + 2.2) - flip(1.8), Y(hd[1] + 2.3), 1.8 * s, (shout ? 1.4 : 0.5) * s, shout ? '#3a1414' : skdd)
+    fr(X(hd[0] + 4.3) - flip(0.8), Y(hd[1] + 0.6), 0.8 * s, 1.2 * s, skd)
+  }
+  if (!armsUp) arm(j.eF, j.hF, false, p.sleeve)
+  // the number, never mirrored, big enough to read across the floor
+  if (!ref && p.num != null) {
+    const m = lp(H0, S0, 0.5), n = String(p.num), px = Math.max(1, Math.round(s * 1.25)), wN = (n.length * 4 - 1) * px
+    const nx = Math.round(X(m[0] + 0.6) - wN / 2), ny = Math.round(Y(m[1]) - 2.5 * px)
+    for (const [dx, col] of [[1, Jdd], [0, T]]) { ctx.fillStyle = col
+      for (let c = 0; c < n.length; c++) { const g = DIG3[n[c]].split('|'); for (let yy = 0; yy < 5; yy++) for (let xx = 0; xx < 3; xx++) if (g[yy][xx] === '#') ctx.fillRect(nx + (c * 4 + xx) * px + dx, ny + yy * px + dx, px, px) } }
+  }
 }
 function outline(c, col, th) { const x = c.getContext('2d'); const d = x.getImageData(0, 0, c.width, c.height); const a = d.data, w = c.width, h = c.height
   const src = new Uint8Array(w * h); for (let i = 0; i < w * h; i++) src[i] = a[i * 4 + 3] > 40 ? 1 : 0; const [r, g, b] = rgb(col)
@@ -689,19 +880,27 @@ function outline(c, col, th) { const x = c.getContext('2d'); const d = x.getImag
 const spriteCache = new Map()
 function sprite(p, ps, f, air, s = SPR) {
   const key = `${p.side}${p.role}|${ps}|${f}|${air ? 1 : 0}|${s}`; let c = spriteCache.get(key)
-  if (!c) { c = document.createElement('canvas'); c.width = Math.round(56 * s); c.height = Math.round(66 * s); paintSprite(c.getContext('2d'), p, ps, f, air, s, Math.round(28 * s), Math.round(60 * s)); outline(c, OUTC, s > 2 ? 2 : 1); spriteCache.set(key, c) }
+  if (!c) {
+    c = document.createElement('canvas'); c.width = Math.round(56 * s); c.height = Math.round(66 * s)
+    paintSprite(c.getContext('2d'), p, ps, f, air, s, Math.round(28 * s), Math.round(60 * s))
+    // a very dark kit gets a softer outline so it doesn't vanish on a dark lane
+    outline(c, !p.ref && lum(S.kits[p.side].j) < 0.12 ? '#463e57' : OUTC, s > 2 ? 2 : 1); spriteCache.set(key, c)
+  }
   return c
 }
+const RUN = ['run0', 'runA', 'run1', 'runB'], DRUN = ['dribRun0', 'runA', 'dribRun1', 'runB']
 function drawPlayer(p, ox, oy) {
   const air = p.z > 0.05, moving = Math.hypot(p.tx - p.x, p.ty - p.y) > 0.15
   let ps = p.pose
   if (ps === 'ready') {
-    if (S.ball.held === p && S.ball.dribble) ps = moving ? ['run0', 'runA', 'run1', 'runB'][Math.floor(gt * 10 + p.num) & 3] : 'dribble'
-    else if (moving && !air) ps = ['run0', 'runA', 'run1', 'runB'][Math.floor(gt * 10 + p.num) & 3]
-    else if (S.g && p.side !== S.g.offense && !air) ps = 'defend'
-    else ps = Math.floor(rt * 1.4 + p.num * 0.37) % 2 ? 'ready2' : 'ready'
+    const onD = S.g && !p.ref && p.side !== S.g.offense && !['point', 'ftMeter', 'ftAI', 'ftFlight', 'over', 'between'].includes(S.phase)
+    if (S.ball.held === p && S.ball.dribble) ps = moving ? DRUN[Math.floor(gt * 10 + (p.num || 0)) & 3] : p.dribUp ? 'dribbleUp' : 'dribbleDown'
+    else if (moving && !air) ps = onD && S.phase !== 'rebound' ? (Math.floor(gt * 7 + (p.num || 0)) & 1 ? 'defend' : 'defend2') : RUN[Math.floor(gt * 10 + (p.num || 0)) & 3]
+    else if (onD && !air) ps = 'defend'
+    else ps = Math.floor(rt * 1.4 + (p.num || 0) * 0.37) % 2 ? 'ready2' : 'ready'
     if (air) ps = 'block'
   }
+  p.shown = ps
   G.drawImage(sprite(p, ps, p.face, air), ox - Math.round(28 * SPR), oy - Math.round(60 * SPR))
 }
 function drawBall(b) {
@@ -721,23 +920,24 @@ function render() {
   G.drawImage(wallCv, -Math.round(wallOx), 0); drawCrowd(Math.round(wallOx))
   G.drawImage(floorCv, Math.round(W / 2 - FX0 - camX * KX), 0)
   // shadows on the floor
-  for (const p of S.players) { const [x, y] = P(p.x, p.y); G.globalAlpha = 0.28; R(x - 8, y - 1, 16, 3, '#3a2210'); G.globalAlpha = 1 }
+  for (const p of [...S.players, S.ref]) { const [x, y] = P(p.x, p.y); G.globalAlpha = 0.28; R(x - 9, y - 1, 18, 3, '#3a2210'); G.globalAlpha = 1 }
   { const [x, y] = P(S.ball.x, S.ball.y); G.globalAlpha = 0.4; R(x - 3, y - 1, 7, 2, '#3a2210'); G.globalAlpha = 1 }
   // rings on the floor: the rebound
   if (S.phase === 'rebound' && S.land && !S.box) { const [x, y] = P(S.land.x, S.land.y); const rem = Math.max(0, S.contactAt - gt); ell(x, y, 6, 2.4, '#ffffff'); const rr = 6 + rem * 40; ell(x, y, rr, rr * 0.4, '#E3B341'); ell(x, y, rr + 1, rr * 0.4 + 0.6, OUTC) }
   // depth order: far to near; the baskets sit at mid-court depth
-  const list = S.players.map(p => ({ y: p.y, k: 'p', p }))
+  const list = [...S.players, S.ref].map(p => ({ y: p.y, k: 'p', p }))
   list.push({ y: 25.01, k: 'hoop', s: -1 }, { y: 25.01, k: 'hoop', s: 1 }, { y: S.ball.y - 0.05, k: 'ball' })
   list.sort((a, c) => c.y - a.y)
   for (const d of list) {
-    if (d.k === 'hoop') drawHoop(d.s)
+    if (d.k === 'hoop') drawHoopBack(d.s)
     else if (d.k === 'p') { const [x, y] = P(d.p.x, d.p.y, d.p.z); drawPlayer(d.p, x, y) }
     else drawBall(S.ball)
   }
+  drawHoopFront(-1); drawHoopFront(1)
   // the release ring on your shot, the contest ring on theirs
   if ((S.phase === 'shoot' || S.phase === 'contest') && S.shooter) {
     const rem = S.contactAt - gt
-    if (rem < 1.0) { const sh = S.shooter, [x, y] = P(sh.x, sh.y, sh.z + 7.6), cx = x + sh.face * 6; ell(cx, y, 5, 5, '#ffffff'); const rr = 5 + Math.max(0, rem) * 26; ell(cx, y, rr, rr, '#E3B341'); ell(cx, y, rr + 1, rr + 1, OUTC) }
+    if (rem < 1.0) { const sh = S.shooter, hh = handOf(sh), [cx, y] = P(hh.x, hh.y, hh.z); ell(cx, y, 5, 5, '#ffffff'); const rr = 5 + Math.max(0, rem) * 26; ell(cx, y, rr, rr, '#E3B341'); ell(cx, y, rr + 1, rr + 1, OUTC) }
   }
   // the read: who their point guard is looking at
   if (S.phase === 'guard' && gt >= S.readAt && S.aiCall) {
@@ -771,19 +971,16 @@ function drawFilm() {
     heroFn: () => sprite(youTeam[0], 'hero', 1, true, 2.6), mateFn: () => sprite(youTeam[4], 'run0', 1, false, 1.6) }, e, reduced)
   return true
 }
-// The close-up cut-in, the same burst and lettering volleyball's kill uses.
+// The close-up cut-in: volleyball's burst and lettering; the dunk gets its own (drawDunkCele).
 function drawCele() {
-  const c = S.cele, e = rt - c.t0, k = reduced ? 1 : clamp(e / 0.2, 0, 1), ease = 1 - (1 - k) * (1 - k), kit = S.kits[0]
+  const c = S.cele, e = rt - c.t0, k = reduced ? 1 : clamp(e / 0.2, 0, 1), ease = 1 - (1 - k) * (1 - k)
   if (!reduced && e < 0.05) { R(0, 0, W, H, '#ffffff'); return }
-  R(0, 0, W, H, '#05070d')
-  const cx = 138, cy = 148, n = 20, rot = reduced ? 0 : e * 0.5, c1 = kit.j, c2 = lum(kit.j) < 0.15 ? shade(kit.t, -0.35) : shade(kit.j, -0.35)
-  for (let i = 0; i < n; i++) { const a0 = rot + i / n * Math.PI * 2, a1 = a0 + Math.PI / n; G.fillStyle = i % 2 ? c1 : c2; G.beginPath(); G.moveTo(cx, cy); G.lineTo(cx + Math.cos(a0) * W * 1.1, cy + Math.sin(a0) * W * 1.1); G.lineTo(cx + Math.cos(a1) * W * 1.1, cy + Math.sin(a1) * W * 1.1); G.closePath(); G.fill() }
-  const bd = 35; G.globalAlpha = 0.55; R(0, 0, W, bd, '#05070d'); R(0, H - bd - 2, W, bd + 2, '#05070d'); G.globalAlpha = 1; R(0, bd, W, 2, '#E3B341'); R(0, H - bd - 4, W, 2, '#E3B341')
-  const h = S.shooter || side(0)[0], spr = sprite(h, c.heroPose || 'hero', 1, true, 3 * SPR), hx = Math.round(-112 + ease * 188)
+  if (c.dunk) { drawDunkCele(c, e); return }
+  burstBg(e)
+  const bd = 35, h = S.shooter || side(0)[0], spr = sprite(h, c.heroPose || 'hero', 1, true, 3 * SPR), hx = Math.round(-112 + ease * 188)
   G.drawImage(spr, hx, H - bd - 4 - spr.height + 22)
   const word = c.word, ks = 6, ww = tw(word, ks), wx = Math.round(W - 18 - ww + (1 - ease) * W * 0.57)
-  const grad = ['#fff6c8', '#ffe27a', '#f7c948', '#f0b232', '#e8962a', '#df7a22', '#c85a18']
-  R(wx - 10, 78, ww + 20, 70, 'rgba(5,7,13,.72)'); txtG(word, wx, 88, ks, grad, OUTC)
+  R(wx - 10, 78, ww + 20, 70, 'rgba(5,7,13,.72)'); txtG(word, wx, 88, ks, GRAD, OUTC)
   const sub = W8.celeSub(TEAMS[S.you].abbr); txt(sub, W - 18 - tw(sub, 2), 162, '#ffffff', 2, OUTC)
 }
 
@@ -793,15 +990,21 @@ function frame(now) {
   if (dead) return
   LITE.tick(now - last); const dt = Math.min(0.05, (now - last) / 1000); last = now; rt += dt; parts.step(dt)
   S.shake = Math.max(0, S.shake - dt * 14)
+  S.netSnap = Math.max(0, S.netSnap - dt * 1.8); S.boardShake = Math.max(0, S.boardShake - dt * 2.4); S.rimBend = Math.max(0, S.rimBend - dt * 2.8)
   if (S.cele) { if (rt - S.cele.t0 >= S.cele.dur) { const t = S.cele.then; S.cele = null; t && t() } }
   else if (!S.paused && !S.band && !S.film && S.phase !== 'idle' && S.phase !== 'between' && S.phase !== 'over') {
     const g = dt * S.ts * (S.tutorial && !AUTO ? 0.75 : 1) * (AUTO ? 3 : 1); gt += g
     const due = timers.filter(t => t.at <= gt); timers = timers.filter(t => t.at > gt); due.forEach(t => t.fn())
     if (S.g && ['bringUp', 'callPlay', 'guard'].includes(S.phase)) guardSpots(S.g.offense)
-    for (const p of S.players) {
-      const dx = p.tx - p.x, dy = p.ty - p.y, d = Math.hypot(dx, dy), sp = 11 * g
+    // the referee trails the play along the far sideline, facing the ball
+    if (S.g && S.ref) { const R0 = S.ref; R0.tx = clamp(S.ball.x - dirOf(S.g.offense) * 7, -38, 38); R0.ty = 52; if (Math.abs(S.ball.x - R0.x) > 0.5) R0.face = Math.sign(S.ball.x - R0.x) }
+    for (const p of [...S.players, S.ref]) {
+      const dx = p.tx - p.x, dy = p.ty - p.y, d = Math.hypot(dx, dy), sp = (p.ref ? 9 : 11) * g
       if (d > 0.01) { const m = Math.min(1, sp / d); p.x += dx * m; p.y += dy * m }
       if (p.jump) { const u = (gt - p.jump.t0) / p.jump.dur; if (u >= 1) { p.jump = null; p.z = 0; pose(p, 'land', 0.2); dust(p.x, p.y, 5) } else p.z = 4 * p.jump.h * u * (1 - u) * 2.2 }
+      // hanging on the rim after a dunk, then the drop
+      if (p.hang) { if (gt < p.hang) p.z = HANG_Z; else { p.hang = 0; p.fall = { t0: gt, z0: p.z } } }
+      if (p.fall) { const u = (gt - p.fall.t0) / 0.32; if (u >= 1) { p.fall = null; p.z = 0; pose(p, 'land', 0.25); dust(p.x, p.y, 10) } else p.z = p.fall.z0 * (1 - u * u) }
       if (p.poseUntil && gt > p.poseUntil) { p.pose = 'ready'; p.poseUntil = 0 }
     }
     ballStep()
@@ -821,6 +1024,7 @@ S.players = [...makeSide(0, rng(S.you * 31 + S.opp * 7 + 11)), ...makeSide(1, rn
 side(0).forEach((p, i) => { p.x = p.tx = -8 - i * 3; p.y = p.ty = 12 + i * 6; p.face = 1 })
 side(1).forEach((p, i) => { p.x = p.tx = 8 + i * 3; p.y = p.ty = 12 + i * 6; p.face = -1 })
 S.ball.x = 0; S.ball.y = 25; S.ball.z = 0.4
+{ const r = rng(S.you * 5 + S.opp * 11 + 2); S.ref = { ref: true, side: 2, role: 'REF', x: 0, y: 52, z: 0, tx: 0, ty: 52, face: 1, pose: 'ready', poseUntil: 0, jump: null, skin: SKIN[Math.floor(r() * SKIN.length)], hair: HAIR[Math.floor(r() * HAIR.length)], hairStyle: 'buzz', num: null } }
 buildCrowd(); buildWall(); buildFloor()
 raf = requestAnimationFrame(frame)
 
@@ -844,5 +1048,6 @@ return {
   ui: () => lastUI,
   destroy: () => { dead = true; cancelAnimationFrame(raf); removeEventListener('keydown', onKey); cv.removeEventListener('pointerdown', onDown) },
   _S: S,
+  _rt: () => rt,
 }
 }
