@@ -28,6 +28,7 @@ export const VB_POSITION_NAME = { S: 'Setter', L: 'Libero', OH: 'Outside hitter'
 
 export function statLabel(sport, manifest, stat, laneOf) {
   if (sport === 'volleyball') return VB_STAT[stat] || stat
+  if (sport === 'basketball') return BB_STAT[stat] || stat
   if (stat === 'defense') return 'Defense'
   return manifest?.lanes?.[laneOf[stat]]?.stat_label || stat
 }
@@ -196,4 +197,110 @@ export const SHARED_VB = {
     card: r => `Team card: setting ${r.throwing}, passing ${r.hands}, hitting ${r.speed}, blocking ${r.blocking}, serving ${r.toughness}, digging ${r.defense}.`,
   },
   campLine: 'Camp rep done: Serving form +2.',
+}
+
+// ============================================================
+// BASKETBALL (BK 2026-10-31 18:25–18:38): the third sport. Built engine-first on branch
+// basketball-engine, reachable only from the dev lab (#hoops) until BK says yes to the words and
+// the save code learns a third sport. EVERY LINE BELOW IS PROPOSED. None of it is approved.
+// It goes to BK as one list for one yes, the way volleyball's did.
+// Stat names sit on the football keys (hoopsRules.js BB_KEY).
+// ============================================================
+export const BB_STAT = { throwing: 'Passing', hands: 'Ball handling', speed: 'Shooting', blocking: 'Rebounding', toughness: 'Free throws', defense: 'Defense' }
+export const BB_POSITION = { throwing: 'PG', hands: 'SG', speed: 'SF', blocking: 'PF', toughness: 'C' }
+export const BB_POSITION_NAME = { PG: 'Point guard', SG: 'Shooting guard', SF: 'Small forward', PF: 'Power forward', C: 'Center' }
+
+const ORD = ['first', 'second', 'third', 'fourth']
+export const BB = {
+  howtoTitle: 'How to play',
+  howto: [
+    ['Offense:', 'Call the play. A better entry pass opens more of them.'],
+    ['Shoot:', 'Tap as the ring closes on the ball.'],
+    ['Defense:', 'Watch their point guard and guess the play.'],
+    ['Contest:', 'Tap as the ring closes on their shooter. Too early is a foul.'],
+    ['Rebound:', 'Tap as the ring closes under the rim to box out.'],
+    ['Free throws:', 'Tap when the marker hits the middle.'],
+  ],
+  howtoNote: 'Questions at the tip-off, timeouts and breaks make your team better.',
+  howtoTurn: 'Turn your phone sideways for a bigger court.',
+  howtoGo: "Let's play",
+
+  // The guided first game: a card at each new moment, the first time it comes up.
+  coach: {
+    call: ['Call the play', 'Your point guard brings it up. You pick who gets the ball. A better entry pass opens more plays.'],
+    shoot: ['Shoot', 'Tap as the ring closes. The closer to the middle, the better the shot.'],
+    guard: ['Defense', 'Their point guard brings it up. Watch the ball and guess who gets it.'],
+    contest: ['Contest', 'Tap as the ring closes on their shooter. Tap too early and you foul.'],
+    rebound: ['Rebound', 'A miss. Tap as the ring closes to box out.'],
+    ft: ['Free throws', 'Tap when the marker hits the middle. Your Free throws stat widens the sweet spot.'],
+    wrap: ['Wrap-up', "Call it, shoot it, guard it, box out. That's basketball."],
+  },
+  coachGo: 'Got it',
+  coachSkip: 'Skip',
+
+  // The call bar, trip by trip.
+  bringUp: 'Your point guard brings it up.',
+  theyBringUp: 'Their point guard brings it up.',
+  callPlay: 'Call the play.',
+  callPlayPost: 'Call the play. Their defense is fronting the post.',
+  pressure: 'Pressure on the ball: drive only.',
+  playLabels: { drive: 'Drive', shooter: 'Shooter', post: 'Post up' },
+  playTo: p => ({ drive: 'Drive it.', shooter: 'Ball to the shooter.', post: 'Feed the post.' }[p]),
+  needsEntry: 'Needs a better entry pass',
+  guardCall: 'Guard their play: who gets the ball? Watch the point guard.',
+  guardLabels: { drive: 'Drive', shooter: 'Shooter', post: 'Post' },
+  guarding: p => ({ drive: 'Guarding the drive.', shooter: 'Guarding the shooter.', post: 'Guarding the post.' }[p]),
+  shootCall: 'Shoot! Tap as the ring closes.',
+  contestCall: 'Contest! Tap as the ring closes. Too early is a foul.',
+  theyShoot: 'They shoot.',
+  reboundCall: 'Box out! Tap as the ring closes.',
+  ftCall: (i, n) => `Free throw ${i} of ${n}. Tap when the marker hits the middle.`,
+  theirFt: 'Their free throws.',
+  shotClock: 'Shot clock! Forced shot.',
+  yourBall: 'Your ball.',
+  theirBall: 'Their ball.',
+  scored: (abbr, pts, a, b) => `${abbr} ${pts === 1 ? 'scores 1' : `scores ${pts}`}. ${a}-${b}`,
+  timeout: n => `Timeout (${n})`,
+  noTimeouts: 'No timeouts left this half',
+  steady: 'Steady timing',
+  steadyOn: 'Steady timing: on',
+  readCue: { drive: 'DRIVE', shooter: 'SHOOTER', post: 'POST' },
+
+  // Words drawn on the court in the pixel font (capitals).
+  pop: { perfect: 'PERFECT', good: 'GOOD', early: 'EARLY', late: 'LATE', steal: 'STEAL', foul: 'FOUL', reach: 'REACH',
+    swish: 'SWISH', bucket: 'BUCKET', miss: 'MISS', board: 'REBOUND', second: 'SECOND CHANCE', ftGood: 'GOOD', ftMiss: 'NO GOOD',
+    shotClock: 'SHOT CLOCK', blocked: 'BLOCKED' },
+  cele: { dunk: 'DUNK!', three: 'THREE!', andOne: 'AND ONE!' },
+  celeSub: abbr => `${abbr} SCORES`,
+  band: 'PEP BAND',
+
+  // The stoppages: what each question is for.
+  tipStake: 'Tip-off. Get it right and you win the tip and the first possession. Miss it and they get the ball first.',
+  tipYou: 'You won the tip. Your ball.',
+  tipThem: name => `${name} won the tip.`,
+  timeoutStake: 'Timeout. Get it right and your coaches spot something: you see their next play sooner, and your rings are wider for one trip down the floor.',
+  timeoutRight: 'Adjustment made: watch their point guard.',
+  timeoutWrong: 'Play stopped. No adjustment this time.',
+  quarterStake: q => `End of the ${ORD[q - 1] || 'last'} quarter. A right answer gives that stat +1 for the next quarter.`,
+  halfStake: (i, n) => `Halftime — question ${i} of ${n}. A right answer gives that stat +1 for the second half.`,
+  locker: 'Locker room. One question about how this team carries itself. Get it right and the whole team comes out with +1 Free throws.',
+  bigMomentHead: 'Big moment',
+  bigMomentBody: (who, ot) => `Last trip of ${ot ? 'overtime' : 'the game'}, ${who === 'you' ? 'your ball' : 'their ball'}, a one-score game. Answer one question for a better read on this possession, or just play it.`,
+  bigMomentStake: 'Big moment. Read this right and your rings are wider on this possession. Miss it and you just play it.',
+  bigMomentTake: 'Take the question',
+  bigMomentSkip: 'Just play it',
+  readYes: 'You read it. Go.',
+  readNo: 'Play it out.',
+  breakHead: (label, you, a, b, them) => `${label} · ${you} ${a} – ${b} ${them}`,
+  breakLabel: p => (p === 2 ? 'Halftime' : p > 4 ? 'End of overtime' : `End of the ${ORD[p - 1]} quarter`),
+  breakPlus: label => `${label}: +1 for the next quarter`,
+  breakNone: label => `${label}: no adjustment`,
+  noAdjust: 'No adjustments.',
+  nextPeriod: p => (p > 4 ? 'Start overtime' : `Start the ${ORD[p - 1]} quarter`),
+  rulesLine: 'Four quarters. A tie goes to overtime.',
+  // The stat strip under the court, short names.
+  cells: [['throwing', 'Pass'], ['hands', 'Handle'], ['speed', 'Shoot'], ['blocking', 'Board'], ['toughness', 'FT'], ['defense', 'D']],
+  tipButton: 'Tip-off',
+  finalHead: 'Final',
+  pressButton: 'Press conference',
 }

@@ -648,5 +648,108 @@ eq(+readChance(lv(1), ['deep', 'deep', 'deep'], 'deep').toFixed(2), 0.7, 'capped
   ok(!/txtG\(g, '[A-Z]/.test(cut.slice(cut.indexOf('FRIDAY NIGHT CUT SCENES'))), 'the new cut scenes print no new words (the banner shows the school name only)')
 }
 
+// ── basketball, engine pass (2026-10-31) ─────────────────────────────────────
+// BK 18:25–18:38 scope; the rules are pure, so whole games are played here with the same
+// functions the court rolls its dice with.
+{
+  const HR = await import('../src/game/hoopsRules.js')
+  const { courtPaint, contrast, baselineFit } = await import('../src/game/hoops.js')
+  const { BB, BB_STAT, SPORTS: PICK } = await import('../src/game/sport.js')
+  const { rng: prng } = await import('../src/game/pixel.js')
+  const flat = v => HR.bbStats(Object.fromEntries(Object.keys(HR.BB_KEY).map(k => [k, v])))
+  eq(Object.keys(HR.bbStats({})), ['Passing', 'Handling', 'Shooting', 'Rebounding', 'FreeThrows', 'Defense'], 'basketball: six stats on the six football keys')
+  eq(HR.bbStats({ throwing: 14, speed: -3 }).Passing, 10, 'basketball: a stat never goes past 10')
+  // the entry pass opens more calls with more Passing
+  const entry = pass => { const r = prng(3); let n = 0; for (let i = 0; i < 4000; i++) n += HR.entryQuality(pass, 5, r()); return n / 4000 }
+  ok(entry(8) > entry(5) && entry(5) > entry(2), 'basketball: better Passing, a better entry on average')
+  eq([3, 2, 1].map(q => HR.openPlays(q).length), [3, 2, 1], 'basketball: entry 3 opens every call, 2 fronts the post, 1 is drive only')
+  // the windows widen with the stat, with Steady timing and with a read
+  for (const play of HR.PLAYS) {
+    const lo = HR.shotWindow(play, flat(3)), hi = HR.shotWindow(play, flat(8))
+    ok(hi.ok > lo.ok && hi.perfect > lo.perfect, `basketball: ${play} window widens with its stat`)
+    ok(HR.shotWindow(play, flat(5), { steady: true }).ok > HR.shotWindow(play, flat(5)).ok, `basketball: Steady timing widens the ${play} window`)
+  }
+  ok(HR.ftGreen(9) > HR.ftGreen(3), 'basketball: Free throws widens the sweet spot')
+  ok(HR.ftChance(0, 0.1) > HR.ftChance(0.15, 0.1) && HR.ftChance(0.15, 0.1) > HR.ftChance(0.4, 0.1), 'basketball: the middle of the meter beats the edge')
+  // every make chance stays in bounds, and timing, a read and a contest all count
+  let inBounds = true
+  for (const play of HR.PLAYS) for (const grade of ['perfect', 'good', 'off']) for (const g of [true, false]) for (const c of ['perfect', 'good', 'off', 'early', 'none']) for (const v of [1, 5, 10]) {
+    const p = HR.makeChance({ play, grade, off: flat(v), def: flat(11 - v), guessed: g, contest: c }); if (!(p >= 0.05 && p <= 0.92)) inBounds = false
+  }
+  ok(inBounds, 'basketball: every make chance stays between 5% and 92%')
+  const mk = o => HR.makeChance({ play: 'shooter', grade: 'good', off: flat(5), def: flat(5), ...o })
+  ok(mk({ grade: 'perfect' }) > mk({}) && mk({}) > mk({ grade: 'off' }), 'basketball: a perfect release beats a good one beats an off one')
+  ok(mk({ guessed: true }) < mk({}), 'basketball: a defense that read the play lowers the chance')
+  ok(mk({ contest: 'perfect' }) < mk({ contest: 'none' }), 'basketball: a good contest lowers the chance')
+  ok(HR.foulChance({ play: 'drive', contest: 'early' }) > HR.foulChance({ play: 'drive' }), 'basketball: a contest that goes early is a reach, more fouls')
+  ok(HR.offRebChance({ offReb: 5, defReb: 5, box: 'perfect', studentOnOffense: true }) > HR.offRebChance({ offReb: 5, defReb: 5 }), 'basketball: your box-out helps your second chances')
+  ok(HR.offRebChance({ offReb: 5, defReb: 5, box: 'perfect', studentOnOffense: false }) < HR.offRebChance({ offReb: 5, defReb: 5 }), 'basketball: your box-out on defense takes theirs away')
+  eq([HR.ftCount('shooter', false), HR.ftCount('drive', false), HR.ftCount('post', true)], [3, 2, 1], 'basketball: three for a fouled three, two for a two, one for an and-one')
+  // the game: quarters, the arrow, the half, overtime, the clock
+  const g = HR.newHoopsGame(1)
+  eq([g.offense, HR.periodLength(g), HR.clockText(g), HR.periodName(g)], [1, 8, '8:00', 'Q1'], 'basketball: the tip winner has the ball, eight trips a quarter, 8:00 on the board')
+  for (let i = 0; i < 4; i++) HR.endPossession(g, g.offense, 0)
+  eq(HR.clockText(g), '4:00', 'basketball: half the trips, half the clock')
+  for (let i = 0; i < 3; i++) HR.endPossession(g, g.offense, 0)
+  eq(HR.endPossession(g, g.offense, 0), 'period', 'basketball: eight trips end the quarter')
+  HR.nextPeriod(g); eq(g.offense, 0, 'basketball: the other team starts the second quarter (the arrow)')
+  g.timeouts = 0
+  for (let i = 0; i < 7; i++) HR.endPossession(g, g.offense, 0)
+  eq(HR.endPossession(g, g.offense, 0), 'half', 'basketball: the second quarter ends at halftime')
+  HR.nextPeriod(g); eq([g.offense, g.timeouts], [1, 2], 'basketball: the tip winner starts the third, and the timeouts come back')
+  for (let i = 0; i < 8; i++) HR.endPossession(g, g.offense, 0)
+  HR.nextPeriod(g); eq(g.offense, 0, 'basketball: the other team starts the fourth')
+  for (let i = 0; i < 7; i++) { ok(!HR.isBigMoment(g) || i === 7, 'basketball: no big moment before the last trip'); HR.endPossession(g, g.offense, 0) }
+  ok(HR.isBigMoment(g), 'basketball: the last trip of a tie game is a big moment')
+  eq(HR.endPossession(g, g.offense, 0), 'period', 'basketball: a tie after four goes to overtime')
+  HR.nextPeriod(g); eq([HR.periodName(g), HR.periodLength(g), HR.clockText(g)], ['OT', 4, '4:00'], 'basketball: overtime is four trips and 4:00')
+  for (let i = 0; i < 3; i++) HR.endPossession(g, g.offense, 0)
+  eq(HR.endPossession(g, 0, 2), 'final', 'basketball: a basket on the last trip of overtime ends it')
+  // whole games, all computer: fair at even strength, the content shows up in the result, never a tie
+  const play = (a, b, n) => { const r = prng(11); let w = 0, pts = 0, ties = 0, maxP = 0
+    for (let i = 0; i < n; i++) { const x = HR.simGame(r, flat(a), flat(b), i % 2); if (x.score[0] > x.score[1]) w++; if (x.score[0] === x.score[1]) ties++; pts += x.score[0] + x.score[1]; maxP = Math.max(maxP, x.period) }
+    return { win: w / n, avg: pts / n, ties, maxP } }
+  const even = play(5, 5, 3000)
+  ok(even.win > 0.45 && even.win < 0.55, `basketball: even teams split (${even.win.toFixed(3)})`)
+  eq(even.ties, 0, 'basketball: no game ends tied')
+  ok(even.avg > 25 && even.avg < 60, `basketball: about ${even.avg.toFixed(1)} points a game, both teams`)
+  ok(even.maxP <= 10, 'basketball: overtime always ends')
+  ok(play(7, 5, 2000).win > 0.65, 'basketball: a team built on more right answers wins more')
+  ok(play(3, 5, 2000).win < 0.35, 'basketball: a team behind on content loses more')
+  // the roster: five positions, legal numbers, the boys' and girls' name lists
+  const LEGALN = new Set([0, 1, 2, 3, 4, 5, 10, 11, 12, 13, 14, 15, 20, 21, 22, 23, 24, 25, 30, 31, 32, 33, 34, 35, 40, 41, 42, 43, 44, 45, 50, 51, 52, 53, 54, 55])
+  for (let seed = 0; seed < 64; seed++) for (let t = 0; t < N_TEAMS; t++) {
+    const ro = roster(seed, t, 1 + (seed % 5), {}, 'basketball', seed % 2 === 0)
+    const nums = Object.values(ro).map(p => p.number)
+    if (new Set(nums).size !== 5 || nums.some(n => !LEGALN.has(n))) throw new Error(`basketball numbers ${nums} (seed ${seed}, team ${t})`)
+  }
+  ok(true, 'basketball: five different legal numbers on every roster, 64 seeds × 12 teams')
+  eq(Object.values(roster(5, 0, 1, {}, 'basketball')).map(p => p.position), ['PG', 'SG', 'SF', 'PF', 'C'], 'basketball positions: PG, SG, SF, PF, C')
+  const boys = roster(5, 0, 1, {}, 'basketball', false), girlsR = roster(5, 0, 1, {}, 'basketball', true)
+  ok(boys.throwing.name !== girlsR.throwing.name, 'basketball: the girls\' season has its own names')
+  eq(roster(5, 0, 1, { speed: 4 }, 'basketball').speed.name, roster(5, 0, 1, {}, 'basketball').speed.name, 'basketball: training a player never changes who he is')
+  eq(roster(5, 3, 2, {}, 'football').throwing.name, roster(5, 3, 2, {}, 'football', true).throwing.name, 'football names ignore the girls flag')
+  // the home court: every school's baseline name reads at 4.5:1 or better
+  // the name runs along the baseline (BK 19:05); a name that can't fit is cut, never squeezed
+  for (const t of TEAMS) ok(baselineFit(t.name.toUpperCase()) >= 1, `${t.name}: the name fits along the baseline`)
+  eq(baselineFit('X'.repeat(40)), 0, 'a name too long for the baseline is cut')
+  for (const t of TEAMS) { const cp = courtPaint(t); ok(contrast(cp.ink, cp.paint) >= 4.5, `${t.name}: baseline lettering reads (${contrast(cp.ink, cp.paint).toFixed(1)}:1)`) }
+  // the words: present, and labelled PROPOSED in the source until BK says yes
+  for (const [k, w] of Object.entries(BB)) ok(w !== '' && w != null, `basketball word ${k} is there`)
+  for (const k of ['call', 'shoot', 'guard', 'contest', 'rebound', 'ft', 'wrap']) ok(BB.coach[k]?.[1]?.length > 10, `basketball coach card ${k}`)
+  eq(Object.keys(BB_STAT), ['throwing', 'hands', 'speed', 'blocking', 'toughness', 'defense'], 'basketball stat names on every key')
+  const sportSrc = fs.readFileSync(path.join(ROOT, 'src/game/sport.js'), 'utf8')
+  ok(sportSrc.includes('EVERY LINE BELOW IS PROPOSED'), 'basketball words are marked PROPOSED')
+  // not on the sport pick, and not in a student's build, until the save code and the words are ready
+  eq(PICK, ['football', 'volleyball'], 'basketball is not on the sport pick yet (save code version 4 comes first)')
+  const mainSrc = fs.readFileSync(path.join(ROOT, 'src/main.jsx'), 'utf8')
+  ok(/import\.meta\.env\.DEV && location\.hash\.startsWith\('#hoops'\)/.test(mainSrc), 'the hoops lab loads only in the dev build')
+  // the dealer has the two new stoppages, on both doors
+  for (const course of Object.keys(manifest.courses)) {
+    const dl = makeDealer(pools[course], manifest.courses[course], manifest.rules)
+    ok(!!dl.draw('tipoff') && !!dl.draw('qbreak'), `${course}: the dealer deals a tip-off and a quarter-break question`)
+  }
+}
+
 console.log(`\n${passed} passed, ${failed} failed`)
 process.exit(failed ? 1 : 0)

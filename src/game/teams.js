@@ -165,7 +165,10 @@ const LAST = ['Hollis', 'Barnes', 'Whitaker', 'Pruitt', 'Okafor', 'Delaney', 'Cr
 const NUMBERS = { QB: [1, 19], WR: [80, 89], RB: [20, 39], OL: [60, 79], TE: [40, 49],
   // Volleyball (2026-10-03): single digits, so the number on a starter's card is the number on her
   // jersey on the court. Ranges never overlap, so no two starters share one.
-  S: [1, 2], L: [3, 4], OH: [5, 6], MB: [7, 8], DS: [9, 9] }
+  S: [1, 2], L: [3, 4], OH: [5, 6], MB: [7, 8], DS: [9, 9],
+  // Basketball (2026-10-31): numbers made of the digits 0–5 only, legal on any high school floor.
+  // Ranges never overlap, so no two starters share one.
+  PG: [0, 5], SG: [10, 15], SF: [20, 25], PF: [30, 35], C: [40, 45] }
 // Girls' volleyball: made-up first names, same rule as above. Never typed from a class list.
 const FIRST_G = ['Ava', 'Kenzie', 'Maya', 'Brooke', 'Jada', 'Riley', 'Sofia', 'Tessa', 'Nia', 'Harper', 'Lena',
   'Paige', 'Camila', 'Reese', 'Talia', 'Morgan', 'Imani', 'Delaney', 'Grace', 'Zoe', 'Aubrey', 'Keira', 'Leah',
@@ -176,10 +179,11 @@ const FIRST_G = ['Ava', 'Kenzie', 'Maya', 'Brooke', 'Jada', 'Riley', 'Sofia', 'T
 // his level. Training him raises the level; it must not turn him into a different kid.
 // A free agent signed in the off-season is generated at season + 1, which is exactly
 // the name next season's roster will show for that position: you signed him, he's yours.
-export function player(seed, teamIndex, position, season, level) {
+// `girls` picks the girls' name list for a sport offered both ways (basketball, BK 2026-10-31 18:32).
+export function player(seed, teamIndex, position, season, level, girls = false) {
   const r = rng(mix(seed, teamIndex, position.charCodeAt(0), position.charCodeAt(1) || 0, season))
   const [lo, hi] = NUMBERS[position]
-  const first = VB_POS.has(position) ? FIRST_G : FIRST
+  const first = girls || VB_POS.has(position) ? FIRST_G : FIRST
   return {
     name: `${first[Math.floor(r() * first.length)]} ${LAST[Math.floor(r() * LAST.length)]}`,
     number: lo + Math.floor(r() * (hi - lo + 1)),
@@ -193,16 +197,19 @@ export const POSITION_OF = { throwing: 'QB', hands: 'WR', speed: 'RB', blocking:
 // Volleyball's five (sport.js): Setter, Libero, Outside hitter, Middle blocker, Serving specialist.
 export const VB_POSITION_OF = { throwing: 'S', hands: 'L', speed: 'OH', blocking: 'MB', toughness: 'DS' }
 const VB_POS = new Set(Object.values(VB_POSITION_OF))
-export const positionsFor = sport => (sport === 'volleyball' ? VB_POSITION_OF : POSITION_OF)
+// Basketball's five (sport.js BB_POSITION): Point guard, Shooting guard, Small forward, Power forward, Center.
+export const BB_POSITION_OF = { throwing: 'PG', hands: 'SG', speed: 'SF', blocking: 'PF', toughness: 'C' }
+export const positionsFor = sport => (sport === 'volleyball' ? VB_POSITION_OF : sport === 'basketball' ? BB_POSITION_OF : POSITION_OF)
 
-export function roster(seed, teamIndex, season, levels, sport = 'football') {
+export function roster(seed, teamIndex, season, levels, sport = 'football', girls = false) {
   const POS = positionsFor(sport)
-  const FIRSTS = sport === 'volleyball' ? FIRST_G : FIRST
+  const g = sport === 'basketball' && !!girls
+  const FIRSTS = sport === 'volleyball' || g ? FIRST_G : FIRST
   // Five starters on one screen: nudge a repeated first name along the list rather than
   // fielding two players called Trey. Identity still depends only on team/position/season.
   const used = new Set()
   return Object.fromEntries(Object.entries(POS).map(([stat, pos]) => {
-    const p = player(seed, teamIndex, pos, season, levels?.[stat] ?? 2)
+    const p = player(seed, teamIndex, pos, season, levels?.[stat] ?? 2, g)
     let first = p.name.split(' ')[0]
     if (used.has(first)) {
       const i = FIRSTS.indexOf(first)
