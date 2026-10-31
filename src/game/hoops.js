@@ -528,14 +528,15 @@ function tArc(cx, cy, r, a0, a1, c, fill, w = 2) {
   G.beginPath(); for (let i = 0; i <= 64; i++) { const a = a0 + (a1 - a0) * i / 64, [x, y] = Tp(cx + Math.cos(a) * r, cy + Math.sin(a) * r); i ? G.lineTo(x, y) : G.moveTo(x, y) }
   if (fill) { G.closePath(); G.fillStyle = fill; G.fill() } else { G.strokeStyle = c; G.lineWidth = w; G.stroke() }
 }
-// The name along each baseline (BK 19:05), letter tops toward the court.
+// The name along each baseline (BK 19:05), reading top to bottom at both ends (BK 19:54).
 function baselineName(xc, name, ink, s) {
   const word = String(name).toUpperCase(), k = baselineFit(word)
   if (!k) return
   const tc = document.createElement('canvas'), tw0 = tw(word, k), th = 7 * k
   tc.width = tw0; tc.height = th; ptxt(tc.getContext('2d'), word, 0, 0, ink, k)
   const [ox, oy] = Tp(xc, 25)
-  G.save(); G.imageSmoothingEnabled = false; G.setTransform(0, -s, s, 0, ox, oy); G.drawImage(tc, -tw0 / 2, -th / 2); G.restore()
+  // both ends read top to bottom, the same way (BK 19:54: the right end read upside down)
+  G.save(); G.imageSmoothingEnabled = false; G.setTransform(0, 1, -1, 0, ox, oy); G.drawImage(tc, -tw0 / 2, -th / 2); G.restore()
 }
 // Centre court: a basketball emblem of our own drawing (BK 18:38), a ring in the home colour.
 function emblem(color) {
