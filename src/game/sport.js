@@ -269,7 +269,7 @@ export const BB = {
   // Words drawn on the court in the pixel font (capitals).
   pop: { perfect: 'PERFECT', good: 'GOOD', early: 'EARLY', late: 'LATE', steal: 'STEAL', foul: 'FOUL', reach: 'REACH',
     swish: 'SWISH', bucket: 'BUCKET', miss: 'MISS', board: 'REBOUND', second: 'SECOND CHANCE', ftGood: 'GOOD', ftMiss: 'NO GOOD',
-    shotClock: 'SHOT CLOCK', blocked: 'BLOCKED' },
+    shotClock: 'SHOT CLOCK' },
   cele: { dunk: 'DUNK!', three: 'THREE!', andOne: 'AND ONE!' },
   celeSub: abbr => `${abbr} SCORES`,
   band: 'PEP BAND',
