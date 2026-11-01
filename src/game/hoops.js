@@ -528,15 +528,15 @@ function tArc(cx, cy, r, a0, a1, c, fill, w = 2) {
   G.beginPath(); for (let i = 0; i <= 64; i++) { const a = a0 + (a1 - a0) * i / 64, [x, y] = Tp(cx + Math.cos(a) * r, cy + Math.sin(a) * r); i ? G.lineTo(x, y) : G.moveTo(x, y) }
   if (fill) { G.closePath(); G.fillStyle = fill; G.fill() } else { G.strokeStyle = c; G.lineWidth = w; G.stroke() }
 }
-// The name along each baseline (BK 19:05), reading top to bottom at both ends (BK 19:54).
+// The name along each baseline (BK 19:05), facing centre court from each end (BK 19:58).
 function baselineName(xc, name, ink, s) {
   const word = String(name).toUpperCase(), k = baselineFit(word)
   if (!k) return
   const tc = document.createElement('canvas'), tw0 = tw(word, k), th = 7 * k
   tc.width = tw0; tc.height = th; ptxt(tc.getContext('2d'), word, 0, 0, ink, k)
   const [ox, oy] = Tp(xc, 25)
-  // both ends read top to bottom, the same way (BK 19:54: the right end read upside down)
-  G.save(); G.imageSmoothingEnabled = false; G.setTransform(0, 1, -1, 0, ox, oy); G.drawImage(tc, -tw0 / 2, -th / 2); G.restore()
+  // read from centre court at each end: letter bottoms toward centre court (BK 19:58)
+  G.save(); G.imageSmoothingEnabled = false; G.setTransform(0, s, -s, 0, ox, oy); G.drawImage(tc, -tw0 / 2, -th / 2); G.restore()
 }
 // Centre court: a basketball emblem of our own drawing (BK 18:38), a ring in the home colour.
 function emblem(color) {
@@ -707,23 +707,23 @@ const JERSEY = Object.fromEntries(Object.entries({
   3: '###.|...#|.##.|...#|...#|###.', 4: '#..#|#..#|####|...#|...#|...#', 5: '####|#...|###.|...#|...#|###.',
 }).map(([k, v]) => [k, v.split('|')]))
 const P0 = (o, ov) => ({ ...o, ...ov })
-const READY = { hip: [0, -28], sh: [1, -44], head: [2, -51], kB: [-2, -14.5], fB: [-3, 0], kF: [3, -14.5], fF: [4, 0], eB: [-1, -36], hB: [0, -28], eF: [4, -36], hF: [6, -29] }
-const RUN0 = { hip: [0, -29], sh: [3, -45], head: [4, -52], kB: [-4, -16], fB: [-9, -6], kF: [5, -16], fF: [6, 0], eB: [-3, -37], hB: [-2, -30], eF: [7, -38], hF: [9, -44] }
-const RUN1 = P0(RUN0, { kB: [4, -16], fB: [3, 0], kF: [-4, -16], fF: [-9, -6], eB: [7, -38], hB: [9, -44], eF: [-3, -37], hF: [-2, -30] })
-const RUNA = { hip: [0, -30], sh: [3, -46], head: [4, -53], kB: [-1, -15], fB: [-2, 0], kF: [5, -19], fF: [2, -10], eB: [1, -38], hB: [2, -31], eF: [4, -38], hF: [5, -32] }
-const DEF = { hip: [-1, -24], sh: [1, -40], head: [3, -47], kB: [-6, -12], fB: [-9, 0], kF: [6, -12], fF: [9, 0], eB: [-5, -35], hB: [-11, -33], eF: [7, -35], hF: [13, -34] }
+const READY = { hip: [0, -28], sh: [1, -44], head: [2, -51], kB: [-2, -14.5], fB: [-3, 0], kF: [3, -14.5], fF: [4, 0], eB: [-5, -37], hB: [-5.5, -29], eF: [6, -37], hF: [6.5, -29] }
+const RUN0 = { hip: [0, -29], sh: [3, -45], head: [4, -52], kB: [-4, -16], fB: [-9, -6], kF: [5, -16], fF: [6, 0], eB: [-6, -38], hB: [-7, -31], eF: [9, -39], hF: [11, -45] }
+const RUN1 = P0(RUN0, { kB: [4, -16], fB: [3, 0], kF: [-4, -16], fF: [-9, -6], eB: [7, -39], hB: [9, -45], eF: [-4, -38], hF: [-5, -31] })
+const RUNA = { hip: [0, -30], sh: [3, -46], head: [4, -53], kB: [-1, -15], fB: [-2, 0], kF: [5, -19], fF: [2, -10], eB: [-4, -39], hB: [-4, -31], eF: [8, -39], hF: [9, -32] }
+const DEF = { hip: [-1, -24], sh: [1, -40], head: [3, -47], kB: [-6, -12], fB: [-9, 0], kF: [6, -12], fF: [9, 0], eB: [-7, -33], hB: [-11, -27], eF: [8, -33], hF: [12, -27] }
 const POSES = {
   ready: READY,
-  ready2: P0(READY, { hip: [0, -27.7], sh: [1, -43.6], head: [2, -50.6], hB: [0, -27.6], hF: [6, -28.6] }),
-  dribbleUp: { hip: [0, -27], sh: [2, -43], head: [3, -50], kB: [-3, -14], fB: [-5, 0], kF: [4, -14], fF: [5, 0], eB: [-1, -35], hB: [0, -28], eF: [6, -35], hF: [10, -28] },
-  dribbleDown: { hip: [0, -27], sh: [2, -43], head: [3, -50], kB: [-3, -14], fB: [-5, 0], kF: [4, -14], fF: [5, 0], eB: [-1, -35], hB: [0, -28], eF: [7, -33], hF: [11, -22] },
+  ready2: P0(READY, { hip: [0, -27.7], sh: [1, -43.6], head: [2, -50.6], eB: [-5, -36.6], hB: [-5.5, -28.6], eF: [6, -36.6], hF: [6.5, -28.6] }),
+  dribbleUp: { hip: [0, -27], sh: [2, -43], head: [3, -50], kB: [-3, -14], fB: [-5, 0], kF: [4, -14], fF: [5, 0], eB: [-5, -36], hB: [-7, -30], eF: [8, -36], hF: [11, -29] },
+  dribbleDown: { hip: [0, -27], sh: [2, -43], head: [3, -50], kB: [-3, -14], fB: [-5, 0], kF: [4, -14], fF: [5, 0], eB: [-5, -36], hB: [-7, -30], eF: [8, -33], hF: [11, -23] },
   run0: RUN0, run1: RUN1, runA: RUNA,
-  runB: P0(RUNA, { kB: [5, -19], fB: [2, -10], kF: [-1, -15], fF: [-2, 0], eB: [4, -38], hB: [5, -32], eF: [1, -38], hF: [2, -31] }),
-  dribRun0: P0(RUN0, { eF: [8, -36], hF: [12, -29] }),
-  dribRun1: P0(RUN1, { eF: [8, -35], hF: [12, -27], eB: [-3, -37], hB: [-2, -30] }),
+  runB: P0(RUNA, { kB: [5, -19], fB: [2, -10], kF: [-1, -15], fF: [-2, 0], eB: [3, -39], hB: [4, -32], eF: [2, -39], hF: [1, -31] }),
+  dribRun0: P0(RUN0, { eF: [9, -36], hF: [12, -29] }),
+  dribRun1: P0(RUN1, { eF: [9, -35], hF: [12, -27], eB: [-6, -38], hB: [-7, -31] }),
   defend: DEF,
   defend2: P0(DEF, { kB: [-3, -12], fB: [-5, 0], kF: [3, -12], fF: [5, 0] }),
-  boxout: { hip: [-5, -25], sh: [0, -40], head: [3, -47], kB: [-9, -12], fB: [-11, 0], kF: [3, -12], fF: [5, 0], eB: [-7, -34], hB: [-13, -31], eF: [5, -36], hF: [10, -41] },
+  boxout: { hip: [-5, -25], sh: [0, -40], head: [3, -47], kB: [-9, -12], fB: [-11, 0], kF: [3, -12], fF: [5, 0], eB: [-9, -33], hB: [-13, -28], eF: [7, -35], hF: [11, -39] },
   shootLoad: { hip: [0, -25], sh: [1, -41], head: [2, -48], kB: [-2, -12], fB: [-3, 0], kF: [3, -12], fF: [4, 0], eB: [4, -35], hB: [5, -42], eF: [6, -35], hF: [6, -43] },
   set: { hip: [0, -30], sh: [0, -46], head: [1, -53], kB: [-1, -15], fB: [-2, 0], kF: [2, -15], fF: [3, 0], eB: [2, -54], hB: [3, -61], eF: [4, -54], hF: [4, -62] },
   release: { hip: [0, -30], sh: [0, -46], head: [1, -53], kB: [-1, -15], fB: [-2, -2], kF: [2, -15], fF: [3, -2], eB: [3, -53], hB: [5, -59], eF: [6, -55], hF: [11, -61] },
@@ -733,10 +733,10 @@ const POSES = {
   dunkReach: { hip: [-1, -30], sh: [-1, -46], head: [1, -53], kB: [-3, -17], fB: [-6, -7], kF: [4, -21], fF: [2, -11], eB: [-3, -57], hB: [-8, -63], eF: [0, -58], hF: [-5, -64] },
   dunkSlam: { hip: [0, -30], sh: [1, -46], head: [0, -53], kB: [-2, -15], fB: [-4, -4], kF: [2, -15], fF: [2, -4], eB: [9, -50], hB: [16, -54], eF: [10, -49], hF: [17, -53] },
   hang: { hip: [-1, -32], sh: [1, -48], head: [-2, -55], kB: [-2, -18], fB: [-4, -5], kF: [1, -18], fF: [0, -5], eB: [7, -57], hB: [13, -65], eF: [8, -58], hF: [14, -66] },
-  land: { hip: [0, -23], sh: [1, -39], head: [2, -46], kB: [-3, -11], fB: [-5, 0], kF: [3, -11], fF: [5, 0], eB: [3, -31], hB: [6, -25], eF: [4, -31], hF: [7, -25] },
+  land: { hip: [0, -23], sh: [1, -39], head: [2, -46], kB: [-3, -11], fB: [-5, 0], kF: [3, -11], fF: [5, 0], eB: [-5, -32], hB: [-5, -25], eF: [7, -32], hF: [8, -25] },
   bump: P0(READY, { head: [3, -51], eB: [7, -38], hB: [14, -38], eF: [7, -37], hF: [14, -37] }),
   hero: { hip: [-1, -30], sh: [0, -46], head: [2, -53], kB: [-3, -17], fB: [-6, -7], kF: [4, -18], fF: [2, -5], eB: [5, -39], hB: [9, -34], eF: [6, -57], hF: [9, -66] },
-  sit: { hip: [0, -15], sh: [1, -31], head: [2, -38], kB: [8, -15], fB: [8, 0], kF: [9, -15], fF: [10, 0], eB: [3, -23], hB: [7, -17], eF: [4, -23], hF: [8, -16] },
+  sit: { hip: [0, -15], sh: [1, -31], head: [2, -38], kB: [8, -15], fB: [8, 0], kF: [9, -15], fF: [10, 0], eB: [-3, -24], hB: [2, -17], eF: [6, -24], hF: [9, -17] },
 }
 function handOf(p) {
   const ps = POSES[p.shown || p.pose] || POSES.ready, [hx, hy] = ps.hF
@@ -773,13 +773,16 @@ function paintSprite(ctx, p, poseName, f, air, s, ox, oy) {
     fr(x0, fy + 0.5 * s, sw, 1 * s, '#2a2a30')
   }
   const sleeveC = ref ? '#f4f4f4' : coachP ? J : null
+  // three-quarter view, as in BK's frame: each arm hangs from its own side of the jersey (BK 19:58)
+  const jB = [S0[0] - 4, S0[1] + 1.4], jF = [S0[0] + 4.4, S0[1] + 1.4]
   const arm = (e, h, back) => {
-    const c = back ? skd : sk
-    seg(S0, e, 2.8, c); seg(e, h, 2.4, c)
-    if (sleeveC) { seg(S0, coachP ? lp(e, h, 0.8) : lp(S0, e, 0.5), 3.2, back ? shade(sleeveC, -0.25) : sleeveC); if (ref) seg(lp(S0, e, 0.2), lp(S0, e, 0.28), 3.3, '#151515') }
-    else if (!back) seg(lp(S0, e, 0.3), lp(S0, e, 0.75), 1, skl)
-    if (p.sleeve && !back && !sleeveC) seg(lp(S0, e, 0.4), lp(e, h, 0.85), 2.7, p.sleeve)
-    blob(h, 1.5, back ? skd : sk)
+    const c = back ? skd : sk, J0 = back ? jB : jF
+    seg(J0, e, 3.2, c); seg(e, h, 2.7, c)
+    seg([J0[0] + 0.4, J0[1] + 0.8], [e[0] + 0.4, e[1] + 0.8], 1, back ? shade(sk, -0.45) : skd)
+    if (sleeveC) { seg(J0, coachP ? lp(e, h, 0.8) : lp(J0, e, 0.5), 3.6, back ? shade(sleeveC, -0.25) : sleeveC); if (ref) seg(lp(J0, e, 0.2), lp(J0, e, 0.28), 3.7, '#151515') }
+    else if (!back) seg(lp(J0, e, 0.15), lp(J0, e, 0.7), 1, skl)
+    if (p.sleeve && !back && !sleeveC) seg(lp(J0, e, 0.4), lp(e, h, 0.85), 3, p.sleeve)
+    blob(h, 1.8, back ? skd : sk); if (!back) blob(h, 0.8, skl, 0.3, -0.4)
   }
   const armsUp = j.hF[1] < j.head[1] - 2
   arm(j.eB, j.hB, true)
@@ -793,7 +796,7 @@ function paintSprite(ctx, p, poseName, f, air, s, ox, oy) {
   }
   // the jersey: a tank, shoulders a little wider than the waist
   const sw = 5.4, ww = 4.2
-  if (!ref && !coachP) { blob([S0[0] - 4, S0[1] + 1.2], 1.8, skd); blob([S0[0] + 4.2, S0[1] + 1.2], 1.9, sk) }
+  if (!ref && !coachP) { blob([S0[0] - 4, S0[1] + 1.4], 2, skd); blob([S0[0] + 4.4, S0[1] + 1.4], 2.1, sk) }
   poly([[S0[0] - sw + 1, S0[1]], [S0[0] + sw - 0.8, S0[1]], [H0[0] + ww, H0[1] - 0.5], [H0[0] - ww, H0[1] - 0.5]], Jd)
   poly([[S0[0] - sw + 2.2, S0[1] + 0.5], [S0[0] + sw - 1.2, S0[1] + 0.5], [H0[0] + ww - 0.3, H0[1] - 0.8], [H0[0] - ww + 1.3, H0[1] - 0.8]], J)
   seg([S0[0] + sw - 1.6, S0[1] + 1.2], [H0[0] + ww - 0.8, H0[1] - 1], 1, Jl)
