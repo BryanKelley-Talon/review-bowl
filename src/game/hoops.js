@@ -833,8 +833,11 @@ function paintSprite(ctx, p, poseName, f, air, s, ox, oy) {
     const m = lp(H0, S0, 0.55), n = String(p.num), px = Math.max(1, Math.round(s * 0.8))
     const glyphs = [...n].map(c => JERSEY[c]), wN = glyphs.reduce((w, g) => w + g[0].length, 0) + (glyphs.length - 1), hN = 6
     const nx = Math.round(X(m[0] + 0.5) - wN * px / 2), ny = Math.round(Y(m[1]) - hN * px / 2)
-    const edge = lum(T) > 0.45 ? shade(J, dark ? -0.6 : -0.55) : '#f4f4f4', o = Math.max(1, Math.round(px / 2))
-    for (const [pass, col] of [[0, edge], [1, T]]) {
+    // the trim colour when it reads on the jersey, otherwise white or black; no outline in play,
+    // a thin one only in the close-up (BK 20:10: "clean up the numbers")
+    const ink = contrast(T, J) >= 3 ? T : contrast('#f4f4f4', J) >= contrast('#141414', J) ? '#f4f4f4' : '#141414'
+    const edge = lum(ink) > 0.45 ? shade(J, dark ? -0.6 : -0.55) : '#f4f4f4', o = Math.max(1, Math.round(px / 2))
+    for (const [pass, col] of (s > 2 ? [[0, edge], [1, ink]] : [[1, ink]])) {
       ctx.fillStyle = col; let cx = nx
       for (const g of glyphs) {
         for (let yy = 0; yy < hN; yy++) for (let xx = 0; xx < g[yy].length; xx++) if (g[yy][xx] === '#') {
