@@ -29,6 +29,7 @@ import { BAND_SECONDS, RUNTHROUGH_SECONDS, drawBand, drawRunThrough } from './cu
 import { HAIR, LITE, OUTC, Particles, SKIN, lum, rgb, rng, shade, tw, txt as ptxt, txtG as ptxtG } from './pixel.js'
 import { cheerColor } from './campus.js'
 import * as RU from './hoopsRules.js'
+import { ANCHOR, HEADS, SHOE, SHOUT_ROW, stamp } from './hoopsStamps.js'
 
 // The league's kits in the court's shape: jersey + trim (court.js's rule).
 function trimOf(k) { return k.helmet && k.helmet !== k.jersey ? k.helmet : k.pants && k.pants !== k.jersey ? k.pants : '#F2F2F2' }
@@ -758,27 +759,40 @@ function paintSprite(ctx, p, poseName, f, air, s, ox, oy) {
   const lp = (a, b, u) => [a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u]
   const blob = (c, r, col, dx = 0, dy = 0) => { const cx = X(c[0] + dx), cy = Y(c[1] + dy), rr = r * s; ctx.fillStyle = col; for (let yy = -rr; yy <= rr; yy++) { const w = Math.sqrt(Math.max(0, rr * rr - yy * yy)); ctx.fillRect(Math.round(cx - w), Math.round(cy + yy), Math.max(1, Math.round(w * 2)), 1) } }
   const poly = (pts, c) => { ctx.fillStyle = c; ctx.beginPath(); pts.forEach(([a, b], i) => (i ? ctx.lineTo(X(a), Y(b)) : ctx.moveTo(X(a), Y(b)))); ctx.closePath(); ctx.fill() }
+  // a limb as a tapered shape, shaded: the far edge darker, the near edge catching the light
+  const taper = (a, b, w0, w1, c, dk, lt) => {
+    const ax = X(a[0]), ay = Y(a[1]), bx = X(b[0]), by = Y(b[1]), dx = bx - ax, dy = by - ay, L0 = Math.hypot(dx, dy) || 1
+    const nx = -dy / L0, ny = dx / L0, h0 = w0 * s / 2, h1 = w1 * s / 2
+    const quad = (o0, o1, i0, i1, col) => { ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(ax + nx * o0, ay + ny * o0); ctx.lineTo(bx + nx * o1, by + ny * o1); ctx.lineTo(bx + nx * i1, by + ny * i1); ctx.lineTo(ax + nx * i0, ay + ny * i0); ctx.closePath(); ctx.fill() }
+    quad(h0, h1, -h0, -h1, c)
+    const sgn = nx * f >= 0 ? 1 : -1
+    if (dk) quad(sgn * h0, sgn * h1, sgn * (h0 - Math.max(1, s)), sgn * (h1 - Math.max(1, s)), dk)
+    if (lt && w0 > 2.6) quad(-sgn * (h0 - Math.max(1, s)), -sgn * (h1 - Math.max(1, s)), -sgn * (h0 - 2 * Math.max(1, s)), -sgn * (h1 - 2 * Math.max(1, s)), lt)
+    ctx.fillStyle = c; ctx.beginPath(); ctx.arc(bx, by, Math.max(0.5, h1), 0, Math.PI * 2); ctx.fill()
+  }
   const H0 = j.hip, S0 = j.sh, suitLegs = ref || coachP, legC = ref ? '#1d1d22' : coachP ? shade(J, -0.15) : null
   const leg = (kn, ft, back) => {
     const c = back ? skd : sk
-    if (suitLegs) { seg(H0, kn, 4.4, back ? shade(legC, -0.3) : legC); seg(kn, ft, 3.8, back ? shade(legC, -0.3) : legC) }
+    const ank = lp(kn, ft, 0.9), calf = lp(kn, ft, 0.32)
+    if (suitLegs) { const lc = back ? shade(legC, -0.3) : legC; taper(H0, kn, 5, 4.2, lc, shade(lc, -0.35)); taper(kn, ank, 4.2, 3.4, lc, shade(lc, -0.35)) }
     else {
-      seg(H0, kn, 4, c); seg(kn, ft, 3.1, c)
-      if (!back) seg(lp(kn, ft, 0.1), lp(kn, ft, 0.4), 1, skl)
-      seg(lp(kn, ft, 0.45), ft, 3.4, back ? '#d5d8de' : '#f6f6f8')           // high white socks
-      seg(lp(kn, ft, 0.5), lp(kn, ft, 0.55), 3.5, back ? shade(T, -0.3) : T)
+      taper(H0, kn, 4.8, 3.4, c, back ? shade(sk, -0.42) : skd, back ? null : skl)          // thigh
+      taper(kn, calf, 3.3, 3.8, c, back ? shade(sk, -0.42) : skd, back ? null : skl)        // the calf filling out
+      taper(calf, ank, 3.8, 2.4, c, back ? shade(sk, -0.42) : skd)
+      taper(lp(kn, ft, 0.46), ank, 3.6, 2.8, back ? '#d0d3da' : '#f6f6f8', back ? '#aeb2bb' : '#cfd3da')   // high white socks
+      taper(lp(kn, ft, 0.5), lp(kn, ft, 0.56), 3.7, 3.6, back ? shade(T, -0.3) : T)
     }
-    const fx = X(ft[0]), fy = Y(ft[1]), sw = 6 * s, shh = 3 * s, x0 = f > 0 ? fx - 2 * s : fx - sw + 2 * s
-    fr(x0, fy - shh + 0.6 * s, sw, shh, suitLegs ? (back ? '#0a0a0a' : '#151515') : back ? '#cfd0d8' : '#f8f8fa')
-    fr(x0, fy + 0.5 * s, sw, 1 * s, '#2a2a30')
+    // hand-pixeled high-tops (hoopsStamps.js)
+    const shoeW = suitLegs ? '#18181c' : back ? '#cfd0d8' : '#f8f8fa'
+    stamp(ctx, SHOE, { o: '#2a1c14', w: shoeW, W: suitLegs ? '#0c0c0e' : '#b9bac4', t: suitLegs ? '#18181c' : back ? shade(J, -0.3) : J, g: '#26262c' }, X(ank[0]), Y(ft[1]) - 3 * s, s, f, ANCHOR.shoe)
   }
   const sleeveC = ref ? '#f4f4f4' : coachP ? J : null
   // three-quarter view, as in BK's frame: each arm hangs from its own side of the jersey (BK 19:58)
   const jB = [S0[0] - 4, S0[1] + 1.4], jF = [S0[0] + 4.4, S0[1] + 1.4]
   const arm = (e, h, back) => {
     const c = back ? skd : sk, J0 = back ? jB : jF
-    seg(J0, e, 3.2, c); seg(e, h, 2.7, c)
-    seg([J0[0] + 0.4, J0[1] + 0.8], [e[0] + 0.4, e[1] + 0.8], 1, back ? shade(sk, -0.45) : skd)
+    taper(J0, e, 3.4, 2.7, c, back ? shade(sk, -0.45) : skd, back ? null : skl)
+    taper(e, lp(e, h, 0.4), 2.7, 3, c, back ? shade(sk, -0.45) : skd); taper(lp(e, h, 0.4), h, 3, 2.1, c, back ? shade(sk, -0.45) : skd)
     if (sleeveC) { seg(J0, coachP ? lp(e, h, 0.8) : lp(J0, e, 0.5), 3.6, back ? shade(sleeveC, -0.25) : sleeveC); if (ref) seg(lp(J0, e, 0.2), lp(J0, e, 0.28), 3.7, '#151515') }
     else if (!back) seg(lp(J0, e, 0.15), lp(J0, e, 0.7), 1, skl)
     if (p.sleeve && !back && !sleeveC) seg(lp(J0, e, 0.4), lp(e, h, 0.85), 3, p.sleeve)
@@ -791,7 +805,6 @@ function paintSprite(ctx, p, poseName, f, air, s, ox, oy) {
   if (!suitLegs) {
     const kF8 = lp(H0, j.kF, 0.62), kB8 = lp(H0, j.kB, 0.62)
     seg(H0, kB8, 5.8, shade(Jd, -0.12)); seg(H0, kF8, 6.2, Jd); seg([H0[0] + 0.6, H0[1]], lp(H0, j.kF, 0.56), 4.2, J)
-    const sF = lp(H0, j.kF, 0.06); seg([sF[0] + 2.6, sF[1]], [kF8[0] + 2.6, kF8[1]], 1, T)
     seg([kF8[0] - 3, kF8[1] + 0.4], [kF8[0] + 3, kF8[1] + 0.4], 1, T)
   }
   // the jersey: a tank, shoulders a little wider than the waist
@@ -809,24 +822,11 @@ function paintSprite(ctx, p, poseName, f, air, s, ox, oy) {
   const hd = j.head, st = ref || coachP ? 'short' : p.hairStyle || 'short'
   seg([S0[0] + 0.5, S0[1] + 0.6], [hd[0], hd[1] + 2.6], 2.6, skd)
   if (ref) blob([S0[0] + 1.3, S0[1] + 1.8], 0.7, '#cfd6dc')
-  if (st === 'pony') { seg([hd[0] - 2.8, hd[1] - 1], [hd[0] - 4.6, hd[1] + 1.6 + (air ? 1 : 0)], 2.2, hair); seg([hd[0] - 4.6, hd[1] + 1.6], [hd[0] - 5, hd[1] + 3.8], 1.8, haird) }
-  if (st === 'bun') blob([hd[0] - 2.4, hd[1] - 3.2], 1.8, hair)
-  if (st === 'afro') { blob(hd, 4.6, hair, -0.6, -1.4); blob(hd, 1.4, hairl, -1.2, -3.8) }
-  if (st === 'puffs') { blob([hd[0] - 2.6, hd[1] - 3.3], 1.7, hair); blob([hd[0] + 0.8, hd[1] - 3.8], 1.6, hair) }
-  blob(hd, st === 'buzz' ? 3.4 : 3.6, st === 'fade' ? shade(hair, 0.18) : hair, -0.4, st === 'buzz' ? -0.4 : -0.8)
-  if (st === 'fade') blob(hd, 2.6, hair, -0.3, -1.8)
-  blob(hd, 3.1, sk, 0.9, 0.8)
-  blob(hd, 1.1, skd, -0.8, 1.6)
-  if (st === 'braids') for (let i = 0; i < 3; i++) seg([hd[0] - 2.2 + i * 1.6, hd[1] - 3.3], [hd[0] - 3.3 + i * 1, hd[1] + 0.4], 0.7, haird)
-  if (p.band) seg([hd[0] - 2.9, hd[1] - 1.9], [hd[0] + 2.9, hd[1] - 2.1], 1, T)
-  const flip = n => (f > 0 ? 0 : n * s)
-  fr(X(hd[0] + 2.2) - flip(1), Y(hd[1] - 0.4), Math.max(1, s), Math.max(1, s), '#141414')
-  if (s > 2) {
-    fr(X(hd[0] + 1.6) - flip(1.4), Y(hd[1] - 1.5), 1.4 * s, 0.5 * s, haird)
-    const shout = ['dunkSlam', 'hang', 'hero'].includes(poseName)
-    fr(X(hd[0] + 1.6) - flip(1.4), Y(hd[1] + 1.7), 1.4 * s, (shout ? 1.1 : 0.4) * s, shout ? '#3a1414' : shade(sk, -0.45))
-    fr(X(hd[0] + 3.4) - flip(0.6), Y(hd[1] + 0.4), 0.6 * s, 0.9 * s, skd)
-  }
+  // the head: hand-pixeled, one stamp per hair style (hoopsStamps.js); the dunk close-up shouts
+  const shout = s > 2 && ['dunkSlam', 'hang', 'hero'].includes(poseName)
+  const map = shout ? HEADS[st].map((row, r) => (r === SHOUT_ROW ? row.replace('m', 'e') : row)) : HEADS[st] || HEADS.short
+  stamp(ctx, map, { o: '#2a1c14', O: '#2a1c14', h: hair, H: hairl, d: haird, s: sk, S: skd, L: skl, e: '#141414', m: shade(sk, -0.42) }, X(hd[0]), Y(hd[1]), s, f, ANCHOR.head)
+  if (p.band) { ctx.fillStyle = T; ctx.fillRect(Math.round(X(hd[0]) - 4 * s), Math.round(Y(hd[1]) - 2 * s), Math.ceil(9 * s), Math.ceil(s)) }
   if (!armsUp) arm(j.eF, j.hF, false)
   // the number: block numerals at the game's own pixel size, trim colour, a contrast outline (BK 19:33)
   if (!ref && !coachP && p.num != null) {
